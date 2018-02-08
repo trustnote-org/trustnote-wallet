@@ -1,0 +1,41 @@
+
+<!--删除钱包-->
+
+<div
+	class="topbar-container"
+	ng-include="'views/includes/topbar.html'"
+	ng-init="titleSection='Delete Wallet'; goBackToState = true">
+</div>
+
+
+<div class="content preferences" ng-controller="preferencesDeleteWalletController as preferences">
+	<!--被删除钱包名字-->
+	<h4></h4>
+	<div class="text-center text-gray">
+		<span translate>Wallet</span>: {{index.walletName}}
+		<span ng-show="index.alias">({{index.alias}})</span>
+	</div>
+
+
+	<h4 class="text-warning text-center m0" style="padding-left: 0px;color: red;" translate>
+		<i class=" icon-waring size-100"></i>
+	</h4>
+
+	<!--<h4 class="text-warning text-center m0" style="padding-left: 0px" translate>Warning!</h4>-->
+	<div class="box-notification" ng-show="preferences.error">
+    	<span class="text-warning size-14">
+      		{{preferences.error|translate}}
+    	</span>
+	</div>
+
+
+	<div class="columns text-center">
+		<!--警告此动作不可逆-->
+		<p translate class="size-14 text-gray">Permanently delete this wallet. THIS ACTION CANNOT BE REVERSED</p>
+		<!--按钮点击删除-->
+		<p class="size-14" ng-click="preferences.deleteWallet()" translate
+				style="background: transparent;border: 1px solid #0095ff;width: 40%;margin: 0 auto;color: #0095ff;border-radius: 50px;padding: 10px 0;cursor: pointer;">
+			Delete wallet
+		</p>
+	</div>
+</div>

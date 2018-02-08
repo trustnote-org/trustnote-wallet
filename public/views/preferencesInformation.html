@@ -1,0 +1,162 @@
+
+<!--钱包信息-->
+
+<!--顶部 开始-->
+<div
+	class="topbar-container"
+	ng-include="'views/includes/topbar.html'"
+	ng-init="titleSection='Wallet Information'; goBackToState = true">
+</div>
+<!--顶部 结束-->
+
+
+<div class="content preferences" ng-controller="preferencesInformation as info" ng-init="info.init()">
+
+	<!--详细信息-->
+	<h4 class="title m0" translate>Wallet Information</h4>
+	<ul class="no-bullet m0 size-14">
+		<li class="line-b p20 oh">
+			<span class="size-14" translate>Wallet Name (at creation)</span>
+			<span class="right text-gray">
+          		{{walletName}}
+        	</span>
+		</li>
+
+
+		<li class="line-b p20 oh" ng-show="!index.externalSource && !index.canSign">
+			<span translate></span>
+			<span class="right text-gray capitalize">
+          		No private key
+			</span>
+		</li>
+	</ul>
+
+
+	<!--钱包 ID-->
+	<h4 class="title m0" translate>Wallet Id</h4>
+	<ul class="no-bullet m0 size-14">
+
+		<li class="oh">
+			<div class="enable_text_select ellipsis size-14">
+				{{walletId}}
+			</div>
+		</li>
+	</ul>
+
+
+	<!--每个钱包有多少钱-->
+	<ul class="no-bullet m0 size-14" ng-show="addrs">
+		<ul class="no-bullet m0 size-14" ng-show="hasListOfBalances()">
+			<div>
+				<h4 class="title m0" translate>Balance By Address</h4>
+
+				<li class="line-b p20 oh" ng-repeat="(key, value) in assocListOfBalances">
+					<div class="enable_text_select ellipsis">
+						{{key}}
+					</div>
+					<div class="text-gray text-right" ng-repeat="row in value">
+						{{row.amount}}
+					</div>
+				</li>
+			</div>
+		</ul>
+	</ul>
+
+
+	<h4></h4>
+	<div class="extra-margin-bottom"></div>
+</div>
+
+
+
+<!--多签名配置-->
+<!--<li class="line-b p20 oh">-->
+<!--<span class="size-14" translate>Wallet Configuration (m-n)</span>-->
+<!--<span class="right text-gray">-->
+<!--{{M}}-{{N}}-->
+<!--</span>-->
+<!--</li>-->
+
+
+<!--li class="line-b p20 oh">
+ <span translate>Wallet Network</span>
+ <span class="right text-gray">
+   {{network}}
+ </span>
+</li-->
+
+<!--派生策略-->
+<!--<li class="line-b p20 oh">-->
+<!--<span class="size-14" translate>Derivation Strategy</span>-->
+<!--<span class="right text-gray">-->
+<!--{{derivationStrategy}}-->
+<!--</span>-->
+<!--</li>-->
+
+<!--ul class="no-bullet m0 size-14">
+  <h4 class="title m0" translate>Transaction history</h4>
+  <li class="line-b p20 oh">
+    <button class="black round small expand"  ng-style="{'background-color':index.backgroundColor}" ng-click="info.clearTransactionHistory();">
+      <span translate>Clear history</span>
+    </button>
+  </li>
+</ul-->
+
+<!--通过邮件发送地址-->
+<!--<li class="line-b p20" ng-show="index.isCordova">-->
+<!--<button class="black round small expand bg0745bc"-->
+<!--ng-click="info.sendAddrs()"-->
+<!--ng-disabled="info.loading">-->
+<!--<i class="fi-mail"></i>-->
+<!--<span translate>Send addresses by email</span>-->
+<!--</button>-->
+<!--</li>-->
+
+<!--<li class="line-b p20 oh" ng-show="index.account">-->
+<!--<span class="size-14" translate>Account</span> ({{derivationStrategy}})-->
+<!--<span class="right text-gray">-->
+<!--#{{index.account}}-->
+<!--</span>-->
+<!--</li>-->
+
+
+<!--共同签署人-->
+<!--<h4 class="title m0" translate>Co-signers</h4>-->
+<!--<li ng-repeat="copayer in index.copayers">-->
+<!--<span class="size-12" ng-show="copayer.me">-->
+<!--<i class="icon-contact size-24 m10r"></i>-->
+<!--{{'Me'|translate}}-->
+<!--<i class="fi-check m5 right"></i>-->
+<!--</span>-->
+
+<!--<span class="size-12 text-gray" ng-show="!copayer.me">-->
+<!--<i class="icon-contact size-24 m10r"></i>-->
+<!--{{copayer.name}}-->
+<!--<i class="fi-check m5 right"></i>-->
+<!--</span>-->
+<!--</li>-->
+
+<!--扩展公钥-->
+<!--<h4 class="title m0" translate>Extended Public Keys</h4>-->
+<!--<li ng-repeat="copayer in index.copayers">-->
+<!--<div class="row collapse">-->
+<!--<div class="small-4 columns class="size-14"">{{copayer.name||'Me'|translate}}</div>-->
+<!--<div class="small-8 columns oh text-gray">-->
+<!--<div class="ellipsis enable_text_select size-10">{{copayer.extended_pubkey}}</div>-->
+<!--</div>-->
+<!--</div>-->
+<!--</li>-->
+
+<!--<li class="size-14" class="line-b p20 oh" ng-show="index.externalSource">-->
+<!--<span>Hardware Wallet</span>-->
+<!--<span class="right text-gray capitalize">-->
+<!--{{index.externalSource}}-->
+<!--</span>-->
+<!--</li>-->
+
+<!--<h4 class="title m0" translate>All Wallet Addresses</h4>-->
+<!--<li ng-repeat="a in addrs" class="oh">-->
+<!--<div class="enable_text_select ellipsis size-14">-->
+<!--{{a.address}}-->
+<!--</div>-->
+<!--</li>-->

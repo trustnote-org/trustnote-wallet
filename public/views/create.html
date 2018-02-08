@@ -1,0 +1,122 @@
+
+<!--添加新钱包-->
+
+<div  class="topbar-container"  ng-include="'views/includes/topbar.html'"  ng-init="titleSection='Create new wallet';  closeToHome = true; noColor = true"> </div>
+
+
+<div class="content" ng-controller="createController as create" ng-init="create.setTotalCosigners(1)" style="padding-bottom: 20px">
+	<!--添加状态-->
+	<div class="onGoingProcess" ng-show="create.loading">
+		<div class="onGoingProcess-content">
+			<div class="spinner">
+				<div class="rect1"></div>
+				<div class="rect2"></div>
+				<div class="rect3"></div>
+				<div class="rect4"></div>
+				<div class="rect5"></div>
+			</div>
+			<span translate>Creating Wallet...</span>
+		</div>
+	</div>
+	<!--添加状态 结束-->
+
+	<!--选择钱包类型-->
+	<!--<div class="create-tab small-only-text-center" ng-hide="create.hideTabs" style="background: #f5f5f5;">-->
+		<!--<div class="row">-->
+			<!--<div class="tab-container small-6 medium-3 large-2" ng-class="{'selected': totalCosigners == 1}">-->
+				<!--<a href ng-click="create.setTotalCosigners(1)" translate>Plain Wallet</a>-->
+			<!--</div>-->
+
+			<!--<div class="tab-container small-6 medium-3 large-2" ng-class="{'selected': totalCosigners != 1}">-->
+				<!--<a href ng-click="create.setMultisig()" translate>Multidevice Wallet</a>-->
+			<!--</div>-->
+		<!--</div>-->
+	  <!--</div>-->
+	<!--选择钱包类型 结束-->
+
+	<form name="setupForm" ng-submit="create.create(setupForm)" novalidate>
+		<div class="row">
+			<div class="large-12 columns">
+				<!--警告-->
+ 				<div class="box-notification" ng-show="create.error">
+					<span class="text-warning size-14">{{create.error|translate}}</span>
+        		</div>
+
+				<!--钱包名称-->
+				<div ng-hide="create.hideWalletName" class="m15t">
+					<label>
+						<span class="size-12 color333" translate>Wallet name</span>
+						<div class="input m5t h45 size-18">
+				  			<input
+								maxlength="20"
+								style="height: 45px;font-size: 14px;"
+								type="text"
+								placeholder="{{( (totalCosigners > 1) ? ('Laptop + phone + tablet') : 'New wallet')|translate}}"
+								name="walletName"
+								ng-model="walletName" ng-required="true"
+								ng-focus="create.formFocus('wallet-name')"
+								ng-blur="create.formFocus(false)">
+						</div>
+          			</label>
+				</div>
+
+				<!--签署多签名钱包-->
+        		<div class="row m10t" ng-show="totalCosigners != 1">
+					<!--共同签名总数-->
+          			<div class="large-6 medium-6 columns m10t">
+						<label>
+							<span class="size-12 color333" translate>Total number of co-signers</span>
+							<select
+								class="size-14 m5t h45"
+								ng-model="totalCosigners"
+								ng-options="totalCosigners as totalCosigners for totalCosigners in create.TCValues"
+								ng-change="create.setTotalCosigners(totalCosigners)">
+							</select>
+						</label>
+          			</div>
+
+					<!--通过签名数-->
+					<div class="large-6 medium-6 columns">
+						<label>
+							<span  class="size-12 color333" translate>Required number of signatures</span>
+						  	<select
+								class="m5t size-14 h45"
+								ng-model="requiredCosigners"
+								ng-options="requiredCosigners as requiredCosigners for requiredCosigners in create.RCValues"
+								ng-disabled="totalCosigners == 1">
+							</select>
+						</label>
+          			</div>
+
+					<!--共同签署人 12345-->
+					<div class="large-6 medium-6 columns" ng-repeat="cosigner in create.cosigners track by $index">
+            			<label>
+							<span class="size-12 color333"  translate>Co-signer {{$index+1}}:</span>
+              				<select
+								class="m5t h45 size-14"
+								ng-model="cosigner.device_address"
+								ng-disabled="$parent.totalCosigners == 1"
+								ng-change="create.onCorrespondentSelected(cosigner.device_address)">
+                  				<option value="" translate>-- Select co-signer --</option>
+                  				<option ng-repeat="candidate_cosigner in create.candidate_cosigners" value="{{candidate_cosigner.device_address}}">{{candidate_cosigner.name+' ('+candidate_cosigner.device_address.substr(0,4)+'...)'}}</option>
+                  				<option value="new" translate>[ Add new co-signer device ]</option>
+              				</select>
+            			</label>
+          			</div>
+        		</div>
+
+		<!--多签名钱包按钮-->
+				<button type="submit" class="button round black expand m0" ng-show="totalCosigners != 1" ng-disabled="setupForm.$invalid || create.loading">
+				  <span translate>Create {{requiredCosigners}}-of-{{totalCosigners}} wallet</span>
+				</button>
+		<!--单签名钱包按钮-->
+				<button type="submit" class="button round black expand m15t" ng-show="totalCosigners == 1" ng-disabled="setupForm.$invalid || create.loading">
+				  <span translate>Create new wallet</span>
+				</button>
+
+			</div> <!-- large-12 columns -->
+    	</div> <!-- row -->
+  	</form>
+</div>
+
+<div class="extra-margin-bottom"></div>

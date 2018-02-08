@@ -1,0 +1,59 @@
+
+<!--top顶部-->
+
+<nav ng-controller="topbarController as topbar" class="tab-bar oh">
+
+<!-- 左边 -->
+  	<section class="left-small"><!--更改代码如下：-->
+    	<!--<a id="hamburger" class="p10" ng-show="!goBackToState && !closeToHome  && !index.noFocusedWallet" ng-click="index.openMenu()">-->
+
+		<!--二维码图标-->
+		<a id="hamburger" class="p10" ng-show="!goBackToState && !closeToHome  && !index.noFocusedWallet" ng-click="index.showQrcode()">
+			<i class="icon-qr size-24"></i>
+    	</a>
+
+		<!--点击返回  或者  点击关闭-->
+		<a ng-show="goBackToState" ng-click="$root.go('^', true); goBackToState = null">
+			<i class="icon-arrow-left3  icon-back"></i>
+			<span class="text-back">{{'Back'|translate}}</span>
+		</a>
+		<!--更改代码	如下  --><!--点击关闭 回到mywallet-->
+		<a ng-show="closeToHome" class="p10 " ng-click="topbar.goWallet();closeToHome = null">
+		<!--<a ng-show="closeToHome" class="p10 " ng-click="topbar.goHome();closeToHome = null">	-->
+      		<span class="text-close">{{'Close'|translate}}</span>
+    	</a>
+  	</section>
+<!--左边结束-->
+
+
+<!-- 右边 打开相机 -->
+	<section class="right-small" ng-show="showCamera">
+		<qr-scanner ng-show="index.isComplete" on-scan="topbar.onQrCodeScanned(data)" before-scan="topbar.onBeforeScan()"></qr-scanner>
+	</section>
+<!-- 右边 打开相机 结束 -->
+
+
+
+<!-- 中间部分 -->
+  	<section class="middle tab-bar-section">
+		<!--<h1 class="title ellipsis" ng-style="{'color': noColor ? '#20498b' : index.backgroundColor, 'max-width': '100%'}">-->
+		<h1 class="ellipsis" ng-style="{ 'max-width': '100%'}">
+
+			<!--top栏 不显示 钱包-->
+			<span
+				class="size-17 colorfff"
+				ng-if="index.arrBalances[index.assetIndex].shared === undefined && !index.shared_address || titleSection">{{(titleSection|translate) || (index.shared_address || index.alias || index.walletName)}}
+			</span>
+
+			<!--top栏 显示 钱包-->
+			<span ng-if="(index.arrBalances[index.assetIndex].shared !== undefined || index.shared_address) && !titleSection">
+				<!--<a ng-click="index.openSubwalletModal()" ng-style="{'color': noColor ? '#20498b' : index.backgroundColor}">-->
+				<a ng-click="index.openSubwalletModal()">
+					<span class="ellipsis size-17 colorfff" style="max-width: calc(100% - 14px);float: left;">{{(index.shared_address || index.alias || index.walletName)}}	</span>
+					<span class="arrow-down" ng-style="{'float': 'left'}"></span>
+				</a>
+			</span>
+		</h1>
+  	</section>
+<!-- 中间部分结束 -->
+</nav>

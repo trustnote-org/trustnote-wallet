@@ -1,0 +1,113 @@
+
+<!-- 首次启动  导航页-->
+
+
+<div class="splash content text-center" ng-init="splash.init()" ng-controller="splashController as splash">
+
+	<!--选择钱包类型 全钱包 轻钱包-->
+	<div ng-if="!index.hasProfile">
+		<div ng-if="splash.step === 'wallet_type'">
+			<div class="row text-left" style="margin-top: 40px">
+				<div class="start-button large-10 medium-10 small-10 medium-centered small-centered large-centered columns">
+
+					<label><span class="text-white size-14" translate>Please choose how much data to store in your wallet</span></label>
+					<p class=" size-14 m0 text-light colorfff" translate>This choice cannot be changed later</p>
+
+					<!--下载完整钱包-->
+					<div class="m20t">
+						<div style="display: table">
+							<div style="display: table-cell; padding-right: 10px"><input type="radio" name="wallet_type" value="full" ng-model="splash.wallet_type" id="wallet_type_full"></div>
+							<div style="display: table-cell"><label class=" size-14 colorfff" style="vertical-align: middle" for="wallet_type_full" translate>Download the entire TrustNote database</label></div>
+						</div>
+						<p class=" size-14 m0 text-light colorfff" translate>
+							This option is better for privacy but will take  several gigabytes of storage and the initial sync will take several days.  CPU load will be high during sync.
+						</p>
+					</div>
+
+					<!--下载轻钱包-->
+					<div class="m20t">
+						<div style="display: table">
+							<div style="display: table-cell; padding-right: 10px"><input type="radio" name="wallet_type" value="light" ng-model="splash.wallet_type" id="wallet_type_light"></div>
+							<div style="display: table-cell"><label class=" size-14 colorfff" style="vertical-align: middle" for="wallet_type_light" translate>Keep only data relevant to you</label></div>
+						</div>
+						<p class=" size-14 m0 text-light colorfff" translate>
+							The wallet vendor will be able to know some of your balances and will be able to see which transactions are yours, but you can start using the wallet immediately and the wallet is fully functional.
+						</p>
+					</div>
+
+					<button ng-click="splash.setWalletType()" class="button black expand round size-12 text-spacing m20t" style="background: #f5f5f5;color: #0095ff;" translate>
+						CONTINUE
+					</button>
+				</div>
+			</div>
+		</div>
+
+
+		<!--填写设备名字-->
+		<div ng-if="splash.step === 'device_name'">
+			<div class="row">
+				<div class="medium-centered small-centered large-centered columns">
+					<div class="m20t">
+						<span class="text-bold size-16 text-white" translate>WELCOME TO TRUSTNOTE</span>
+						<p class=" size-14 m0 text-light colorfff" donttranslate>Make payment fun</p>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="container-image large-3 medium-3 small-3 medium-centered small-centered large-centered columns">
+					<img src="img/icon-splash.png" alt="icon" width="100%">
+				</div>
+			</div>
+			<div class="text-center size-12 text-warning" ng-show="splash.error && !splash.creatingProfile">
+				{{splash.error|translate}}. <span translate>Retrying...</span>
+			</div>
+			<div class="onGoingProcess" ng-show="splash.creatingProfile">
+				<div class="onGoingProcess-content" style="background: #fff">
+					<div class="spinner">
+						<div class="rect1" style="background: #0095ff"></div>
+						<div class="rect2" style="background: #0095ff"></div>
+						<div class="rect3" style="background: #0095ff"></div>
+						<div class="rect4" style="background: #0095ff"></div>
+						<div class="rect5" style="background: #0095ff"></div>
+					</div>
+					<span style="color: #0095ff;" translate>Creating Profile...</span>
+				</div>
+			</div>
+			<div class="row" ng-show="!splash.creatingProfile">
+				<div class="start-button large-8 medium-8 small-8 medium-centered small-centered large-centered columns">
+
+					<div ng-show="!splash.bDeviceNameSet">
+						<label><span class=" colorfff" translate>Please name this device</span></label>
+
+						<!--设备名 输入-->
+						<input
+							type="text"
+							maxlength="20"
+							id="deviceName"
+							name="deviceName"
+							ng-model="splash.deviceName"
+							style="border-left:none;border-top:none;border-right: none;border-radius: 0;text-align: center;color: #fff;">
+						<!--设备名 输入  结束-->
+
+						<button ng-click="splash.saveDeviceName()" class="button black expand round size-12 text-spacing" ng-disabled="!splash.deviceName" style="background: #f5f5f5;color: #0095ff;" translate>
+							CONTINUE
+						</button>
+					</div>
+
+					<!--点击开始-->
+					<div ng-show="splash.bDeviceNameSet">
+						<p class=" size-14 m0 text-light m20b colorfff" translate>Your wallet will be created on this device, keep it safe.  See your backup options in the Settings menu.Also in the Settings menu, you will find security options such as setting a password.</p>
+						<!--<p class=" size-14 m0 text-light m20b colorfff" translate></p>-->
+						<button ng-click="index.splashClick=true;splash.create();" class="button black expand round size-12 text-spacing" translate style="background: #f5f5f5;color: #0095ff;">
+							GET STARTED
+						</button>
+					</div>
+					<!--
+					<p class="text-gray m5b size-12" translate>Already have a wallet?</p>
+					<button  ng-click="splash.create(true)" class="button round outline dark-gray tiny" ng-disabled="!splash.deviceName" translate>Import backup </button>
+					-->
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

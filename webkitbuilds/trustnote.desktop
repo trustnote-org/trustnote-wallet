@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=TrustNote
+Comment=Make payment fun
+Exec=bash -c 'cd $(dirname %k) && ./TrustNote %u'
+Icon=icon-white-256.png
+Terminal=false
+Categories=Office;Finance;
+MimeType=x-scheme-handler/trustnote;
+X-Ubuntu-Touch=true
+X-Ubuntu-StageHint=SideStage

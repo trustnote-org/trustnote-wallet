@@ -1,0 +1,200 @@
+<!--消息首页-->
+
+<style type="text/css">
+	.bot_name {
+		text-overflow: ellipsis;
+		width: 75%;
+		display: inline-block;
+		white-space: nowrap;
+		overflow: hidden;
+	}
+</style>
+
+
+<div style="width: 100%;height: 100%;overflow:auto;" ng-controller="correspondentDevicesController">
+
+
+	<div>
+
+
+		<!--top顶部-->
+		<nav ng-controller="topbarController as topbar" class="tab-bar" ng-show="state.is('correspondentDevices')">
+
+			<!--左边-->
+			<section class="left-small">
+				<!--点击返回-->
+				<a ng-show="goBackToState" ng-click="$root.go('^', true); goBackToState = null;">
+					<i class="icon-arrow-left3 icon-back"></i>
+					<span class="text-back">{{'Back'|translate}}</span>
+				</a>
+
+				<!--点击关闭-->
+				<a ng-show="closeToHome" class="p10 " ng-click="topbar.goHome(); closeToHome = null">
+					<span class="text-close">{{'Close'|translate}}</span>
+				</a>
+			</section>
+			<!--左边结束-->
+
+
+			<!--右边点击二维码-->
+			<section class="right-small">
+				<qr-scanner ng-show="index.isComplete" on-scan="topbar.onQrCodeScanned(data)"
+							before-scan="topbar.onBeforeScan()"></qr-scanner>
+			</section>
+
+
+			<!--中间 联系人+机器人商店-->
+			<section class="middle tab-bar-section">
+				<h1 class="title ellipsis" ng-style="{ 'max-width': '100%'}">
+					<span translate class="size-17 colorfff">Contacts</span>
+				</h1>
+			</section>
+
+
+			<!--<section class="middle tab-bar-section">-->
+			<!--<div class="mtabset">-->
+			<!--<div class="mtab-title" ng-click="$parent.mtab = 1" ng-class="{'active': mtab == 1}" ng-style="{'color': noColor ? '#20498b' : index.backgroundColor}"  translate>  Contacts </div>-->
+			<!--<div class="mtab-title" ng-click="$parent.mtab = 2" ng-class="{'active': mtab == 2}" ng-style="{'color': noColor ? '#20498b' : index.backgroundColor}" translate> Bot Store	</div>-->
+			<!--</div>-->
+			<!--</section>-->
+			<!--中间 联系人+机器人商店 结束-->
+		</nav>
+		<!--top顶部  结束-->
+
+
+		<!--消息主界面-->
+		<div ui-view="dialog"></div>
+
+
+		<!--消息列表页面-->
+		<div class="m20b tab-view tab-in" ng-show="state.is('correspondentDevices')" id="chat">
+
+			<!--现在不启用 消息页面只是联系人-->
+			<!--<div class="create-tab small-only-text-center">-->
+			<!--<div class="row">-->
+			<!--<div class="tab-container small-6 medium-3 large-2" ng-class="{'selected': mtab == 1}">-->
+			<!--<a href ng-click="mtab = 1" translate>Contacts</a>-->
+			<!--</div>-->
+
+			<!--<div class="tab-container small-6 medium-3 large-2" ng-class="{'selected': mtab == 2}">-->
+			<!--<a href ng-click="mtab = 2" translate>Bot Store</a>-->
+			<!--</div>-->
+			<!--</div>-->
+			<!--</div>-->
+
+
+			<!--联系人列表-->
+			<div class="mtab" ng-class="{'active': mtab == 1}" ng-init="mtab = 1">
+				<ul class="no-bullet m0 correspondentList" ng-init="readList()">
+					<!--联系人列表-->
+					<li class="p10 line-b" ng-repeat="correspondent in list | orderBy:newMsgByAddressComparator">
+
+						<a ng-show="selectedCorrespondentList[correspondent.device_address]"
+						   ng-hide="hideRemoveButton(correspondent.removable)" class="removeCorrespondentList"
+						   ng-click="remove(correspondent.device_address)">
+							<i class="fi-trash size-24"></i>
+						</a>
+						<a class="selectCorrespondentList" ng-show="editCorrespondentList"
+						   ng-click="toggleSelectCorrespondentList(correspondent.device_address)">
+							<i class="fi-trash"></i>
+						</a>
+
+						<!--已添加设备名字-->
+						<div ng-click="showCorrespondent(correspondent)" class="pointer">
+							{{correspondent.name}} ({{correspondent.device_address | limitTo:4}}...)
+							<div class="right text-gray">
+								<i class="icon-arrow-right3 size-14" ng-show="!editCorrespondentList && hideRemove"></i>
+							</div>
+							<div class="right correspondentlist_badge"
+								 ng-show="newMessagesCount[correspondent.device_address]">
+								{{newMessagesCount[correspondent.device_address]}}
+							</div>
+							<div class="size-10 text-gray ellipsis">
+								{{correspondent.device_address}}@{{correspondent.hub}}
+							</div>
+						</div>
+					</li>
+					<!-- 添加新设备 Add a new device -->
+					<!--<li class="m10t line-b" ng-show="!editCorrespondentList" style="padding:0 0.5rem;">-->
+					<!--<a ng-click="beginAddCorrespondent()" class="p10" style="color:#0745bc;">-->
+					<!--<i class="fi-plus size-18 m10r" style="vertical-align: middle;"></i>-->
+					<!--<span class="text-close size-12" translate>Add a new device</span>-->
+					<!--</a>-->
+					<!--</li>-->
+
+					<!--移除一个设备  Remove a device-->
+					<!--<li class="m10t" ng-show="!editCorrespondentList"  style="padding:0 0.5rem;">-->
+					<!--<a ng-click="hideRemove = !hideRemove" class="p10" style="color:#20498b;">-->
+					<!--<i class="fi-minus size-18 m10r" style="vertical-align: middle;"></i>-->
+					<!--<span class="text-close size-12" translate>Remove a device</span>-->
+					<!--</a>-->
+					<!--</li>-->
+				</ul>
+
+
+				<!--添加 移除 设备-->
+				<div class="row m20t" ng-show="!editCorrespondentList">
+
+					<!--左边 移除设备-->
+					<!--<div class="columns small-6 medium-6 large-6" ng-show="list.length">-->
+					<div class="" ng-show="list.length" style="font-style: 14px;padding:0 0.9375rem;">
+						<a ng-show="!editCorrespondentList && hideRemove" ng-click="hideRemove = !hideRemove"
+						   class="button black round expand size-14 bg0745bc" translate>Remove device</a>
+						<a ng-show="!(!editCorrespondentList && hideRemove)" ng-click="hideRemove = !hideRemove"
+						   class="button black round expand size-14 bg0745bc" translate>Finish editing</a>
+					</div>
+
+					<!--右边 添加设备-->
+					<!--<div class="large-6 medium-6 small-6 columns" style="position: fixed;right: 10px;bottom: 70px;">-->
+					<!--<a ng-click="beginAddCorrespondent()" class="button black expand round size-14 bg0745bc" translate>Add new device</a>-->
+					<!--</div>-->
+
+
+				</div>
+
+			</div>
+			<!--联系人列表  结束-->
+
+
+			<!--机器人商店列表-->
+			<div class="mtab" ng-class="{'active': mtab == 2}">
+				<ul class="no-bullet m0 correspondentList">
+					<li class="line-b" ng-repeat="bot in bots" style="padding: 10px 10px 5px 10px">
+						<div ng-click="showBot(bot)" class="pointer">
+							<span class="bot_name">{{bot.name}}</span>
+							<div class="right text-gray">
+								<i class="icon-arrow-right3 size-14" ng-show="!editCorrespondentList && hideRemove"></i>
+							</div>
+							<div class="right label tu radius light-gray" ng-if="bot.isPaired" translate
+								 style="margin-top: 5px">Added
+							</div>
+						</div>
+					</li>
+				</ul>
+				<div class="text-warning size-12 m10b" ng-show="botsError">{{botsError|translate}}</div>
+			</div>
+			<!--机器人商店列表  结束-->
+		</div>
+
+
+		<!--点击 添加新设备-->
+		<!--<div ng-show="!editCorrespondentList" style="width: 40px;height: 40px;border-radius: 50%;overflow: hidden;position: fixed;right: 20px;bottom: 100px;background: #0745bc;">-->
+		<!--<a ng-click="beginAddCorrespondent()" class="oh" style="width: 100%;height: 100%;display: block;text-align: center;line-height: 40px;color: #fff;">-->
+		<!--<i class="fi-plus size-20 icon"></i>-->
+		<!--</a>-->
+		<!--</div>-->
+		<!--点击 添加新设备 结束-->
+	</div>
+
+
+	<!--点击添加设备  固定定位-->
+	<div
+		ng-show="state.is('correspondentDevices')"
+		ng-click="beginAddCorrespondent()"
+		style="width: 40px;text-align: center;height: 40px;line-height:40px;border-radius: 50%;overflow: hidden;position: fixed;right: 20px;bottom: 100px;background: #0095ff;">
+		<i class="fi-plus size-20 icon colorfff"></i>
+	</div>
+</div>
+
+
+<div ng-include="'views/includes/menu.html'" ng-show="!index.noFocusedWallet"></div>

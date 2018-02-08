@@ -1,0 +1,70 @@
+
+<!--消息中编辑页面-->
+
+<div ng-controller="editCorrespondentDeviceController">
+
+	<!--顶部 开始-->
+	<nav class="tab-bar">
+		<!--点击返回-->
+		<section class="left-small">
+			<a ng-click="$root.go('correspondentDevices.correspondentDevice')">
+				<i class="icon-arrow-left3 icon-back"></i>
+				<span class="text-back">{{'Back'|translate}}</span>
+			</a>
+		</section>
+
+		<!--对方设备名字-->
+		<section class="middle tab-bar-section">
+			<h1 class=" ellipsis w100 ">
+				<span class="size-17 colorfff">{{name}}</span>
+			</h1>
+		</section>
+	</nav>
+	<!--顶部 结束-->
+
+
+
+	<div class="columns m20t m20b">
+		<!--钱包完整地址-->
+		<div>
+			<span translate class="size-12 color333">Full address:</span>
+			<div class="size-10 text-gray ellipsis">{{correspondent.device_address}}@{{hub}}</div>
+		</div>
+
+
+		<form name="editForm" class="m20t" no-validate>
+			<!--重命名-->
+			<div class="text-warning size-12 m10b" ng-show="error">{{error|translate}}</div>
+			<span translate class="size-12 color333">Rename:</span>
+			<input
+				style="height: 45px;font-size: 14px;"
+				maxlength="20"
+				type="text"
+				id="name"
+				name="name"
+				ng-model="name"
+				required>
+
+			<!--更改一下URI-->
+			<!--<span translate class="size-14">Change TrustME URI:</span>-->
+			<!--<input type="text" id="hub" name="hub" ng-model="hub" required>-->
+
+			<!--点击保存按钮-->
+			<div class="row">
+				<div>
+					<input type="submit" class="button expand round" value="{{'Save'|translate}}" ng-disabled="!editForm.$valid" style="background: #0095ff;padding: 10px 0;font-size: 0.8rem;" ng-click="save()">
+				</div>
+			</div>
+		</form>
+
+	</div>
+
+    <div class="purge_chat columns size-14">
+		<a href="#" ng-click="purge_chat()" translate>clear chat history</a>
+	</div>
+
+    <div class="extra-margin-bottom"></div>
+</div>
+
+
+<div ng-include="'views/includes/menu.html'" ng-show="!index.noFocusedWallet"></div>

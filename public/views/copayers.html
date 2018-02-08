@@ -1,0 +1,65 @@
+
+<!--创建多签名钱包-->
+
+<!--<div-->
+	<!--class="topbar-container"-->
+	<!--ng-include="'views/includes/topbar.html'"-->
+	<!--ng-init="">-->
+<!--</div>-->
+
+
+<nav ng-controller="topbarController as topbar" class="tab-bar oh">
+	<section class="middle tab-bar-section">
+		<h1 class="ellipsis" ng-style="{ 'max-width': '100%'}">
+			<span
+				class="size-17 colorfff"
+				ng-if="index.arrBalances[index.assetIndex].shared === undefined && !index.shared_address || titleSection">{{(titleSection|translate) || (index.shared_address || index.alias || index.walletName)}}
+			</span>
+		</h1>
+	</section>
+</nav>
+
+
+
+
+<style>
+	.cancel_wallet a {
+		color: #883333;
+		border: 1px dashed #883333;
+		border-width: 0 0 1px 0;
+	}
+</style>
+
+
+
+<div class="content" ng-controller="copayersController as copayers" ng-init="copayers.init()">
+	<div>
+		<div class="row m10t text-center">
+			<div class="large-12 columns">
+				<h1 translate>Approve wallet creation on other devices</h1>
+			</div>
+		</div>
+
+		<h4 class="title oh m0">
+			<span translate>Waiting for co-signers</span>
+
+			<span class="text-gray right">
+        		[ <span translate>{{index.m}}-of-{{index.n}}</span> ]
+      		</span>
+		</h4>
+
+		<div class="p10 line-b" ng-include="'views/includes/copayers.html'"></div>
+		<div ng-if="!index.isComplete" class="p10 line-b m20b">
+			<p class="size-12 m0">
+				<i class="fi-loop"></i>
+				<span translate>Waiting...</span>
+			</p>
+		</div>
+	</div>
+
+	<div class="cancel_wallet columns">
+		<a href="#" ng-click="copayers.deleteWallet()" translate>cancel wallet creation</a>
+	</div>
+</div>
+
+<div class="extra-margin-bottom"></div>

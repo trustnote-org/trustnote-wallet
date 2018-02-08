@@ -1,0 +1,46 @@
+<!--关于trustnote-->
+
+<div class="topbar-container" ng-include="'views/includes/topbar.html'" ng-init="titleSection='About TrustNote'; goBackToState = true"></div>
+
+
+<div class="content preferences" ng-controller="preferencesAbout as about">
+	<h4 translate>Release Information</h4>
+
+
+	<div ng-controller="versionController as v">
+		<ul class="no-bullet m0">
+
+			<li ng-conf>
+				<span translate>Version</span>
+				<span class="right text-gray">v{{v.version}} {{v.type}} </span>
+			</li>
+			<!-- <li  ng-conf ng-click="$root.openExternalLink('https://gitee.com/trustnote/trustnote-wallet')"> -->
+			<li ng-conf>
+				<span translate>Commit hash</span>
+				<span class="right text-gray">#{{v.commitHash}}</span>
+			</li>
+
+			<li ng-click="$root.go('preferencesGlobal.preferencesAbout.disclaimer')">
+				<i class="icon-arrow-right3 size-14 right text-gray"></i>
+				<span translate>Terms of Use</span>
+			</li>
+		</ul>
+	</div>
+
+	<h4></h4>
+	<ul class="no-bullet m0">
+		<!--<li  ng-click="$root.go('preferencesGlobal.preferencesAbout.disclaimer')">-->
+		<!--<i class="icon-arrow-right3 size-14 right text-gray"></i>-->
+		<!--<span translate>Terms of Use</span>-->
+		<!--</li>-->
+		<!-- <li  ng-click="$root.go('preferencesGlobal.preferencesAbout.translators')">
+          <i class="icon-arrow-right3 size-24 right text-gray"></i>
+          <span translate>Translators</span>
+        </li> -->
+		<!-- <li  ng-conf ng-click="$root.go('preferencesGlobal.preferencesAbout.preferencesLogs')">
+          <i class="icon-arrow-right3 size-24 right text-gray"></i>
+          <span translate>Session log</span>
+        </li> -->
+	</ul>
+
+</div>

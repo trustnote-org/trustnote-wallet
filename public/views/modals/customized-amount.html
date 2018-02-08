@@ -1,0 +1,121 @@
+
+<!--要求特定金额-->
+
+<nav class="tab-bar">
+	<!--左侧  点击关闭-->
+	<section class="left-small">
+		<a ng-click="cancel()" class="p10">
+			<span class="text-close" translate>Close</span>
+		</a>
+	</section>
+
+	<!--中间 要求特定金额-->
+	<section class="middle tab-bar-section">
+		<h1 class="title ellipsis w100" >
+			<span class="size-17 colorfff" translate>Request a specific amount</span>
+		</h1>
+	</section>
+</nav>
+
+
+
+<div class="modal-content fix-modals-touch">
+	<div class="m20b" ng-show="amountInSmallestUnits">
+
+		<h4 class="title m0" translate>QR Code</h4>
+		<ul class="no-bullet size-14 m0">
+			<li class="line-b p10 oh text-center">
+				<qrcode size="220" version="6" data="{{protocol}}:{{addr + '?amount=' + amountInSmallestUnits + asset_param}}"></qrcode>
+
+
+			</li>
+		</ul>
+
+		<!-- 详情 -->
+		<h4 class="title m0" translate>Details</h4>
+		<ul class="no-bullet size-14 m0">
+			<li class="line-b p10 oh">
+				<span class="text-gray" translate>Address</span>:
+				<span class="right enable_text_select">
+      				<span class="text-gray enable_text_select">{{addr}}</span>
+    			</span>
+			</li>
+
+			<li class="line-b p10 oh">
+				<span class="text-gray" translate>Amount</span>:
+				<span class="right">
+      				{{customizedAmountUnit}}
+    			</span>
+			</li>
+		</ul>
+		<!-- 详情 结束 -->
+	</div>
+
+
+	<div ng-show="!amountInSmallestUnits" class="row m20t">
+		<div class="large-12 large-centered columns">
+			<form name="amountForm" ng-submit="submitForm(amountForm)" novalidate>
+				<div class="right" ng-hide="amountForm.amount.$pristine && !amountForm.amount.$modelValue ">
+          			<span class="has-error right size-12" ng-if="amountForm.amount.$invalid">
+            			<i class="icon-notvalid size-14"></i>
+            			<span clas="vm" translate>Not valid</span>
+          			</span>
+
+					<small class="text-primary right" ng-if="!amountForm.amount.$invalid">
+						<i class="icon-valid size-14"></i>
+					</small>
+        		</div>
+
+				<div>
+					<label for="amount">
+						<span class="size-12 color333" translate>Amount</span>
+					</label>
+
+					<div class="input">
+
+
+						<!--指定金额-->
+						<input
+							style="height: 45px;font-size: 14px;" min="0.000001" max="999999999.999999"
+							type="number" id="amount" name="amount" ng-attr-placeholder="{{'Amount'|translate}}"
+							ng-model="_customAmount" valid-amount="{{index.arrBalances[index.assetIndex].asset}}"
+							required autocomplete="off">
+						<!--指定金额 结束-->
+
+
+						<a class="postfix" ng-if="index.arrBalances[index.assetIndex].asset === 'base'" style="line-height: 45px;">{{unitName}}</a>
+						<a class="postfix" ng-if="index.arrBalances[index.assetIndex].asset === index.BLACKBYTES_ASSET">{{bbUnitName}}</a>
+						<a class="postfix"
+						   ng-if="index.arrBalances[index.assetIndex].asset !== 'base' && index.arrBalances[index.assetIndex].asset !== index.BLACKBYTES_ASSET">of
+							{{index.arrBalances[index.assetIndex].asset.substr(0,4)}}</a>
+					</div>
+				</div>
+
+				<button type="submit" class="button black round expand" ng-disabled="amountForm.$invalid" style="background: #0095ff" translate>
+          			{{buttonLabel}}
+        		</button>
+			</form>
+		</div>
+	</div>
+</div>
+
+
+<!--移动端显示点击分享钱包地址-->
+<!--<div class="m10t text-center" ng-show="isCordova">-->
+<!--<span class="button outline dark-gray tiny round" ng-click="shareAddress('{{protocol}}:' + addr + '?amount=' + amountInSmallestUnits + asset_param)">-->
+<!--<i class="fi-share"></i>-->
+<!--<span translate>Share address</span>-->
+<!--</span>-->
+<!--</div>-->
+
+<!--资产类型-->
+<!--<div>-->
+<!--<label for="asset">-->
+<!--<span translate>Asset</span>-->
+<!--</label>-->
+
+<!--<select class="m10t" ng-model="index.assetIndex" id="asset" name="asset"-->
+<!--ng-options="index.arrBalances.indexOf(balance) as (balance.asset === 'base' ? 'notes' : (balance.asset === index.BLACKBYTES_ASSET ? 'blackbytes' : balance.asset)) for balance in index.arrBalances">-->
+
+<!--</select>-->
+<!--</div>-->

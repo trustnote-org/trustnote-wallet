@@ -1,0 +1,251 @@
+
+<!--交易中 插入保存的地址 和钱包-->
+
+<div ng-init="(wallets[0] || !bAllowAddressbook) ? selectedWalletsOpt = true : selectedWalletsOpt = false">
+	<nav class="tab-bar oh">
+		<!--左边-->
+		<section class="left-small">
+			<!--点击关闭-->
+			<a ng-show="!editAddressbook && !addAddressbookEntry" ng-click="cancel()" class="p10">
+				<span class="text-close" translate>Close</span>
+			</a>
+			<!--点击返回-->
+			<a ng-show="addAddressbookEntry" ng-click="newAddress = ''; toggleAddAddressbookEntry()" >
+				<i class="icon-arrow-left3 icon-back"></i>
+				<span class="text-back" translate>Back</span>
+			</a>
+		</section>
+		<!--左边结束-->
+
+
+		<!-- 中间部分  联系人 -->
+		<section class="middle tab-bar-section">
+			<h1 class="ellipsis" ng-style="{ 'max-width': '100%'}">
+				<span class="size-17 colorfff" translate>Contacts</span>
+			</h1>
+		</section>
+		<!-- 中间部分结束 -->
+
+
+		<!--右边-->
+		<section class="right-small" ng-show="!selectedWalletsOpt" ng-click="toggleEditAddressbook()">
+			<!--点击编辑-->
+			<a ng-show="!editAddressbook && !addAddressbookEntry" href class="p10">
+				<span class="text-close" translate>Edit</span>
+			</a>
+			<!--点击完成-->
+			<a ng-show="editAddressbook && !addAddressbookEntry" href class="p10">
+				<span class="text-close" translate>Done</span>
+			</a>
+			<!--打开相机-->
+			<qr-scanner ng-show="addAddressbookEntry" on-scan="onQrCodeScanned(data, addressbookForm)" before-scan="beforeQrCodeScann()"></qr-scanner>
+		</section>
+		<!--右边结束-->
+  	</nav>
+
+
+
+
+	<div class="modal-content fix-modals-touch">
+		<div class="create-tab small-only-text-center" ng-hide="create.hideTabs">
+			<div class="row">
+
+				<!--选择钱包 -->
+				<div class="tab-container small-6 medium-3 large-2" ng-class="{'selected':selectedWalletsOpt}">
+					<a href ng-click="selectedWalletsOpt = true" translate>Wallet</a>
+				</div>
+
+				<!--选择地址簿-->
+				<div class="tab-container small-6 medium-3 large-2" ng-class="{'selected':!selectedWalletsOpt}">
+					<a href ng-click="selectedWalletsOpt = false" translate>Addressbook</a>
+				</div>
+			</div>
+
+
+
+		</div>
+		<!--选择切换  钱包 地址簿 结束-->
+
+		<div ng-show="selectedWalletsOpt">
+			<div class="onGoingProcess" ng-if="gettingAddress">
+				<div class="onGoingProcess-content">
+					<div class="spinner">
+						<div class="rect1"></div>
+						<div class="rect2"></div>
+						<div class="rect3"></div>
+						<div class="rect4"></div>
+						<div class="rect5"></div>
+					</div>
+					<span translate> Getting address for wallet {{selectedWalletName}} ...</span>
+				</div>
+			</div>
+
+			<div ng-if="!gettingAddress">
+				<ul class="no-bullet">
+					<!--已经保存的钱包-->
+					<li class="line-b" ng-repeat="w in wallets">
+						<a ng-click="selectWallet(w.id, w.name)" class="db oh">
+							<!--钱包头像-->
+							<div style="border-radius: 50%;font-size: 18px;" class="avatar-wallet" ng-style="{'background-color':w.color}" > {{(w.name || w.id) | limitTo: 1}} </div>
+							<!--钱包名字-->
+							<div class="ellipsis name-wallet text-bold"> {{w.name || w.id}} </div>
+							<!--钱包签名人数-->
+							<div class="size-12">{{w.m}} of {{w.n}}
+								<span ng-show="w.network=='testnet'">[Testnet]</span>
+							</div>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+
+
+		<div ng-show="!selectedWalletsOpt" class="m20b">
+			<ul ng-show="!addAddressbookEntry" class="no-bullet m0" ng-init="listEntries()">
+				<!--已经保存的地址-->
+				<li class="p10 line-b" ng-repeat="(addr, label) in list">
+					<!--移除一个地址-->
+					<a ng-show="selectedAddressbook[addr]" class="removeAddressbook" ng-click="remove(addr)" translate>Remove</a>
+
+					<a class="selectAddressbook" ng-show="editAddressbook" ng-click="toggleSelectAddressbook(addr)">
+						<i class="fi-trash"></i>
+					</a>
+
+					<div ng-click="selectAddressbook(addr)">
+						{{label}}
+						<div class="size-10 text-gray ellipsis">{{addr}}</div>
+					</div>
+				</li>
+
+				<!--添加新的条目-->
+				<li class="m10t line-b" ng-show="!editAddressbook">
+					<a ng-click="toggleAddAddressbookEntry()" style="display:block;width: 100%;color: #333;">
+						<!--<i class="fi-plus size-18 m10r"></i>-->
+						<i class="icon-arrow-right3 size-14 right text-gray " style="margin-top:5px;"></i>
+						<span class="text-close size-14" translate>Add a new entry</span>
+						<span ng-show="!list[newAddress] && newAddress">({{newAddress}})</span>
+					</a>
+				</li>
+			</ul>
+
+
+			<!--地址簿添加新条目-->
+			<div ng-show="addAddressbookEntry">
+
+				<!--添加新条目-->
+				<h4 class="title m0" translate>Add a new entry</h4>
+
+				<form name="addressbookForm" class="p10" no-validate>
+					<div class="text-warning size-12 m10b" ng-show="error">{{error|translate}}</div>
+
+					<span ng-hide="addressbookForm.address.$pristine">
+						<!--输入地址无效-->
+						<span class="has-error right size-12" ng-show="addressbookForm.address.$invalid && addressbook.address">
+              				<i class="icon-notvalid size-14"></i>
+              				<span class="vm" translate>Not valid</span>
+            			</span>
+
+						<!--输入地址有效-->
+						<small class="right text-primary" ng-show="!addressbookForm.address.$invalid">
+              				<i class="icon-valid size-14"></i>
+            			</small>
+					</span>
+
+
+
+					<!-- 地址 -->
+					<label class="size-12 color333" translate>Address</label>
+					<!-- 输入地址 是trustnote地址 -->
+					<input
+						style="height: 45px; font-size: 14px;"
+						type="text"
+						id="address"
+						name="address"
+						ng-model="addressbook.address"
+						placeholder="{{'TrustNote address'|translate}}"
+						valid-address required>
+					<!-- 输入地址 结束-->
+
+
+
+					<!-- 联系人姓名 -->
+					<label class="size-12 color333" translate>Label</label>
+					<!-- 输入 联系人姓名 -->
+					<input
+						style="height: 45px; font-size: 14px;"
+						maxlength="20"
+						type="text"
+						id="label"
+						name="label"
+						ng-model="addressbook.label"
+						placeholder="{{'Name of the contact'|translate}}" required>
+					<!-- 输入 联系人姓名 结束 -->
+
+
+
+					<div class="row">
+						<!-- 点击取消 -->
+						<div class="columns large-6 medium-6 small-6">
+							<input type="button"
+								   class="button expand outline dark-gray round"
+								   ng-click="newAddress = ''; toggleAddAddressbookEntry()"
+								   style="font-size: 12px;padding: 10px 0;"
+								   value="{{'Cancel'|translate}}">
+						</div>
+						<!-- 点击取消 结束 -->
+
+
+						<!-- 点击保存 -->
+						<div class="columns large-6 medium-6 small-6">
+							<input type="submit"
+								   class="button expand round"
+								   value="{{'Save'|translate}}"
+								   ng-disabled="!addressbookForm.$valid"
+								   style="background: #0095ff;font-size: 12px;padding: 10px 0;"
+								   ng-click="newAddress = ''; add(addressbook)">
+						</div>
+						<!-- 点击保存 结束 -->
+
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+
+<!--选择切换  钱包 地址簿-->
+<!--<div style="height: 60px;background-color: #f00;position: relative;margin-top:20px;" class="w100" >-->
+<!--<section ng-show="bAllowAddressbook" class="w100" style="background: darkgreen;position: absolute;left: 0;">-->
+<!--<ul class="w100" ng-show="!editAddressbook && wallets[0] && !addAddressbookEntry" style="background: #f08a24;">-->
+
+
+<!--&lt;!&ndash;点击选择钱包&ndash;&gt;-->
+<!--<li class="ellipsis text-center" ng-class="{'selected':selectedWalletsOpt}" ng-click="selectedWalletsOpt = true" translate style="width: 50%;">-->
+<!--Wallets-->
+<!--</li>-->
+
+
+<!--&lt;!&ndash;点击选择地址簿&ndash;&gt;-->
+<!--<li class="ellipsis text-center" ng-class="{'selected':!selectedWalletsOpt}" ng-click="selectedWalletsOpt = false" translate style="width: 50%;">-->
+<!--Addressbook-->
+<!--</li>-->
+<!--</ul>-->
+
+
+<!--<h1 ng-show="(editAddressbook || !wallets[0]) && !addAddressbookEntry" class="title ellipsis" translate style="color: #fff">-->
+<!--Addressbook-->
+<!--</h1>-->
+<!--</section>-->
+
+<!--<section class="middle tab-bar-section" ng-show="!bAllowAddressbook">-->
+<!--<ul class="button-group round even-2">-->
+<!--<li class="ellipsis" ng-class="{'selected':selectedWalletsOpt}" ng-click="selectedWalletsOpt = true" translate>-->
+<!--Wallets-->
+<!--</li>-->
+<!--</ul>-->
+<!--</section>-->
+<!--</div>-->

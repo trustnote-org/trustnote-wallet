@@ -1,0 +1,410 @@
+
+<!--聊天页面-->
+
+<div ng-controller="correspondentDeviceController">
+	<!--原top栏顶部-->
+	<!--<div class="topbar-container" ng-include="'views/includes/topbar.html'" ng-init="titleSection=correspondent.name; goBackToState = true; showCamera = true"></div> -->
+
+	<!--添加top栏顶部-->
+	<nav class="tab-bar">
+    	<!--返回-->
+		<section class="left-small">
+    		<a ng-click="goToCorrespondentDevices()">
+				<i class="icon-arrow-left3 icon-back"></i>
+      			<span class="text-back">{{'Back'|translate}}</span>
+    		</a>
+    	</section>
+
+
+		<!-- 中间 对方设备名字-->
+    	<section class="middle tab-bar-section">
+	    	<h1 class=" ellipsis w100" >
+	      		<span class="size-17 colorfff"> {{correspondent.name}} </span>
+	    	</h1>
+    	</section>
+		<!-- 中间 结束-->
+
+
+		<!--编辑  -----ng-click="$root.go('correspondentDevices.correspondentDevice')"-->
+
+		<!--更改代码 取消调用函数 直接通过根路径-->
+    	<!--<section class="right-small" ng-click="editCorrespondent()">-->
+
+		<section class="right-small" ng-click="$root.go('correspondentDevices.correspondentDevice.editCorrespondentDevice')">
+      		<a href="#" class="p10">
+        		<span class="text-close" translate>Edit</span>
+      		</a>
+    	</section>
+  	</nav>
+	<!--添加top栏顶部  结束-->
+
+
+<style>
+    .right-side{
+        margin-left:auto;
+        margin-right:0px;
+    }
+    .left-side{
+        margin-left:0px;
+        margin-right:auto;
+    }
+    .send-form{
+        position: absolute;
+        width: 100%;
+        padding-bottom: 58px;
+        bottom: 0px;
+        border-top: 1px solid #E9E9EC;
+        background-color: white;
+        z-index: 5;
+        white-space: nowrap;
+        text-align: center;
+    }
+    .send-form .textinput {
+    	min-height:30px;
+    	width: 75%;
+    	margin: 0 auto;
+    	display: inline;
+    	vertical-align: middle;
+    	margin-top: 8px;
+    }
+    .send-form .chatbutton {
+    	padding: 6px 8px 4px 8px;
+    	border-radius: 40px;
+    	margin: 5px auto;
+    }
+
+	/*添加发送按钮样式：hover时bg还是 主题蓝*/
+	.send-form .btn:hover{
+		background: #0095ff;
+	}
+	
+	
+	
+    .send-form .chatbutton i {
+    	vertical-align: baseline;
+    }
+    #drop {
+    	max-width: 300px;
+    	left: 15px;
+    	width: auto !important;
+    	text-align: left;
+    	line-height: 1em;
+    }
+    #recording-drop {
+    	max-width: 200px;
+    	left: 140px;
+    	padding: 15px;
+    }
+    .message-log{
+        position: absolute;
+        width: 100%;
+        bottom: 150px;
+        top: 45px;
+        overflow-x: hidden;
+        overflow-y: auto;
+        /*margin-top: 10px;*/
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        font-size: 13px;
+    }
+    .chat-message{
+        width:100%;
+        margin-top: 10px;
+    }
+    /*.chat-message:last-child{
+        margin-bottom: 10px;
+    }*/
+    .bubble{
+        padding: 10px 15px;
+        margin: 0px 7px;
+        border-radius: 18px;
+        position: relative;
+        max-width: 80%;
+        text-align: left;
+        /*display: inline-block;*/
+        word-wrap: break-word;
+    }
+    .top-drop-btn, .top-drop-btn:hover, .top-drop-btn:active, .top-drop-btn:focus {
+    	padding: 0;
+    	background: none;
+    }
+    #top-drop {
+    	width: 150px;
+    	left: 50%;
+    	margin-left: -75px;
+    }
+    
+
+/*
+Chat bubble CSS credits http://codepen.io/samuelkraft/pen/Farhl
+*/
+	.clear {
+		clear: both;
+	}
+	.from-me {
+		color: white;
+		background: #0B93F6;
+		float: right;
+	}
+	.from-me:before {
+		content: "";
+		position: absolute;
+		z-index: 2;
+		bottom: -2px;
+		right: -7px;
+		height: 20px;
+		border-right: 20px solid #0B93F6;
+		border-bottom-left-radius: 16px 14px;
+		-webkit-transform: translate(0, -2px);
+		transform: translate(0, -2px);
+	}
+	.from-me:after {
+		content: "";
+		position: absolute;
+		z-index: 3;
+		bottom: -2px;
+		right: -56px;
+		width: 26px;
+		height: 20px;
+		background: white;
+		border-bottom-left-radius: 10px;
+		-webkit-transform: translate(-30px, -2px);
+		transform: translate(-30px, -2px);
+	}
+	.from-me a {
+		color: white;
+	}
+	.bubble a.payment, .bubble a.external-link {
+		text-decoration: underline;
+	}
+	.bubble a.command {
+		line-height: 2;
+	}
+	.from-them {
+		background: #E5E5EA;
+		color: black;
+		float: left;
+	}
+	.from-them:before {
+		content: "";
+		position: absolute;
+		z-index: 2;
+		bottom: -2px;
+		left: -7px;
+		height: 20px;
+		border-left: 20px solid #E5E5EA;
+		border-bottom-right-radius: 16px 14px;
+		-webkit-transform: translate(0, -2px);
+		transform: translate(0, -2px);
+	}
+
+	.from-them:after {
+		content: "";
+		position: absolute;
+		z-index: 3;
+		bottom: -2px;
+		left: 4px;
+		width: 26px;
+		height: 20px;
+		background: white;
+		border-bottom-right-radius: 10px;
+		-webkit-transform: translate(-30px, -2px);
+		transform: translate(-30px, -2px);
+	}
+	.system {
+		position: relative;
+		z-index: 1;
+		text-align: center;
+		max-width: 100%;
+	}
+	.system span {
+		color: #888;
+		padding: 0 10px;
+		background-color: white;
+	}
+	.system span.padding {
+		padding: 0 10px 0 0;
+	}
+	.system b {
+		background-color: white;
+		border: 1px dashed #888;
+		border-width: 0 0 1px 0;
+		cursor: pointer;
+	}
+	.system:before {
+		border-top: 2px solid #dfdfdf;
+		content: "";
+		margin: 0 auto;
+		/* this centers the line to the full width specified */
+		position: absolute;
+		/* positioning must be absolute here, and relative positioning must be applied to the parent */
+		top: 50%;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		width: 95%;
+		z-index: -1;
+	}
+	.switch-line {
+		margin-top: 5px;
+	}
+	.msg-ts {
+		color: #666;
+		font-size: 10px;
+		padding-top: 10px;
+		width: 12%;
+	}
+
+	@media (max-width: 350px) {
+		.msg-ts {
+			font-size: 8px;
+		}
+	}
+	.send-form .textinput::-webkit-input-placeholder {
+		white-space: nowrap;
+	}
+
+	.dropup-item {
+		display: inline-block;
+		max-width: 100%;
+		padding: 0 15px 0 10px;
+	}
+
+	.dropup-item-link {
+		padding: 8px 0 !important;
+		display: inline-block !important;
+		max-width: calc(100% - 10px);
+		float: left;
+	}
+
+	.ellipsis-end {
+		float: left;
+		width: 10px;
+		padding: 8px 0;
+		color: #555555;
+	}
+</style>
+
+	<!--状态气泡-->
+	<div class="onGoingProcess" ng-show="onGoingProcess">
+		<div class="onGoingProcess-content">
+			<div class="spinner">
+				<div class="rect1"></div>
+				<div class="rect2"></div>
+				<div class="rect3"></div>
+				<div class="rect4"></div>
+				<div class="rect5"></div>
+			</div>
+			{{onGoingProcess|translate}}...
+		</div>
+	</div>
+
+
+
+
+	<!--&lt;!&ndash;对话内容&ndash;&gt;bind-to-height="['bottom','form[name=chatForm]']"-->
+	<div
+		class="message-log size-12 enable_text_select"
+		scroll-bottom="messageEvents"
+		when-scrolled="loadMoreHistory"
+
+		style="bottom: 77px;"
+		ng-mousemove="newMsgCounterEnabled ?'': newMessagesCount[correspondent.device_address] = 0">
+
+		<div class="chat-message" ng-repeat="messageEvent in messageEvents">
+			<div ng-class="messageEvent.bIncoming ? 'from-them' : (messageEvent.type == 'system' ? 'system' : 'from-me')" class="bubble" dynamic="messageEvent.message"></div>
+
+			<span></span>
+
+			<div ng-class="(messageEvent.bIncoming ? 'left' : 'right')" class="msg-ts" ng-if="messageEvent.type != 'system'">{{messageEvent.timestamp * 1000 | date:'shortTime'}}</div>
+
+			<div class="clear"></div>
+		</div>
+	</div>
+
+
+
+
+
+
+	<!--文本输入框  左侧按钮+文本框+发送-->
+	<form name="chatForm" class="send-form columns" no-validate ng-mousemove="newMsgCounterEnabled ?'': newMessagesCount[correspondent.device_address] = 0">
+		<!--发生错误-->
+		<div class="text-warning size-12 m10b" ng-show="error">{{error|translate}}</div>
+
+		<!--插入我的钱包地址-->
+		<a class="bg0745bc" dropdown-toggle="#drop" data-options="align:top" style="width: 30px;text-align:center;height: 30px;line-height:30px;position: absolute;bottom:59px;left: 10px;border-radius: 50%">
+			<i class="size-21 icon-dots-three colorfff"></i>
+		</a>
+
+		<ul id="drop" class="f-dropdown drop-top drop-up" data-dropdown-content>
+			<li class="dropup-item">
+				<a ng-click="insertMyAddress()" class="ellipsis dropup-item-link">
+				  	<span translate>
+				  		Insert my address
+				  	</span>
+					({{(index.shared_address ? 'Shared address '+index.shared_address : (index.alias || index.walletName))}}
+				</a>
+				<span class="ellipsis-end">)</span>
+			</li>
+			<div class="clear"></div>
+
+			<li class="dropup-item">
+				<a ng-click="requestPayment()" class="ellipsis dropup-item-link">
+					<span translate>Request payment</span> ({{(index.shared_address ? 'Shared address'+index.shared_address : (index.alias || index.walletName))}}
+				</a>
+				<span class="ellipsis-end">)</span>
+			</li>
+		</ul>
+
+		<!--中间文本输入框-->
+		<textarea
+			style="margin: 5px auto 0;width: 82%;"
+			rows="1" msd-elastic id="message" name="message" ng-model="message"
+			autofocus required ng-enter="send()" class="textinput"
+			placeholder="{{'Text message to'|translate}} {{correspondent.name}}">
+		</textarea>
+
+		<!--点击发送信息-->
+		<button
+			type="submit" class=" btn bg0745bc"
+			ng-disabled="!chatForm.$valid"
+			style="position: absolute;right: 8px;bottom: 40px;width: 35px;height: 30px;padding: 0;border-radius: 10px"
+			ng-click="send()">
+			<i class="size-21 icon-right-plane"></i>
+		</button>
+
+	</form>
+
+      
+
+
+    <div class="extra-margin-bottom"></div>
+</div>
+
+<div ng-include="'views/includes/menu.html'" ng-show="!index.noFocusedWallet"></div>
+
+
+<!--开启或关闭本地聊天记录-->
+<!--<div id="recording-drop" class="f-dropdown pos-at-cursor" data-dropdown-content>-->
+<!--<div class="text" ng-if="correspondent.my_record_pref && correspondent.peer_record_pref" translate>-->
+<!--Both you and {{correspondent.name}} enabled local chat history recording.-->
+<!--</div>-->
+
+<!--<div class="text" ng-if="!(correspondent.my_record_pref && correspondent.peer_record_pref)" translate>-->
+<!--Either you or {{correspondent.name}} have chat history recording disabled. History is not saved for anyone now.-->
+<!--</div>-->
+<!--<br>-->
+<!--开关一：我的录制偏好-->
+<!--<div>-->
+<!--<switch ng-model="correspondent.my_record_pref" class="green right"></switch>-->
+<!--<div translate>My recording preference</div>-->
+<!--</div>-->
+<!--<div class="clear"></div>-->
+
+<!--开关二：他们 录制偏好-->
+<!--<div class="switch-line">-->
+<!--<switch ng-model="correspondent.peer_record_pref" class="green right" disabled="true"></switch>-->
+<!--<div translate>Their recording preference</div>-->
+<!--</div>-->
+<!--</div>-->

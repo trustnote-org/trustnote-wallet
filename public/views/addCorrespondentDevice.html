@@ -1,0 +1,46 @@
+
+<!--添加新设备-->
+
+<div class="topbar-container" ng-include="'views/includes/topbar.html'" ng-init="titleSection='Add new device'; goBackToState = true; noColor = true; index.tab = 'chat'"></div>
+
+<div class="content">
+	<ul  class="no-bullet m0 correspondentList">
+		<!--邀请其他设备-->
+		<li class=" line-b"  style="padding:0rem 0rem;">
+			<a ng-click="$root.go('correspondentDevices.addCorrespondentDevice.inviteCorrespondentDevice')" class="p10" style="display: block;color:#0095ff;width: 100%;">
+				<i class="icon-arrow-right3 size-14" style="float: right;margin-top:5px;"></i>
+				<span class="text-close size-14" translate>Invite the other device</span>
+			</a>
+		</li>
+
+		<!--接受其他设备邀请-->
+		<li class=" line-b" style="padding:0 0rem;">
+			<a ng-click="$root.go('correspondentDevices.addCorrespondentDevice.acceptCorrespondentInvitation')" class="p10" style="display: block;color:#0095ff;width: 100%;">
+				<i class="icon-arrow-right3 size-14" style="float: right;margin-top:5px;"></i>
+				<span class="text-close size-14" translate>Accept invitation from the other device</span>
+			</a>
+		</li>
+	</ul>
+</div>
+
+<div ng-include="'views/includes/menu.html'" ng-show="!index.noFocusedWallet"></div>
+
+
+<!--原代码内容-->
+<!--<ul class="no-bullet manage size-12">-->
+<!--<li>-->
+<!--<a ng-click="$root.go('correspondentDevices.addCorrespondentDevice.inviteCorrespondentDevice')">-->
+<!--&lt;!&ndash;<i class="fi-die-four circle plus-fixed" style="background: #20498b"></i>&ndash;&gt;-->
+<!--<i class="icon-arrow-right3 size-18 right m20t"></i>-->
+<!--<span translate>Invite the other device</span>-->
+<!--</a>-->
+<!--</li>-->
+<!--<li>-->
+<!--<a ng-click="$root.go('correspondentDevices.addCorrespondentDevice.acceptCorrespondentInvitation')">-->
+<!--&lt;!&ndash;<i class="icon-scan circle" style="background: #20498b"></i>&ndash;&gt;-->
+<!--<i class="icon-arrow-right3 size-18 right m20t"></i>-->
+<!--<span translate style="max-width: 60%">Accept invitation from the other device</span>-->
+<!--</a>-->
+<!--</li>-->
+
+<!--</ul>-->

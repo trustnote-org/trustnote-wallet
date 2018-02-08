@@ -1,0 +1,34 @@
+
+<!--钱包别名-->
+
+<div class="topbar-container" ng-include="'views/includes/topbar.html'"  ng-init="titleSection='Wallet Alias'; goBackToState = true"> </div>
+
+
+<span class="content preferences" ng-controller="preferencesAliasController as prefAlias">
+	<h4></h4>
+
+	<form name="settingsAliasForm" ng-submit="prefAlias.save()" class="columns">
+		<!--钱包的别名-->
+		<label>
+			<span class="size-12 color333" translate>  Alias for <span>{{index.walletName}}</span>  </span>
+		</label>
+
+		<!--input输入别名-->
+		<input
+			style="margin-bottom:5px; height: 45px; font-size: 14px;"
+			type="text"
+			id="alias2"
+			name="alias2"
+			maxlength="20"
+			ng-model="prefAlias.alias" >
+
+
+
+		<span class="text-gray size-12" translate> Changing wallet alias only affects the local wallet name. </span>
+		<div class="small-12 m15t">
+			<input type="submit" class="button expand black round" value="{{'Save'|translate}}" style="background: #0095ff;">
+		</div>
+	</form>
+
+
+</div>

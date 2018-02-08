@@ -1,0 +1,62 @@
+
+<!--完整备份文件导入-->
+
+<div class="topbar-container" ng-include="'views/includes/topbar.html'" ng-init="titleSection='Restore from full backup';  goBackToState = true; noColor = true"></div>
+
+<div class="content preferences" ng-controller="importController as import">
+	<h4></h4>
+
+	<div class="onGoingProcess" ng-show="import.importing">
+		<div class="onGoingProcess-content">
+			<div class="spinner">
+				<div class="rect1"></div>
+				<div class="rect2"></div>
+				<div class="rect3"></div>
+				<div class="rect4"></div>
+				<div class="rect5"></div>
+			</div>
+			<span translate> Importing wallet... </span>
+		</div>
+	</div>
+
+	<div class="box-notification" ng-show="import.error">
+		<span class="text-warning">{{import.error}}</span>
+	</div>
+
+	<div>
+		<form class="columns" ng-submit="import.walletImport()">
+			<label><span translate>Your wallet file:</span></label>
+
+			<div ng-show="import.android && import.androidVersion < 5">
+				<button ng-click="import.oldAndroidInputFileClick()" class="button small black round" translate>Choose File</button>
+				{{import.oldAndroidFileName}}
+			</div>
+			
+			<input ng-show="!import.android || import.androidVersion>=5" type="file" ng-file-select>
+			<input type="password" placeholder="Password" ng-model="import.password">
+			
+			<input ng-disabled="import.importing || import.password == '' || (!file && !import.oldAndroidFilePath)" type="submit" class="button expand black round" value="{{'Import'|translate}}" style="background: #0095ff;">
+		</form>
+	</div>
+
+	<div ng-show="import.iOs && import.arrBackupFiles.length > 0" style="background-color: #fff">
+		<div class="center">OR</div>
+		<div>
+			<ul class="no-bullet m0" ng-repeat="backupFile in import.arrBackupFiles | orderBy:backupFile.time:true">
+				<li ng-click="import.iosWalletImportFromFile(backupFile.originalName)">
+					<i class="icon-arrow-right3 size-24 right text-gray"></i>
+					<div>{{backupFile.name}}</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="text-alert size-12 columns">
+		<span translate>WARNINGS:</span>
+		<ul class="warnings">
+			<li translate>This will permanently delete all your existing wallets!</li>
+			<!--<li translate>If you have moved this backup from another device, stop using it on the original one immediately after creating the backup.  Never clone wallets.  If you need access from several devices, use multisig.</li>-->
+			<li translate>If you have moved this backup from another device, stop using it on the original one immediately after creating the backup.  Never clone wallets.</li>
+		</ul>
+	</div>
+</div>

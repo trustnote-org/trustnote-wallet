@@ -1,0 +1,85 @@
+
+<!--偏好设定-->
+<!--index.updateHistoryFromNetwork();  index.onClick();-->
+<!--<div class="topbar-container" ng-include="'views/includes/topbar.html'" ng-init="titleSection='Preferences'; closeToHome = true"></div>-->
+
+
+<!--top顶部-->
+
+<nav ng-controller="topbarController as topbar" class="tab-bar oh" ng-init="closeToHome = true">
+
+	<section class="left-small">
+		<a ng-show="closeToHome" class="p10 "
+		   ng-click="topbar.goWallet();closeToHome = null;index.updateHistoryFromNetwork();  index.onClick()">
+			<span class="text-close">{{'Close'|translate}}</span>
+		</a>
+	</section>
+
+
+	<!-- 中间部分 -->
+	<section class="middle tab-bar-section">
+		<h1 class="ellipsis" ng-style="{ 'max-width': '100%'}">
+			<span class="size-17 colorfff" translate>Preferences</span>
+		</h1>
+	</section>
+	<!-- 中间部分结束 -->
+</nav>
+
+
+
+
+
+
+
+
+<div class="content preferences" ng-controller="preferencesController as preferences" ng-init="preferences.init()">
+	<h4></h4>
+  	<ul class="no-bullet m0" ng-show="!index.noFocusedWallet">
+
+		<li  ng-click="$root.go('preferences.preferencesAlias')">
+      		<div class="right text-gray">
+        		{{index.alias||index.walletName}}
+        		<i class="icon-arrow-right3 size-14"></i>
+      		</div>
+      		<div translate>Wallet Alias</div>
+    	</li>
+
+		<li ng-click="$root.go('preferences.preferencesColor')">
+      		<div class="right text-gray">
+        		<span ng-style="{'color':index.backgroundColor}">&block;</span>
+        		<i class="icon-arrow-right3 size-14"></i>
+      		</div>
+      		<div translate>Color</div>
+    	</li>
+
+    	<li ng-show="index.isPrivKeyExternal">
+      		<div class="right text-gray">
+        		{{preferences.externalSource}}
+        		<!-- (Accont {{preferences.externalAccount}}) -->
+      		</div>
+      		<div translate>Hardware wallet</div>
+    	</li>
+
+    	<h4></h4>
+		<li ng-click="$root.go('preferences.preferencesAdvanced')">
+      		<i class="icon-arrow-right3 size-14 right text-gray"></i>
+      		<div translate>Advanced</div>
+    	</li>
+  	</ul>
+
+  	<div ng-show="!index.noFocusedWallet && index.canSign && preferences.touchidAvailable">
+    	<h4 translate  ng-show="index.canSign">
+      		Spending Restrictions
+    	</h4>
+
+    	<ul class="no-bullet m0">
+      		<li  ng-show="preferences.touchidAvailable">
+        		<switch id="touchid" name="touchid" ng-model="touchid" class="green right"></switch>
+        		<div translate>Scan Fingerprint</div>
+      		</li>
+    	</ul>
+  	</div>
+  	<h4></h4>
+</div>
+
+<div class="extra-margin-bottom"></div>

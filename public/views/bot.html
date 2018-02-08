@@ -1,0 +1,43 @@
+
+<!--添加 机器人商店-->
+
+<div ng-controller="botController">
+	<nav class="tab-bar">
+		<!--点击返回-->
+		<section class="left-small">
+			<a ng-click="$root.go('correspondentDevices', 'correspondentDevices')">
+				<i class="icon-arrow-left3 icon-back"></i>
+				<span class="text-back">{{'Back'|translate}}</span>
+			</a>
+		</section>
+
+		<!--<section class="right-small">-->
+			<!--<qr-scanner on-scan="onQrCodeScanned(data)" before-scan="beforeQrCodeScan()"></qr-scanner>-->
+		<!--</section>-->
+
+		<!--添加机器人页面  机器人商店-->
+		<section class="middle tab-bar-section">
+			<h1 class="title ellipsis">
+				<span class="size-17 colorfff">{{'Bot Store'|translate}}</span>
+			</h1>
+		</section>
+	</nav>
+
+
+
+	<div class="columns m20t" style="position: absolute; margin-bottom: 60px;">
+		<h1 style="font-weight: 200; margin-bottom: 25px">{{bot.name}}</h1>
+		<div class="m30b" translate dynamic="bot.description" style="-webkit-user-select: text;"></div>
+
+		<div class="row">
+			<div>
+				<input ng-if="bot.isPaired" type="button" class="button expand round" value="{{'Open chat'|translate}}" style="background: #0095ff;font-size: 14px;padding: 10px 0;" ng-click="open(bot)" ng-disabled="!bot">
+				<input ng-if="!bot.isPaired" type="button" class="button expand round" value="{{'Add Bot'|translate}}" style="background: #0095ff;font-size: 14px;padding: 10px 0;" ng-click="pair(bot)" ng-disabled="!bot">
+			</div>
+		</div>
+	</div>
+
+	<div class="extra-margin-bottom"></div>
+</div>
+
+<div ng-include="'views/includes/menu.html'" ng-show="!index.noFocusedWallet"></div>

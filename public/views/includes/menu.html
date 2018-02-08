@@ -1,0 +1,32 @@
+
+<!--底部的tab栏-->
+
+<div class="bottom-bar second-bottom-bar row collapse animated slideInRight" ng-class="{ 'slideOutRight': !showPlugins }" ng-if="index.menu.length > 6">
+
+	<div class="medium-{{index.menuItemSize}} small-{{index.menuItemSize}} columns text-center bottombar-item" ng-repeat="item in index.menu | limitTo: 5 - index.menu.length">
+		<span ng-include="'views/includes/menu-item.html'"></span>
+	</div>
+
+	<div class="medium-{{index.menuItemSize}} small-{{index.menuItemSize}} columns text-center bottombar-item" ng-repeat="n in index.menu | limitTo: 4 - index.menu.length % 6">
+		<a></a>
+	</div>
+
+	<menu-toggle ng-show="index.menu.length > 6"> </menu-toggle>
+</div>
+
+
+
+
+<div class="bottom-bar row collapse">
+	<div ng-class="{ 'columns': index.menu.length == 5 }">
+		<div class="row collapse">
+			<div class="columns text-center bottombar-item" ng-repeat="item in index.menu | limitTo: (index.menu.length > 6 ? 5 : index.menu.length)">
+				<span ng-include="'views/includes/menu-item.html'"></span>
+			</div>
+			<!-- tab中选项多于四个显示 三角切换     -->
+			<menu-toggle ng-show="index.menu.length > 4"></menu-toggle>
+		</div>
+	</div>
+</div>
+
+

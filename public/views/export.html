@@ -1,0 +1,80 @@
+
+<!--完整导出钱包备份-->
+
+<div class="topbar-container" ng-include="'views/includes/topbar.html'" ng-init="titleSection='Full backup'; goBackToState = true"></div>
+
+<div class="content preferences" ng-controller="exportController as export">
+	<h4></h4>
+	<div class="onGoingProcess" ng-show="export.exporting">
+		<div class="onGoingProcess-content">
+			<div class="spinner">
+				<div class="rect1"></div>
+				<div class="rect2"></div>
+				<div class="rect3"></div>
+				<div class="rect4"></div>
+				<div class="rect5"></div>
+			</div>
+			<span translate> Exporting... </span>
+		</div>
+	</div>
+
+	<div>
+		<div class="text-warning size-14 m20b" ng-show="export.error">
+			<i class="fi-alert size-12"></i>
+			<span translate> Failed to export </span>
+		</div>
+
+
+		<form>
+			<div class="row">
+				<div class="columns">
+					<!--设置新的密码-->
+					<label class="size-12 color333" translate>Set up a Password </label>
+					<div class="input">
+						<input
+							style="height: 45px; font-size: 14px;"
+							type="password"
+							class="form-control"
+							placeholder="{{'Your export password'|translate}}"
+							name="password"
+							ng-model="export.password">
+					</div>
+
+					<!--再次输入新密码-->
+					<label class="size-12 color333"  translate>Repeat the password</label>
+					<div class="input">
+						<input
+							style="height: 45px; font-size: 14px;"
+							type="password"
+							class="form-control"
+							placeholder="{{'Repeat password'|translate}}"
+							name="password2"
+							ng-model="export.repeatpassword">
+					</div>
+
+					<!--选择是否压缩文件-->
+					<div class="size-14 m20b" ng-show="!export.isCordova">
+						<switch name="bCompression" ng-model="export.bCompression" class="green right"></switch>
+						<div translate>Compress the file? (Slower)</div>
+					</div>
+
+					<input type="file" id="nwExportInputFile" nwsaveas=""  style="display: none"/>
+
+					<button class="black round expand m20t" ng-click="export.walletExport()" ng-disabled="(export.exporting || !export.password || export.password != export.repeatpassword)" style="background: #0095ff;">
+						<i class="fi-download"></i>
+						<span translate>Export</span>
+					</button>
+				</div>
+			</div>
+		</form>
+
+		<div class="text-alert size-12 columns">
+			<span translate>WARNING:</span>
+			<ul class="warnings">
+				<li translate>If you plan to restore the wallet on another device, stop using it on the current one immediately after creating the backup.  Never clone wallets.</li>
+			</ul>
+		</div>
+	</div>
+</div>
+
+<div class="extra-margin-bottom"></div>

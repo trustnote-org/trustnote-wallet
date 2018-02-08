@@ -1,0 +1,50 @@
+
+<!--智能钱包的定义-->
+
+<nav class="tab-bar">
+	<!--左侧 点击关闭-->
+	<section class="left-small">
+		<a ng-click="cancel()" class="p10">
+			<span class="text-close" translate>Close</span>
+		</a>
+	</section>
+
+	<!--中间title-->
+	<section class="middle tab-bar-section">
+		<h1 class=" ellipsis w100">
+			<span class="size-17 colorfff" translate>Definition of smart address</span>
+		</h1>
+	</section>
+</nav>
+
+
+
+<div class="modal-content fix-modals-touch">
+	<div class="row columns m20t" translate>
+		{{address}} can be spent if:
+	</div>
+
+	<!--angular中动态组件	-->
+	<div class="row columns m20t size-14 center enable_text_select" dynamic="humanReadableDefinition"></div>
+
+
+	<div class="row columns m20t size-14">
+		<span class="text-gray" translate>Peer:</span>
+		<span>{{shared_address_cosigners}}</span>
+	</div>
+
+	<div class="row columns size-14">
+		<span class="text-gray" translate>Created:</span>
+		<span>
+		  	<time>{{ creation_ts * 1000 | amDateFormat:'MM/DD/YYYY HH:mm a'}}</time>
+		  	<time>({{ creation_ts * 1000 | amTimeAgo}})</time>
+		</span>
+	</div>
+
+	<div class="large-12 large-centered row columns m20t">
+		<button class="button black round expand" style="background: #0095ff" ng-click="cancel()" translate>
+			Close
+		</button>
+	</div>
+
+</div>

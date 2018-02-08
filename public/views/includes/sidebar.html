@@ -1,0 +1,135 @@
+
+<!--mywallet-顶部+钱包-->
+<!--top顶部栏-->
+<nav ng-controller="topbarController as topbar" class="tab-bar"  ng-init="showCamera = true" style="border: none">
+	<!-- 右边 点击进入全局设置 vm {vertical-align: middle;}-->
+	<!--.sidebar .icon {-->
+	<!--width:  39px;-->
+	<!--text-align: center;-->
+	<!--margin-right: 15px;-->
+	<!--float: left;-->
+	<!--display: block;-->
+	<!--}-->
+	<!--点击进入设置-->
+	<section class="right-small" ng-show="showCamera">
+		<a ng-click="$root.go('preferencesGlobal')" class="p10">
+			<i class="icon-set size-26 vm"></i>
+		</a>
+	</section>
+
+	<!-- 中间 middle -->
+	<section class="middle tab-bar-section">
+		<h1 class="title ellipsis " ng-style="{'max-width': '100%'}">
+			<span translate class="size-17 colorfff">Wallet</span>
+		</h1>
+	</section>
+</nav>
+
+
+
+
+<!--添加一个色块-->
+<div style="height: 50px;background: url('img/bg.png');"> </div>
+
+
+
+
+<div style="height: calc(100% - 35px);overflow: auto;margin: -50px auto 0;padding-top:15px;">
+
+<!--<nav class="sidebar left-off-canvas-menu" ng-controller="sidebarController as sidebar">-->
+<nav ng-controller="sidebarController as sidebar">
+  	<ul class="off-canvas-list">
+		<!-- 钱包 repeat  -->
+    	<li
+			ng-show="sidebar.wallets[0]"
+			ng-repeat="item in sidebar.wallets track by $index"
+			ng-class="{'selected': item.id == index.walletId}"
+			class="nav-item oh"
+			style="border: 1px solid #d7d7d7;margin:0 auto;margin-bottom: 15px;width: 94%;background:#fff;border-radius: 5px;position: relative;">
+
+			<!--判断index.isCordova--电脑端-->
+	  	  	<a 
+				ng-if="!index.isCordova" 
+				ng-click="sidebar.switchWallet(item.id, index.walletId); index.updateTxHistory();" 
+				class="oh" 
+				style="border: none;width: 85%;>
+
+	  	  		 <!--<input type="checkbox" name="" id="" value="" ng-if="{'selected': item.id == index.walletId}" style="float: left;"/>-->
+
+				<!--被选中显示图标-->
+				<div style="width: 20px;height: 100%;color: #0095ff;position: absolute;left: 0;top: 0;padding:20px 0 0 5px" ng-if="item.id == index.walletId" >
+					<i class="icon-valid"></i>
+				</div>
+				<!--没有选中显示图标-->
+			  	<div style="color: #aaaaaa;width: 20px;height: 100%;position: absolute;left: 0;top: 0;padding:20px 0 0 8px" ng-if="item.id != index.walletId" >
+				  	<i class=""></i>
+			  	</div>
+
+				<!--钱包圆头像-->
+			  	<div class="avatar-wallet"   ng-style="{'background-color':item.color}" style="float: left;color:#fff;border-radius: 50%;width: 45px;height: 45px;text-align: center;line-height: 45px;margin-left:15px;">
+					{{(item.name || item.id) | limitTo: 1}}
+				</div>
+				<!--钱包名字-->
+		        <div class="name-wallet" ng-class="{'m8t':item.n == 1}" style="float: left;margin-top:11px;margin-left:5px;color: #333;font-size: 16px;">
+					{{item.name || item.id}}
+					<div class="size-12" ng-show="item.n > 1" translate style="color: #666;">( {{item.m}}-of-{{item.n}} )</div>
+				</div>
+				<!--多签名钱包-->
+		        <!--<div class="size-12" ng-show="item.n > 1" translate style="float: left;">{{item.m}}-of-{{item.n}}</div>-->
+			</a>
+
+			<!--<div -->
+				<!--class="large-1 medium-1 small-1 columns text-right" -->
+				<!--style="height: 100%;width: 50px;position: absolute;right: 0;top: 0;padding-top:20px;padding-right:12px;"-->
+				<!--ng-click="sidebar.goPreferences(item.id, index.walletId)" >-->
+				<!--<i class="icon-arrow-right3 size-14 text-gray"></i>-->
+			<!--</div>-->
+
+
+
+			<!--判断index.isCordova--移动端-->
+	      	<a
+				ng-if="index.isCordova"
+				ng-click="sidebar.switchWallet(item.id, index.walletId); index.updateHistoryFromNetwork();  index.onClick();"
+				class="oh"
+				style="border: none;width: 85%;">
+		        <!--<div class="avatar-wallet"   ng-style="{'background-color':item.color}" style="border-radius: 50%;">{{(item.name || item.id) | limitTo: 1}}</div>-->
+		        <!--<div class="name-wallet" ng-class="{'m8t':item.n == 1}">{{item.name || item.id}}</div>-->
+		        <!--<div class="size-12" ng-show="item.n > 1" translate>{{item.m}}-of-{{item.n}}</div>-->
+				<!--被选中显示图标-->
+				<div style="width: 20px;height: 100%;color: #0095ff;position: absolute;left: 0;top: 0;padding:20px 0 0 5px" ng-if="item.id == index.walletId" >
+					<i class="icon-valid"></i>
+				</div>
+				<!--没有选中显示图标-->
+				<div style="color: #aaaaaa;width: 20px;height: 100%;position: absolute;left: 0;top: 0;padding:20px 0 0 8px" ng-if="item.id != index.walletId" >
+					<i></i>
+				</div>
+
+				<!--钱包圆头像-->
+				<div class="avatar-wallet"   ng-style="{'background-color':item.color}" style="float: left;color:#fff;border-radius: 50%;width: 45px;height: 45px;text-align: center;line-height: 45px;margin-left:15px;">
+					{{(item.name || item.id) | limitTo: 1}}
+				</div>
+				<!--钱包的名字-->
+				<div class="name-wallet" ng-class="{'m8t':item.n == 1}" style="float: left;margin-top:11px;margin-left:5px;color: #333;">
+					{{item.name || item.id}}
+					<!--多签名钱包-->
+					<div class="size-12" ng-show="item.n > 1" translate style="color: #666;">( {{item.m}}-of-{{item.n}} )</div>
+				</div>
+			</a>
+
+			<div
+				class="large-1 medium-1 small-1 columns text-right"
+				style="height: 100%;width: 50px;position: absolute;right: 0;top: 0;padding-top:20px;padding-right:12px;"
+				ng-click="sidebar.goPreferences(item.id, index.walletId)" >
+				<i class="icon-arrow-right3 size-14 text-gray"></i>
+			</div>
+    	</li>
+
+		<!--添加一个额外的margin-bottom -->
+		<div style="margin-bottom: 50px"></div>
+   	</ul>
+	<!-- 钱包 repeat  结束-->
+</nav>
+
+
+</div>
