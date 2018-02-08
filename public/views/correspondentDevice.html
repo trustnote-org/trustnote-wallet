@@ -302,24 +302,28 @@ Chat bubble CSS credits http://codepen.io/samuelkraft/pen/Farhl
 
 
 
-	<!--&lt;!&ndash;对话内容&ndash;&gt;bind-to-height="['bottom','form[name=chatForm]']"-->
+	<!--对话内容   bind-to-height="['bottom','form[name=chatForm]']"   -->
 	<div
 		class="message-log size-12 enable_text_select"
 		scroll-bottom="messageEvents"
 		when-scrolled="loadMoreHistory"
-
 		style="bottom: 77px;"
 		ng-mousemove="newMsgCounterEnabled ?'': newMessagesCount[correspondent.device_address] = 0">
 
+		<!-- 聊天信息 -->
 		<div class="chat-message" ng-repeat="messageEvent in messageEvents">
+			<!--来自对方 系统信息 我发送的-->
 			<div ng-class="messageEvent.bIncoming ? 'from-them' : (messageEvent.type == 'system' ? 'system' : 'from-me')" class="bubble" dynamic="messageEvent.message"></div>
 
 			<span></span>
-
-			<div ng-class="(messageEvent.bIncoming ? 'left' : 'right')" class="msg-ts" ng-if="messageEvent.type != 'system'">{{messageEvent.timestamp * 1000 | date:'shortTime'}}</div>
+			<!--消息发送时间-->
+			<div ng-class="(messageEvent.bIncoming ? 'left' : 'right')" class="msg-ts" ng-if="messageEvent.type != 'system'">
+				{{messageEvent.timestamp * 1000 | date:'shortTime'}}
+			</div>
 
 			<div class="clear"></div>
 		</div>
+		<!-- 聊天信息 结束 -->
 	</div>
 
 
@@ -359,7 +363,8 @@ Chat bubble CSS credits http://codepen.io/samuelkraft/pen/Farhl
 
 		<!--中间文本输入框-->
 		<textarea
-			style="margin: 5px auto 0;width: 82%;"
+			style="margin: 5px auto 0;width: 82%; max-height: 80px; overflow: auto; resize: none; "
+			maxlength="200"
 			rows="1" msd-elastic id="message" name="message" ng-model="message"
 			autofocus required ng-enter="send()" class="textinput"
 			placeholder="{{'Text message to'|translate}} {{correspondent.name}}">

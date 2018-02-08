@@ -3,6 +3,8 @@
 angular.module('copayApp.controllers').controller('newVersionIsAvailable', function ($scope, $modalInstance, go, newVersion, backButton) {
 
 	$scope.version = newVersion.version;
+	if(newVersion.msg)
+		$scope.msg = newVersion.msg;
 	
 	document.removeEventListener('backbutton', backButton.back, false);
 
@@ -19,25 +21,25 @@ angular.module('copayApp.controllers').controller('newVersionIsAvailable', funct
 		//    link = 'https://github.com/trustnote/trustnote/releases/tag/v' + newVersion.version;
 		//  }
 
-		var appPlatform = ''
-		if (typeof (process.platform) !== "undefined") {
-			switch (process.platform) {
-				case 'win32':
-					appPlatform = "/trustnote/trustnote-win64.exe";
-					break;
-				case 'linux':
-					appPlatform = "/trustnote/trustnote-linux64.zip";
-					break;
-				case 'darwin':
-					appPlatform = '/trustnote/trustnote-osx64.dmg';
-					break;
-			}
-		} else {
-			if (window.cordova.platformId === "android")
-				appPlatform = "/trustnote/trustnote.apk"
-			if (window.cordova.platformId === "ios")
-				appPlatform = "#download"
-		}
+		var appPlatform = '/application.html';
+		// if (typeof (process.platform) !== "undefined") {
+		// 	switch (process.platform) {
+		// 		case 'win32':
+		// 			appPlatform = "/trustnote/trustnote-win64.exe";
+		// 			break;
+		// 		case 'linux':
+		// 			appPlatform = "/trustnote/trustnote-linux64.zip";
+		// 			break;
+		// 		case 'darwin':
+		// 			appPlatform = '/trustnote/trustnote-osx64.dmg';
+		// 			break;
+		// 	}
+		// } else {
+		// 	if (window.cordova.platformId === "android")
+		// 		appPlatform = "/trustnote/trustnote.apk"
+		// 	if (window.cordova.platformId === "ios")
+		// 		appPlatform = "#download"
+		// }
 		link = 'https://trustnote.org' + appPlatform;
 
 		//go.openExternalLink(link);

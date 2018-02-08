@@ -67,12 +67,26 @@ angular.module('copayApp.controllers').controller('qrcodeController', function($
 		});
 	};
 
+
+	// 点击按钮 复制钱包地址到粘贴板  然后判断 移动端还是电脑端
 	this.copyAddress = function(addr) {
 		if (isCordova) {
 			window.cordova.plugins.clipboard.copy(addr);
 			window.plugins.toast.showShortCenter(gettextCatalog.getString('Copied to clipboard'));
+
+			// document.getElementsByClassName("copyed")[0].innerHTML = gettextCatalog.getString('Copied');
+			// setTimeout(function () {
+			// 	document.getElementsByClassName("copyed")[0].innerHTML = gettextCatalog.getString('Copy wallet address');
+			// },3000)
+
 		} else if (nodeWebkit.isDefined()) {
 			nodeWebkit.writeToClipboard(addr);
+			document.getElementsByClassName("copyedd")[0].style.display = 'block';
+			setTimeout(function () {
+				if(document.getElementsByClassName("copyedd")[0])
+					document.getElementsByClassName("copyedd")[0].style.display = 'none';
+			},1000)
+			// window.plugins.toast.showShortCenter(gettextCatalog.getString('Copied to clipboard'));
 		}
 	};
 

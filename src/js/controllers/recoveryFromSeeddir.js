@@ -1,20 +1,21 @@
+/**
+ * Created by gaoyang on 2018/1/22.
+ */
 'use strict';
 
-angular.module('copayApp.controllers').controller('recoveryFromSeed',
+angular.module('copayApp.controllers').controller('recoveryFromSeeddir',
 	function ($rootScope, $scope, $log, gettext, $timeout, gettextCatalog, profileService, go, notification, storageService) {
 
 		var async = require('async');
 		var conf = require('trustnote-common/conf.js');
 		var wallet_defined_by_keys = require('trustnote-common/wallet_defined_by_keys.js');
 		var objectHash = require('trustnote-common/object_hash.js');
-
 		try{
 			var ecdsa = require('secp256k1');
 		}
 		catch(e){
 			var ecdsa = require('trustnote-common/node_modules/secp256k1' + '');
 		}
-
 		var Mnemonic = require('bitcore-mnemonic');
 		var Bitcore = require('bitcore-lib');
 		var db = require('trustnote-common/db.js');
@@ -37,6 +38,10 @@ angular.module('copayApp.controllers').controller('recoveryFromSeed',
 		self.assocIndexesToWallets = {};
 		self.credentialsEncrypted = false;
 
+		// 定义模态框 的显示
+		self.show = false;
+
+
 		// 删除口令 （ 修改后 ）
 		self.delteConfirm = function () {
 			fc.clearMnemonic();
@@ -49,33 +54,25 @@ angular.module('copayApp.controllers').controller('recoveryFromSeed',
 		};
 
 
-		// 钱包内部恢复
-		self.passwordRequest = function (msg, cb) {
+		self.passwordRequest = function (msg) {
 			self.credentialsEncrypted = true;
 			$timeout(function () {
 				$scope.$apply();
 			});
-
-			// 输入密码错误 （ 可以捕捉的错误 ）
 			profileService.unlockFC(msg, function (err) {
 				if(typeof(err) !== "undefined"){
 					if(typeof(err.message) === "undefined")
 						return;
 					if (err.message === "Wrong password") {
 						$timeout(function(){
-	                		self.passwordRequest(err.message, cb);
-	            		}, 500);
+							self.passwordRequest(err.message);
+						}, 500);
 					}
-					// 输入密码 取消
-					$scope.index.showneikuang = false;
 					return;
 				}
-				// 输入密码 未捕捉的错误
 				else if(err){
 					return;
 				}
-
-				// 输入密码 点击确定
 				profileService.disablePrivateKeyEncryptionFC(function (err) {
 					$rootScope.$emit('Local/NewEncryptionSetting');
 					if (err) {
@@ -83,11 +80,12 @@ angular.module('copayApp.controllers').controller('recoveryFromSeed',
 						return;
 					}
 				});
-				if(profileService.password)
-					self.password = profileService.password;
 				self.credentialsEncrypted = false;
-				return cb();
 			});
+		}
+
+		if (fc.isPrivKeyEncrypted()) {
+			self.passwordRequest(gettextCatalog.getString('This will permanently delete all your existing wallets!'));
 		}
 
 		function determineIfAddressUsed(address, cb) {
@@ -126,7 +124,7 @@ angular.module('copayApp.controllers').controller('recoveryFromSeed',
 						checkAndAddCurrentAddress(is_change);
 					} else {
 						currentAddressIndex++;
-						if (currentAddressIndex - lastUsedAddressIndex > 20) {
+						if (currentAddressIndex - lastUsedAddressIndex >= 20) {
 							if (is_change) {
 								if (lastUsedAddressIndex !== -1) {
 									lastUsedWalletIndex = currentWalletIndex;
@@ -138,10 +136,6 @@ angular.module('copayApp.controllers').controller('recoveryFromSeed',
 									setCurrentWallet();
 								}
 							} else {
-								if (lastUsedAddressIndex !== -1) {
-									if (!assocMaxAddressIndexes[currentWalletIndex]) assocMaxAddressIndexes[currentWalletIndex] = {main: 0};
-									assocMaxAddressIndexes[currentWalletIndex].main = Math.floor((currentAddressIndex-1)/20)*20;
-								}
 								currentAddressIndex = 0;
 								checkAndAddCurrentAddress(1);
 							}
@@ -214,9 +208,8 @@ angular.module('copayApp.controllers').controller('recoveryFromSeed',
 			startAddToNewWallet(0);
 		}
 
-
-		// 创建钱包 函数
 		function createWallets(arrWalletIndexes, cb) {
+
 			function createWallet(n) {
 				var account = parseInt(arrWalletIndexes[n]);
 				var opts = {};
@@ -229,17 +222,15 @@ angular.module('copayApp.controllers').controller('recoveryFromSeed',
 				opts.mnemonic = self.inputMnemonic;
 				opts.account = account;
 
-
-				// 调用profileSevice中的createWallet 函数
 				profileService.createWallet(opts, function(err, walletId) {
 					self.assocIndexesToWallets[account] = walletId;
 					n++;
 					(n < arrWalletIndexes.length) ? createWallet(n) : cb();
 				});
 			}
+
 			createWallet(0);
 		}
-		// 创建钱包 结束
 
 		function scanForAddressesAndWalletsInLightClient(mnemonic, cb) {
 			self.xPrivKey = new Mnemonic(mnemonic).toHDPrivateKey();
@@ -269,18 +260,9 @@ angular.module('copayApp.controllers').controller('recoveryFromSeed',
 							self.error = 'When scanning an error occurred, please try again later.';
 							self.scanning = false;
 
-							// 钱包内部恢复的时候 让弹出框 显示出来
-							$scope.index.showneikuang = false;
-							// 钱包内部恢复时 安卓禁用返回键
-							profileService.haschoosen = 2;
+							// 定义模态框 出错后 模态框不显示
+							self.show = false;
 
-							if(self.password) {
-								profileService.setPrivateKeyEncryptionFC(self.password, function () {
-									$rootScope.$emit('Local/NewEncryptionSetting');
-									$scope.encrypt = true;
-									delete self.password;
-								});
-							}
 							$timeout(function () {
 								$rootScope.$apply();
 							});
@@ -319,31 +301,31 @@ angular.module('copayApp.controllers').controller('recoveryFromSeed',
 			setCurrentWallet();
 		}
 
+
+
+
+
+
 		function cleanAndAddWalletsAndAddresses(assocMaxAddressIndexes) {
 			var device = require('trustnote-common/device');
 			var arrWalletIndexes = Object.keys(assocMaxAddressIndexes);
 			if (arrWalletIndexes.length) {
 				removeAddressesAndWallets(function () {
 					var myDeviceAddress = objectHash.getDeviceAddress(ecdsa.publicKeyCreate(self.xPrivKey.derive("m/1'").privateKey.bn.toBuffer({size: 32}), true).toString('base64'));
-
 					profileService.replaceProfile(self.xPrivKey.toString(), self.inputMnemonic, myDeviceAddress, function () {
 						device.setDevicePrivateKey(self.xPrivKey.derive("m/1'").privateKey.bn.toBuffer({size: 32}));
-
 						createWallets(arrWalletIndexes, function () {
 							createAddresses(assocMaxAddressIndexes, function () {
 								self.scanning = false;
-								$scope.index.showneikuang = false;
-								if(self.password) {
-									profileService.setPrivateKeyEncryptionFC(self.password, function () {
-										$rootScope.$emit('Local/NewEncryptionSetting');
-										$scope.encrypt = true;
-										delete self.password;
-									});
-								}	
-// 更改代码  正常恢复
-								$rootScope.$emit('Local/ShowAlertnei', arrWalletIndexes.length + gettextCatalog.getString(" wallets recovered, please restart the application to finish."), 'fi-check', function () {
+								self.show = false;
+								// 向内存中写入2
+								self.haschoosen();
+
+							// 更改代码   正常恢复
+								$rootScope.$emit('Local/ShowAlertdir', arrWalletIndexes.length + gettextCatalog.getString(" wallets recovered, please restart the application to finish."), 'fi-check', function () {
 									if (navigator && navigator.app) // android
 										navigator.app.exitApp();
+
 									else if (process.exit) // nwjs
 										process.exit();
 								});
@@ -358,24 +340,19 @@ angular.module('copayApp.controllers').controller('recoveryFromSeed',
 					profileService.replaceProfile(self.xPrivKey.toString(), self.inputMnemonic, myDeviceAddress, function () {
 						device.setDevicePrivateKey(self.xPrivKey.derive("m/1'").privateKey.bn.toBuffer({size: 32}));
 						createWallets(arrWalletIndexes, function () {
-								self.scanning = false;
-								$scope.index.showneikuang = false;
+							self.scanning = false;
+							self.show = false;
+							// 向内存中写入2
+							self.haschoosen();
 
-								if(self.password) {
-									profileService.setPrivateKeyEncryptionFC(self.password, function () {
-										$rootScope.$emit('Local/NewEncryptionSetting');
-										$scope.encrypt = true;
-										delete self.password;
-									});
-								}
+						// 更改代码   没有交易恢复
+							$rootScope.$emit('Local/ShowAlertdir', arrWalletIndexes.length + gettextCatalog.getString(" wallets recovered, please restart the application to finish."), 'fi-check', function () {
+								if (navigator && navigator.app) // android
+									navigator.app.exitApp();
 
-// 更改代码   修改后恢复（没有交易）
-								$rootScope.$emit('Local/ShowAlertnei', arrWalletIndexes.length + gettextCatalog.getString(" wallets recovered, please restart the application to finish."), 'fi-check', function () {
-									if (navigator && navigator.app) // android
-										navigator.app.exitApp();
-									else if (process.exit) // nwjs
-										process.exit();
-								});
+								else if (process.exit) // nwjs
+									process.exit();
+							});
 						});
 					});
 				});
@@ -386,6 +363,7 @@ angular.module('copayApp.controllers').controller('recoveryFromSeed',
 				// });
 			}
 		}
+
 
 
 
@@ -405,7 +383,7 @@ angular.module('copayApp.controllers').controller('recoveryFromSeed',
 			});
 		};
 
-		$rootScope.$on('Local/ShowAlertnei', function (event, msg, msg_icon, cb) {
+		$rootScope.$on('Local/ShowAlertdir', function (event, msg, msg_icon, cb) {
 			self.showPopup(msg, msg_icon, cb);
 		});
 
@@ -417,38 +395,131 @@ angular.module('copayApp.controllers').controller('recoveryFromSeed',
 				self.error = '';
 				// 首先转换成小写
 				self.inputMnemonic = self.inputMnemonic.toLowerCase();
-
-				// alert($rootScope.index.showneikuang)
-
 				if ((self.inputMnemonic.split(' ').length % 3 === 0) && Mnemonic.isValid(self.inputMnemonic)) {
-					// 钱包内部恢复的时候 让弹出框 显示出来
-					$scope.index.showneikuang = true;
-					// 钱包内部恢复 安卓禁用返回键
-					delete profileService.haschoosen;
-					if (fc && fc.hasPrivKeyEncrypted()) {
-						self.passwordRequest(gettextCatalog.getString('This will permanently delete all your existing wallets!'), function(){
-							self.scanning = true;
-							if (self.bLight) {
-								scanForAddressesAndWalletsInLightClient(self.inputMnemonic, cleanAndAddWalletsAndAddresses);
+					self.scanning = true;
 
-							} else {
-								scanForAddressesAndWallets(self.inputMnemonic, cleanAndAddWalletsAndAddresses);
-							}
-						});
-					}
-					else {
-						self.scanning = true;
-						if (self.bLight) {
-							scanForAddressesAndWalletsInLightClient(self.inputMnemonic, cleanAndAddWalletsAndAddresses);
+					// 向内存中写入2
+					// self.haschoosen();
 
-						} else {
-							scanForAddressesAndWallets(self.inputMnemonic, cleanAndAddWalletsAndAddresses);
-						}
+					// 模态框 显示出来
+					self.show = true;
+
+					if (self.bLight) {
+						scanForAddressesAndWalletsInLightClient(self.inputMnemonic, cleanAndAddWalletsAndAddresses);
+
+					} else {
+						scanForAddressesAndWallets(self.inputMnemonic, cleanAndAddWalletsAndAddresses);
 					}
 				} else {
-					self.error = gettext('Seed is not valid');
+					self.error = 'Seed is not valid';
 				}
 			}
 		}
 
+
+
+// 更改代码 声明一个方法 向存储中写入2
+		self.haschoosen = function () {
+			storageService.hashaschoosen(2, function (err) {});
+		}
+
+		self.delteConfirm = function () {
+			fc.clearMnemonic();
+			profileService.clearMnemonic(function () {
+				self.deleted = true;
+				notification.success(successMsg);
+			});
+		};
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		// 回复钱包并删除口令
+		self.recoveryFormdel = function() {
+			if (self.inputMnemonic) {
+				self.error = '';
+				// 首先转换成小写
+				self.inputMnemonic = self.inputMnemonic.toLowerCase();
+				if ((self.inputMnemonic.split(' ').length % 3 === 0) && Mnemonic.isValid(self.inputMnemonic)) {
+					self.scanning = true;
+
+					// 模态框 显示出来
+					self.show = true;
+
+					if (self.bLight) {
+						scanForAddressesAndWalletsInLightClient(self.inputMnemonic, cleanAndAddWalletsAndAddressesdel);
+					} else {
+						scanForAddressesAndWallets(self.inputMnemonic, cleanAndAddWalletsAndAddressesdel);
+					}
+				} else {
+					self.error = 'Seed is not valid';
+				}
+			}
+		}
+
+
+		function cleanAndAddWalletsAndAddressesdel(assocMaxAddressIndexes) {
+			var device = require('trustnote-common/device');
+			var arrWalletIndexes = Object.keys(assocMaxAddressIndexes);
+			if (arrWalletIndexes.length) {
+				removeAddressesAndWallets(function () {
+					var myDeviceAddress = objectHash.getDeviceAddress(ecdsa.publicKeyCreate(self.xPrivKey.derive("m/1'").privateKey.bn.toBuffer({size: 32}), true).toString('base64'));
+					profileService.replaceProfile(self.xPrivKey.toString(), self.inputMnemonic, myDeviceAddress, function () {
+						device.setDevicePrivateKey(self.xPrivKey.derive("m/1'").privateKey.bn.toBuffer({size: 32}));
+						createWallets(arrWalletIndexes, function () {
+							createAddresses(assocMaxAddressIndexes, function () {
+								self.scanning = false;
+								self.show = false;
+								// 向内存中写入2
+								self.haschoosen();
+
+								// 更改代码   正常恢复
+								$rootScope.$emit('Local/ShowAlertdir', arrWalletIndexes.length + gettextCatalog.getString(" wallets recovered, please restart the application to finish."), 'fi-check', function () {
+
+									self.delteConfirm();
+									if (navigator && navigator.app) // android
+										navigator.app.exitApp();
+									else if (process.exit) // nwjs
+										process.exit();
+								});
+							});
+						});
+					});
+				});
+			} else {
+				removeAddressesAndWallets(function () {
+					arrWalletIndexes[0] = 0;
+					var myDeviceAddress = objectHash.getDeviceAddress(ecdsa.publicKeyCreate(self.xPrivKey.derive("m/1'").privateKey.bn.toBuffer({size: 32}), true).toString('base64'));
+					profileService.replaceProfile(self.xPrivKey.toString(), self.inputMnemonic, myDeviceAddress, function () {
+						device.setDevicePrivateKey(self.xPrivKey.derive("m/1'").privateKey.bn.toBuffer({size: 32}));
+						createWallets(arrWalletIndexes, function () {
+							self.scanning = false;
+							self.show = false;
+							// 向内存中写入2
+							self.haschoosen();
+
+							// 更改代码   没有交易恢复
+							$rootScope.$emit('Local/ShowAlertdir', arrWalletIndexes.length + gettextCatalog.getString(" wallets recovered, please restart the application to finish."), 'fi-check', function () {
+
+								self.delteConfirm();
+								if (navigator && navigator.app) // android
+									navigator.app.exitApp();
+
+								else if (process.exit) // nwjs
+									process.exit();
+							});
+						});
+					});
+				});
+				// self.error = 'No active addresses found.';
+				// self.scanning = false;
+				// $timeout(function () {
+				// 	$rootScope.$apply();
+				// });
+			}
+		}
+
 	});
+
+
+
+

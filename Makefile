@@ -13,6 +13,7 @@ cordova-base:
 #
 # release-android: cordova-base
 # 	make -C cordova release-android
+#
 
 ios-prod:
 	cordova/build.sh IOS --clear
@@ -24,6 +25,11 @@ ios-debug:
 	cd ../trustnotebuilds/project-IOS && cordova build ios
 	open ../trustnotebuilds/project-IOS/platforms/ios/TrustNote.xcodeproj
 
+ios:
+	cordova/build.sh IOS --dbgjs
+	cd ../trustnotebuilds/project-IOS && cordova build ios
+	open ../trustnotebuilds/project-IOS/platforms/ios/TrustNote.xcodeproj
+	
 android:
 	cordova/build.sh ANDROID
 	cd ../trustnotebuilds/project-ANDROID && cordova build android 2>&1 >/dev/null

@@ -84,7 +84,17 @@ angular
 						templateUrl: 'views/splash.html',
 					}
 				}
+			})
+			.state('backupWaring', {
+				url: '/backupWaring',
+				needProfile: false,
+				views: {
+					'main': {
+						templateUrl: 'views/includes/backupWaring.html',
+					}
+				}
 			});
+
 
 		$stateProvider
 			.state('walletHome', {
@@ -431,6 +441,9 @@ angular
 					},
 				}
 			})
+
+
+			// 点击 进入钱包恢复页面
 			.state('preferencesGlobal.recoveryFromSeed', {
 				url: '/recoveryFromSeed',
 				templateUrl: 'views/recoveryFromSeed.html',
@@ -439,6 +452,32 @@ angular
 				views: {
 					'main@': {
 						templateUrl: 'views/recoveryFromSeed.html'
+					}
+				}
+			})
+
+			.state('preferencesGlobal.recoveryFromSeeddir', {
+				url: '/recoveryFromSeeddir',
+				templateUrl: 'views/recoverFormSeedDir.html',
+				walletShouldBeComplete: true,
+				needProfile: true,
+				views: {
+					'main@': {
+						templateUrl: 'views/recoverFormSeedDir.html'
+					}
+				}
+			})
+
+
+
+			.state('preferencesGlobal.synchronization', {
+				url: '/synchronization',
+				templateUrl: 'views/synchronization.html',
+				walletShouldBeComplete: true,
+				needProfile: true,
+				views: {
+					'main@': {
+						templateUrl: 'views/synchronization.html'
 					}
 				}
 			})
@@ -545,7 +584,7 @@ angular
 				needProfile: false
 			});
 	})
-	.run(function ($rootScope, $state, $log, uriHandler, isCordova, profileService, $timeout, nodeWebkit, uxLanguage, animationService) {
+	.run(function ($rootScope, $state, $log, uriHandler, isCordova, profileService, storageService, $timeout, nodeWebkit, uxLanguage, animationService) {
 		FastClick.attach(document.body);
 
 		uxLanguage.init();
@@ -592,7 +631,8 @@ angular
 						if (err.message && err.message.match('NOPROFILE')) {
 							$log.debug('No profile... redirecting');
 							$state.transitionTo('splash');
-						} else if (err.message && err.message.match('NONAGREEDDISCLAIMER')) {
+						}
+						else if (err.message && err.message.match('NONAGREEDDISCLAIMER')) {
 							$log.debug('Display disclaimer... redirecting');
 							$state.transitionTo('preferencesGlobal.preferencesAbout.disclaimer');
 						} else {
@@ -600,13 +640,21 @@ angular
 						}
 					} else {
 						$log.debug('Profile loaded ... Starting UX.');
-						$state.transitionTo(toState.name || toState, toParams);
+						storageService.gethaschoosen(function (err, val) {
+							if (val == 1) {
+								$log.debug('No choosen... redirecting');
+								$state.transitionTo('backupWaring');
+							}
+							else {
+								$state.transitionTo(toState.name || toState, toParams);
+							}
+						});
+
 					}
 				});
 			}
 
 			if (profileService.focusedClient && !profileService.focusedClient.isComplete() && toState.walletShouldBeComplete) {
-
 				$state.transitionTo('copayers');
 				event.preventDefault();
 			}

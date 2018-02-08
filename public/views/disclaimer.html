@@ -5,6 +5,7 @@
 	<!--topbar顶部-->
 	<div ng-if="agreed && index.hasProfile" class="topbar-container" ng-include="'views/includes/topbar.html'" ng-init="titleSection='Terms of Use';  goBackToState = true; noColor = true"></div>
 
+
 	<div class="content p20b" ng-class="{'disclaimer':!index.hasProfile}">
 		<h4 class="title m0" ng-show="!index.hasProfile">
 			<div class="right">TrustNote</div>
@@ -36,7 +37,10 @@
 				<p translate>I affirm that I have read, understood, and agree with these terms.</p>
 				<button class="black round expand" ng-click="agree()" ng-disabled="loading" translate>Agree</button>
 			</div>
-			<button ng-show="agreed && !index.hasProfile" class="round expand" ng-click="agree()" translate>Go back</button>
+			<button ng-show="agreed && !index.hasProfile" class="round expand" ng-click="agree()" translate
+					style="text-transform:uppercase; width: 150px; text-align:center; height: 45px; line-height: 45px; background: #0095ff; border-radius: 40px; color: #fff; margin: 25px auto; cursor:pointer;font-size:14px;">
+				Next
+			</button>
 		</div>
 
 		<div class="extra-margin-bottom"></div>

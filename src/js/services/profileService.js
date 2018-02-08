@@ -4,12 +4,12 @@ var breadcrumbs = require('trustnote-common/breadcrumbs.js');
 
 angular.module('copayApp.services').factory('profileService', function profileServiceFactory($rootScope, $location, $timeout, $filter, $log, lodash, storageService, bwcService, configService, pushNotificationsService, isCordova, gettext, gettextCatalog, nodeWebkit, uxLanguage) {
 
+	// 声明一个空对象 ，最后返回root这个对象
     var root = {};
 
     root.profile = null;
     root.focusedClient = null;
     root.walletClients = {};
-    
 	root.Utils = bwcService.getUtils();
 
 	root.formatAmount = function(amount, asset, opts) {
@@ -26,7 +26,8 @@ angular.module('copayApp.services').factory('profileService', function profileSe
         }
     };
 
-// 更改代码  添加选项：option
+
+	// 更改代码  添加选项：option（第一次改）     设置主钱包
     root._setFocus = function(walletId, option, cb) {
     	// alert("----"+option)
       	$log.debug('Set focus:', walletId);
@@ -41,9 +42,12 @@ angular.module('copayApp.services').factory('profileService', function profileSe
         	root.focusedClient = root.walletClients[lodash.keys(root.walletClients)[0]];
       	}
 
-      	// Still nothing?
-      	if (lodash.isEmpty(root.focusedClient)) {
+
+      	// 仍然没有钱包 emit一个事件 Still nothing?
+
+		if (lodash.isEmpty(root.focusedClient)) {
         	$rootScope.$emit('Local/NoWallets');
+        	return;
       	} else {
         	$rootScope.$emit('Local/NewFocusedWallet', option);
       	}
@@ -56,7 +60,7 @@ angular.module('copayApp.services').factory('profileService', function profileSe
         	storageService.storeFocusedWalletId(walletId, cb);
       	});
     };
-// 更改代码  添加选项：option 结束
+	// 更改代码  添加选项：option 结束
 
 
     root.setWalletClient = function(credentials) {
@@ -130,10 +134,14 @@ angular.module('copayApp.services').factory('profileService', function profileSe
             });
         });
     }
-    
+
+
+
+
     root.bindProfile = function(profile, cb) {
 		breadcrumbs.add('bindProfile');
-        root.profile = profile;
+
+		root.profile = profile;
         configService.get(function(err) {
             $log.debug('Preferences read');
             if (err)
@@ -172,6 +180,7 @@ angular.module('copayApp.services').factory('profileService', function profileSe
 
     root.loadAndBindProfile = function(cb) {
 	  	breadcrumbs.add('loadAndBindProfile');
+      storageService.gethaschoosen(function (err, val) {root.haschoosen = val;});
       	storageService.getDisclaimerFlag(function(err, val) {
         	if (!val) {
 		  		breadcrumbs.add('Non agreed disclaimer');
@@ -185,7 +194,8 @@ angular.module('copayApp.services').factory('profileService', function profileSe
             		if (!profile) {
 						breadcrumbs.add('no profile');
                 		return cb(new Error('NOPROFILE: No profile'));
-            		} else {
+            		}
+            		else {
               			$log.debug('Profile read');
               			return root.bindProfile(profile, cb);
             		}
@@ -275,7 +285,7 @@ angular.module('copayApp.services').factory('profileService', function profileSe
             var tempDeviceKey = device.genPrivKey();
 			// initDeviceProperties sets my_device_address needed by walletClient.createWallet
 			walletClient.initDeviceProperties(walletClient.credentials.xPrivKey, null, config.hub, config.deviceName);
-            var walletName = gettextCatalog.getString('Small Expenses Wallet');
+            var walletName = gettextCatalog.getString('TTT Wallet');
             walletClient.createWallet(walletName, 1, 1, {
                 network: 'livenet'
             }, function(err) {
@@ -298,8 +308,9 @@ angular.module('copayApp.services').factory('profileService', function profileSe
         });
     };
 
-// 创建新钱包
-    // create additional wallet (the first wallet is created in _createNewProfile())
+
+	// 创建新钱包
+    // 创建额外的钱包 第一个钱包在 上面的函数中创建的 create additional wallet (the first wallet is created in _createNewProfile())
     root.createWallet = function(opts, cb) {
         $log.debug('Creating Wallet:', opts);
 		if (!root.focusedClient.credentials.xPrivKey){ // locked
@@ -310,6 +321,7 @@ angular.module('copayApp.services').factory('profileService', function profileSe
 			});
 			return console.log('need password to create new wallet');
 		}
+
 		var walletDefinedByKeys = require('trustnote-common/wallet_defined_by_keys.js');
         walletDefinedByKeys.readNextAccount(function(account){
             console.log("next account = "+account);
@@ -337,6 +349,37 @@ angular.module('copayApp.services').factory('profileService', function profileSe
             });
         });
     };
+    // 创建新钱包 结束
+
+	root.synchronization = function(opts, cb) {
+		$log.debug('Creating Wallet:', opts);
+		if (!root.focusedClient.credentials.xPrivKey){ // locked
+			root.unlockFC(null, function(err){
+				if (err)
+					return cb(err.message);
+				root.createWallet(opts, cb);
+			});
+			return console.log('need password to create new wallet');
+		}
+		var walletDefinedByKeys = require('trustnote-common/wallet_defined_by_keys.js');
+		walletDefinedByKeys.readNextAccount(function(account){
+			opts.extendedPrivateKey = root.focusedClient.credentials.xPrivKey;
+			root._seedWallet(opts, function(err, walletClient) {
+				if (err)
+					return cb(err);
+
+				walletClient.createWallet(opts.name, opts.m, opts.n, {
+					network: opts.networkName,
+					account: opts.account,
+					cosigners: opts.cosigners
+				}, function(err) {
+					if (err)
+						return cb(gettext('Error creating wallet')+": "+err);
+					root._addWalletClient(walletClient, opts, cb);
+				});
+			});
+		});
+	};
 
 
     root.getClient = function(walletId) {
@@ -618,6 +661,7 @@ angular.module('copayApp.services').factory('profileService', function profileSe
         	try {
           		fc.unlock(password);
 		  		breadcrumbs.add('unlocked '+fc.credentials.walletId);
+		  		root.password = password;
         	} catch (e) {
           		$log.debug(e);
           		return cb({
@@ -625,6 +669,8 @@ angular.module('copayApp.services').factory('profileService', function profileSe
           		});
         	}
 			var autolock = function() {
+				if(root.password)
+					delete root.password;
 		  		if (root.bKeepUnlocked){
 			  		console.log("keeping unlocked");
 			  		breadcrumbs.add("keeping unlocked");

@@ -1,10 +1,19 @@
 
 <!--钱包种子备份-->
+<div class="passModalMask" style="opacity: 0.3; padding: 0; background: #000;" ng-if="index.showneikuang"> </div>
+
 
 <div class="topbar-container" ng-include="'views/includes/topbar.html'" ng-init="titleSection='Recovery'; goBackToState = true"> </div>
 
+
 <div class="content preferences" ng-controller="recoveryFromSeed as recFromSeed">
-	<h4></h4>
+
+	<!--恢复成功 弹出-->
+	<div ng-include="'views/recoveryFromSeedAlert.html'" ng-if="recFromSeed.showAlert"></div>
+
+	<!--钱包内部 恢复钱包时弹出一个模态框-->
+	<!--<div class="passModalMask" style="opacity: 0.3; padding: 0; background: #000;" ng-if="recFromSeed.show"> </div>-->
+	<!--<h4></h4>-->
 	<div class="onGoingProcess" ng-show="recFromSeed.scanning">
 		<div class="onGoingProcess-content">
 			<div class="spinner">
@@ -24,20 +33,33 @@
 
 	<div>
 		<form name="settingsDeviceNameForm" class="columns" ng-submit="recFromSeed.recoveryForm()">
-			<label><span translate>Your Wallet Seed:</span></label>
-			<textarea id="inputMnemonic" ng-model="recFromSeed.inputMnemonic" ng-disabled="recFromSeed.credentialsEncrypted" autocomplete="off"></textarea>
-			<input ng-show="!recFromSeed.scanning" ng-disabled="recFromSeed.credentialsEncrypted" type="submit" class="button expand black round" value="{{'Recover'|translate}}" style="background: #0095ff;">
+			<label style="margin: 10px 0 8px;">
+				<span class="size-12 color333" style="text-transform: capitalize" translate>Your Wallet Seed:</span>
+			</label>
+
+			<textarea
+				style="height: 100px; font-size: 16px; color: #000; line-height: 26px; resize:none"
+				id="inputMnemonic"
+				ng-model="recFromSeed.inputMnemonic"
+				autocomplete="off">
+			</textarea>
+
+			<!--按钮 点击恢复钱包-->
+			<input
+				ng-show="!recFromSeed.scanning"
+				type="submit"
+				class="button expand black round"
+				value="{{'Recover'|translate}}"
+				style="background: #0095ff;">
+			<!--按钮 点击恢复钱包 结束-->
+
 		</form>
 
 		<div class="text-alert size-12 columns">
-			<span translate>WARNINGS:</span>
+			<span translate>Note:</span>
 			<ul class="warnings">
 				<li translate>This will permanently delete all your existing wallets!</li>
-				<!-- <li translate>Private assets are not recovered.</li> -->
-
-				<!--<li translate>Only single-sig wallets can be recovered.</li>-->
-				<!--<li translate>Correspondents are not restored.</li>-->
-				<!--<li translate>Do not clone wallets, stop using the original wallet with this seed.</li>-->
+				<li translate>During the recovery, please be patient and do not shut down the software.</li>
 			</ul>
 		</div>
 	</div>

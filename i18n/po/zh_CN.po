@@ -520,7 +520,7 @@ msgstr "输入配对码或通过点击右上角图标扫描二维码"
 
 #: public/views/includes/password.html:13
 msgid "Enter your password"
-msgstr "请输入交易密码"
+msgstr "请输入密码"
 
 #: src/js/services/profileService.js:280
 #: src/js/services/profileService.js:330
@@ -958,11 +958,11 @@ msgstr "正在重新连接到钱包服务..."
 
 #: public/views/recoveryFromSeed.html:34
 msgid "Recover"
-msgstr "使用口令恢复钱包"
+msgstr "口令恢复钱包"
 
 #: public/views/preferencesGlobal.html:109
 msgid "Recovery from seed"
-msgstr "使用口令恢复钱包"
+msgstr "口令恢复钱包"
 
 #: public/views/walletHome.html:58
 msgid "Recreating Wallet..."
@@ -1153,7 +1153,7 @@ msgid "Share address"
 msgstr "分享地址"
 
 #: public/views/walletHome.html:258
-msgid "Share this wallet address to receive payments."
+msgid "Updating the address does not affect charging, and the previous address is still valid."
 msgstr "更新上述地址不影响收款，且之前的地址仍然有效"
 
 #: public/views/walletHome.html:567
@@ -1278,7 +1278,7 @@ msgstr "这是一个私人资产，只能通过点击聊天中的链接发送或
 
 #: public/views/splash.html:28
 msgid "This option is better for privacy but will take  several gigabytes of storage and the initial sync will take several days.  CPU load will be high during sync."
-msgstr "这个选项对隐私更为有利，但会增加几G字节的存储空间，并且初始同步将会持续数天。同步过程将占用大量CPU资源。"
+msgstr "下载完整的钱包账本 完整钱包账本对保护隐私有利，但是会持续增加应用的存储空间，可能有几十G字节，初次同步可能会持续一段时间，取决于您的网络带宽，另外，同步过程会占用大量的CPU和内存资源，请谨慎选择。 下载仅与您相关的数据 这将显著降低应用的存储空间，同时可以完成交易，查询余额，添加好友等操作，在使用应用过程中请确保网络畅通。"
 
 #: public/views/walletHome.html:347
 msgid "This payment is bound to a condition"
@@ -1389,7 +1389,7 @@ msgid "WARNINGS:"
 msgstr "警告："
 
 #: public/views/splash.html:53
-msgid "WELCOME TO TRUSTNOTE"
+msgid "Welcome To TrustNote"
 msgstr "欢迎来到TrustNote"
 
 #: public/views/copayers.html:24
@@ -1434,8 +1434,8 @@ msgid "Wallet name"
 msgstr "钱包名称"
 
 #: public/views/backup.html:34
-msgid "Wallet seed not available."
-msgstr "钱包口令不可用。"
+msgid "Wallet seed deleted."
+msgstr "钱包口令已删除。"
 
 #: public/views/modals/destination-address.html:15
 #: public/views/modals/destination-address.html:29
@@ -1484,6 +1484,9 @@ msgstr "您没有钱包"
 msgid "Your Wallet Seed:"
 msgstr "钱包口令："
 
+msgid "Your Wallet Seed Phrase:"
+msgstr "钱包口令："
+
 #: public/views/export.html:33
 msgid "Your export password"
 msgstr "导出的密码"
@@ -1501,7 +1504,7 @@ msgid "Your wallet key will be encrypted. Password cannot be recovered. Be sure 
 msgstr "警告：请您牢记密码！否则钱包内所有资产将无法转出！"
 
 #: public/views/splash.html:90
-msgid "Your wallet will be created on this device, keep it safe.  See your backup options in the Settings menu.Also in the Settings menu, you will find security options such as setting a password."
+msgid "Your wallet will be created on this device, keep it safe.  See your backup options in the Settings menu. Also in the Settings menu, you will find security options such as setting a password."
 msgstr "您的钱包将在此设备上创建，请确认设备足够安全，并及时备份钱包。此外，在钱包设置中，您可以设置交易密码。"
 
 
@@ -1764,10 +1767,10 @@ msgstr "聊天记录"
 msgid "Please backup the mnemonic word"
 msgstr "请立即备份您的钱包口令"
 
-msgid "We highly recommend you write the Mnemonic words(Backup Phrase) on Paper and keep it in a safe place, anyone get it can access or spend you assets. Also get start with a small amout of assets."
+msgid "We highly recommend you write the Mnemonic words(Backup Phrase) on Paper and keep it in a safe place, anyone get it can access or spend your assets. Also get start with a small amout of assets."
 msgstr "备份钱包，导出“口令”并抄写到安全的地方，千万不要保存到网络上。然后尝试转入，转出小额资产开始使用。"
 
-msgid "Don't screenshot"
+msgid "Don't Screenshot"
 msgstr "请勿截图"
 
 msgid "Please write the Mnemonic words on Paper and keep it in a safe place."
@@ -1782,17 +1785,17 @@ msgstr "删除口令"
 msgid "Next"
 msgstr "下一步"
 
-msgid "Ignore"
+msgid "Skip"
 msgstr "跳过"
 
 msgid "Confirm"
 msgstr "确定"
 
 msgid "Last step"
-msgstr "返回上一步"
+msgstr "上一步"
 
-msgid "Are you sure you want to delete the mnemonic ？"
-msgstr "您确定要删除钱包口令么？"
+msgid "Are you sure you want to delete the Seed Phrase?"
+msgstr "您确定要删除钱包口令吗？"
 
 msgid "Hello"
 msgstr "您好"
@@ -1806,6 +1809,9 @@ msgstr "口令用于恢复钱包，将它准确地写到纸上，并存放在只
 msgid "Confirm your mnemonic words"
 msgstr "确认您的钱包口令"
 
+msgid "Confirm Your Mnemonic Words"
+msgstr "确认您的钱包口令"
+
 msgid "Please write the mnemonic words in order and make sure your mnemonic was correct written."
 msgstr "请按顺序输入口令以确认您的备份口令正确"
 
@@ -1817,4 +1823,112 @@ msgstr "无法删除剩下的最后一个钱包"
 
 msgid "Invalid mnemonic"
 msgstr "无效的口令"
+
+msgid "Backup Your Seed Phrase"
+msgstr "备份钱包口令"
+
+
+msgid "wallets recovered, please restart the application to finish."
+msgstr "个钱包已恢复，请重启本应用"
+
+msgid "All minus fees"
+msgstr "发送所有可用余额"
+
+msgid "Restore Wallet"
+msgstr "恢复钱包"
+
+msgid "Restore Wallet and Delete Seed Phrase"
+msgstr "恢复钱包并删除口令"
+
+
+msgid "Synchronization completed"
+msgstr "同步完成"
+
+msgid "Synchronization"
+msgstr "克隆钱包同步"
+
+msgid "Sync Cloned Wallets"
+msgstr "克隆钱包同步"
+
+msgid "Click to Sync the Wallets:"
+msgstr "点击按钮同步："
+
+msgid "Sync Wallets"
+msgstr "同步钱包"
+
+msgid " wallets recovered, please restart the application to finish."
+msgstr "个钱包已经恢复，请重启软件"
+
+msgid "LIGHT ∙ FAST ∙ SWEET"
+msgstr "极轻、极速、极趣的数字钱包"
+
+msgid "Create Wallet"
+msgstr "创建钱包"
+
+msgid "CREATE WALLET"
+msgstr "创建钱包"
+
+msgid "Restore Wallet"
+msgstr "恢复钱包"
+
+msgid "Create Wallet and Backup Your Seed Phrase"
+msgstr "创建钱包并备份您的口令"
+
+msgid "Confirm delete"
+msgstr "确定删除"
+
+msgid "Delete Seed Phrase"
+msgstr "删除口令"
+
+msgid "Note:"
+msgstr "注意："
+
+msgid "Caution:"
+msgstr "注意："
+
+msgid "Note: Only one space is allowed between words."
+msgstr "注意：输入单词之间只有一个英文空格！"
+
+msgid "Only one space is allowed between words."
+msgstr "输入单词之间只有一个英文空格！"
+
+msgid "Restore Wallet from Seed Phrase"
+msgstr "使用口令恢复钱包"
+
+msgid "DELETE SEED PHRASE"
+msgstr "删除口令"
+
+msgid "We don’t recommend cloning your Wallet because your Wallet is safe as long as your Seed Phrase is well protected. However, if you experience data inconsistency issue between the original Wallet and its clone, you can fix it by using the “Sync Cloned Wallets” feature on both Wallets."
+msgstr "不建议您克隆钱包，保护好您的口令就是安全的。如果您遇到克隆钱包导致的数据不同步，请在两个钱包上使用克隆钱包同步功能。"
+
+msgid "It will delete the seed phrase in the app and can not be restored, please be sure that you have the seed phrase back to a safe place"
+msgstr "此操作将彻底删除应用中口令并且不可恢复，请再次确认您已经将口令备份到安全的地方"
+
+msgid "During synchronization, please be patient."
+msgstr "同步过程中，请耐心等待。"
+
+msgid "please try again later."
+msgstr "请检查网络，稍后再试。"
+
+msgid "Copy wallet address"
+msgstr "复制钱包地址"
+
+msgid "Copied"
+msgstr "已复制"
+
+msgid "During the recovery, please be patient and do not shut down the software."
+msgstr "钱包恢复过程中，请耐心等待，切勿退出软件。"
+
+msgid "Please use English input method, to ensure that there is only one English space between words."
+msgstr "请使用英文输入法，确保单词之间有且仅有一个英文空格。"
+
+msgid "Delete the whole chat history with {{ name }} ?"
+msgstr "确定要删除与{{ name }}的全部聊天记录么？"
+
+msgid "TTT Wallet"
+msgstr "TTT 钱包"
+
+msgid "Preparing camera..."
+msgstr "准备相机..."
+
 

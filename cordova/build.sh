@@ -84,6 +84,10 @@ if [ ! -d $PROJECT ]; then
 
 	if [ $CURRENT_OS == "IOS" ]; then
 		cordova plugin add https://github.com/phonegap/phonegap-plugin-barcodescanner.git
+		checkOK
+
+		cordova plugin add cordova-plugin-exitapp-ios
+		checkOK
 	else
 		cordova plugin add cordova-plugin-android-support-v4-jar
 		checkOK
@@ -231,5 +235,6 @@ if [ $CURRENT_OS == "IOS" ]; then
 #  cp -R ios/splash/* $PROJECT/platforms/ios/Trustnote/Resources/splash
 #  checkOK
 fi
+
 
 

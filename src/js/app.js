@@ -1,22 +1,22 @@
 'use strict';
 
 var modules = [
-  'ui.router',
-  'angularMoment',
-  'angular-carousel',
-  'mm.foundation',
-  'monospaced.qrcode',
-  'monospaced.elastic',
-  'gettext',
-  'ngLodash',
-  'uiSwitch',
-  'bwcModule',
-  'copayApp.filters',
-  'copayApp.services',
-  'copayApp.controllers',
-  'copayApp.directives',
-  'copayApp.addons',
-  'ct.ui.router.extras'
+	'ui.router',
+	'angularMoment',
+	'angular-carousel',
+	'mm.foundation',
+	'monospaced.qrcode',
+	'monospaced.elastic',
+	'gettext',
+	'ngLodash',
+	'uiSwitch',
+	'bwcModule',
+	'copayApp.filters',
+	'copayApp.services',
+	'copayApp.controllers',
+	'copayApp.directives',
+	'copayApp.addons',
+	'ct.ui.router.extras'
 ];
 
 var copayApp = window.copayApp = angular.module('copayApp', modules);

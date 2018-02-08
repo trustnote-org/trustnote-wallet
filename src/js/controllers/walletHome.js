@@ -18,6 +18,8 @@ angular.module('copayApp.controllers').controller('walletHomeController', functi
 	var indexScope = $scope.index;
 	$scope.currentSpendUnconfirmed = configWallet.spendUnconfirmed;
 
+
+
 	// INIT
 	var walletSettings = configWallet.settings;
 	this.unitValue = walletSettings.unitValue;
@@ -36,6 +38,14 @@ angular.module('copayApp.controllers').controller('walletHomeController', functi
 	this.isTestnet = constants.version.match(/t$/);
 	this.testnetName = (constants.alt === '2') ? '[NEW TESTNET]' : '[TESTNET]';
 	$scope.index.tab = 'walletHome'; // for some reason, current tab state is tracked in index and survives re-instatiations of walletHome.js
+
+
+// 做旧版本兼容 升级后 内存中不存在值 或没有 2 写入2
+	storageService.gethaschoosen(function (err, val) {
+		if(!val && val != 2)
+			storageService.hashaschoosen(2, function () { });
+		// alert('kkkkkk')
+	});
 
 	var disablePaymentRequestListener = $rootScope.$on('paymentRequest', function (event, address, amount, asset, recipient_device_address) {
 		console.log('paymentRequest event ' + address + ', ' + amount);

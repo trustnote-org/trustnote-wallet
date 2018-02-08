@@ -10,12 +10,16 @@ var breadcrumbs = require('trustnote-common/breadcrumbs.js');
 var Bitcore = require('bitcore-lib');
 var EventEmitter = require('events').EventEmitter;
 
+
 angular.module('copayApp.controllers').controller('indexController', function ($rootScope, $scope, $log, $filter, $timeout, lodash, go, profileService, configService, isCordova, storageService, addressService, gettext, gettextCatalog, amMoment, nodeWebkit, addonManager, txFormatService, uxLanguage, $state, isMobile, addressbookService, notification, animationService, $modal, bwcService, backButton, pushNotificationsService) {
 	breadcrumbs.add('index.js');
 	var self = this;
 
-// 添加代码
-    self.splashClick = false;
+
+
+// 更改代码
+
+	self.splashClick = true;
 
 	self.BLACKBYTES_ASSET = constants.BLACKBYTES_ASSET;
 	self.isCordova = isCordova;
@@ -28,6 +32,10 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 	self.assetIndex = 0;
 	self.$state = $state;
 	self.usePushNotifications = isCordova && !isMobile.Windows() && isMobile.Android();
+
+
+	self.showneikuang = false;
+	self.showneikuangsync = false;
 	/*
 	 console.log("process", process.env);
 	 var os = require('os');
@@ -162,6 +170,10 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 		setSyncProgress(0);
 	});
 	eventBus.on('catchup_balls_left', function (count_left) {
+		if(!self.anyOnGoingProcess) {
+			self.anyOnGoingProcess = true;
+			self.onGoingProcessName = 'Syncing';
+		}
 		if (catchup_balls_at_start === -1) {
 			catchup_balls_at_start = count_left;
 		}
@@ -182,6 +194,9 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 	eventBus.on('refresh_light_started', function () {
 		console.log('refresh_light_started');
 		self.setOngoingProcess('Syncing', true);
+		$timeout(function () {
+			self.setOngoingProcess('Syncing', false);
+		}, 60000)
 	});
 	eventBus.on('refresh_light_done', function () {
 		console.log('refresh_light_done');
@@ -692,6 +707,14 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 		$timeout(function () {
 			//$rootScope.$apply();
 			self.hasProfile = true;
+
+
+
+// 更改代码
+			storageService.gethaschoosen(function (err, val) {self.haschoosen = val;});
+			// self.haschoosen = localStorage.getItem("haschoosen");
+			// alert(self.haschoosen)
+
 			self.noFocusedWallet = false;
 			self.onGoingProcess = {};
 
@@ -1145,13 +1168,20 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 
 
 	self.updateLocalTxHistory = function (client, cb) {
+		self.updateTimeout = true;
 		var walletId = client.credentials.walletId;
 		if (self.arrBalances.length === 0)
 			return console.log('updateLocalTxHistory: no balances yet');
 		breadcrumbs.add('index: ' + self.assetIndex + '; balances: ' + JSON.stringify(self.arrBalances));
 		if (!client.isComplete())
 			return console.log('fc incomplete yet');
+		$timeout(function () {
+			if(self.updateTimeout) {
+				return cb('update timeout');
+			}
+		},60000);
 		client.getTxHistory(self.arrBalances[self.assetIndex].asset, self.shared_address, function onGotTxHistory(txs) {
+			self.updateTimeout = false;
 			var newHistory = self.processNewTxs(txs);
 			$log.debug('Tx History synced. Total Txs: ' + newHistory.length);
 
@@ -1230,7 +1260,7 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 	}, 5000);
 
 
-// 弹出错误提示： An exception occurred: TypeError: Cannot read property 'toString' of undefined; cause: undefined
+//  弹出框
 	self.showPopup = function (msg, msg_icon, cb) {
 		$log.warn('Showing ' + msg_icon + ' popup:' + msg);
 		self.showAlert = {
@@ -1417,7 +1447,12 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 		breadcrumbs.add('NeedFreshHistory');
 		self.updateHistory();
 	});
-
+	
+	$rootScope.$on('Local/Synchronization', function (event) {
+		breadcrumbs.add('Synchronization');
+		self.updateAll();
+		self.updateTxHistory();
+	});
 
 	$rootScope.$on('Local/WalletCompleted', function (event) {
 		self.setFocusedWallet();
@@ -1512,22 +1547,34 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 	});
 
 
+
+// 更改代码 监听到状态 没有钱包 go.path 进入种子恢复钱包页
+
 	$rootScope.$on('Local/NoWallets', function (event) {
 		$timeout(function () {
 			self.hasProfile = true;
 			self.noFocusedWallet = true;
 			self.isComplete = null;
 			self.walletName = null;
-			go.path('preferencesGlobal.import');
+
+			// 监听 没有钱包状态 删除profile 重置app 然后进入选择钱包类型页
+			// self.profile = {};
+			storageService.deleteProfile(function () {
+				return cb();
+			});
+			// alert('meiyouqianbao')
+			go.path('splash');
 		});
 	});
 
+
+	// 进入首页前 满足1：option是真 2： 存储中已经写入2  3： 恢复页面的模态框不显示
 	$rootScope.$on('Local/NewFocusedWallet', function (e, option) {
 		// alert(option)
 		console.log('on Local/NewFocusedWallet');
 		self.setFocusedWallet();
 		//self.updateTxHistory();
-		if (option) {
+		if (option && (self.haschoosen == 2) && !self.showneikuang) {
 
 			go.walletHome();
 		}

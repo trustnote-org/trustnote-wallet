@@ -3,12 +3,14 @@
 
 var constants = require('trustnote-common/constants.js');
 
+
 angular.module('copayApp.controllers').controller('correspondentDeviceController',
 	function ($scope, $rootScope, $timeout, $sce, $modal, configService, profileService, animationService, isCordova, go, correspondentListService, addressService, lodash, $deepStateRedirect, $state, backButton) {
 
 		var chatStorage = require('trustnote-common/chat_storage.js');
 		var self = this;
 		console.log("correspondentDeviceController");
+
 		var device = require('trustnote-common/device.js');
 		var eventBus = require('trustnote-common/event_bus.js');
 		var conf = require('trustnote-common/conf.js');
@@ -21,12 +23,15 @@ angular.module('copayApp.controllers').controller('correspondentDeviceController
 		$rootScope.tab = $scope.index.tab = 'chat';
 		var correspondent = correspondentListService.currentCorrespondent;
 		$scope.correspondent = correspondent;
-//	var myPaymentAddress = indexScope.shared_address;
+
+		//	var myPaymentAddress = indexScope.shared_address;
 		if (document.chatForm && document.chatForm.message)
 			document.chatForm.message.focus();
 
 		if (!correspondentListService.messageEventsByCorrespondent[correspondent.device_address])
 			correspondentListService.messageEventsByCorrespondent[correspondent.device_address] = [];
+
+		// 前端页面中的data
 		$scope.messageEvents = correspondentListService.messageEventsByCorrespondent[correspondent.device_address];
 
 		$scope.$watch("correspondent.my_record_pref", function (pref, old_pref) {
@@ -1093,6 +1098,7 @@ angular.module('copayApp.controllers').controller('correspondentDeviceController
 			});
 		}
 
+		// 设置状态气泡
 		function setOngoingProcess(name) {
 			if (isCordova) {
 				if (name) {
@@ -1196,15 +1202,13 @@ angular.module('copayApp.controllers').controller('correspondentDeviceController
 
 	ScrollPosition.prototype.restore = function () {
 		if (this.readyFor === 'up') {
-			this.node.scrollTop = this.node.scrollHeight
-				- this.previousScrollHeightMinusTop;
+			this.node.scrollTop = this.node.scrollHeight - this.previousScrollHeightMinusTop;
 		}
 	}
 
 	ScrollPosition.prototype.prepareFor = function (direction) {
 		this.readyFor = direction || 'up';
-		this.previousScrollHeightMinusTop = this.node.scrollHeight
-			- this.node.scrollTop;
+		this.previousScrollHeightMinusTop = this.node.scrollHeight - this.node.scrollTop;
 	}
 
 	return function (scope, elm, attr) {

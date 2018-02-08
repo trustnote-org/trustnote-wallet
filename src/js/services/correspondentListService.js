@@ -44,7 +44,8 @@ angular.module('copayApp.services').factory('correspondentListService', function
 			addMessageEvent(true, from_address, body, message_counter);
 		});
 	}
-	
+
+	// 添加消息页面
 	function addMessageEvent(bIncoming, peer_address, body, message_counter, skip_history_load){
 		if (!root.messageEventsByCorrespondent[peer_address] && !skip_history_load) {
 			return loadMoreHistory({device_address: peer_address}, function() {
@@ -84,6 +85,8 @@ angular.module('copayApp.services').factory('correspondentListService', function
 		else
 			$rootScope.$digest();
 	}
+	// 添加消息页面 结束
+
 
 	function insertMsg(messages, msg_obj) {
 		for (var i = messages.length-1; i >= 0 && msg_obj.message_counter; i--) {
@@ -95,7 +98,7 @@ angular.module('copayApp.services').factory('correspondentListService', function
 		}
 		messages.push(msg_obj);
 	}
-	
+
 	var payment_request_regexp = /\[.*?\]\(TTT:([0-9A-Z]{32})\?([\w=&;+%]+)\)/g; // payment description within [] is ignored
 	
 	function highlightActions(text, arrMyAddresses){
@@ -105,8 +108,14 @@ angular.module('copayApp.services').factory('correspondentListService', function
 		//	if (arrMyAddresses.indexOf(address) >= 0)
 		//		return address;
 			//return '<a send-payment address="'+address+'">'+address+'</a>';
-			return '<a dropdown-toggle="#pop'+address+'">'+address+'</a><ul id="pop'+address+'" class="f-dropdown" style="left:0px" data-dropdown-content><li><a ng-click="sendPayment(\''+address+'\')">'+gettext('Pay to this address')+'</a></li></ul>';
-		//	return '<a ng-click="sendPayment(\''+address+'\')">'+address+'</a>';
+
+			// return '<a dropdown-toggle="#pop'+address+'">'+address+'</a><ul id="pop'+address+'" class="f-dropdown" style="left:0px" data-dropdown-content><li><a ng-click="sendPayment(\''+address+'\')">'+gettext('Pay to this address')+'</a></li></ul>';
+
+
+// 更改代码  付款到这个地址
+			return '<a dropdown-toggle="#pop'+address+'">' + address + '</a><ul id="pop'+address+'" class="f-dropdown" style="left:0px" data-dropdown-content><li><a ng-click="sendPayment(\''+address+'\')" translate>' + 'Pay to this address' + '</a></li></ul>';
+
+			//	return '<a ng-click="sendPayment(\''+address+'\')">'+address+'</a>';
 			//return '<a send-payment ng-click="sendPayment(\''+address+'\')">'+address+'</a>';
 			//return '<a send-payment ng-click="console.log(\''+address+'\')">'+address+'</a>';
 			//return '<a onclick="console.log(\''+address+'\')">'+address+'</a>';
@@ -372,6 +381,9 @@ angular.module('copayApp.services').factory('correspondentListService', function
 		return parse(arrDefinition, 0);
 	}
 
+
+
+
 	var historyEndForCorrespondent = {};
 	function loadMoreHistory(correspondent, cb) {
 		if (historyEndForCorrespondent[correspondent.device_address]) {
@@ -394,13 +406,22 @@ angular.module('copayApp.services').factory('correspondentListService', function
 			}
 			var walletGeneral = require('trustnote-common/wallet_general.js');
 			walletGeneral.readMyAddresses(function(arrMyAddresses){
+
 				if (messages.length < limit)
 					historyEndForCorrespondent[correspondent.device_address] = true;
+
 				for (var i in messages) {
 					var message = messages[i];
 					var msg_ts = new Date(message.creation_date.replace(' ', 'T')+'.000Z');
+
+					// 上一条信息存在 且 上一条信息的时间戳 与 当前时间戳不一致 顶部添加一个时间戳
 					if (last_msg_ts && last_msg_ts.getDay() != msg_ts.getDay()) {
-						messageEvents.unshift({type: 'system', bIncoming: false, message: last_msg_ts.toDateString(), timestamp: Math.floor(msg_ts.getTime() / 1000)});	
+						messageEvents.unshift({
+							type: 'system',
+							bIncoming: false,
+							message: last_msg_ts.toLocaleDateString(),
+							timestamp: Math.floor(msg_ts.getTime() / 1000)
+						});
 					}
 					last_msg_ts = msg_ts;
 					if (message.type == "text") {
@@ -411,10 +432,24 @@ angular.module('copayApp.services').factory('correspondentListService', function
 							message.message = formatOutgoingMessage(message.message);
 						}
 					}
-					messageEvents.unshift({id: message.id, type: message.type, bIncoming: message.is_incoming, message: message.message, timestamp: Math.floor(msg_ts.getTime() / 1000), chat_recording_status: message.chat_recording_status});
+					messageEvents.unshift({
+						id: message.id,
+						type: message.type,
+						bIncoming: message.is_incoming,
+						message: message.message,
+						timestamp: Math.floor(msg_ts.getTime() / 1000),
+						chat_recording_status: message.chat_recording_status
+					});
 				}
+
+				// 聊天记录中 上面的时间信息（ 数组顶部添加 ）
 				if (historyEndForCorrespondent[correspondent.device_address] && messageEvents.length > 1) {
-					messageEvents.unshift({type: 'system', bIncoming: false, message: (last_msg_ts ? last_msg_ts : new Date()).toDateString(), timestamp: Math.floor((last_msg_ts ? last_msg_ts : new Date()).getTime() / 1000)});
+					messageEvents.unshift({
+						type: 'system',
+						bIncoming: false,
+						message: (last_msg_ts ? last_msg_ts : new Date()).toLocaleDateString(),
+						timestamp: Math.floor((last_msg_ts ? last_msg_ts : new Date()).getTime() / 1000)
+					});
 				}
 				$rootScope.$digest();
 				if (cb) cb();
@@ -422,18 +457,26 @@ angular.module('copayApp.services').factory('correspondentListService', function
 		});
 	}
 
+
+
+
 	function checkAndInsertDate(messageEvents, message) {
 		if (messageEvents.length == 0 || typeof messageEvents[messageEvents.length-1].timestamp == "undefined") return;
 
 		var msg_ts = new Date(message.timestamp * 1000);
 		var last_msg_ts = new Date(messageEvents[messageEvents.length-1].timestamp * 1000);
 		if (last_msg_ts.getDay() != msg_ts.getDay()) {
-			messageEvents.push({type: 'system', bIncoming: false, message: msg_ts.toDateString(), timestamp: Math.floor(msg_ts.getTime() / 1000)});	
+			messageEvents.push({
+				type: 'system',
+				bIncoming: false,
+				message: msg_ts.toLocaleDateString(),
+				timestamp: Math.floor(msg_ts.getTime() / 1000)
+			});
 		}
 	}
 
 
-	// 聊天记录 设置
+	// 聊天记录 设置 （ 解析消息 ） 消息历史记录状态默认是开的
 	function parseMessage(message) {
 		switch (message.type) {
 			case "system":
@@ -458,8 +501,10 @@ angular.module('copayApp.services').factory('correspondentListService', function
 		device.readCorrespondent(correspondent_address, function(correspondent){
 			var oldState = (correspondent.peer_record_pref && correspondent.my_record_pref);
 			correspondent.peer_record_pref = enabled;
+
 			var newState = (correspondent.peer_record_pref && correspondent.my_record_pref);
 			device.updateCorrespondentProps(correspondent);
+
 			if (newState != oldState) {
 				if (!root.messageEventsByCorrespondent[correspondent_address]) root.messageEventsByCorrespondent[correspondent_address] = [];
 				var message = {

@@ -949,7 +949,7 @@ touch-action: manipulation; /* IE11+ */
 
 /*修改安卓启动页 背景色*/
 #splash{
-  background-color: #0095ff;
+  background-color: #fff;
   position: absolute;
   left: 0;
   top: 0;

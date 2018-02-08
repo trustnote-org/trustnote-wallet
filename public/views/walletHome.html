@@ -79,7 +79,8 @@
 
 			<!--banner背景图-->
 			<!--<div class="amount" style="background: #0745bc;" ng-swipe-right="index.suspendSwipe()" >-->
-			<div class="amount" style="background:url('img/bg.png')" >
+
+			<div class="amount" style="background:url('img/bg.png'); background-size: 100% 100%" >
           		<div ng-if="!index.anyOnGoingProcess || 1" style="position: relative;">
             		<div ng-show="index.updateError" ng-click='index.openWallet(); index.updateTxHistory()'>
 						<span class="size-12 db m10b">{{index.updateError|translate}}</span>
@@ -265,7 +266,7 @@
       			</div>
 
 				<div ng-show="index.txHistory[0]">
-					<div ng-repeat="btx in index.txHistory" ng-click="home.openTxModal(btx)" class="row collapse last-transactions-content">
+					<div ng-repeat="btx in index.txHistory" ng-click="home.openTxModal(btx)" class="row collapse last-transactions-content" style=" position: relative;">
 
 						<!--交易的 四种状态  -->
 						<!--<div class="large-3 medium-3 small-3 columns">-->
@@ -313,27 +314,31 @@
 
 
 						<!--交易的 四种状态 对应四种符号-->
-						<div class="large-4 medium-4 small-4 columns m5r" style="padding:3px 0 0 10px;font-weight: bold;width: 140px; ">
+						<!--<div class="large-4 medium-4 small-4 columns m5r" style="padding:3px 0 0 10px;font-weight: bold;width: 140px; ">-->
+						<div class="large-4 medium-4 small-4 columns m5r" style="width: 55%; position: absolute; left: 110px; padding-top:2px; ">
 							<span class="size-16">
-				  				<span ng-if="btx.action == 'received'">+</span>
-				  				<span ng-if="btx.action == 'sent'">-</span>
-				  				<span class="size-12" ng-if="btx.action == 'invalid'" translate> (possible double spend) </span>
+				  				<span ng-if="btx.action == 'received'" style="position: absolute; left: 0;">+</span>
+				  				<span ng-if="btx.action == 'sent'" style="position: absolute; left: 0;">-</span>
+				  				<span class="size-12" ng-if="btx.action == 'invalid'" translate style="position: absolute; left: 0;"> (possible double spend) </span>
+
 								<!--金额-->
-				  				<span ng-if="btx.action != 'invalid'">  {{btx.amountStr}}   </span>
+				  				<span ng-if="btx.action != 'invalid'" style="padding-left: 10px">  {{btx.amountStr}}   </span>
 							</span>
 						</div>
 
 						<!--交易发生时间-->
-						<div class="large-3 medium-3 small-3 columns text-right " style=" width: 108px;">
-							<div class="m5t size-12 text-gray">
+						<!--<div class="large-3 medium-3 small-3 columns text-right " style=" width: 108px;">-->
+						<div class="large-3 medium-3 small-3 columns text-right " style=" position: absolute; right: 23px; width: 110px;">
+							<div class="m5t size-10 text-gray">
 								<time ng-if="btx.time">{{btx.time * 1000 | amTimeAgo}}</time>
 								<span translate class="text-warning" ng-show="!btx.time && (!btx.confirmations || btx.confirmations == 0)"> Unconfirmed  </span>
 							</div>
 						</div>
 
 						<!--右箭头-->
-			  			<div class="large-1 medium-1 small-1 columns text-right" style="width: 10px; float: right;">
-							<i class="icon-arrow-right3 size-14 text-gray"></i>
+			  			<!--<div class="large-1 medium-1 small-1 columns text-right" style="width: 10px; float: right;">-->
+						<div class="large-1 medium-1 small-1 columns text-right" style="position: absolute; right: 10px; top: 25px;">
+								<i class="icon-arrow-right3 size-14 text-gray"></i>
 			  			</div>
 
 						<!--添加清楚浮动fix bug-->
@@ -439,7 +444,7 @@
 				</div>
 
 				<div ng-show="index.txHistory[0]">
-					<div ng-repeat="btx in index.txHistory" ng-click="home.openTxModal(btx)" class="row collapse last-transactions-content">
+					<div ng-repeat="btx in index.txHistory" ng-click="home.openTxModal(btx)" class="row collapse last-transactions-content" style="position: relative;">
 
 						<!--交易的 四种状态  -->
 						<!--<div class="large-3 medium-3 small-3 columns">-->
@@ -494,16 +499,20 @@
 
 
 						<!--交易的 四种状态 对应四种符号-->
-						<div class="large-4 medium-4 small-4 columns m5r" style="padding:3px 0 0 20px;font-weight: bold;width: 130px;">
+						<div class="large-4 medium-4 small-4 columns m5r"  style="width: 55%; position: absolute; left: 110px; padding-top:2px; ">
 							<span class="size-16">
-				  				<span ng-if="btx.action == 'received'">+</span>
-				  				<span ng-if="btx.action == 'sent'">-</span>
-				  				<span class="size-12" ng-if="btx.action == 'invalid'" translate> (possible double spend) </span>
-				  				<span ng-if="btx.action != 'invalid'">  {{btx.amountStr}}   </span>
+				  				<span ng-if="btx.action == 'received'" style="position: absolute; left: 0;">+</span>
+				  				<span ng-if="btx.action == 'sent'" style="position: absolute; left: 0;">-</span>
+				  				<span class="size-12" ng-if="btx.action == 'invalid'" translate style="position: absolute; left: 0;"> (possible double spend) </span>
+
+
+								<span ng-if="btx.action != 'invalid'"  style="padding-left:10px;">  {{btx.amountStr}}   </span>
 							</span>
 						</div>
 
-						<div class="large-3 medium-3 small-3 columns text-right" style=" width: 108px;">
+
+						<!--交易时间-->
+						<div class="large-3 medium-3 small-3 columns text-right" style=" position: absolute; right: 23px; width: 110px;">
 							<div class="m5t size-12 text-gray">
 								<time ng-if="btx.time">{{btx.time * 1000 | amTimeAgo}}</time>
 								<span translate class="text-warning" ng-show="!btx.time && (!btx.confirmations || btx.confirmations == 0)"> Unconfirmed  </span>
@@ -511,7 +520,7 @@
 						</div>
 
 						<!--右箭头-->
-						<div class="large-1 medium-1 small-1 columns text-right" style="width: 10px; float: right;">
+						<div class="large-1 medium-1 small-1 columns text-right" style="position: absolute; right: 10px; top: 25px;">
 							<i class="icon-arrow-right3 size-14 text-gray"></i>
 						</div>
 
@@ -581,7 +590,7 @@
 
 
 
-		<!--send页面 开始 交易页面 -->
+		<!-- send页面 开始 交易页面 -->
 		<div id="send" class="send tab-view">
 			<div>
 				<h4 class="title m0">
@@ -697,6 +706,9 @@
 									</small>
 								</div>
 
+
+
+								<!-- 发送金额 -->
 								<div>
 									<label for="amount">
 										<span class="size-12 color333" translate>Amount</span>
@@ -704,13 +716,13 @@
 									</label>
 									<div class="input">
 
-
 										<!--ng-minlength="0.00000001" ng-maxlength="10000000000"-->
+										<!--ng-attr-placeholder="{{(home.bSendAll ? (index.arrBalances[index.assetIndex].asset === 'base' ? 'All minus fees' : 'All') : 'Amount')|translate}}"-->
 										<input type="number" id="amount" minlength="0.000001" max="999999999.999999"
 											   style="height: 45px; font-size: 14px; padding-right:30px;"
 											   ng-disabled="home.blockUx || home.lockAmount || home.bSendAll"
 											   name="amount"
-											   ng-attr-placeholder="{{(home.bSendAll ? (index.arrBalances[index.assetIndex].asset === 'base' ? 'All minus fees' : 'All') : 'Amount')|translate}}"
+											   ng-attr-placeholder="{{(home.bSendAll ? (index.arrBalances[index.assetIndex].asset === 'base' ? (index.arrBalances[0].stable/1000000).toFixed(6).toLocaleString() : 'All') : 'Amount')|translate}}"
 											   ng-model="_amount"
 											   valid-amount="{{index.arrBalances[index.assetIndex].asset}}"
 											   ng-required="!home.bSendAll" autocomplete="off"
@@ -723,6 +735,12 @@
 										</a>
 									</div>
 								</div>
+								<!-- 发送金额 结束 -->
+
+
+
+
+
               				</div>
             			</div>
 

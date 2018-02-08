@@ -35,8 +35,9 @@
 
 
 					<!-- 首次启动  打开备份提示  -->
-					<div ng-include="'views/includes/backupWaring.html'"  ng-if="index.hasProfile && index.splashClick"></div>
+					<!--<div ng-include="'views/includes/backupWaring.html'"  ng-if="index.hasProfile && index.splashClick"></div>-->
 					<!--<div ng-include="'views/includes/backupWaring.html'"  ng-if="index.hasProfile"></div>-->
+					<!--<div ng-include="'views/includes/backupWaring.html'"  ng-if="index.hasProfile && (index.haschoosen == 1) && index.splashClick"></div>-->
 
 					<!-- 弹出提示框 -->
 					<div ng-include="'views/includes/alert.html'" ng-if="index.showAlert"></div>

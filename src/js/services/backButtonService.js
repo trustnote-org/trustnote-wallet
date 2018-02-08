@@ -1,7 +1,7 @@
 'use strict';
 
 
-angular.module('copayApp.services').factory('backButton', function($log, $rootScope, gettextCatalog, $deepStateRedirect, $document, $timeout, go, $state, lodash) {
+angular.module('copayApp.services').factory('backButton', function($log, $rootScope, gettextCatalog, $deepStateRedirect, $document, $timeout, go, $state, lodash, profileService) {
 	var root = {};
 	
 	root.menuOpened = false;
@@ -40,9 +40,7 @@ angular.module('copayApp.services').factory('backButton', function($log, $rootSc
 				fromParams: fromParams
 			});
 		}
-
-
-			if (to.name == "walletHome") {
+		if (to.name == "walletHome") {
 			$rootScope.$emit('Local/SetTab', 'walletHome', true);
 		}
 		root.menuOpened = false;
@@ -60,6 +58,9 @@ angular.module('copayApp.services').factory('backButton', function($log, $rootSc
 		else if (root.menuOpened) {
 			go.swipe();
 			root.menuOpened = false;
+		}
+		else if(typeof(profileService.haschoosen) == "undefined" || profileService.haschoosen != 2){
+			askAndExit();
 		}
 		else {
 			var currentState = arrHistory.pop();

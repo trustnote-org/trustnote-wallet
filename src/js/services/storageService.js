@@ -1,194 +1,223 @@
 'use strict';
 
 angular.module('copayApp.services')
-  .factory('storageService', function(logHeader, fileStorageService, localStorageService, sjcl, $log, lodash, isCordova) {
+	.factory('storageService', function (logHeader, fileStorageService, localStorageService, sjcl, $log, lodash, isCordova) {
 
-    var root = {};
+		var root = {};
 
-    // File storage is not supported for writting according to 
-    // https://github.com/apache/cordova-plugin-file/#supported-platforms
-    var shouldUseFileStorage = isCordova && !isMobile.Windows();
-    $log.debug('Using file storage:', shouldUseFileStorage);
-
-
-    var storage = shouldUseFileStorage ? fileStorageService : localStorageService;
-
-    var getUUID = function(cb) {
-      // TO SIMULATE MOBILE
-      //return cb('hola');
-      if (!window || !window.plugins || !window.plugins.uniqueDeviceID)
-        return cb(null);
-
-      window.plugins.uniqueDeviceID.get(
-        function(uuid) {
-          return cb(uuid);
-        }, cb);
-    };
-
-    var encryptOnMobile = function(text, cb) {
-
-      // UUID encryption is disabled.
-      return cb(null, text);
-      //
-      // getUUID(function(uuid) {
-      //   if (uuid) {
-      //     $log.debug('Encrypting profile');
-      //     text = sjcl.encrypt(uuid, text);
-      //   }
-      //   return cb(null, text);
-      // });
-    };
+		// File storage is not supported for writting according to
+		// https://github.com/apache/cordova-plugin-file/#supported-platforms
+		var shouldUseFileStorage = isCordova && !isMobile.Windows();
+		$log.debug('Using file storage:', shouldUseFileStorage);
 
 
-    var decryptOnMobile = function(text, cb) {
-      var json;
-      try {
-        json = JSON.parse(text);
-      } catch (e) {};
+		var storage = shouldUseFileStorage ? fileStorageService : localStorageService;
 
-      if (!json) return cb('Could not access storage')
+		var getUUID = function (cb) {
+			// TO SIMULATE MOBILE
+			//return cb('hola');
+			if (!window || !window.plugins || !window.plugins.uniqueDeviceID)
+				return cb(null);
 
-      if (!json.iter || !json.ct) {
-        $log.debug('Profile is not encrypted');
-        return cb(null, text);
-      }
+			window.plugins.uniqueDeviceID.get(
+				function (uuid) {
+					return cb(uuid);
+				}, cb);
+		};
 
-      $log.debug('Profile is encrypted');
-      getUUID(function(uuid) {
-        $log.debug('Device UUID:' + uuid);
-        if (!uuid)
-          return cb('Could not decrypt storage: could not get device ID');
+		var encryptOnMobile = function (text, cb) {
 
-        try {
-          text = sjcl.decrypt(uuid, text);
+			// UUID encryption is disabled.
+			return cb(null, text);
+			//
+			// getUUID(function(uuid) {
+			//   if (uuid) {
+			//     $log.debug('Encrypting profile');
+			//     text = sjcl.encrypt(uuid, text);
+			//   }
+			//   return cb(null, text);
+			// });
+		};
 
-          $log.info('Migrating to unencrypted profile');
-          return storage.set('profile', text, function(err) {
-            return cb(err, text);
-          });
-        } catch(e) {
-          $log.warn('Decrypt error: ', e);
-          return cb('Could not decrypt storage: device ID mismatch');
-        };
-        return cb(null, text);
-      });
-    };
 
-    // on mobile, the storage keys are files, we have to avoid slashes in filenames
-    function getSafeWalletId(walletId){
-        return walletId.replace(/[\/+=]/g, '');
-    }
+		var decryptOnMobile = function (text, cb) {
+			var json;
+			try {
+				json = JSON.parse(text);
+			} catch (e) {
+			}
+			;
 
-    root.storeNewProfile = function(profile, cb) {
-      encryptOnMobile(profile.toObj(), function(err, x) {
-        storage.create('profile', x, cb);
-      });
-    };
+			if (!json) return cb('Could not access storage')
 
-    root.storeProfile = function(profile, cb) {
-      encryptOnMobile(profile.toObj(), function(err, x) {
-        storage.set('profile', x, cb);
-      });
-    };
+			if (!json.iter || !json.ct) {
+				$log.debug('Profile is not encrypted');
+				return cb(null, text);
+			}
 
-    root.getProfile = function(cb) {
-      storage.get('profile', function(err, str) {
-        //console.log("prof="+str+", err="+err);
-        if (err || !str)
-          return cb(err);
+			$log.debug('Profile is encrypted');
+			getUUID(function (uuid) {
+				$log.debug('Device UUID:' + uuid);
+				if (!uuid)
+					return cb('Could not decrypt storage: could not get device ID');
 
-        decryptOnMobile(str, function(err, str) {
-          if (err) return cb(err);
-          var p, err;
-          try {
-            p = Profile.fromString(str);
-          } catch (e) {
-            $log.debug('Could not read profile:', e);
-            err = new Error('Could not read profile:' + e);
-          }
-          return cb(err, p);
-        });
-      });
-    };
+				try {
+					text = sjcl.decrypt(uuid, text);
 
-    root.deleteProfile = function(cb) {
-      storage.remove('profile', cb);
-    };
+					$log.info('Migrating to unencrypted profile');
+					return storage.set('profile', text, function (err) {
+						return cb(err, text);
+					});
+				} catch (e) {
+					$log.warn('Decrypt error: ', e);
+					return cb('Could not decrypt storage: device ID mismatch');
+				}
+				;
+				return cb(null, text);
+			});
+		};
 
-    root.storeFocusedWalletId = function(id, cb) {
-      storage.set('focusedWalletId', id || '', cb);
-    };
+		// on mobile, the storage keys are files, we have to avoid slashes in filenames
+		function getSafeWalletId(walletId) {
+			return walletId.replace(/[\/+=]/g, '');
+		}
 
-    root.getFocusedWalletId = function(cb) {
-      storage.get('focusedWalletId', cb);
-    };
+		root.storeNewProfile = function (profile, cb) {
+			encryptOnMobile(profile.toObj(), function (err, x) {
+				storage.create('profile', x, cb);
+			});
+		};
 
-    root.setBackupFlag = function(walletId, cb) {
-      storage.set('backup-' + getSafeWalletId(walletId), Date.now(), cb);
-    };
+		root.storeProfile = function (profile, cb) {
+			encryptOnMobile(profile.toObj(), function (err, x) {
+				storage.set('profile', x, cb);
+			});
+		};
 
-    root.getBackupFlag = function(walletId, cb) {
-      storage.get('backup-' + getSafeWalletId(walletId), cb);
-    };
+		root.getProfile = function (cb) {
+			storage.get('profile', function (err, str) {
+				//console.log("prof="+str+", err="+err);
+				if (err || !str)
+					return cb(err);
 
-    root.clearBackupFlag = function(walletId, cb) {
-      storage.remove('backup-' + getSafeWalletId(walletId), cb);
-    };
+				decryptOnMobile(str, function (err, str) {
+					if (err) return cb(err);
+					var p, err;
+					try {
+						p = Profile.fromString(str);
+					} catch (e) {
+						$log.debug('Could not read profile:', e);
+						err = new Error('Could not read profile:' + e);
+					}
+					return cb(err, p);
+				});
+			});
+		};
 
-    root.getConfig = function(cb) {
-      storage.get('config', cb);
-    };
+		root.deleteProfile = function (cb) {
+			storage.remove('profile', cb);
+		};
 
-    root.storeConfig = function(val, cb) {
-      $log.debug('Storing Preferences', val);
-      storage.set('config', val, cb);
-    };
+		root.storeFocusedWalletId = function (id, cb) {
+			storage.set('focusedWalletId', id || '', cb);
+		};
 
-    root.clearConfig = function(cb) {
-      storage.remove('config', cb);
-    };
+		root.getFocusedWalletId = function (cb) {
+			storage.get('focusedWalletId', cb);
+		};
 
-    root.setDisclaimerFlag = function(cb) {
-      storage.set('agreeDisclaimer', true, cb);
-    };
+		root.setBackupFlag = function (walletId, cb) {
+			storage.set('backup-' + getSafeWalletId(walletId), Date.now(), cb);
+		};
 
-    root.getDisclaimerFlag = function(cb) {
-      storage.get('agreeDisclaimer', cb);
-    };
+		root.getBackupFlag = function (walletId, cb) {
+			storage.get('backup-' + getSafeWalletId(walletId), cb);
+		};
 
-    root.setRemotePrefsStoredFlag = function(cb) {
-      storage.set('remotePrefStored', true, cb);
-    };
+		root.clearBackupFlag = function (walletId, cb) {
+			storage.remove('backup-' + getSafeWalletId(walletId), cb);
+		};
 
-    root.getRemotePrefsStoredFlag = function(cb) {
-      storage.get('remotePrefStored', cb);
-    };
+		root.getConfig = function (cb) {
+			storage.get('config', cb);
+		};
 
-    root.setAddressbook = function(network, addressbook, cb) {
-      storage.set('addressbook-' + network, addressbook, cb);
-    };
+		root.storeConfig = function (val, cb) {
+			$log.debug('Storing Preferences', val);
+			storage.set('config', val, cb);
+		};
 
-    root.getAddressbook = function(network, cb) {
-      storage.get('addressbook-' + network, cb);
-    };
+		root.clearConfig = function (cb) {
+			storage.remove('config', cb);
+		};
 
-    root.removeAddressbook = function(network, cb) {
-      storage.remove('addressbook-' + network, cb);
-    };
 
-    root.setPushInfo = function(projectNumber, registrationId, enabled, cb) {
-      storage.set('pushToken', JSON.stringify({projectNumber: projectNumber, registrationId: registrationId, enabled: enabled}), cb);
-    };
 
-    root.getPushInfo = function(cb) {
-      storage.get('pushToken', function(err, data) {
-      	err ? cb(err) : cb(null, (data ? JSON.parse(data) : data));
-	  });
-    };
-      
-    root.removePushInfo = function(cb){
-      storage.remove('pushToken', cb);
-    };
+		// 存储 是否同意 免责声明
+		root.setDisclaimerFlag = function (cb) {
+			storage.set('agreeDisclaimer', true, cb);
+		};
 
-    return root;
-  });
+		// 获取 是否同意 免责声明
+		root.getDisclaimerFlag = function (cb) {
+			storage.get('agreeDisclaimer', cb);
+		};
+
+
+
+		root.setRemotePrefsStoredFlag = function (cb) {
+			storage.set('remotePrefStored', true, cb);
+		};
+
+		root.getRemotePrefsStoredFlag = function (cb) {
+			storage.get('remotePrefStored', cb);
+		};
+
+		root.setAddressbook = function (network, addressbook, cb) {
+			storage.set('addressbook-' + network, addressbook, cb);
+		};
+
+		root.getAddressbook = function (network, cb) {
+			storage.get('addressbook-' + network, cb);
+		};
+
+		root.removeAddressbook = function (network, cb) {
+			storage.remove('addressbook-' + network, cb);
+		};
+
+		root.setPushInfo = function (projectNumber, registrationId, enabled, cb) {
+			storage.set('pushToken', JSON.stringify({
+				projectNumber: projectNumber,
+				registrationId: registrationId,
+				enabled: enabled
+			}), cb);
+		};
+
+		root.getPushInfo = function (cb) {
+			storage.get('pushToken', function (err, data) {
+				err ? cb(err) : cb(null, (data ? JSON.parse(data) : data));
+			});
+		};
+
+		root.removePushInfo = function (cb) {
+			storage.remove('pushToken', cb);
+		};
+
+
+
+
+
+		// 存储 是否选择  回复钱包 创建新的钱包
+		root.hashaschoosen = function (value, cb) {
+			storage.set('haschoosen', value, cb);
+			// alert('zai storage zhong')
+		};
+
+		// 获取 是否选择 回复钱包 创建新的钱包
+		root.gethaschoosen = function (cb) {
+			storage.get('haschoosen',cb);
+		};
+
+
+		return root;
+	});

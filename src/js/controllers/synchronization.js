@@ -1,62 +1,38 @@
 'use strict';
 
-angular.module('copayApp.controllers').controller('recoveryFromSeed',
-	function ($rootScope, $scope, $log, gettext, $timeout, gettextCatalog, profileService, go, notification, storageService) {
+angular.module('copayApp.controllers').controller('synchronization',
+	function ($rootScope, $scope, $log, gettext, $timeout, lodash, gettextCatalog, profileService, storageService, configService) {
 
 		var async = require('async');
 		var conf = require('trustnote-common/conf.js');
 		var wallet_defined_by_keys = require('trustnote-common/wallet_defined_by_keys.js');
 		var objectHash = require('trustnote-common/object_hash.js');
-
 		try{
 			var ecdsa = require('secp256k1');
 		}
 		catch(e){
 			var ecdsa = require('trustnote-common/node_modules/secp256k1' + '');
 		}
-
-		var Mnemonic = require('bitcore-mnemonic');
 		var Bitcore = require('bitcore-lib');
 		var db = require('trustnote-common/db.js');
 		var network = require('trustnote-common/network');
 		var myWitnesses = require('trustnote-common/my_witnesses');
 		var fc = profileService.focusedClient;
 
-
-
-
-		// 更改代码
-		var successMsg = gettext('Backup words deleted');
 		var self = this;
 
 		self.error = '';
 		self.bLight = conf.bLight;
 		self.scanning = false;
-		self.inputMnemonic = '';
 		self.xPrivKey = '';
 		self.assocIndexesToWallets = {};
 		self.credentialsEncrypted = false;
 
-		// 删除口令 （ 修改后 ）
-		self.delteConfirm = function () {
-			fc.clearMnemonic();
-			profileService.clearMnemonic(function () {
-				// self.deleted = true;
-				notification.success(successMsg);
-				// go.walletHome();
-			});
-
-		};
-
-
-		// 钱包内部恢复
 		self.passwordRequest = function (msg, cb) {
 			self.credentialsEncrypted = true;
 			$timeout(function () {
 				$scope.$apply();
 			});
-
-			// 输入密码错误 （ 可以捕捉的错误 ）
 			profileService.unlockFC(msg, function (err) {
 				if(typeof(err) !== "undefined"){
 					if(typeof(err.message) === "undefined")
@@ -66,16 +42,11 @@ angular.module('copayApp.controllers').controller('recoveryFromSeed',
 	                		self.passwordRequest(err.message, cb);
 	            		}, 500);
 					}
-					// 输入密码 取消
-					$scope.index.showneikuang = false;
 					return;
 				}
-				// 输入密码 未捕捉的错误
 				else if(err){
 					return;
 				}
-
-				// 输入密码 点击确定
 				profileService.disablePrivateKeyEncryptionFC(function (err) {
 					$rootScope.$emit('Local/NewEncryptionSetting');
 					if (err) {
@@ -90,6 +61,16 @@ angular.module('copayApp.controllers').controller('recoveryFromSeed',
 			});
 		}
 
+		var config = configService.getSync();
+		var walletId = fc.credentials.walletId;
+		config.aliasFor = config.aliasFor || {};
+		var wallets = lodash.map(profileService.profile.credentials, function(c) {
+			return {
+				name: config.aliasFor[c.walletId] || c.walletName,
+				id: c.walletId,
+			};
+		});
+
 		function determineIfAddressUsed(address, cb) {
 			db.query("SELECT 1 FROM outputs WHERE address = ? LIMIT 1", [address], function(outputsRows) {
 				if (outputsRows.length === 1)
@@ -102,8 +83,7 @@ angular.module('copayApp.controllers').controller('recoveryFromSeed',
 			});
 		}
 
-		function scanForAddressesAndWallets(mnemonic, cb) {
-			self.xPrivKey = new Mnemonic(mnemonic).toHDPrivateKey();
+		function scanForAddressesAndWallets(cb) {
 			var xPubKey;
 			var lastUsedAddressIndex = -1;
 			var lastUsedWalletIndex = -1;
@@ -172,7 +152,7 @@ angular.module('copayApp.controllers').controller('recoveryFromSeed',
 			db.addQuery(arrQueries, "DELETE FROM wallet_signing_paths");
 			db.addQuery(arrQueries, "DELETE FROM extended_pubkeys");
 			db.addQuery(arrQueries, "DELETE FROM wallets");
-			db.addQuery(arrQueries, "DELETE FROM correspondent_devices");
+			// db.addQuery(arrQueries, "DELETE FROM correspondent_devices");
 
 			async.series(arrQueries, cb);
 		}
@@ -214,9 +194,8 @@ angular.module('copayApp.controllers').controller('recoveryFromSeed',
 			startAddToNewWallet(0);
 		}
 
-
-		// 创建钱包 函数
 		function createWallets(arrWalletIndexes, cb) {
+
 			function createWallet(n) {
 				var account = parseInt(arrWalletIndexes[n]);
 				var opts = {};
@@ -224,25 +203,21 @@ angular.module('copayApp.controllers').controller('recoveryFromSeed',
 				opts.n = 1;
 				opts.name = 'Wallet #' + account;
 				opts.network = 'livenet';
-				opts.cosigners = [];
 				opts.extendedPrivateKey = self.xPrivKey;
-				opts.mnemonic = self.inputMnemonic;
+				opts.cosigners = [];
 				opts.account = account;
 
-
-				// 调用profileSevice中的createWallet 函数
-				profileService.createWallet(opts, function(err, walletId) {
+				profileService.synchronization(opts, function(err, walletId) {
 					self.assocIndexesToWallets[account] = walletId;
 					n++;
 					(n < arrWalletIndexes.length) ? createWallet(n) : cb();
 				});
 			}
+
 			createWallet(0);
 		}
-		// 创建钱包 结束
 
-		function scanForAddressesAndWalletsInLightClient(mnemonic, cb) {
-			self.xPrivKey = new Mnemonic(mnemonic).toHDPrivateKey();
+		function scanForAddressesAndWalletsInLightClient(cb) {
 			var xPubKey;
 			var currentWalletIndex = 0;
 			var lastUsedWalletIndex = -1;
@@ -266,14 +241,10 @@ angular.module('copayApp.controllers').controller('recoveryFromSeed',
 						if(response && response.error){
 							var breadcrumbs = require('trustnote-common/breadcrumbs.js');
 							breadcrumbs.add('Error scanForAddressesAndWalletsInLightClient: ' + response.error);
-							self.error = 'When scanning an error occurred, please try again later.';
+							self.error = gettextCatalog.getString('please try again later.');
 							self.scanning = false;
-
-							// 钱包内部恢复的时候 让弹出框 显示出来
-							$scope.index.showneikuang = false;
-							// 钱包内部恢复时 安卓禁用返回键
+							$scope.index.showneikuangsync = false;
 							profileService.haschoosen = 2;
-
 							if(self.password) {
 								profileService.setPrivateKeyEncryptionFC(self.password, function () {
 									$rootScope.$emit('Local/NewEncryptionSetting');
@@ -325,27 +296,38 @@ angular.module('copayApp.controllers').controller('recoveryFromSeed',
 			if (arrWalletIndexes.length) {
 				removeAddressesAndWallets(function () {
 					var myDeviceAddress = objectHash.getDeviceAddress(ecdsa.publicKeyCreate(self.xPrivKey.derive("m/1'").privateKey.bn.toBuffer({size: 32}), true).toString('base64'));
-
 					profileService.replaceProfile(self.xPrivKey.toString(), self.inputMnemonic, myDeviceAddress, function () {
 						device.setDevicePrivateKey(self.xPrivKey.derive("m/1'").privateKey.bn.toBuffer({size: 32}));
-
 						createWallets(arrWalletIndexes, function () {
 							createAddresses(assocMaxAddressIndexes, function () {
 								self.scanning = false;
-								$scope.index.showneikuang = false;
+								$scope.index.showneikuangsync = false;
+								profileService.haschoosen = 2;
 								if(self.password) {
 									profileService.setPrivateKeyEncryptionFC(self.password, function () {
 										$rootScope.$emit('Local/NewEncryptionSetting');
 										$scope.encrypt = true;
 										delete self.password;
 									});
-								}	
-// 更改代码  正常恢复
-								$rootScope.$emit('Local/ShowAlertnei', arrWalletIndexes.length + gettextCatalog.getString(" wallets recovered, please restart the application to finish."), 'fi-check', function () {
-									if (navigator && navigator.app) // android
-										navigator.app.exitApp();
-									else if (process.exit) // nwjs
-										process.exit();
+								}
+
+// 更改代码
+								// $rootScope.$emit('Local/ShowAlert', "Synchronization completed", 'fi-check', function () {
+								$rootScope.$emit('Local/ShowAlert', gettextCatalog.getString("Synchronization completed"), 'fi-check', function () {
+										var opts = {
+										aliasFor: {}
+									};
+									for(item in wallets) {
+										opts.aliasFor[wallets[item].id] = wallets[item].name;
+										configService.set(opts, function(err) {
+											if (err) {
+												$scope.$emit('Local/DeviceError', err);
+												return;
+											}
+											$scope.$emit('Local/AliasUpdated');
+										});
+									}
+									$rootScope.$emit('Local/Synchronization');
 								});
 							});
 						});
@@ -358,95 +340,64 @@ angular.module('copayApp.controllers').controller('recoveryFromSeed',
 					profileService.replaceProfile(self.xPrivKey.toString(), self.inputMnemonic, myDeviceAddress, function () {
 						device.setDevicePrivateKey(self.xPrivKey.derive("m/1'").privateKey.bn.toBuffer({size: 32}));
 						createWallets(arrWalletIndexes, function () {
-								self.scanning = false;
-								$scope.index.showneikuang = false;
+							self.scanning = false;
+							$scope.index.showneikuangsync = false;
+							profileService.haschoosen = 2;
+// 更改代码
+							if(self.password) {
+								profileService.setPrivateKeyEncryptionFC(self.password, function () {
+									$rootScope.$emit('Local/NewEncryptionSetting');
+									$scope.encrypt = true;
+									delete self.password;
+								});
+							}
 
-								if(self.password) {
-									profileService.setPrivateKeyEncryptionFC(self.password, function () {
-										$rootScope.$emit('Local/NewEncryptionSetting');
-										$scope.encrypt = true;
-										delete self.password;
+							$rootScope.$emit('Local/ShowAlert', gettextCatalog.getString("Synchronization completed"), 'fi-check', function () {
+								var opts = {
+									aliasFor: {}
+								};
+								for(item in wallets) {
+									opts.aliasFor[wallets[item].id] = wallets[item].name;
+									configService.set(opts, function(err) {
+										if (err) {
+											$scope.$emit('Local/DeviceError', err);
+											return;
+										}
+										$scope.$emit('Local/AliasUpdated');
 									});
 								}
-
-// 更改代码   修改后恢复（没有交易）
-								$rootScope.$emit('Local/ShowAlertnei', arrWalletIndexes.length + gettextCatalog.getString(" wallets recovered, please restart the application to finish."), 'fi-check', function () {
-									if (navigator && navigator.app) // android
-										navigator.app.exitApp();
-									else if (process.exit) // nwjs
-										process.exit();
-								});
+							});
 						});
 					});
 				});
-				// self.error = 'No active addresses found.';
-				// self.scanning = false;
-				// $timeout(function () {
-				// 	$rootScope.$apply();
-				// });
 			}
 		}
 
-
-
-		// 更改代码 添加监听事件 恢复成功 弹出确认框
-		self.showPopup = function (msg, msg_icon, cb) {
-			$log.warn('Showing ' + msg_icon + ' popup:' + msg);
-			self.showAlert = {
-				msg: msg.toString(),
-				msg_icon: msg_icon,
-				close: function (err) {
-					self.showAlert = null;
-					if (cb) return cb(err);
-				},
-			};
-			$timeout(function () {
-				$rootScope.$apply();
-			});
-		};
-
-		$rootScope.$on('Local/ShowAlertnei', function (event, msg, msg_icon, cb) {
-			self.showPopup(msg, msg_icon, cb);
-		});
-
-
-
-		// 点击恢复钱包
-		self.recoveryForm = function() {
-			if (self.inputMnemonic) {
-				self.error = '';
-				// 首先转换成小写
-				self.inputMnemonic = self.inputMnemonic.toLowerCase();
-
-				// alert($rootScope.index.showneikuang)
-
-				if ((self.inputMnemonic.split(' ').length % 3 === 0) && Mnemonic.isValid(self.inputMnemonic)) {
-					// 钱包内部恢复的时候 让弹出框 显示出来
-					$scope.index.showneikuang = true;
-					// 钱包内部恢复 安卓禁用返回键
+		self.synchronization = function() {
+			if (fc.hasPrivKeyEncrypted()) {
+				self.passwordRequest(gettextCatalog.getString('During synchronization, please be patient.'), function(){
+					self.scanning = true;
+					$scope.index.showneikuangsync = true;
 					delete profileService.haschoosen;
-					if (fc && fc.hasPrivKeyEncrypted()) {
-						self.passwordRequest(gettextCatalog.getString('This will permanently delete all your existing wallets!'), function(){
-							self.scanning = true;
-							if (self.bLight) {
-								scanForAddressesAndWalletsInLightClient(self.inputMnemonic, cleanAndAddWalletsAndAddresses);
-
-							} else {
-								scanForAddressesAndWallets(self.inputMnemonic, cleanAndAddWalletsAndAddresses);
-							}
-						});
+					self.xPrivKey = Bitcore.HDPrivateKey.fromString(profileService.profile.xPrivKey);
+					self.scanning = true;
+					if (self.bLight) {
+						scanForAddressesAndWalletsInLightClient(cleanAndAddWalletsAndAddresses);
+					} else {
+						scanForAddressesAndWallets(cleanAndAddWalletsAndAddresses);
 					}
-					else {
-						self.scanning = true;
-						if (self.bLight) {
-							scanForAddressesAndWalletsInLightClient(self.inputMnemonic, cleanAndAddWalletsAndAddresses);
-
-						} else {
-							scanForAddressesAndWallets(self.inputMnemonic, cleanAndAddWalletsAndAddresses);
-						}
-					}
+				});
+			}
+			else {
+				self.scanning = true;
+				$scope.index.showneikuangsync = true;
+				delete profileService.haschoosen;
+				self.xPrivKey = Bitcore.HDPrivateKey.fromString(profileService.profile.xPrivKey);
+				self.scanning = true;
+				if (self.bLight) {
+					scanForAddressesAndWalletsInLightClient(cleanAndAddWalletsAndAddresses);
 				} else {
-					self.error = gettext('Seed is not valid');
+					scanForAddressesAndWallets(cleanAndAddWalletsAndAddresses);
 				}
 			}
 		}

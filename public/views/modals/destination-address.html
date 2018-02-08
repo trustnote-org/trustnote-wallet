@@ -21,7 +21,7 @@
 		<!-- 中间部分  联系人 -->
 		<section class="middle tab-bar-section">
 			<h1 class="ellipsis" ng-style="{ 'max-width': '100%'}">
-				<span class="size-17 colorfff" translate>Contacts</span>
+				<span class="size-17 colorfff" translate>Address</span>
 			</h1>
 		</section>
 		<!-- 中间部分结束 -->
@@ -104,17 +104,21 @@
 			<ul ng-show="!addAddressbookEntry" class="no-bullet m0" ng-init="listEntries()">
 				<!--已经保存的地址-->
 				<li class="p10 line-b" ng-repeat="(addr, label) in list">
-					<!--移除一个地址-->
+
+					<!-- 移除一个地址 -->
 					<a ng-show="selectedAddressbook[addr]" class="removeAddressbook" ng-click="remove(addr)" translate>Remove</a>
+					<!-- 移除一个地址 结束 -->
 
 					<a class="selectAddressbook" ng-show="editAddressbook" ng-click="toggleSelectAddressbook(addr)">
 						<i class="fi-trash"></i>
 					</a>
 
+					<!-- 遍历姓名 地址 -->
 					<div ng-click="selectAddressbook(addr)">
 						{{label}}
 						<div class="size-10 text-gray ellipsis">{{addr}}</div>
 					</div>
+					<!-- 遍历姓名 地址 结束 -->
 				</li>
 
 				<!--添加新的条目-->

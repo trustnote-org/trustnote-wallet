@@ -1,0 +1,43 @@
+
+<!--克隆钱包 同步-->
+
+<!--添加一个模态框 恢复时弹出-->
+<div class="passModalMask" style="opacity: 0.3; padding: 0; background: #000;" ng-if="index.showneikuangsync"> </div>
+
+<div class="topbar-container" ng-include="'views/includes/topbar.html'" ng-init="titleSection='Synchronization'; goBackToState = true"> </div>
+
+<div class="content preferences" ng-controller="synchronization as sync">
+	<h4></h4>
+	<div class="onGoingProcess" ng-show="sync.scanning">
+		<div class="onGoingProcess-content">
+			<div class="spinner">
+				<div class="rect1"></div>
+				<div class="rect2"></div>
+				<div class="rect3"></div>
+				<div class="rect4"></div>
+				<div class="rect5"></div>
+			</div>
+			<span translate> Scanning for addresses... </span>
+		</div>
+	</div>
+
+	<div class="box-notification" ng-show="recFromSeed.error">
+		<span class="text-warning" translate>{{recFromSeed.error}}</span>
+	</div>
+
+	<div>
+		<form name="settingsDeviceNameForm" class="columns" ng-submit="sync.synchronization()">
+			<label><span translate>Click to Sync the Wallets:</span></label>
+			<input ng-disabled="sync.scanning" type="submit" class="button expand black round" value="{{'Sync Wallets'|translate}}" style="background: #0095ff;">
+		</form>
+
+		<div class="text-alert size-12 columns">
+			<span translate>Caution:</span>
+			<ul class="warnings">
+				<li translate>We don’t recommend cloning your Wallet because your Wallet is safe as long as your Seed Phrase is well protected. However, if you experience data inconsistency issue between the original Wallet and its clone, you can fix it by using the “Sync Cloned Wallets” feature on both Wallets.</li>
+			</ul>
+		</div>
+	</div>
+
+</div>
+<div class="extra-margin-bottom"></div>

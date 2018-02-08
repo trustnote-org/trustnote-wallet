@@ -10,6 +10,8 @@ angular.module('copayApp.services')
 
   eventBus.on('new_version', function(ws, data){
     root.version = data.version;
+    if(data.msg)
+    	root.msg = data.msg;
     if(!root.shown) {
       var modalInstance = $modal.open({
           templateUrl: 'views/modals/newVersionIsAvailable.html',

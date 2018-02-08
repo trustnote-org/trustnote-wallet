@@ -62,8 +62,10 @@ angular.module('copayApp.controllers').controller('sidebarController', function(
 
 	  self.goPreferences = function(itemID, currentID) {
 		  profileService.tempWalletId = currentID;
-		  profileService.setAndStoreFocus(itemID, false, function() {
-		  });
+		  if(itemID !== currentID){
+			  profileService.setAndStoreFocus(itemID, false, function() {
+			  });
+		  }
 		  $rootScope.go('preferences');
 	  };
 

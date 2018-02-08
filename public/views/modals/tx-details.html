@@ -72,21 +72,35 @@
       		</span>
 		</li>
 
-		<!--from 接收 -->
+
+
+
+
+		<!-- 接收 来自 -->
 		<li ng-if="btx.action == 'received'" class="line-b p10 row collapse">
-			<div class="text-gray small-2 columns"><span translate>From</span>:</div>
-			<div class="right small-10 columns enable_text_select ellipsis">
-				<div ng-repeat="address in btx.arrPayerAddresses" class="right">{{address}}</div>
-			</div>
+			<!--<div class="text-gray small-2 columns"><span translate>From</span>:</div>-->
+			<span class="text-gray" translate>From</span>:
+			<!--<div class="right small-10 columns enable_text_select ellipsis">-->
+				<!--<div ng-repeat="address in btx.arrPayerAddresses" class="right">{{address}}</div>-->
+			<!--</div>-->
+			<span class="right enable_text_select ellipsis">
+      			<span>
+        			<span ng-repeat="address in btx.arrPayerAddresses">{{address}}</span>
+      			</span>
+    		</span>
 		</li>
-
-
-		<!--to 如果是接收 显示TO到那儿-->
+		<!-- 接收 到哪个地址 -->
 		<li ng-if="btx.action == 'received'" class="line-b p10 row collapse">
-			<div class="text-gray small-2 columns"><span translate>To</span>:</div>
-			<div class="right small-10 columns enable_text_select ellipsis">
-				<div class="right">{{btx.my_address}}</div>
-			</div>
+			<!--<div class="text-gray small-2 columns"><span translate>To</span>:</div>-->
+			<span class="text-gray" translate>To</span>:
+			<!--<div class="right small-10 columns enable_text_select ellipsis">-->
+				<!--<div class="right">{{btx.my_address}}</div>-->
+			<!--</div>-->
+			<span class="right enable_text_select ellipsis">
+      			<span>
+        			<span>{{btx.my_address}}</span>
+      			</span>
+    		</span>
 		</li>
 
 

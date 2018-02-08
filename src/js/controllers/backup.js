@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('copayApp.controllers').controller('wordsController',
-	function ($rootScope, $scope, $timeout, profileService, go, gettext, confirmDialog, notification, $log, isCordova) {
+	function ($rootScope, $scope, $timeout, profileService, go, gettext, confirmDialog, notification, $log, isCordova, storageService) {
 
 		var msg = gettext('Are you sure you want to delete the backup words?');
 		var successMsg = gettext('Backup words deleted');
@@ -22,6 +22,10 @@ angular.module('copayApp.controllers').controller('wordsController',
         self.step = 'show_waring';
         self.delseed = false;
 
+		self.gono00 = function () {
+			self.step = 'show_jietu00';
+		}
+
         self.gono = function () {
             self.step = 'show_jietu';
         }
@@ -37,7 +41,9 @@ angular.module('copayApp.controllers').controller('wordsController',
         self.del = function () {
             self.delseed = !self.delseed;
         }
-
+		self.gorukou2 = function () {
+			self.step = 'rukou2';
+		}
 
 
 
@@ -87,6 +93,8 @@ angular.module('copayApp.controllers').controller('wordsController',
 		};
 
 
+
+
 		// 删除口令
 		self.delete = function () {
 			confirmDialog.show(msg, function (ok) {
@@ -101,8 +109,6 @@ angular.module('copayApp.controllers').controller('wordsController',
 			});
 		};
 
-
-
         // 删除口令 修改后
         self.delteConfirm = function () {
             fc.clearMnemonic();
@@ -111,7 +117,6 @@ angular.module('copayApp.controllers').controller('wordsController',
                 notification.success(successMsg);
                 go.walletHome();
             });
-
         };
 
 
@@ -164,4 +169,22 @@ angular.module('copayApp.controllers').controller('wordsController',
 				}
 			}
 		}
+
+
+
+// 更改代码
+		self.haschoosen = function () {
+			storageService.hashaschoosen(2, function (err) {
+
+				$scope.index.splashClick = false;
+				$timeout(function () {
+					$scope.$apply();
+				}, 1);
+
+				go.walletHome();
+			});
+
+		};
+
+
 	});

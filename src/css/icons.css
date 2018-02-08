@@ -238,17 +238,30 @@
 
 /*警告 要备份钱包种子*/
 .icon-beifen:before {
-    content: "\e626";
+    content: "\e62c";
+}
+.icon-beifenr:before {
+	content: "\e626";
 }
 
 /*警告 不要截屏*/
 .icon-no:before {
-    content: "\e627";
+    content: "\e62a";
 }
 
 /* 碎纸机 */
 .icon-trashes:before {
 	content: "\e629";
+}
+
+/* 启动页 钱包 */
+.icon-splashwallet:before {
+	content: "\e62b";
+}
+
+/* 点击复制二维码 */
+.icon-copy:before {
+	content: "\e62d";
 }
 
 

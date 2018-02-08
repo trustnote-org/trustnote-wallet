@@ -33,7 +33,7 @@
 
 		<!-- 详情 -->
 		<h4 class="title m0" translate>Details</h4>
-		<ul class="no-bullet size-14 m0">
+		<ul class="no-bullet size-14 m0 enable_text_select">
 			<li class="line-b p10 oh">
 				<span class="text-gray" translate>Address</span>:
 				<span class="right enable_text_select">
@@ -76,7 +76,9 @@
 
 						<!--指定金额-->
 						<input
-							style="height: 45px;font-size: 14px;" min="0.000001" max="999999999.999999"
+							style="height: 45px;font-size: 14px;"
+							min="0.000001"
+							max="999999999.999999"
 							type="number" id="amount" name="amount" ng-attr-placeholder="{{'Amount'|translate}}"
 							ng-model="_customAmount" valid-amount="{{index.arrBalances[index.assetIndex].asset}}"
 							required autocomplete="off">
@@ -91,8 +93,13 @@
 					</div>
 				</div>
 
-				<button type="submit" class="button black round expand" ng-disabled="amountForm.$invalid" style="background: #0095ff" translate>
-          			{{buttonLabel}}
+				<button
+					type="submit"
+					class="button black round expand"
+					ng-disabled="amountForm.$invalid"
+					style="background: #0095ff;"
+					translate>
+					Request payment
         		</button>
 			</form>
 		</div>

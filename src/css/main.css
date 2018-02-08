@@ -503,6 +503,7 @@ ul.manage li {
 .db {display: block;}
 .size-10 { font-size: 10px; }
 .size-12 { font-size: 12px; }
+.size-13 { font-size: 13px; }
 .size-14 { font-size: 14px; }
 .size-16 { font-size: 16px; }
 .size-17 { font-size: 17px; }
@@ -581,6 +582,12 @@ ul.manage li {
 }
 .color333{
 	color: #333;
+}
+.color666{
+	color: #666;
+}
+.color999{
+	color: #999;
 }
 .bg0745bc{
 	background: #0095ff;
@@ -1365,10 +1372,10 @@ input.ng-invalid-match, input.ng-invalid-match:focus {
 
 .splash {
   top: 0;
-  background: #00264b;
-  background-image: -webkit-linear-gradient(#00264b 0%, #00264b 100%);
-  background-image: -o-linear-gradient(#00264b 0%, #00264b 100%);
-  background-image: linear-gradient(#00264b 0%, #00264b 100%);
+  background: #fff;
+  background-image: -webkit-linear-gradient(#fff 0%, #fff 100%);
+  background-image: -o-linear-gradient(#fff 0%, #fff 100%);
+  background-image: linear-gradient(#fff 0%, #fff 100%);
 }
 
 .splash .start-button button.black {

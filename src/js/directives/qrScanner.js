@@ -10,6 +10,8 @@ angular.module('copayApp.directives')
 
 			var controller = function ($scope) {
 
+
+				// 移动端的 相机
 				$scope.cordovaOpenScanner = function () {
 					window.ignoreMobilePause = true;
 					window.plugins.spinnerDialog.show(null, gettextCatalog.getString('Preparing camera...'), true);
@@ -41,6 +43,9 @@ angular.module('copayApp.directives')
 					}, 100);
 				};
 
+
+
+				// 电脑端的 相机
 				$scope.modalOpenScanner = function () {
 					var parentScope = $scope;
 					var ModalInstanceCtrl = function ($scope, $rootScope, $modalInstance) {
@@ -161,10 +166,13 @@ angular.module('copayApp.directives')
 
 				};
 
+				// 打开扫描仪 （ 相机 ）
 				$scope.openScanner = function () {
+					// 移动端的 相机
 					if (isCordova) {
 						$scope.cordovaOpenScanner();
 					}
+					// 电脑端的 相机
 					else {
 						$scope.modalOpenScanner();
 					}

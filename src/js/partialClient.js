@@ -157,9 +157,9 @@ function initWallet() {
 	}
 
 	function showCompleteClient() {
-		// getFromId('splash').style.display = 'none';
-		// 
-		setTimeout(function(){ getFromId('splash').style.display = 'none'; },3000);
+		getFromId('splash').style.display = 'none';
+		
+		// setTimeout(function(){ getFromId('splash').style.display = 'none'; },3000);
 		
 		swipeListener.close();
 		var pages = document.getElementsByClassName('page');

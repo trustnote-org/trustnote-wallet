@@ -5,6 +5,7 @@ var eventBus = require('trustnote-common/event_bus.js');
 angular.module('copayApp.services').factory('go', function($window, $rootScope, $location, $state, profileService, fileSystemService, nodeWebkit, notification, gettextCatalog, authService, $deepStateRedirect, $stickyState) {
 	var root = {};
 
+
 	var hideSidebars = function() {
 		if (typeof document === 'undefined')
 			return;
@@ -12,6 +13,7 @@ angular.module('copayApp.services').factory('go', function($window, $rootScope, 
 		var elem = document.getElementById('off-canvas-wrap');
 		elem.className = 'off-canvas-wrap';
 	};
+
 
 	var toggleSidebar = function(invert) {
 		if (typeof document === 'undefined')
@@ -31,6 +33,11 @@ angular.module('copayApp.services').factory('go', function($window, $rootScope, 
 		}
 	};
 
+
+
+
+
+	// 开始定义了一个root的空对象
 	root.openExternalLink = function(url, target) {
 		if (nodeWebkit.isDefined()) {
 			nodeWebkit.openExternalLink(url);
@@ -119,6 +126,9 @@ angular.module('copayApp.services').factory('go', function($window, $rootScope, 
 
 	// Global go. This should be in a better place TODO
 	// We dont do a 'go' directive, to use the benefits of ng-touch with ng-click
+
+
+
 	$rootScope.go = function(path, resetState) {
 		var targetState = $state.get(path);
 		if (resetState) $deepStateRedirect.reset(targetState.name);

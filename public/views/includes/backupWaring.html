@@ -1,172 +1,325 @@
 <!--<div class="passModalMask" ng-click="index.askqr = false"> </div>-->
 
 <!--蒙版层-->
-<div class="passModalMask"> </div>
+<!--<div class="passModalMask" style="opacity: 1; padding: 0;"> </div>-->
+
 
 
 <!--备份钱包口令-->
-<div class="passModal oh" style="height: 80%; border-radius: 10px;">
+<div class="passModal" style="height: 100%; width: 100%; background: goldenrod; border-radius: 0px; position: absolute; left: 0; top: 0;">
 
 
 
 
 <!--控制器开始-->
-<div class="content preferences" ng-controller="wordsController as wordsC" style="top:0;">
+<div class="content preferences" ng-controller="wordsController as wordsC" style="top:0; background:#fff;">
 
-	<!--第一步：警告 请立即备份您的钱包-->
-	<div  ng-if="wordsC.step === 'show_waring'">
-		<h1 class="icon-beifen m20t" style="font-size: 110px;color:#333;text-align: center;"></h1>
-		<h1 class="color333; text-center" style="font-size: 18px; font-weight: bold; " translate>Hello</h1>
-		<h1 class="color333; text-center" style="font-size: 18px; font-weight: bold; " translate>Please backup the mnemonic word</h1>
+	<!--本页面样式-->
+	<style>
+		p.pbutton{
+			width: 150px;
+			text-align:center;
+			height: 45px;
+			line-height: 45px;
+			background: #0095ff;
+			border-radius: 40px;
+			color: #fff;
+			margin: 25px auto;
+			cursor:pointer;
+			font-size:14px;
+		}
 
-		<p class="size-14 text-center" style="width: 90%; margin: 15px auto;" translate>We highly recommend you write the Mnemonic words(Backup Phrase) on Paper and keep it in a safe place, anyone get it can access or spend you assets. Also get start with a small amout of assets.</p>
+	</style>
+	<!--本页面样式 结束-->
+	<!-- 添加一个色块 -->
+	<!--<div style="background: #12172e; height: 45px; line-height: 45px; text-align: center; font-size: 17px; color:#fff; " translate>Backup</div>-->
 
-		<p
-				style="width: 150px; text-align:center; height: 45px; line-height: 45px; background: #0095ff; border-radius: 40px; color: #fff; margin: 25px auto; cursor:pointer; " translate
-				ng-click="wordsC.gono()">
-			Backup
-		</p>
+	<!--第一步：恢复钱包 or 创建新的钱包 -->
+	<div  ng-if="wordsC.step === 'show_waring'" style=" background: url('img/beijing-1080_1920.png');background-size: cover ; height: 100%;">
+		<h1 class="icon-beifen" style="font-size: 110px;color:#fff;text-align: center; margin: 0; padding-top: 100px;"></h1>
+		<h1 class="text-center" style="font-size: 18px; font-weight: bold; color:#fff" translate>LIGHT ∙ FAST ∙ SWEET</h1>
+
+		<!--<p class="size-14 text-center" style="width: 90%; margin: 15px auto;" translate>We highly recommend you write the Mnemonic words(Backup Phrase) on Paper and keep it in a safe place, anyone get it can access or spend you assets. Also get start with a small amout of assets.</p>-->
+
+		
+		<!--点击 创建新的钱包-->
+		<p class="pbutton" translate ng-click="wordsC.gono00()" style="margin-top:130px;background: #fff; color: #0095ff;text-transform: uppercase;"> Create Wallet </p>
+		<!-- 点击 恢复原来钱包 -->
+		<p class="pbutton" style="background: none; border: 1px solid #fff; color: #fff;text-transform: uppercase;" translate ng-click="wordsC.gorukou2()" translate> Restore Wallet </p>
 	</div>
 	<!--第一步  结束-->
 
 
-	<!--第二步 展示不能截图-->
-	<div ng-if="wordsC.step === 'show_jietu'">
-		<h1 class="icon-no m20t" style="font-size: 110px;color:#ff5665;text-align: center;"></h1>
-		<h1 class="color333; text-center" style="font-size: 18px; font-weight: bold; " translate>	Don't screenshot</h1>
-		<p class="size-14 text-center" style="width: 90%; margin: 15px auto;" translate>Please write the Mnemonic words on Paper and keep it in a safe place.</p>
 
-		<p
-				style="width: 150px; text-align:center; height: 45px; line-height: 45px; background: #ff5665; border-radius: 40px; color: #fff; margin: 25px auto 0; cursor:pointer; " translate
-				ng-click="wordsC.showword()">
-			Understood
-		</p>
+
+
+
+
+	<!--入口二：恢复原来的钱包----------------------------------------------------------------------------------------------------------------------------------------------------->
+	<div ng-if="wordsC.step === 'rukou2'">
+		<div class=" preferences" ng-controller="recoveryFromSeeddir as recFromSeeddir">
+
+			<!--恢复成功 弹出一个页面 -->
+			<div ng-include="'views/includes/recoveryAlert.html'" ng-if="recFromSeeddir.showAlert"></div>
+			<!-- 一个模态框 目的是开始恢复时 禁止其他操作 -->
+			<div class="passModalMask" style="opacity: 0.3; padding: 0; background: #000;" ng-if="recFromSeeddir.show"> </div>
+
+			<div style="background: #12172e; height: 45px; line-height: 45px; text-align: center; font-size: 17px; color:#fff; " translate>
+				<span translate>Restore Wallet</span>
+
+				<a ng-if="!recFromSeeddir.scanning" ng-click="wordsC.step = 'show_waring'" style="color:#fff; position: absolute; left: 0;width: 60px;">
+					<i class="icon-arrow-left3  icon-back" style="font-size: 24px; position: absolute; left: 0; top: 10px;"></i>
+					<span class="text-back" style="font-size: 16px;position: absolute; left:20px;" >{{'Back'|translate}}</span>
+				</a>
+
+				<a ng-if="recFromSeeddir.scanning" style="color:#999; position: absolute; left: 0;width: 60px;">
+					<i class="icon-arrow-left3  icon-back" style="font-size: 24px; position: absolute; left: 0; top: 10px;"></i>
+					<span class="text-back" style="font-size: 16px;position: absolute; left:20px;" >{{'Back'|translate}}</span>
+				</a>
+			</div>
+
+
+			<div class="onGoingProcess" ng-show="recFromSeeddir.scanning">
+				<div class="onGoingProcess-content">
+					<div class="spinner">
+						<div class="rect1"></div>
+						<div class="rect2"></div>
+						<div class="rect3"></div>
+						<div class="rect4"></div>
+						<div class="rect5"></div>
+					</div>
+					<span translate> Scanning for addresses... </span>
+				</div>
+			</div>
+
+			<div class="box-notification" ng-show="recFromSeeddir.error">
+				<span class="text-warning" translate>{{recFromSeeddir.error}}</span>
+			</div>
+
+
+
+			<div>
+				<form name="settingsDeviceNameForm" class="columns" ng-submit="recFromSeeddir.recoveryForm()" style="margin-bottom:0;position: relative; height: 210px;">
+					<label style="margin: 10px 0 8px;">
+						<span class="size-12 color333" translate style="text-transform: capitalize">Your Wallet Seed Phrase:</span>
+					</label>
+
+					<textarea
+						style="height: 100px; font-size: 16px; color: #000; line-height: 26px; resize:none"
+						id="inputMnemonic"
+						ng-model="recFromSeeddir.inputMnemonic"
+						ng-disabled="recFromSeeddir.credentialsEncrypted"
+						autocomplete="off">
+			</textarea>
+
+					<!--按钮 点击恢复钱包-->
+					<input
+						ng-show="!recFromSeeddir.scanning"
+						ng-disabled="recFromSeeddir.credentialsEncrypted"
+						type="submit"
+						class="button expand black round"
+						value="{{'Restore Wallet from Seed Phrase'|translate}}"
+						style="background: #0095ff; width: 85%;display: block; margin: 0 auto;">
+					<!--按钮 点击恢复钱包 结束-->
+				</form>
+
+
+
+				<!--第二个按钮 恢复并删除口令-->
+				<form name="settingsDeviceNameForm" class="columns" ng-submit="recFromSeeddir.recoveryFormdel()" style="position: relative">
+
+			<textarea
+				style="display: none"
+				id="inputMnemonic"
+				ng-model="recFromSeeddir.inputMnemonic"
+				ng-disabled="recFromSeeddir.credentialsEncrypted"
+				autocomplete="off">
+			</textarea>
+
+					<!--按钮 点击恢复钱包-->
+					<input
+						ng-show="!recFromSeeddir.scanning"
+						ng-disabled="recFromSeeddir.credentialsEncrypted"
+						type="submit"
+						class="button expand black round"
+						value="{{'Restore Wallet and Delete Seed Phrase'|translate}}"
+						style="color: #0095ff;width: 85%;display: block;margin: 5px auto 20px;background: #fff; border: 1px solid #0095ff;">
+					<!--按钮 点击恢复钱包 结束-->
+				</form>
+
+
+
+
+				<!--<div class="text-alert size-12 columns">-->
+					<!--&lt;!&ndash;<span translate>Note:</span>&ndash;&gt;-->
+					<!--<ul class="warnings">-->
+						<!--<li translate style="border: none;">Note: Only one space is allowed between words.</li>-->
+						<!--<li translate>During backup, please be patient, do not quit.</li>-->
+					<!--</ul>-->
+				<!--</div>-->
+				<div class="text-alert size-12 columns">
+					<span translate>Note:</span>
+					<ul class="warnings">
+						<li translate>Only one space is allowed between words.</li>
+						<li translate>During the recovery, please be patient and do not shut down the software.</li>
+						<!-- <li translate>Private assets are not recovered.</li> -->
+
+						<!--<li translate>Only single-sig wallets can be recovered.</li>-->
+						<!--<li translate>Correspondents are not restored.</li>-->
+						<!--<li translate>Do not clone wallets, stop using the original wallet with this seed.</li>-->
+					</ul>
+				</div>
+			</div>
+
+		</div>
+		<!--<div class="extra-margin-bottom"></div>-->
+
+
 	</div>
+	<!--入口二：恢复原来的钱包----------------------------------------------------------------------------------------------------------------------------------------------------------------------->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	<!--入口一：创建新的钱包-->
+	<div ng-if="wordsC.step === 'show_jietu00'">
+		<div style="background: #12172e; height: 45px; line-height: 45px; text-align: center; font-size: 17px; color:#fff; ">
+			<span translate>Create Wallet</span>
+
+			<a ng-click="wordsC.step = 'show_waring'" style="color:#fff; position: absolute; left: 0;width: 60px;">
+				<i class="icon-arrow-left3  icon-back" style="font-size: 24px; position: absolute; left: 0; top: 10px;"></i>
+				<span class="text-back" style="font-size: 16px;position: absolute; left:20px;" >{{'Back'|translate}}</span>
+			</a>
+		</div>
+		<h1 class="icon-beifenr" style="font-size: 110px;color:#333;text-align: center; margin: 0; padding-top: 70px;"></h1>
+		<h1 class="text-center" style="font-size: 18px; font-weight: bold; color:#333" translate>Create Wallet and Backup Your Seed Phrase</h1>
+		<p class="size-14 text-center" style="width: 90%; margin: 15px auto;" translate>We highly recommend you write the Mnemonic words(Backup Phrase) on Paper and keep it in a safe place, anyone get it can access or spend your assets. Also get start with a small amout of assets.</p>
+		<p class="pbutton" translate ng-click="wordsC.gono()" style="margin-top: 40px;text-transform: uppercase;"> Next </p>
+	</div>
+
+
+	<!--第二步 警告不能截图-->
+	<!--<div ng-if="wordsC.step === 'show_jietu'">-->
+		<!--<div style="background: #12172e; height: 45px; line-height: 45px; text-align: center; font-size: 17px; color:#fff; " translate>Create Wallet</div>-->
+		<!--<h1 class="icon-no m20t" style="font-size: 110px;color:#ff5665;text-align: center;"></h1>-->
+		<!--<h1 class="color333; text-center" style="font-size: 18px; font-weight: bold; " translate>	Don't Screenshot</h1>-->
+		<!--<p class="size-14 text-center" style="width: 90%; margin: 15px auto;" translate>Please write the Mnemonic words on Paper and keep it in a safe place.</p>-->
+
+		<!--&lt;!&ndash;点击 知道了&ndash;&gt;-->
+		<!--<p class="pbutton" translate ng-click="wordsC.showword()" style="margin-top: 50px; text-transform: uppercase;"> Understood </p>-->
+	<!--</div>-->
 	<!--第二步  结束-->
 
 
 	<!--第三步：显示助记词-->
-	<div  ng-if="wordsC.step === 'show_word'">
+	<div  ng-if="wordsC.step === 'show_jietu'">
+		<div style="background: #12172e; height: 45px; line-height: 45px; text-align: center; font-size: 17px; color:#fff; " translate>Backup Your Seed Phrase</div>
 
 		<!--备份错误-->
 		<div class="box-notification" ng-show="wordsC.error">
 			<span class="text-warning">{{wordsC.error|translate}}</span>
 		</div>
+		<!--警告不要截屏-->
+		<h1 class="icon-no m20t" style="font-size: 70px;color:#ff5665;text-align: center;"></h1>
+		<h1 class="color333; text-center" style="font-size: 18px; font-weight: bold; " translate>	Don't Screenshot</h1>
 
-		<h1 class="color333; text-center" style="font-size: 18px; font-weight: bold; margin-top:45px; "  translate>Please backup the mnemonic words</h1>
+		<h1 class="color333; text-center" style="font-size: 18px; font-weight: bold; margin-top:10px; "  translate>Please backup the mnemonic words</h1>
 		<p class="size-14 text-center" style="width: 90%; margin: 15px auto;" translate>Those 12 mnemonic words are for recovering you wallet, write down correctly on paper and keep in a safe place.</p>
 
 		<!--<div style="width: 90%; background:#fff; height: 100px; margin:0 auto; padding: 10px ; ">-->
 			<!--显示12个助记词-->
-		<div class="p10" style="background:white;-webkit-user-select: text;" ng-class="{'enable_text_select': index.network == 'testnet'}">
-			<span ng-repeat="word in wordsC.mnemonicWords track by $index" class=" enable_text_select">
+		<div class="p10" style="background:#f5f5f5;-webkit-user-select: text;height: 100px; color: #000; width: 95%; margin: 0 auto; border-radius: 3px; line-height:26px;" ng-class="{'enable_text_select': index.network == 'testnet'}">
+			<span ng-repeat="word in wordsC.mnemonicWords track by $index" class=" enable_text_select" >
 				<span style="white-space:nowrap; -webkit-user-select: text;">{{word}}</span>
 				<span ng-show="wordsC.useIdeograms">&#x3000;</span>
 			</span>
 		</div>
 
-		<p
-                style="width: 150px; text-align:center; height: 45px; line-height: 45px; background: #0095ff; border-radius: 40px; color: #fff; margin: 25px auto 0; cursor:pointer;"
-				translate
-				ng-click="wordsC.showinput()">
-			Next
-		</p>
+		<!--点击 下一步-->
+		<p class="pbutton" translate ng-click="wordsC.showinput()" style="text-transform: uppercase;"> Next </p>
 	</div>
 	<!--第三步 结束-->
 
 
 	<!--第四步 校验您的钱包口令-->
 	<div ng-if="wordsC.step === 'show_input'">
-		<h1 class="color333; text-center" style="font-size: 18px; font-weight: bold; margin-top:45px; " translate>Confirm your mnemonic words</h1>
-		<p class="size-14 text-center" style="width: 90%; margin: 15px auto 0;" translate>Please write the mnemonic words in order and make sure your mnemonic was correct written.</p>
-		<!--<p class="size-14 text-center" style="width: 90%; margin: 5px auto;">以确认您的备份口令正确</p>-->
+		<div style="background: #12172e; height: 45px; line-height: 45px; text-align: center; font-size: 17px; color:#fff; " translate>Backup Your Seed Phrase</div>
+		<h1 class="color333; text-center" style="font-size: 18px; font-weight: bold; margin-top:45px; " translate>Confirm Your Mnemonic Words</h1>
+		<p class="size-14 text-center" style="width: 90%; margin: 15px auto 5px;" translate>Please write the mnemonic words in order and make sure your mnemonic was correct written.</p>
+		<p class="size-14 text-center" style="width: 90%; margin: 0px auto 10px;" translate>Please use English input method, to ensure that there is only one English space between words.</p>
 
-		<textarea ng-model="wordsC.value" style="width: 90%; background:#fff; height: 100px; margin:0 auto; padding: 10px ;"></textarea>
+		<textarea ng-model="wordsC.value" style="width: 90%; background:#f5f5f5; height: 100px; margin:0 auto; padding: 10px ;font-size: 16px; color: #000; line-height:26px;"></textarea>
 
 
 		<!--建议删除种子文件-->
-
 		<p ng-if="wordsC.dis() && wordsC.value" style="text-align: center; color:red;margin-top: 10px;" translate>Invalid mnemonic</p>
-		<p
-				ng-if="wordsC.dis()"
-				style="width: 150px; text-align:center; height: 45px; line-height: 45px; background: #0095ff; border-radius: 40px; color: #fff; margin: 25px auto 0; cursor:pointer;  " translate
-				ng-click="wordsC.showword()">
-			Last step
-		</p>
+		<!--点击 上一步-->
+		<p class="pbutton" ng-if="wordsC.dis()" translate ng-click="wordsC.gono()" style="text-transform: uppercase;"> Last step </p>
+
 		<p class="size-14 text-center" style="width: 90%; margin: 20px auto 10px;color:#ff5665; font-weight: bold" ng-if="!wordsC.dis()" translate>Your mnemonic words are correct. To make your wallet safe, we highly recommend you delete mnemonic words from app.</p>
 
 		<!--点击删除钱包-->
 		<div style="text-align: center;">
 			<button
-					style="width: 150px; text-align:center; height: 45px; background: #0095ff; border-radius: 40px; color: #fff; margin: 0px auto 0; padding: 0;"
+					style="width: 210px; text-align:center; height: 45px; background: #0095ff; border-radius: 40px; color: #fff; margin: 0px auto 0; padding: 0;"
 					ng-click="wordsC.del()"
-					translate ng-if="!wordsC.dis()" translate>DELETE</button>
+					translate ng-if="!wordsC.dis()" translate>DELETE SEED PHRASE</button>
 		</div>
 
-		<!--正确 点击进入 主页-->
+		<!--正确 点击下一步 主页-->
 		<div style="text-align: center;margin: 15px;">
 			<button
-					style="width: 150px; text-align:center; height: 45px; background: #0095ff; border-radius: 40px; color: #fff; padding: 0;margin: 0;"
-					ng-click="index.splashClick = false"
+					style="width: 210px; text-align:center; height: 45px; background: #fff; border-radius: 40px; color: #0095ff; padding: 0;margin: 0; border: 1px solid #0095ff;text-transform: uppercase;"
+					ng-click="wordsC.haschoosen(); index.splashClick = false"
 					ng-if="!wordsC.dis()" translate>
-				Next
+				Skip
 			</button>
 		</div>
 
 
 		<!--确认要删除么？-->
-		<div style="position: absolute; width: 100%;height: 100%; left:0; top:0;background:#f5f5f5; " ng-if="wordsC.delseed">
-			<h1 class="icon-trashes m20t" style="font-size: 110px;color:#333;text-align: center;"></h1>
+		<div style="position: absolute; width: 100%;height: 100%; left:0; top:0;background:#fff; " ng-if="wordsC.delseed">
+			<div style="background: #12172e; height: 45px; line-height: 45px; text-align: center; font-size: 17px; color:#fff; " translate>Backup Your Seed Phrase</div>
+			<h1 class="icon-trashes m20t" style="font-size: 110px;color:#333;text-align: center; margin-top: 70px"></h1>
 			<h1 class="text-center" style="font-size: 18px; font-weight: bold; color:#333; " translate>
-				Are you sure you want to delete the mnemonic ？
+				Are you sure you want to delete the Seed Phrase?
 			</h1>
+			<p class="size-14 text-center" style="width: 90%; margin: 0px auto 10px;" translate>It will delete the seed phrase in the app and can not be restored, please be sure that you have the seed phrase back to a safe place</p>
 
-
-
-			<!--<span-->
-					<!--translate-->
-					<!--ng-click="index.splashClick = false"-->
-					<!--style="cursor:pointer;display: inline-block;width: 110px; text-align:center;height: 45px;line-height: 45px;position: absolute;left:40px;background: #0095ff;border-radius: 40px;color:#fff; margin-top: 75px;">-->
-				<!--Ignore-->
-			<!--</span>-->
-
-			<!--<span-->
-					<!--translate-->
-					<!--ng-click="wordsC.delteConfirm();index.splashClick = false"-->
-				  	<!--style="cursor:pointer;display: inline-block;width: 110px; text-align:center;height: 45px;line-height: 45px; position: absolute;right:40px;background: #0095ff;border-radius: 40px;color:#fff; margin-top:75px;">-->
-				<!--Confirm-->
-			<!--</span>-->
-
-
-
-
-			<p style="width: 150px; text-align:center; height: 45px; line-height: 45px; background: #0095ff; border-radius: 40px; color: #fff; margin: 75px auto 0; cursor:pointer;"
-				translate
-			   ng-click="index.splashClick = false">
-				Ignore
-			</p>
-
-			<p style="width: 150px; text-align:center; height: 45px; line-height: 45px; background: #0095ff; border-radius: 40px; color: #fff; margin: 25px auto 0; cursor:pointer;"
-			   translate
-			   ng-click="wordsC.delteConfirm();index.splashClick = false">
-				Confirm
-			</p>
-
-
-
+			<!--点击 跳过删除口令 进入钱包-->
+			<p class="pbutton" style="margin: 75px auto 0;text-transform: uppercase;" translate ng-click="wordsC.delteConfirm();wordsC.haschoosen(); index.splashClick = false">  Confirm delete </p>
+			<!--点击 确定删除口令 进入钱包-->
+			<p class="pbutton" translate ng-click="wordsC.haschoosen(); index.splashClick = false " style="background: #fff; color: #0095ff; border: 1px solid #0095ff;text-transform: uppercase;"> Skip </p>
 		</div>
-
-
-		<!--style="font-size: 18px;color: #ff5665; text-align: center;margin-top:100px; margin-bottom: 120px;padding: 0 10px"-->
-
-
 	</div>
 	<!--第四步 结束-->
+
 </div>
 <!--控制器 结束	-->
 
 
 </div>
+
+
+
+
+
+
+
+
+
+
 
 
 <!--;index.splashClick = false-->
@@ -204,3 +357,17 @@
 <!--<button ng-click="wordsC.showInput()"> 点击下一步</button>-->
 
 <!--<div class="extra-margin-bottom"></div>-->
+
+<!--<span-->
+<!--translate-->
+<!--ng-click="index.splashClick = false"-->
+<!--style="cursor:pointer;display: inline-block;width: 110px; text-align:center;height: 45px;line-height: 45px;position: absolute;left:40px;background: #0095ff;border-radius: 40px;color:#fff; margin-top: 75px;">-->
+<!--Ignore-->
+<!--</span>-->
+
+<!--<span-->
+<!--translate-->
+<!--ng-click="wordsC.delteConfirm();index.splashClick = false"-->
+<!--style="cursor:pointer;display: inline-block;width: 110px; text-align:center;height: 45px;line-height: 45px; position: absolute;right:40px;background: #0095ff;border-radius: 40px;color:#fff; margin-top:75px;">-->
+<!--Confirm-->
+<!--</span>-->

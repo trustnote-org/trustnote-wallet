@@ -11,7 +11,7 @@
 				<div class="large-12 columns m10t" style="position: relative;">
 					<!--点击叉号关闭-->
 					<span
-						style="position: absolute;right: 0;top: -10px;color: gray;" ng-click="index.askqr = false">
+						style="position: absolute;right: 10px;top: 0px;color: gray;" ng-click="index.askqr = false">
 						<i class="icon-notvalid size-28 "></i>
 					</span>
 					<h2 class="text-center m10t m10b" translate>My TrustNote address</h2>
@@ -24,7 +24,7 @@
 
 
 						<div class="text-center" ng-click="qrcode.copyAddress(qrcode.addr[index.walletId])" ng-show="qrcode.addr[index.walletId] || qrcode.generatingAddress">
-							<qrcode size="180" data="{{qrcode.protocol}}:{{qrcode.addr[index.walletId]}}"></qrcode>
+							<qrcode size="150" data="{{qrcode.protocol}}:{{qrcode.addr[index.walletId]}}"></qrcode>
 
 							<div  ng-show="qrcode.generatingAddress" style="position:relative; top:-226px; height:0px">
 								<!--<div style="height:180px; width:180px; margin:auto; background: url(img/qr.png) white">-->
@@ -37,10 +37,28 @@
 									</div>
 							</div>
 						</div>
-						<div class="m10t text-center" >
-							<h4 ng-class="{'enable_text_select': !index.isCordova}" class="size-12">
+						<div class="m10t text-center enable_text_select" style="position: relative">
+							<!-- 钱包地址 -->
+							<h4 ng-class="{'enable_text_select': !index.isCordova}" class="size-13 enable_text_select m5b">
 								{{index.shared_address || (qrcode.generatingAddress ? '...' : qrcode.addr[index.walletId])}}
+								<!--<img src="img/dianjifuzhi.png" alt="" style="width: 16px; cursor:pointer" ng-click="qrcode.copyAddress(qrcode.addr[index.walletId])">-->
+								<i class="icon-copy size-16 color333" ng-click="qrcode.copyAddress(qrcode.addr[index.walletId])" style="cursor: pointer"></i>
 							</h4>
+
+							<!--按钮 点击复制钱包的地址-->
+							<!--<span-->
+								<!--class="copyed"-->
+								<!--ng-click="qrcode.copyAddress(qrcode.addr[index.walletId])"-->
+								<!--style="border: 1px solid #0095ff; border-radius: 3px; padding: 0px 10px; cursor: pointer; font-size: 10px; display: inline-block; margin-bottom:5px;color: #0095ff;"-->
+								<!--translate>-->
+								<!--Copy wallet address-->
+							<!--</span>-->
+							<!--按钮 点击复制钱包的地址  结束-->
+							<span translate class="copyedd"
+								  style="position: absolute; left: 100px; top: 13px;padding: 5px 40px; background: #666; color: #fff; border-radius: 3px; display: none;">
+								Copied
+
+							</span>
 						</div>
 					</div>
 				</div>
@@ -54,18 +72,18 @@
                   			<!--<span translate>Share address</span>-->
                 		<!--</span>-->
 					<!--</div>-->
-					<div class="line-t size-12 text-center">
+					<div class=" size-12 text-center color999">
 						<span ng-if="index.shared_address" translate>This address is shared with {{index.shared_address_cosigners}}.</span>
-						<span ng-if="!index.shared_address" translate>Share this wallet address to receive payments.</span>
+						<span ng-if="!index.shared_address" translate>Updating the address does not affect charging, and the previous address is still valid.</span>
 						<span ng-if="!index.shared_address && 0" translate>To protect your privacy, new addresses are generated automatically once you use them.</span>
 					</div>
 				</div>
 			</div>
 		</div>
 
-		<div class="row m20t" ng-if="!index.shared_address">
+		<div class="row m15t" ng-if="!index.shared_address">
 			<div class="middle-12 columns">
-				<button class="button black expand round m0" ng-click="qrcode.setAddress(true)" style="background: #0095ff" ng-disabled="qrcode.blockUx || index.isOffline ||qrcode.generatingAddress" translate>
+				<button class="button black expand round m0" ng-click="qrcode.setAddress(true)" style="background: #fff; color: #0095ff; border: 1px solid #0095ff;font-size: 14px" ng-disabled="qrcode.blockUx || index.isOffline ||qrcode.generatingAddress" translate>
 						Generate new address
 				</button>
 			</div>
