@@ -1278,7 +1278,7 @@ msgstr "这是一个私人资产，只能通过点击聊天中的链接发送或
 
 #: public/views/splash.html:28
 msgid "This option is better for privacy but will take  several gigabytes of storage and the initial sync will take several days.  CPU load will be high during sync."
-msgstr "下载完整的钱包账本 完整钱包账本对保护隐私有利，但是会持续增加应用的存储空间，可能有几十G字节，初次同步可能会持续一段时间，取决于您的网络带宽，另外，同步过程会占用大量的CPU和内存资源，请谨慎选择。 下载仅与您相关的数据 这将显著降低应用的存储空间，同时可以完成交易，查询余额，添加好友等操作，在使用应用过程中请确保网络畅通。"
+msgstr "下载完整的钱包账本，完整钱包账本对保护隐私有利，但是会持续增加应用的存储空间，可能有几十G字节，初次同步可能会持续一段时间，取决于您的网络带宽，另外，同步过程会占用大量的CPU和内存资源，请谨慎选择。下载仅与您相关的数据，这将显著降低应用的存储空间，同时可以完成交易，查询余额，添加好友等操作，在使用应用过程中请确保网络畅通。"
 
 #: public/views/walletHome.html:347
 msgid "This payment is bound to a condition"
