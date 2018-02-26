@@ -14,8 +14,14 @@
 		<!-- Device name   -->
 		<li ng-click="$root.go('preferencesGlobal.preferencesDeviceName')">
 			<div class="right text-gray">
-				{{prefGlobal.deviceName}}
-				<i class="icon-arrow-right3 size-14"></i>
+
+				<div style="float: right;">
+					<i class="icon-arrow-right3 size-14"></i>
+				</div>
+
+				<div style="float: right; width:260px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; text-align: right; padding-right: 3px;">
+					{{prefGlobal.deviceName}}
+				</div>
 			</div>
 			<div class="size-14" translate>Device name</div>
 		</li>

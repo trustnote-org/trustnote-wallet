@@ -37,11 +37,25 @@
   	<ul class="no-bullet m0" ng-show="!index.noFocusedWallet">
 
 		<li  ng-click="$root.go('preferences.preferencesAlias')">
-      		<div class="right text-gray">
-        		{{index.alias||index.walletName}}
-        		<i class="icon-arrow-right3 size-14"></i>
-      		</div>
-      		<div translate>Wallet Alias</div>
+      		<!--<div class="right text-gray">-->
+        		<!--{{index.alias||index.walletName}}-->
+        		<!--<i class="icon-arrow-right3 size-14"></i>-->
+      		<!--</div>-->
+      		<!--<div translate>Wallet Alias</div>-->
+
+
+			<div class="right text-gray">
+
+				<div style="float: right;">
+					<i class="icon-arrow-right3 size-14"></i>
+				</div>
+
+				<div style="float: right; width:260px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; text-align: right; padding-right: 3px;">
+					{{index.alias||index.walletName}}
+				</div>
+			</div>
+			<div class="size-14" translate>Wallet Alias</div>
+
     	</li>
 
 		<li ng-click="$root.go('preferences.preferencesColor')">
