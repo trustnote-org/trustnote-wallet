@@ -64,7 +64,7 @@
 					{{(item.name || item.id) | limitTo: 1}}
 				</div>
 				<!--钱包名字-->
-		        <div class="name-wallet" ng-class="{'m8t':item.n == 1}" style="float: left;margin-top:11px;margin-left:5px;color: #333;font-size: 16px;">
+		        <div class="name-wallet" ng-class="{'m8t':item.n == 1}" style="width: 70%; float: left;margin-top:11px;margin-left:5px;color: #333;font-size: 16px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
 					{{item.name || item.id}}
 					<div class="size-12" ng-show="item.n > 1" translate style="color: #666;">( {{item.m}}-of-{{item.n}} )</div>
 				</div>
@@ -96,7 +96,7 @@
 					{{(item.name || item.id) | limitTo: 1}}
 				</div>
 				<!--钱包的名字-->
-				<div class="name-wallet" ng-class="{'m8t':item.n == 1}" style="float: left;margin-top:11px;margin-left:5px;color: #333;">
+				<div class="name-wallet" ng-class="{'m8t':item.n == 1}" style="width: 70%; float: left;margin-top:11px;margin-left:5px;color: #333; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
 					{{item.name || item.id}}
 					<!--多签名钱包-->
 					<div class="size-12" ng-show="item.n > 1" translate style="color: #666;">( {{item.m}}-of-{{item.n}} )</div>
