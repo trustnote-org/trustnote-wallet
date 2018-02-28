@@ -179,6 +179,7 @@ angular.module('copayApp.directives')
 				};
 			};
 
+			// 返回一个 指令定义 对象
 			return {
 				restrict: 'E',
 				scope: {
