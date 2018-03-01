@@ -786,7 +786,7 @@ msgstr "否"
 
 #: src/js/controllers/password.js:18
 msgid "No password given"
-msgstr "没有设置交易密码"
+msgstr "没有输入交易密码"
 
 #: public/views/walletHome.html:483
 msgid "No transactions yet"
@@ -1930,5 +1930,9 @@ msgstr "TTT 钱包"
 
 msgid "Preparing camera..."
 msgstr "准备相机..."
+
+msgid "Not enough spendable funds"
+msgstr "没有足够的可用资金"
+
 
 

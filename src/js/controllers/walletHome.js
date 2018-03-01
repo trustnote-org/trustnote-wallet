@@ -854,7 +854,7 @@ angular.module('copayApp.controllers').controller('walletHomeController', functi
 							else if (err.match(/device address/))
 								err = "This is a private asset, please send it only by clicking links from chat";
 							else if (err.match(/no funded/))
-								err = "Not enough spendable funds";
+								err = gettextCatalog.getString('Not enough spendable funds') ;
 							return self.setSendError(err);
 						}
 						var binding = self.binding;

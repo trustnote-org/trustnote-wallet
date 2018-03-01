@@ -28,7 +28,14 @@
 
 <!-- 右边 打开相机 -->
 	<section class="right-small" ng-show="showCamera">
-		<qr-scanner ng-show="index.isComplete" on-scan="topbar.onQrCodeScanned(data)" before-scan="topbar.onBeforeScan()"></qr-scanner>
+
+		<!--angular 自定义指令-->
+		<qr-scanner ng-show="index.isComplete" on-scan="topbar.onQrCodeScanned(data)" before-scan="topbar.onBeforeScan()">
+			<!--此处是有内容的，qrScanner中定义 -->
+			<!--<a id="camera-icon" class="p10" ng-click="openScanner()">-->
+				<!--<i class="icon-scan size-24"></i>-->
+			<!--</a> -->
+		</qr-scanner>
 	</section>
 <!-- 右边 打开相机 结束 -->
 
