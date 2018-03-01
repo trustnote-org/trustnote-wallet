@@ -2,7 +2,7 @@ TrustNote is a wallet for storage and transfer of decentralized value.  See [tru
 
 ## Binary Downloads
 
-[trustnote.org](https://trustnote.org/)
+[trustnote.org](https://trustnote.org/application.html)
 
 ## Main Features
 
@@ -10,7 +10,7 @@ TBD
 
 ## Installation
 
-Download and install [NW.js v0.14.7 LTS](https://dl.nwjs.io/v0.14.7) and [Node.js v5.12.0](https://nodejs.org/download/release/v5.12.0/).  These versions are recommended for easiest install but newer versions will work too.  If you already have another version of Node.js installed, you can use [NVM](https://github.com/creationix/nvm) to keep both.
+Download and install [NW.js v0.14.7 LTS](https://dl.nwjs.io/v0.14.7) and [Node.js v5.12.0](https://nodejs.org/download/release/v5.12.0/) (or newer).  These versions are recommended for easiest install but newer versions will work too.  If you already have another version of Node.js installed, you can use [NVM](https://github.com/creationix/nvm) to keep both.
 
 Clone the source:
 
@@ -45,41 +45,34 @@ Then run TrustNote desktop client:
 
 ## Build TrustNote App Bundles
 
-All app bundles will be placed at `../trustnotebuilds` dir, so create it first: `mkdir -p ../trustnotebuilds`
+All app bundles will be placed at `../trustnotebuilds` dir.
 
 
 ### Android
 
 - Install Android SDK
-- Run `make android-debug`
+- Run `make android`
 
 ### iOS
 
-- Install Xcode 7 (or newer)
-- Install Cordova 6 `npm install cordova@6 -g`
-- Run `make ios-debug`
+- Install Xcode 9 (or newer)
+- Install Cordova `npm install cordova -g`
+- Run `make ios`
   * In case of ios-deploy missing error: `npm install -g ios-deploy`
-  * In case of `DeviceSupport` missing error, run `cd /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/DeviceSupport/ && sudo ln -s 10.3.1\ \(14E8301\)/ 10.3`
   * If you encounter 'bitcore' not found after app launch, install it also `npm install bitcore-lib` and remove `../trustnotebuilds/project-IOS` folder completely, then rerun make again.
   * On code signing error, open Xcode project `../trustnotebuilds/project-IOS/platforms/ios/TrustNote.xcodeproj` in Xcode, open project properties, select TrustNote target and set your AppleID account as a team. Xcode may also ask you to change bundle identifier to be unique, just append any random string to 'org.trustnote.smartwallet' bundle identifier.
 
 ### macOS
 
-- `grunt desktop`
-- copy `node_modules` into the app bundle ../trustnotebuilds/TrustNote/osx64/TrustNote.app/Contents/Resources/app.nw, except those that are important only for development (karma, grunt, jasmine)
-- `grunt dmg`
+- `make osx64`
 
 ### Windows
 
-- `grunt desktop`
-- copy `node_modules` into the app bundle ../trustnotebuilds/TrustNote/win64, except those that are important only for development (karma, grunt, jasmine)
-- `grunt inno64`
+- `make win64`
 
 ### Linux
 
-- `grunt desktop`
-- copy `node_modules` into the app bundle ../trustnotebuilds/TrustNote/linux64, except those that are important only for development (karma, grunt, jasmine)
-- `grunt linux64`
+- `make linux`
 
 
 ## About TrustNote
@@ -100,10 +93,6 @@ TrustNote uses a single extended private key for all wallets, BIP44 is used for 
 * [GitHub Issues](https://github.com/trustnote/trustnote-wallet/issues)
   * Open an issue if you are having problems with this project
 * [Email Support](mailto:foundation@trustnote.org)
-
-## Credits
-
-The GUI is based on [Copay](https://github.com/bitpay/copay), the most beautiful and easy to use Bitcoin wallet.
 
 ## License
 
