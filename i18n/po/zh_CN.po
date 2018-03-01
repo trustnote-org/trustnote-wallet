@@ -1934,5 +1934,9 @@ msgstr "准备相机..."
 msgid "Not enough spendable funds"
 msgstr "没有足够的可用资金"
 
+msgid "not enough spendable funds "
+msgstr "中没有足够的可用资金"
 
+msgid ". It needs atleast "
+msgstr "。这需要至少"
 
