@@ -855,6 +855,8 @@ angular.module('copayApp.controllers').controller('walletHomeController', functi
 								err = "This is a private asset, please send it only by clicking links from chat";
 							else if (err.match(/no funded/))
 								err = gettextCatalog.getString('Not enough spendable funds') ;
+							else if (err.match(/connection closed/))
+								err = gettextCatalog.getString('[internal] connection closed') ;
 							else if (err.match(/funds from/))
 								err = err.substring(err.indexOf("from")+4, err.indexOf("for")) + gettextCatalog.getString(err.substr(0,err.indexOf("from"))) + gettextCatalog.getString(". It needs atleast ")  + parseInt(err.substring(err.indexOf("for")+3, err.length))/1000000 + "MN";
 							return self.setSendError(err);

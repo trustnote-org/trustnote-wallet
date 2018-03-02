@@ -1940,3 +1940,5 @@ msgstr "中没有足够的可用资金"
 msgid ". It needs atleast "
 msgstr "。这需要至少"
 
+msgid "[internal] connection closed"
+msgstr "【內部错误】网络连接失败"
