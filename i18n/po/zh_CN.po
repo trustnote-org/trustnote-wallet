@@ -1942,3 +1942,6 @@ msgstr "。这需要至少"
 
 msgid "[internal] connection closed"
 msgstr "【內部错误】网络连接失败"
+
+msgid "When scanning an error occurred, please try again later."
+msgstr "当扫描时发生一个错误，请稍后再试。"
