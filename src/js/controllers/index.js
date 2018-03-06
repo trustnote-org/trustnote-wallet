@@ -16,7 +16,6 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 	var self = this;
 
 
-
 // 更改代码
 
 	self.splashClick = true;
@@ -170,7 +169,7 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 		setSyncProgress(0);
 	});
 	eventBus.on('catchup_balls_left', function (count_left) {
-		if(!self.anyOnGoingProcess) {
+		if (!self.anyOnGoingProcess) {
 			self.anyOnGoingProcess = true;
 			self.onGoingProcessName = 'Syncing';
 		}
@@ -624,29 +623,21 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 		'title': gettext('Home'),
 		'icon': 'icon-home',
 		'link': 'walletHome'
-	},
-
-//{
-//  'title': gettext('Receive'),
-//  'icon': 'icon-receive2',
-//  'link': 'receive'
-//},
-
-		{
-			'title': gettext('Transaction'),
-			'icon': 'icon-paperplane',
-			'link': 'send'
-		}, {
-			'title': gettext('Message'),
-			'icon': 'icon-bubble',
-			'new_state': 'correspondentDevices',
-			'link': 'chat'
-		}, {
-			'title': gettext('Wallet'),
-			'icon': 'icon-wallets',
-			'new_state': 'mywallet',
-			'link': 'mywallet'
-		}];
+	}, {
+		'title': gettext('Transaction'),
+		'icon': 'icon-paperplane',
+		'link': 'send'
+	}, {
+		'title': gettext('Message'),
+		'icon': 'icon-bubble',
+		'new_state': 'correspondentDevices',
+		'link': 'chat'
+	}, {
+		'title': gettext('Wallet'),
+		'icon': 'icon-wallets',
+		'new_state': 'mywallet',
+		'link': 'mywallet'
+	}];
 
 	self.addonViews = addonManager.addonViews();
 	self.menu = self.menu.concat(addonManager.addonMenuItems());
@@ -709,9 +700,10 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 			self.hasProfile = true;
 
 
-
 // 更改代码
-			storageService.gethaschoosen(function (err, val) {self.haschoosen = val;});
+			storageService.gethaschoosen(function (err, val) {
+				self.haschoosen = val;
+			});
 			// self.haschoosen = localStorage.getItem("haschoosen");
 			// alert(self.haschoosen)
 
@@ -961,8 +953,6 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 	};
 
 
-
-
 	// 设置总资产数
 	self.setBalance = function (assocBalances, assocSharedBalances) {
 		if (!assocBalances) return;
@@ -978,8 +968,8 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 		// 循环资产类型
 		for (var asset in assocBalances) {
 			var balanceInfo = assocBalances[asset];
-				balanceInfo.asset = asset;
-				balanceInfo.total = balanceInfo.stable + balanceInfo.pending;
+			balanceInfo.asset = asset;
+			balanceInfo.total = balanceInfo.stable + balanceInfo.pending;
 
 			if (assocSharedBalances[asset]) {
 				balanceInfo.shared = 0;
@@ -987,8 +977,8 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 
 				for (var sa in assocSharedBalances[asset]) {
 					var total_on_shared_address = (assocSharedBalances[asset][sa].stable || 0) + (assocSharedBalances[asset][sa].pending || 0);
-						balanceInfo.shared += total_on_shared_address;
-						balanceInfo.assocSharedByAddress[sa] = total_on_shared_address;
+					balanceInfo.shared += total_on_shared_address;
+					balanceInfo.assocSharedByAddress[sa] = total_on_shared_address;
 				}
 			}
 
@@ -1055,8 +1045,6 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 
 
 	};
-
-
 
 
 // 点击下载CSV文件
@@ -1132,7 +1120,7 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 				if (!isNode) csvContent = 'data:text/csv;charset=utf-8,';
 				csvContent += 'Date,Destination,Note,Amount,Currency,Spot Value,Total Value,Tax Type,Category\n';
 
-			// 更改代码-下载CSV文件默认单位是MN
+				// 更改代码-下载CSV文件默认单位是MN
 				var _amount, _note;
 				var dataString;
 				data.forEach(function (it, index) {
@@ -1147,7 +1135,7 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 					if (it.action == 'moved')
 						_note += ' Moved:' + it.amount
 
-					dataString = formatDate(it.time * 1000) + ',' + formatString(it.addressTo) + ',' + _note + ',' + _amount/1000000 + ',MN,,,,';
+					dataString = formatDate(it.time * 1000) + ',' + formatString(it.addressTo) + ',' + _note + ',' + _amount / 1000000 + ',MN,,,,';
 					csvContent += dataString + "\n";
 
 				});
@@ -1176,10 +1164,10 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 		if (!client.isComplete())
 			return console.log('fc incomplete yet');
 		$timeout(function () {
-			if(self.updateTimeout) {
+			if (self.updateTimeout) {
 				return cb('update timeout');
 			}
-		},60000);
+		}, 60000);
 		client.getTxHistory(self.arrBalances[self.assetIndex].asset, self.shared_address, function onGotTxHistory(txs) {
 			self.updateTimeout = false;
 			var newHistory = self.processNewTxs(txs);
@@ -1447,7 +1435,7 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 		breadcrumbs.add('NeedFreshHistory');
 		self.updateHistory();
 	});
-	
+
 	$rootScope.$on('Local/Synchronization', function (event) {
 		breadcrumbs.add('Synchronization');
 		self.updateAll();
@@ -1545,7 +1533,6 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 			triggerTxUpdate: true,
 		});
 	});
-
 
 
 // 更改代码 监听到状态 没有钱包 go.path 进入种子恢复钱包页
