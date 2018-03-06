@@ -151,7 +151,8 @@ angular.module('copayApp.services').factory('profileService', function profileSe
                 if (err) 
                     return cb(err);
                 root._setFocus(focusedWalletId, true, function() {
-                    console.log("focusedWalletId", focusedWalletId);
+
+                	console.log("focusedWalletId", focusedWalletId);
 					require('trustnote-common/wallet.js');
 					var device = require('trustnote-common/device.js');
                     var config = configService.getSync();
