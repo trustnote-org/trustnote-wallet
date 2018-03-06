@@ -266,7 +266,7 @@ angular.module('copayApp.controllers').controller('recoveryFromSeed',
 						if(response && response.error){
 							var breadcrumbs = require('trustnote-common/breadcrumbs.js');
 							breadcrumbs.add('Error scanForAddressesAndWalletsInLightClient: ' + response.error);
-							self.error = 'When scanning an error occurred, please try again later.';
+							self.error = gettextCatalog.getString('When scanning an error occurred, please try again later.');
 							self.scanning = false;
 
 							// 钱包内部恢复的时候 让弹出框 显示出来
