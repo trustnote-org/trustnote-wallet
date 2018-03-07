@@ -277,6 +277,7 @@ angular.module('copayApp.services').factory('profileService', function profileSe
         console.log("_createNewProfile");
         if (opts.noWallet)
             return cb(null, Profile.create());
+
         root._seedWallet({}, function(err, walletClient) {
             if (err)
                 return cb(err);
