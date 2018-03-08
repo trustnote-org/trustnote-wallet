@@ -58,12 +58,8 @@ angular.module('copayApp.services').factory('configService', function (storageSe
 	};
 
 	root.hub = [
-		'victor.trustnote.org/tn',
-		'eason.trustnote.org/tn',
-		'lymn.trustnote.org/tn',
-		'bob.trustnote.org/tn',
-		'curry.trustnote.org/tn',
-		'kake.trustnote.org/tn'
+		'shawtest.trustnote.org',
+		'raytest.trustnote.org',
 	]
 
 	// 钱包默认配置
