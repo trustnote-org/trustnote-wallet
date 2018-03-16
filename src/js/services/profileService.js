@@ -783,7 +783,7 @@ angular.module('copayApp.services').factory('profileService', function profileSe
                 return cb();
             $timeout(function(){
                 root.insistUnlockFC(err.message, cb);
-            }, 1000);
+            }, 100);
         });
     };
 
