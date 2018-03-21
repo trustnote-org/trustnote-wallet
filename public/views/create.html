@@ -23,15 +23,17 @@
 	<!--选择钱包类型-->
 	<!--<div class="create-tab small-only-text-center" ng-hide="create.hideTabs" style="background: #f5f5f5;">-->
 		<!--<div class="row">-->
+			<!--&lt;!&ndash;创建 普通钱包&ndash;&gt;-->
 			<!--<div class="tab-container small-6 medium-3 large-2" ng-class="{'selected': totalCosigners == 1}">-->
 				<!--<a href ng-click="create.setTotalCosigners(1)" translate>Plain Wallet</a>-->
 			<!--</div>-->
-
+			<!--&lt;!&ndash;创建 观察钱包&ndash;&gt;-->
 			<!--<div class="tab-container small-6 medium-3 large-2" ng-class="{'selected': totalCosigners != 1}">-->
-				<!--<a href ng-click="create.setMultisig()" translate>Multidevice Wallet</a>-->
+				<!--&lt;!&ndash;<a href ng-click="create.setMultisig()" translate>Multidevice Wallet</a>&ndash;&gt;-->
+				<!--<a href ng-click="create.setMultisig()" translate>Observe Wallet</a>-->
 			<!--</div>-->
 		<!--</div>-->
-	  <!--</div>-->
+	<!--</div>-->
 	<!--选择钱包类型 结束-->
 
 	<form name="setupForm" ng-submit="create.create(setupForm)" novalidate>
@@ -43,7 +45,8 @@
         		</div>
 
 				<!--钱包名称-->
-				<div ng-hide="create.hideWalletName" class="m15t">
+				<!--<div ng-hide="create.hideWalletName" class="m15t">-->
+				<div ng-show="totalCosigners == 1 && !create.hideWalletName" class="m15t">
 					<label>
 						<span class="size-12 color333" translate>Wallet name</span>
 						<div class="input m5t h45 size-18">
@@ -60,55 +63,58 @@
           			</label>
 				</div>
 
-				<!--签署多签名钱包-->
-        		<div class="row m10t" ng-show="totalCosigners != 1">
-					<!--共同签名总数-->
-          			<div class="large-6 medium-6 columns m10t">
-						<label>
-							<span class="size-12 color333" translate>Total number of co-signers</span>
-							<select
-								class="size-14 m5t h45"
-								ng-model="totalCosigners"
-								ng-options="totalCosigners as totalCosigners for totalCosigners in create.TCValues"
-								ng-change="create.setTotalCosigners(totalCosigners)">
-							</select>
-						</label>
-          			</div>
+				<!--观察者 钱包-->
+				<div class="row m10t" ng-show="totalCosigners != 1">
+					<!--观察钱包 note-->
+					<div class="large-6 medium-6 columns m10t">
+						<p translate>Observe wallets need to import cold wallet authentication code for daily viewing of accounts and transactions. The wallet of large sums of money recommends the use of cold wallet management to avoid disclosure and theft.</p>
+					</div>
 
-					<!--通过签名数-->
-					<div class="large-6 medium-6 columns">
-						<label>
-							<span  class="size-12 color333" translate>Required number of signatures</span>
-						  	<select
-								class="m5t size-14 h45"
-								ng-model="requiredCosigners"
-								ng-options="requiredCosigners as requiredCosigners for requiredCosigners in create.RCValues"
-								ng-disabled="totalCosigners == 1">
-							</select>
-						</label>
-          			</div>
+					<div>
+						<h4>
+							冷钱包认证码
+							<qr-scanner ng-show="index.isComplete" on-scan="topbar.onQrCodeScanned(data)" before-scan="topbar.onBeforeScan()"></qr-scanner>
+						</h4>
+						<input type="text">
+					</div>
 
-					<!--共同签署人 12345-->
-					<div class="large-6 medium-6 columns" ng-repeat="cosigner in create.cosigners track by $index">
-            			<label>
-							<span class="size-12 color333"  translate>Co-signer {{$index+1}}:</span>
-              				<select
-								class="m5t h45 size-14"
-								ng-model="cosigner.device_address"
-								ng-disabled="$parent.totalCosigners == 1"
-								ng-change="create.onCorrespondentSelected(cosigner.device_address)">
-                  				<option value="" translate>-- Select co-signer --</option>
-                  				<option ng-repeat="candidate_cosigner in create.candidate_cosigners" value="{{candidate_cosigner.device_address}}">{{candidate_cosigner.name+' ('+candidate_cosigner.device_address.substr(0,4)+'...)'}}</option>
-                  				<option value="new" translate>[ Add new co-signer device ]</option>
-              				</select>
-            			</label>
-          			</div>
-        		</div>
+					<button>开始导入</button>
+
+					<!--&lt;!&ndash;通过签名数&ndash;&gt;-->
+					<!--<div class="large-6 medium-6 columns">-->
+						<!--<label>-->
+							<!--<span  class="size-12 color333" translate>Required number of signatures</span>-->
+							<!--<select-->
+								<!--class="m5t size-14 h45"-->
+								<!--ng-model="requiredCosigners"-->
+								<!--ng-options="requiredCosigners as requiredCosigners for requiredCosigners in create.RCValues"-->
+								<!--ng-disabled="totalCosigners == 1">-->
+							<!--</select>-->
+						<!--</label>-->
+					<!--</div>-->
+
+					<!--&lt;!&ndash;共同签署人 12345&ndash;&gt;-->
+					<!--<div class="large-6 medium-6 columns" ng-repeat="cosigner in create.cosigners track by $index">-->
+						<!--<label>-->
+							<!--<span class="size-12 color333"  translate>Co-signer {{$index+1}}:</span>-->
+							<!--<select-->
+								<!--class="m5t h45 size-14"-->
+								<!--ng-model="cosigner.device_address"-->
+								<!--ng-disabled="$parent.totalCosigners == 1"-->
+								<!--ng-change="create.onCorrespondentSelected(cosigner.device_address)">-->
+								<!--<option value="" translate>&#45;&#45; Select co-signer &#45;&#45;</option>-->
+								<!--<option ng-repeat="candidate_cosigner in create.candidate_cosigners" value="{{candidate_cosigner.device_address}}">{{candidate_cosigner.name+' ('+candidate_cosigner.device_address.substr(0,4)+'...)'}}</option>-->
+								<!--<option value="new" translate>[ Add new co-signer device ]</option>-->
+							<!--</select>-->
+						<!--</label>-->
+					<!--</div>-->
+				</div>
+				<!--观察者钱包 结束-->
 
 		<!--多签名钱包按钮-->
-				<button type="submit" class="button round black expand m0" ng-show="totalCosigners != 1" ng-disabled="setupForm.$invalid || create.loading">
-				  <span translate>Create {{requiredCosigners}}-of-{{totalCosigners}} wallet</span>
-				</button>
+				<!--<button type="submit" class="button round black expand m0" ng-show="totalCosigners != 1" ng-disabled="setupForm.$invalid || create.loading">-->
+				  <!--<span translate>Create {{requiredCosigners}}-of-{{totalCosigners}} wallet</span>-->
+				<!--</button>-->
 		<!--单签名钱包按钮-->
 				<button type="submit" class="button round black expand m15t" ng-show="totalCosigners == 1" ng-disabled="setupForm.$invalid || create.loading">
 				  <span translate>Create new wallet</span>
@@ -120,3 +126,51 @@
 </div>
 
 <div class="extra-margin-bottom"></div>
+
+
+
+<!--多签名钱包-->
+<!--<div class="row m10t" ng-show="totalCosigners != 1">-->
+<!--&lt;!&ndash;共同签名总数&ndash;&gt;-->
+<!--<div class="large-6 medium-6 columns m10t">-->
+<!--<label>-->
+<!--<span class="size-12 color333" translate>Total number of co-signers</span>-->
+<!--<select-->
+<!--class="size-14 m5t h45"-->
+<!--ng-model="totalCosigners"-->
+<!--ng-options="totalCosigners as totalCosigners for totalCosigners in create.TCValues"-->
+<!--ng-change="create.setTotalCosigners(totalCosigners)">-->
+<!--</select>-->
+<!--</label>-->
+<!--</div>-->
+
+<!--&lt;!&ndash;通过签名数&ndash;&gt;-->
+<!--<div class="large-6 medium-6 columns">-->
+<!--<label>-->
+<!--<span  class="size-12 color333" translate>Required number of signatures</span>-->
+<!--<select-->
+<!--class="m5t size-14 h45"-->
+<!--ng-model="requiredCosigners"-->
+<!--ng-options="requiredCosigners as requiredCosigners for requiredCosigners in create.RCValues"-->
+<!--ng-disabled="totalCosigners == 1">-->
+<!--</select>-->
+<!--</label>-->
+<!--</div>-->
+
+<!--&lt;!&ndash;共同签署人 12345&ndash;&gt;-->
+<!--<div class="large-6 medium-6 columns" ng-repeat="cosigner in create.cosigners track by $index">-->
+<!--<label>-->
+<!--<span class="size-12 color333"  translate>Co-signer {{$index+1}}:</span>-->
+<!--<select-->
+<!--class="m5t h45 size-14"-->
+<!--ng-model="cosigner.device_address"-->
+<!--ng-disabled="$parent.totalCosigners == 1"-->
+<!--ng-change="create.onCorrespondentSelected(cosigner.device_address)">-->
+<!--<option value="" translate>&#45;&#45; Select co-signer &#45;&#45;</option>-->
+<!--<option ng-repeat="candidate_cosigner in create.candidate_cosigners" value="{{candidate_cosigner.device_address}}">{{candidate_cosigner.name+' ('+candidate_cosigner.device_address.substr(0,4)+'...)'}}</option>-->
+<!--<option value="new" translate>[ Add new co-signer device ]</option>-->
+<!--</select>-->
+<!--</label>-->
+<!--</div>-->
+<!--</div>-->
+<!--多签名钱包  结束-->

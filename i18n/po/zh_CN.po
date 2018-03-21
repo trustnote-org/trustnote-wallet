@@ -1919,9 +1919,6 @@ msgstr "已复制"
 msgid "During the recovery, please be patient and do not shut down the software."
 msgstr "钱包恢复过程中，请耐心等待，切勿退出软件。"
 
-msgid "Please use English input method, to ensure that there is only one English space between words."
-msgstr "请使用英文输入法，确保单词之间有且仅有一个英文空格。"
-
 msgid "Delete the whole chat history with {{ name }} ?"
 msgstr "确定要删除与{{ name }}的全部聊天记录么？"
 
@@ -1945,3 +1942,11 @@ msgstr "【內部错误】网络连接失败"
 
 msgid "When scanning an error occurred, please try again later."
 msgstr "当扫描时发生一个错误，请稍后再试。"
+
+msgid "Observe Wallet"
+msgstr "观察钱包"
+
+msgid "Observe wallets need to import cold wallet authentication code for daily viewing of accounts and transactions. The wallet of large sums of money recommends the use of cold wallet management to avoid disclosure and theft."
+msgstr "观察钱包需要导入冷钱包认证码，用来日常查看账户、交易。大额资金的钱包建议使用冷钱包管理，避免泄露被盗。"
+
+
