@@ -823,6 +823,7 @@ textarea:focus
 	/*border-bottom: 1px solid #DEDFE1;*/
 	/*margin-bottom: 25px;*/
 	overflow: hidden;
+	background: #f5f5f5;
 }
 
 .create-tab .tab-container {

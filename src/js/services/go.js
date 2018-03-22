@@ -5,7 +5,6 @@ var eventBus = require('trustnote-common/event_bus.js');
 angular.module('copayApp.services').factory('go', function($window, $rootScope, $location, $state, profileService, fileSystemService, nodeWebkit, notification, gettextCatalog, authService, $deepStateRedirect, $stickyState) {
 	var root = {};
 
-
 	var hideSidebars = function() {
 		if (typeof document === 'undefined')
 			return;
@@ -13,7 +12,6 @@ angular.module('copayApp.services').factory('go', function($window, $rootScope, 
 		var elem = document.getElementById('off-canvas-wrap');
 		elem.className = 'off-canvas-wrap';
 	};
-
 
 	var toggleSidebar = function(invert) {
 		if (typeof document === 'undefined')
@@ -34,9 +32,6 @@ angular.module('copayApp.services').factory('go', function($window, $rootScope, 
 	};
 
 
-
-
-
 	// 开始定义了一个root的空对象
 	root.openExternalLink = function(url, target) {
 		if (nodeWebkit.isDefined()) {
@@ -48,6 +43,7 @@ angular.module('copayApp.services').factory('go', function($window, $rootScope, 
 		}
 	};
 
+	// 定义 路由跳转
 	root.path = function(path, cb) {
 		$state.go(path)
 		.then(function() {
@@ -57,7 +53,7 @@ angular.module('copayApp.services').factory('go', function($window, $rootScope, 
 			console.log("transition failed "+path);
 			if (cb) return cb('animation in progress');
 		});
-		hideSidebars();
+		// hideSidebars();
 	};
 
 	root.swipe = function(invert) {
@@ -75,7 +71,6 @@ angular.module('copayApp.services').factory('go', function($window, $rootScope, 
 		}
 	};
 
-
 	root.send = function(cb) {
 		$stickyState.reset('walletHome');
 		root.path('walletHome', function() {
@@ -85,7 +80,7 @@ angular.module('copayApp.services').factory('go', function($window, $rootScope, 
 		});
 	};
 
-// 更改代码
+// 更改代码 （ tab-4 到mywallet ）
 	root.wallet = function() {
 		var fc = profileService.focusedClient;
 		if (fc && !fc.isComplete())
@@ -96,7 +91,6 @@ angular.module('copayApp.services').factory('go', function($window, $rootScope, 
 			});
 		}
 	};
-
 
 
 	root.history = function(cb) {
@@ -142,6 +136,7 @@ angular.module('copayApp.services').factory('go', function($window, $rootScope, 
 
 	function handleUri(uri){
 		console.log("handleUri "+uri);
+
 		require('trustnote-common/uri.js').parseUri(uri, {
 			ifError: function(err){
 				console.log(err);
@@ -181,7 +176,7 @@ angular.module('copayApp.services').factory('go', function($window, $rootScope, 
 	}
 	
 	function registerWindowsProtocolHandler(){
-		// now we do it in inno setup
+		// now we do it in inno setup(一个免费的安装制作软件)
 	}
 	
 	function createLinuxDesktopFile(){
@@ -298,6 +293,9 @@ X-Ubuntu-StageHint=SideStage\n", {mode: 0755}, function(err){
 	root.handleUri = handleUri;
 	
 	return root;
+
+
+
 }).factory('$exceptionHandler', function($log){
 	return function myExceptionHandler(exception, cause) {
 		console.log("angular $exceptionHandler");
