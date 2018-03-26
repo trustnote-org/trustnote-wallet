@@ -58,10 +58,13 @@ angular.module('copayApp.services').factory('configService', function (storageSe
 	};
 
 	root.hub = [
-		'shawtest.trustnote.org',
-		'raytest.trustnote.org',
+		'victor.trustnote.org/tn',
+		'eason.trustnote.org/tn',
+		'lymn.trustnote.org/tn',
+		'bob.trustnote.org/tn',
+		'curry.trustnote.org/tn',
+		'kake.trustnote.org/tn'
 	]
-
 	// 钱包默认配置
 	var defaultConfig = {
 		// wallet limits
