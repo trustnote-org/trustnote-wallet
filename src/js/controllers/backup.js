@@ -67,84 +67,132 @@ angular.module('copayApp.controllers').controller('wordsController', function ($
 
 // input框中 内容变化时 触发对应函数
 	self.funReg1 = function () {
+		self.items = []
 		self.m1 = self.jumpNum = 1;
+
+		if(reg.test(self.mnemonic1)) return  false;
+
 		self.str = self.mnemonic1;
 		self.funReg();
 		self.strMnemonic();
 		self.compare();
 	};
 	self.funReg2 = function () {
+		self.items = []
 		self.m1 = self.jumpNum = 2;
+
+		if(reg.test(self.mnemonic2)) return  false;
+
 		self.str = self.mnemonic2;
 		self.funReg();
 		self.strMnemonic();
 		self.compare();
 	};
 	self.funReg3 = function () {
+		self.items = []
 		self.m1 = self.jumpNum = 3;
+
+		if(reg.test(self.mnemonic3)) return  false;
+
 		self.str = self.mnemonic3;
 		self.funReg();
 		self.strMnemonic();
 		self.compare();
 	};
 	self.funReg4 = function () {
+		self.items = []
 		self.m1 = self.jumpNum = 4;
+
+		if(reg.test(self.mnemonic4)) return  false;
+
 		self.str = self.mnemonic4;
 		self.funReg();
 		self.strMnemonic();
 		self.compare();
 	};
 	self.funReg5 = function () {
+		self.items = []
 		self.m1 = self.jumpNum = 5;
+
+		if(reg.test(self.mnemonic5)) return  false;
+
 		self.str = self.mnemonic5;
 		self.funReg();
 		self.strMnemonic();
 		self.compare();
 	};
 	self.funReg6 = function () {
+		self.items = []
 		self.m1 = self.jumpNum = 6;
+
+		if(reg.test(self.mnemonic6)) return  false;
+
 		self.str = self.mnemonic6;
 		self.funReg();
 		self.strMnemonic();
 		self.compare();
 	};
 	self.funReg7 = function () {
+		self.items = []
 		self.m1 = self.jumpNum = 7;
+
+		if(reg.test(self.mnemonic7)) return  false;
+
 		self.str = self.mnemonic7;
 		self.funReg();
 		self.strMnemonic();
 		self.compare();
 	};
 	self.funReg8 = function () {
+		self.items = []
 		self.m1 = self.jumpNum = 8;
+
+		if(reg.test(self.mnemonic8)) return  false;
+
 		self.str = self.mnemonic8;
 		self.funReg();
 		self.strMnemonic();
 		self.compare();
 	};
 	self.funReg9 = function () {
+		self.items = []
 		self.m1 = self.jumpNum = 9;
+
+		if(reg.test(self.mnemonic9)) return  false;
+
 		self.str = self.mnemonic9;
 		self.funReg();
 		self.strMnemonic();
 		self.compare();
 	};
 	self.funReg10 = function () {
+		self.items = []
 		self.m1 = self.jumpNum = 10;
+
+		if(reg.test(self.mnemonic10)) return  false;
+
 		self.str = self.mnemonic10;
 		self.funReg();
 		self.strMnemonic();
 		self.compare();
 	};
 	self.funReg11 = function () {
+		self.items = []
 		self.m1 = self.jumpNum = 11;
+
+		if(reg.test(self.mnemonic11)) return  false;
+
 		self.str = self.mnemonic11;
 		self.funReg();
 		self.strMnemonic();
 		self.compare();
 	};
 	self.funReg12 = function () {
+		self.items = []
 		self.m1 = self.jumpNum = 12;
+
+		if(reg.test(self.mnemonic12)) return  false;
+
 		self.str = self.mnemonic12;
 		self.funReg();  // 设置了一个 self.items 列表
 		self.strMnemonic();  // 12个input 输入框 拼接为一个 整体
@@ -341,13 +389,17 @@ angular.module('copayApp.controllers').controller('wordsController', function ($
 		var newlist = [];
 		//var str = self.mnemonic1;
 		var newStr = '';
-		var reg1 = new RegExp('^' + self.str + '.*');
-		for(var i = 0; i < mnemonic.length; i++){
-			if(reg1.test(mnemonic[i])){
-				newStr = mnemonic[i].substr(self.str.length);
-				newlist.push(newStr);
-			}
-		};
+		try{
+			var reg1 = new RegExp('^' + self.str + '.*');
+			for(var i = 0; i < mnemonic.length; i++){
+				if(reg1.test(mnemonic[i])){
+					newStr = mnemonic[i].substr(self.str.length);
+					newlist.push(newStr);
+				}
+			};
+		}catch (err){
+			console.log(err);
+		}
 
 		self.items = newlist;
 

@@ -45,6 +45,7 @@
 			height: 25px;
 			text-align: center;
 			margin-bottom:3px;
+			font-size: 1rem;
 		}
 		/*下面的提示ul > li列表*/
 		ul.notiUl{
@@ -149,28 +150,28 @@
 					<div style=" height: 120px; padding: 0 5px; margin-bottom:30px;">
 						<!--111-->
 						<div class="inptWrap">
-							<input class="inptMnemonic inptMnemonic1" ng-model="recFromSeeddir.mnemonic1" ng-change="recFromSeeddir.funReg1()" ng-focus="recFromSeeddir.funReg1()" onkeyup="this.value=this.value.replace(/[^a-z]/g,'');" ng-keyup="recFromSeeddir.handleKeyboard1($event)" maxlength="8">
+							<input class="inptMnemonic inptMnemonic1" lang="en" ng-model="recFromSeeddir.mnemonic1" ng-change="recFromSeeddir.funReg1()" ng-focus="recFromSeeddir.funReg1()" onkeyup="this.value=this.value.replace(/[^a-z]/g,'');" onchange="this.value=this.value.replace(/[^a-z]/g,'');"  ng-keyup="recFromSeeddir.handleKeyboard1($event)" maxlength="8">
 							<ul class="notiUl" ng-if="recFromSeeddir.m1 == 1 && recFromSeeddir.mnemonic1">
 								<li class="notiLi" ng-class="{'active':$index == recFromSeeddir.num}" ng-repeat="item in recFromSeeddir.items" ng-click="recFromSeeddir.mnemonic1 = recFromSeeddir.mnemonic1+item; recFromSeeddir.hideUlclearItems()"> <span>{{recFromSeeddir.mnemonic1}}</span>{{item}} </li>
 							</ul>
 						</div>
 						<!--222-->
 						<div class="inptWrap">
-							<input class="inptMnemonic inptMnemonic1" ng-model="recFromSeeddir.mnemonic2" ng-change="recFromSeeddir.funReg2()" ng-focus="recFromSeeddir.funReg2()" onkeyup="this.value=this.value.replace(/[^a-z]/g,'');" ng-keyup="recFromSeeddir.handleKeyboard2($event)" maxlength="8">
+							<input class="inptMnemonic inptMnemonic1" lang="en" ng-model="recFromSeeddir.mnemonic2" ng-change="recFromSeeddir.funReg2()" ng-focus="recFromSeeddir.funReg2()" onkeyup="this.value=this.value.replace(/[^a-z]/g,'');" onchange="this.value=this.value.replace(/[^a-z]/g,'');"  ng-keyup="recFromSeeddir.handleKeyboard2($event)" maxlength="8">
 							<ul class="notiUl" ng-if="recFromSeeddir.m1 == 2 && recFromSeeddir.mnemonic2">
 								<li class="notiLi" ng-class="{'active':$index == recFromSeeddir.num}" ng-repeat="item in recFromSeeddir.items" ng-click="recFromSeeddir.mnemonic2 = recFromSeeddir.mnemonic2+item; recFromSeeddir.hideUlclearItems()"> <span>{{recFromSeeddir.mnemonic2}}</span>{{item}} </li>
 							</ul>
 						</div>
 						<!--333-->
 						<div class="inptWrap">
-							<input class="inptMnemonic inptMnemonic1" ng-model="recFromSeeddir.mnemonic3" ng-change="recFromSeeddir.funReg3()" ng-focus="recFromSeeddir.funReg3()" onkeyup="this.value=this.value.replace(/[^a-z]/g,'');" ng-keyup="recFromSeeddir.handleKeyboard3($event)" maxlength="8">
+							<input class="inptMnemonic inptMnemonic1" lang="en" ng-model="recFromSeeddir.mnemonic3" ng-change="recFromSeeddir.funReg3()" ng-focus="recFromSeeddir.funReg3()" onkeyup="this.value=this.value.replace(/[^a-z]/g,'');" onchange="this.value=this.value.replace(/[^a-z]/g,'');"  ng-keyup="recFromSeeddir.handleKeyboard3($event)" maxlength="8">
 							<ul class="notiUl" ng-if="recFromSeeddir.m1 == 3 && recFromSeeddir.mnemonic3">
 								<li class="notiLi" ng-class="{'active':$index == recFromSeeddir.num}" ng-repeat="item in recFromSeeddir.items" ng-click="recFromSeeddir.mnemonic3 = recFromSeeddir.mnemonic3+item; recFromSeeddir.hideUlclearItems()"> <span>{{recFromSeeddir.mnemonic3}}</span>{{item}} </li>
 							</ul>
 						</div>
 						<!--444-->
 						<div class="inptWrap noMarginR">
-							<input class="inptMnemonic inptMnemonic1" ng-model="recFromSeeddir.mnemonic4" ng-change="recFromSeeddir.funReg4()" ng-focus="recFromSeeddir.funReg4()" onkeyup="this.value=this.value.replace(/[^a-z]/g,'');" ng-keyup="recFromSeeddir.handleKeyboard4($event)" maxlength="8">
+							<input class="inptMnemonic inptMnemonic1" lang="en" ng-model="recFromSeeddir.mnemonic4" ng-change="recFromSeeddir.funReg4()" ng-focus="recFromSeeddir.funReg4()" onkeyup="this.value=this.value.replace(/[^a-z]/g,'');" onchange="this.value=this.value.replace(/[^a-z]/g,'');"  ng-keyup="recFromSeeddir.handleKeyboard4($event)" maxlength="8">
 							<ul class="notiUl" ng-if="recFromSeeddir.m1 == 4 && recFromSeeddir.mnemonic4">
 								<li class="notiLi" ng-class="{'active':$index == recFromSeeddir.num}" ng-repeat="item in recFromSeeddir.items" ng-click="recFromSeeddir.mnemonic4 = recFromSeeddir.mnemonic4+item; recFromSeeddir.hideUlclearItems()"> <span>{{recFromSeeddir.mnemonic4}}</span>{{item}} </li>
 							</ul>
@@ -179,28 +180,28 @@
 						<div class="clearB"></div>
 						<!--555-->
 						<div class="inptWrap">
-							<input class="inptMnemonic inptMnemonic1" ng-model="recFromSeeddir.mnemonic5" ng-change="recFromSeeddir.funReg5()" ng-focus="recFromSeeddir.funReg5()" onkeyup="this.value=this.value.replace(/[^a-z]/g,'');" ng-keyup="recFromSeeddir.handleKeyboard5($event)" maxlength="8">
+							<input class="inptMnemonic inptMnemonic1" lang="en" ng-model="recFromSeeddir.mnemonic5" ng-change="recFromSeeddir.funReg5()" ng-focus="recFromSeeddir.funReg5()" onkeyup="this.value=this.value.replace(/[^a-z]/g,'');" onchange="this.value=this.value.replace(/[^a-z]/g,'');"  ng-keyup="recFromSeeddir.handleKeyboard5($event)" maxlength="8">
 							<ul class="notiUl" ng-if="recFromSeeddir.m1 == 5 && recFromSeeddir.mnemonic5">
 								<li class="notiLi" ng-class="{'active':$index == recFromSeeddir.num}" ng-repeat="item in recFromSeeddir.items" ng-click="recFromSeeddir.mnemonic5 = recFromSeeddir.mnemonic5+item; recFromSeeddir.hideUlclearItems()"> <span>{{recFromSeeddir.mnemonic5}}</span>{{item}} </li>
 							</ul>
 						</div>
 						<!--666-->
 						<div class="inptWrap">
-							<input class="inptMnemonic inptMnemonic1" ng-model="recFromSeeddir.mnemonic6" ng-change="recFromSeeddir.funReg6()" ng-focus="recFromSeeddir.funReg6()" onkeyup="this.value=this.value.replace(/[^a-z]/g,'');" ng-keyup="recFromSeeddir.handleKeyboard6($event)" maxlength="8">
+							<input class="inptMnemonic inptMnemonic1" lang="en" ng-model="recFromSeeddir.mnemonic6" ng-change="recFromSeeddir.funReg6()" ng-focus="recFromSeeddir.funReg6()" onkeyup="this.value=this.value.replace(/[^a-z]/g,'');" onchange="this.value=this.value.replace(/[^a-z]/g,'');"  ng-keyup="recFromSeeddir.handleKeyboard6($event)" maxlength="8">
 							<ul class="notiUl" ng-if="recFromSeeddir.m1 == 6 && recFromSeeddir.mnemonic6">
 								<li class="notiLi" ng-class="{'active':$index == recFromSeeddir.num}" ng-repeat="item in recFromSeeddir.items" ng-click="recFromSeeddir.mnemonic6 = recFromSeeddir.mnemonic6+item; recFromSeeddir.hideUlclearItems()"> <span>{{recFromSeeddir.mnemonic6}}</span>{{item}} </li>
 							</ul>
 						</div>
 						<!--777	-->
 						<div class="inptWrap">
-							<input class="inptMnemonic inptMnemonic1" ng-model="recFromSeeddir.mnemonic7" ng-change="recFromSeeddir.funReg7()" ng-focus="recFromSeeddir.funReg7()" onkeyup="this.value=this.value.replace(/[^a-z]/g,'');" ng-keyup="recFromSeeddir.handleKeyboard7($event)" maxlength="8">
+							<input class="inptMnemonic inptMnemonic1" lang="en" ng-model="recFromSeeddir.mnemonic7" ng-change="recFromSeeddir.funReg7()" ng-focus="recFromSeeddir.funReg7()" onkeyup="this.value=this.value.replace(/[^a-z]/g,'');" onchange="this.value=this.value.replace(/[^a-z]/g,'');"  ng-keyup="recFromSeeddir.handleKeyboard7($event)" maxlength="8">
 							<ul class="notiUl" ng-if="recFromSeeddir.m1 == 7 && recFromSeeddir.mnemonic7">
 								<li class="notiLi" ng-class="{'active':$index == recFromSeeddir.num}" ng-repeat="item in recFromSeeddir.items" ng-click="recFromSeeddir.mnemonic7 = recFromSeeddir.mnemonic7+item; recFromSeeddir.hideUlclearItems()"> <span>{{recFromSeeddir.mnemonic7}}</span>{{item}} </li>
 							</ul>
 						</div>
 						<!--888	-->
 						<div class="inptWrap noMarginR">
-							<input class="inptMnemonic inptMnemonic1" ng-model="recFromSeeddir.mnemonic8" ng-change="recFromSeeddir.funReg8()" ng-focus="recFromSeeddir.funReg8()" onkeyup="this.value=this.value.replace(/[^a-z]/g,'');" ng-keyup="recFromSeeddir.handleKeyboard8($event)" maxlength="8">
+							<input class="inptMnemonic inptMnemonic1" lang="en" ng-model="recFromSeeddir.mnemonic8" ng-change="recFromSeeddir.funReg8()" ng-focus="recFromSeeddir.funReg8()" onkeyup="this.value=this.value.replace(/[^a-z]/g,'');" onchange="this.value=this.value.replace(/[^a-z]/g,'');"  ng-keyup="recFromSeeddir.handleKeyboard8($event)" maxlength="8">
 							<ul class="notiUl" ng-if="recFromSeeddir.m1 == 8 && recFromSeeddir.mnemonic8">
 								<li class="notiLi" ng-class="{'active':$index == recFromSeeddir.num}" ng-repeat="item in recFromSeeddir.items" ng-click="recFromSeeddir.mnemonic8 = recFromSeeddir.mnemonic8+item; recFromSeeddir.hideUlclearItems()"> <span>{{recFromSeeddir.mnemonic8}}</span>{{item}} </li>
 							</ul>
@@ -209,28 +210,28 @@
 						<div class="clearB"></div>
 						<!--999-->
 						<div class="inptWrap">
-							<input class="inptMnemonic inptMnemonic1" ng-model="recFromSeeddir.mnemonic9" ng-change="recFromSeeddir.funReg9()" ng-focus="recFromSeeddir.funReg9()" onkeyup="this.value=this.value.replace(/[^a-z]/g,'');" ng-keyup="recFromSeeddir.handleKeyboard9($event)" maxlength="8">
+							<input class="inptMnemonic inptMnemonic1" lang="en" ng-model="recFromSeeddir.mnemonic9" ng-change="recFromSeeddir.funReg9()" ng-focus="recFromSeeddir.funReg9()" onkeyup="this.value=this.value.replace(/[^a-z]/g,'');" onchange="this.value=this.value.replace(/[^a-z]/g,'');"  ng-keyup="recFromSeeddir.handleKeyboard9($event)" maxlength="8">
 							<ul class="notiUl" ng-if="recFromSeeddir.m1 == 9 && recFromSeeddir.mnemonic9">
 								<li class="notiLi" ng-class="{'active':$index == recFromSeeddir.num}" ng-repeat="item in recFromSeeddir.items" ng-click="recFromSeeddir.mnemonic9 = recFromSeeddir.mnemonic9+item; recFromSeeddir.hideUlclearItems()"> <span>{{recFromSeeddir.mnemonic9}}</span>{{item}} </li>
 							</ul>
 						</div>
 						<!--10 10 10-->
 						<div class="inptWrap">
-							<input class="inptMnemonic inptMnemonic1" ng-model="recFromSeeddir.mnemonic10" ng-change="recFromSeeddir.funReg10()" ng-focus="recFromSeeddir.funReg10()" onkeyup="this.value=this.value.replace(/[^a-z]/g,'');" ng-keyup="recFromSeeddir.handleKeyboard10($event)" maxlength="8">
+							<input class="inptMnemonic inptMnemonic1" lang="en" ng-model="recFromSeeddir.mnemonic10" ng-change="recFromSeeddir.funReg10()" ng-focus="recFromSeeddir.funReg10()" onkeyup="this.value=this.value.replace(/[^a-z]/g,'');" onchange="this.value=this.value.replace(/[^a-z]/g,'');"  ng-keyup="recFromSeeddir.handleKeyboard10($event)" maxlength="8">
 							<ul class="notiUl" ng-if="recFromSeeddir.m1 == 10 && recFromSeeddir.mnemonic10">
 								<li class="notiLi" ng-class="{'active':$index == recFromSeeddir.num}" ng-repeat="item in recFromSeeddir.items" ng-click="recFromSeeddir.mnemonic10 = recFromSeeddir.mnemonic10+item; recFromSeeddir.hideUlclearItems()"> <span>{{recFromSeeddir.mnemonic10}}</span>{{item}} </li>
 							</ul>
 						</div>
 						<!--11 11 11-->
 						<div class="inptWrap">
-							<input class="inptMnemonic inptMnemonic1" ng-model="recFromSeeddir.mnemonic11" ng-change="recFromSeeddir.funReg11()" ng-focus="recFromSeeddir.funReg11()" onkeyup="this.value=this.value.replace(/[^a-z]/g,'');" ng-keyup="recFromSeeddir.handleKeyboard11($event)" maxlength="8">
+							<input class="inptMnemonic inptMnemonic1" lang="en" ng-model="recFromSeeddir.mnemonic11" ng-change="recFromSeeddir.funReg11()" ng-focus="recFromSeeddir.funReg11()" onkeyup="this.value=this.value.replace(/[^a-z]/g,'');" onchange="this.value=this.value.replace(/[^a-z]/g,'');"  ng-keyup="recFromSeeddir.handleKeyboard11($event)" maxlength="8">
 							<ul class="notiUl" ng-if="recFromSeeddir.m1 == 11 && recFromSeeddir.mnemonic11">
 								<li class="notiLi" ng-class="{'active':$index == recFromSeeddir.num}" ng-repeat="item in recFromSeeddir.items" ng-click="recFromSeeddir.mnemonic11 = recFromSeeddir.mnemonic11+item; recFromSeeddir.hideUlclearItems()"> <span>{{recFromSeeddir.mnemonic11}}</span>{{item}} </li>
 							</ul>
 						</div>
 						<!--12 12 12-->
 						<div class="inptWrap noMarginR">
-							<input class="inptMnemonic inptMnemonic1" ng-model="recFromSeeddir.mnemonic12" ng-change="recFromSeeddir.funReg12()" ng-focus="recFromSeeddir.funReg12()" onkeyup="this.value=this.value.replace(/[^a-z]/g,'');" ng-keyup="recFromSeeddir.handleKeyboard12($event)" maxlength="8">
+							<input class="inptMnemonic inptMnemonic1" lang="en" ng-model="recFromSeeddir.mnemonic12" ng-change="recFromSeeddir.funReg12()" ng-focus="recFromSeeddir.funReg12()" onkeyup="this.value=this.value.replace(/[^a-z]/g,'');" onchange="this.value=this.value.replace(/[^a-z]/g,'');"  ng-keyup="recFromSeeddir.handleKeyboard12($event)" maxlength="8">
 							<ul class="notiUl" ng-if="recFromSeeddir.m1 == 12 && recFromSeeddir.mnemonic12">
 								<li class="notiLi" ng-class="{'active':$index == recFromSeeddir.num}" ng-repeat="item in recFromSeeddir.items" ng-click="recFromSeeddir.mnemonic12 = recFromSeeddir.mnemonic12+item; recFromSeeddir.hideUlclearItems()"> <span>{{recFromSeeddir.mnemonic12}}</span>{{item}} </li>
 							</ul>
@@ -373,28 +374,28 @@
 		<div style=" height: 120px; padding: 0 5px;">
 		<!--111-->
 			<div class="inptWrap">
-				<input class="inptMnemonic inptMnemonic2" ng-model="wordsC.mnemonic1" ng-change="wordsC.funReg1()" ng-focus="wordsC.funReg1()" onkeyup="this.value=this.value.replace(/[^a-z]/g,'');" ng-keyup="wordsC.handleKeyboard1($event)" maxlength="8">
+				<input class="inptMnemonic inptMnemonic2" lang="en" ng-model="wordsC.mnemonic1" ng-change="wordsC.funReg1()" ng-focus="wordsC.funReg1()" onkeyup="this.value=this.value.replace(/[^a-z]/g,'');" onchange="this.value=this.value.replace(/[^a-z]/g,'');"  ng-keyup="wordsC.handleKeyboard1($event)" maxlength="8">
 				<ul class="notiUl" ng-if="wordsC.m1 == 1 && wordsC.mnemonic1">
 					<li class="notiLi" ng-class="{'active':$index == wordsC.num}" ng-repeat="item in wordsC.items" ng-click="wordsC.mnemonic1 = wordsC.mnemonic1+item; wordsC.hideUlclearItems(); "> <span>{{wordsC.mnemonic1}}</span>{{item}} </li>
 				</ul>
 			</div>
 		<!--222-->
 			<div class="inptWrap">
-				<input class="inptMnemonic inptMnemonic2" ng-model="wordsC.mnemonic2" ng-change="wordsC.funReg2()" ng-focus="wordsC.funReg2()" onkeyup="this.value=this.value.replace(/[^a-z]/g,'');" ng-keyup="wordsC.handleKeyboard2($event)" maxlength="8">
+				<input class="inptMnemonic inptMnemonic2" lang="en" ng-model="wordsC.mnemonic2" ng-change="wordsC.funReg2()" ng-focus="wordsC.funReg2()" onkeyup="this.value=this.value.replace(/[^a-z]/g,'');" onchange="this.value=this.value.replace(/[^a-z]/g,'');"  ng-keyup="wordsC.handleKeyboard2($event)" maxlength="8">
 				<ul class="notiUl" ng-if="wordsC.m1 == 2 && wordsC.mnemonic2">
 					<li class="notiLi" ng-class="{'active':$index == wordsC.num}" ng-repeat="item in wordsC.items" ng-click="wordsC.mnemonic2 = wordsC.mnemonic2+item; wordsC.hideUlclearItems(); "> <span>{{wordsC.mnemonic2}}</span>{{item}} </li>
 				</ul>
 			</div>
 		<!--333-->
 			<div class="inptWrap">
-				<input class="inptMnemonic inptMnemonic2" ng-model="wordsC.mnemonic3" ng-change="wordsC.funReg3()" ng-focus="wordsC.funReg3()" onkeyup="this.value=this.value.replace(/[^a-z]/g,'');" ng-keyup="wordsC.handleKeyboard3($event)" maxlength="8">
+				<input class="inptMnemonic inptMnemonic2" lang="en" ng-model="wordsC.mnemonic3" ng-change="wordsC.funReg3()" ng-focus="wordsC.funReg3()" onkeyup="this.value=this.value.replace(/[^a-z]/g,'');" onchange="this.value=this.value.replace(/[^a-z]/g,'');"  ng-keyup="wordsC.handleKeyboard3($event)" maxlength="8">
 				<ul class="notiUl" ng-if="wordsC.m1 == 3 && wordsC.mnemonic3">
 					<li class="notiLi" ng-class="{'active':$index == wordsC.num}" ng-repeat="item in wordsC.items" ng-click="wordsC.mnemonic3 = wordsC.mnemonic3+item; wordsC.hideUlclearItems()"> <span>{{wordsC.mnemonic3}}</span>{{item}} </li>
 				</ul>
 			</div>
 		<!--444-->
 			<div class="inptWrap noMarginR">
-				<input class="inptMnemonic inptMnemonic2" ng-model="wordsC.mnemonic4" ng-change="wordsC.funReg4()" ng-focus="wordsC.funReg4()" onkeyup="this.value=this.value.replace(/[^a-z]/g,'');" ng-keyup="wordsC.handleKeyboard4($event)" maxlength="8">
+				<input class="inptMnemonic inptMnemonic2" lang="en" ng-model="wordsC.mnemonic4" ng-change="wordsC.funReg4()" ng-focus="wordsC.funReg4()" onkeyup="this.value=this.value.replace(/[^a-z]/g,'');" onchange="this.value=this.value.replace(/[^a-z]/g,'');"  ng-keyup="wordsC.handleKeyboard4($event)" maxlength="8">
 				<ul class="notiUl" ng-if="wordsC.m1 == 4 && wordsC.mnemonic4">
 					<li class="notiLi" ng-class="{'active':$index == wordsC.num}" ng-repeat="item in wordsC.items" ng-click="wordsC.mnemonic4 = wordsC.mnemonic4+item; wordsC.hideUlclearItems()"> <span>{{wordsC.mnemonic4}}</span>{{item}} </li>
 				</ul>
@@ -403,28 +404,28 @@
 			<div class="clearB"></div>
 		<!--555-->
 			<div class="inptWrap">
-				<input class="inptMnemonic inptMnemonic2" ng-model="wordsC.mnemonic5" ng-change="wordsC.funReg5()" ng-focus="wordsC.funReg5()" onkeyup="this.value=this.value.replace(/[^a-z]/g,'');" ng-keyup="wordsC.handleKeyboard5($event)" maxlength="8">
+				<input class="inptMnemonic inptMnemonic2" lang="en" ng-model="wordsC.mnemonic5" ng-change="wordsC.funReg5()" ng-focus="wordsC.funReg5()" onkeyup="this.value=this.value.replace(/[^a-z]/g,'');" onchange="this.value=this.value.replace(/[^a-z]/g,'');"  ng-keyup="wordsC.handleKeyboard5($event)" maxlength="8">
 				<ul class="notiUl" ng-if="wordsC.m1 == 5 && wordsC.mnemonic5">
 					<li class="notiLi" ng-class="{'active':$index == wordsC.num}" ng-repeat="item in wordsC.items" ng-click="wordsC.mnemonic5 = wordsC.mnemonic5+item; wordsC.hideUlclearItems()"> <span>{{wordsC.mnemonic5}}</span>{{item}} </li>
 				</ul>
 			</div>
 		<!--666-->
 			<div class="inptWrap">
-				<input class="inptMnemonic inptMnemonic2" ng-model="wordsC.mnemonic6" ng-change="wordsC.funReg6()" ng-focus="wordsC.funReg6()" onkeyup="this.value=this.value.replace(/[^a-z]/g,'');" ng-keyup="wordsC.handleKeyboard6($event)" maxlength="8">
+				<input class="inptMnemonic inptMnemonic2" lang="en" ng-model="wordsC.mnemonic6" ng-change="wordsC.funReg6()" ng-focus="wordsC.funReg6()" onkeyup="this.value=this.value.replace(/[^a-z]/g,'');" onchange="this.value=this.value.replace(/[^a-z]/g,'');"  ng-keyup="wordsC.handleKeyboard6($event)" maxlength="8">
 				<ul class="notiUl" ng-if="wordsC.m1 == 6 && wordsC.mnemonic6">
 					<li class="notiLi" ng-class="{'active':$index == wordsC.num}" ng-repeat="item in wordsC.items" ng-click="wordsC.mnemonic6 = wordsC.mnemonic6+item; wordsC.hideUlclearItems()"> <span>{{wordsC.mnemonic6}}</span>{{item}} </li>
 				</ul>
 			</div>
 		<!--777	-->
 			<div class="inptWrap">
-				<input class="inptMnemonic inptMnemonic2" ng-model="wordsC.mnemonic7" ng-change="wordsC.funReg7()" ng-focus="wordsC.funReg7()" onkeyup="this.value=this.value.replace(/[^a-z]/g,'');" ng-keyup="wordsC.handleKeyboard7($event)" maxlength="8">
+				<input class="inptMnemonic inptMnemonic2" lang="en" ng-model="wordsC.mnemonic7" ng-change="wordsC.funReg7()" ng-focus="wordsC.funReg7()" onkeyup="this.value=this.value.replace(/[^a-z]/g,'');" onchange="this.value=this.value.replace(/[^a-z]/g,'');"  ng-keyup="wordsC.handleKeyboard7($event)" maxlength="8">
 				<ul class="notiUl" ng-if="wordsC.m1 == 7 && wordsC.mnemonic7">
 					<li class="notiLi" ng-class="{'active':$index == wordsC.num}" ng-repeat="item in wordsC.items" ng-click="wordsC.mnemonic7 = wordsC.mnemonic7+item; wordsC.hideUlclearItems()"> <span>{{wordsC.mnemonic7}}</span>{{item}} </li>
 				</ul>
 			</div>
 		<!--888	-->
 			<div class="inptWrap noMarginR">
-				<input class="inptMnemonic inptMnemonic2" ng-model="wordsC.mnemonic8" ng-change="wordsC.funReg8()" ng-focus="wordsC.funReg8()" onkeyup="this.value=this.value.replace(/[^a-z]/g,'');" ng-keyup="wordsC.handleKeyboard8($event)" maxlength="8">
+				<input class="inptMnemonic inptMnemonic2" lang="en" ng-model="wordsC.mnemonic8" ng-change="wordsC.funReg8()" ng-focus="wordsC.funReg8()" onkeyup="this.value=this.value.replace(/[^a-z]/g,'');" onchange="this.value=this.value.replace(/[^a-z]/g,'');"  ng-keyup="wordsC.handleKeyboard8($event)" maxlength="8">
 				<ul class="notiUl" ng-if="wordsC.m1 == 8 && wordsC.mnemonic8">
 					<li class="notiLi" ng-class="{'active':$index == wordsC.num}" ng-repeat="item in wordsC.items" ng-click="wordsC.mnemonic8 = wordsC.mnemonic8+item; wordsC.hideUlclearItems()"> <span>{{wordsC.mnemonic8}}</span>{{item}} </li>
 				</ul>
@@ -433,28 +434,28 @@
 			<div class="clearB"></div>
 		<!--999-->
 			<div class="inptWrap">
-				<input class="inptMnemonic inptMnemonic2" ng-model="wordsC.mnemonic9" ng-change="wordsC.funReg9()" ng-focus="wordsC.funReg9()" onkeyup="this.value=this.value.replace(/[^a-z]/g,'');" ng-keyup="wordsC.handleKeyboard9($event)" maxlength="8">
+				<input class="inptMnemonic inptMnemonic2" lang="en" ng-model="wordsC.mnemonic9" ng-change="wordsC.funReg9()" ng-focus="wordsC.funReg9()" onkeyup="this.value=this.value.replace(/[^a-z]/g,'');" onchange="this.value=this.value.replace(/[^a-z]/g,'');"  ng-keyup="wordsC.handleKeyboard9($event)" maxlength="8">
 				<ul class="notiUl" ng-if="wordsC.m1 == 9 && wordsC.mnemonic9">
 					<li class="notiLi" ng-class="{'active':$index == wordsC.num}" ng-repeat="item in wordsC.items" ng-click="wordsC.mnemonic9 = wordsC.mnemonic9+item; wordsC.hideUlclearItems()"> <span>{{wordsC.mnemonic9}}</span>{{item}} </li>
 				</ul>
 			</div>
 		<!--10 10 10-->
 			<div class="inptWrap">
-				<input class="inptMnemonic inptMnemonic2" ng-model="wordsC.mnemonic10" ng-change="wordsC.funReg10()" ng-focus="wordsC.funReg10()" onkeyup="this.value=this.value.replace(/[^a-z]/g,'');" ng-keyup="wordsC.handleKeyboard10($event)" maxlength="8">
+				<input class="inptMnemonic inptMnemonic2" lang="en" ng-model="wordsC.mnemonic10" ng-change="wordsC.funReg10()" ng-focus="wordsC.funReg10()" onkeyup="this.value=this.value.replace(/[^a-z]/g,'');" onchange="this.value=this.value.replace(/[^a-z]/g,'');"  ng-keyup="wordsC.handleKeyboard10($event)" maxlength="8">
 				<ul class="notiUl" ng-if="wordsC.m1 == 10 && wordsC.mnemonic10">
 					<li class="notiLi" ng-class="{'active':$index == wordsC.num}" ng-repeat="item in wordsC.items" ng-click="wordsC.mnemonic10 = wordsC.mnemonic10+item; wordsC.hideUlclearItems()"> <span>{{wordsC.mnemonic10}}</span>{{item}} </li>
 				</ul>
 			</div>
 		<!--11 11 11-->
 			<div class="inptWrap">
-				<input class="inptMnemonic inptMnemonic2" ng-model="wordsC.mnemonic11" ng-change="wordsC.funReg11()" ng-focus="wordsC.funReg11()" onkeyup="this.value=this.value.replace(/[^a-z]/g,'');" ng-keyup="wordsC.handleKeyboard11($event)" maxlength="8">
+				<input class="inptMnemonic inptMnemonic2" lang="en" ng-model="wordsC.mnemonic11" ng-change="wordsC.funReg11()" ng-focus="wordsC.funReg11()" onkeyup="this.value=this.value.replace(/[^a-z]/g,'');" onchange="this.value=this.value.replace(/[^a-z]/g,'');"  ng-keyup="wordsC.handleKeyboard11($event)" maxlength="8">
 				<ul class="notiUl" ng-if="wordsC.m1 == 11 && wordsC.mnemonic11">
 					<li class="notiLi" ng-class="{'active':$index == wordsC.num}" ng-repeat="item in wordsC.items" ng-click="wordsC.mnemonic11 = wordsC.mnemonic11+item; wordsC.hideUlclearItems()"> <span>{{wordsC.mnemonic11}}</span>{{item}} </li>
 				</ul>
 			</div>
 		<!--12 12 12-->
 			<div class="inptWrap noMarginR">
-				<input class="inptMnemonic inptMnemonic2" ng-model="wordsC.mnemonic12" ng-change="wordsC.funReg12()" ng-focus="wordsC.funReg12()" onkeyup="this.value=this.value.replace(/[^a-z]/g,'');" ng-keyup="wordsC.handleKeyboard12($event)" maxlength="8">
+				<input class="inptMnemonic inptMnemonic2" lang="en" ng-model="wordsC.mnemonic12" ng-change="wordsC.funReg12()" ng-focus="wordsC.funReg12()" onkeyup="this.value=this.value.replace(/[^a-z]/g,'');" onchange="this.value=this.value.replace(/[^a-z]/g,'');"  ng-keyup="wordsC.handleKeyboard12($event)" maxlength="8">
 				<ul class="notiUl" ng-if="wordsC.m1 == 12 && wordsC.mnemonic12">
 					<li class="notiLi" ng-class="{'active':$index == wordsC.num}" ng-repeat="item in wordsC.items" ng-click="wordsC.mnemonic12 = wordsC.mnemonic12+item; wordsC.hideUlclearItems()"> <span>{{wordsC.mnemonic12}}</span>{{item}} </li>
 				</ul>
