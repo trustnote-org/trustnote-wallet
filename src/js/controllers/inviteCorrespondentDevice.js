@@ -6,7 +6,6 @@ angular.module('copayApp.controllers').controller('inviteCorrespondentDeviceCont
   function($scope, $timeout, profileService, go, isCordova, correspondentListService, gettextCatalog) {
     
     var self = this;
-    
     function onPaired(peer_address){
         correspondentListService.setCurrentCorrespondent(peer_address, function(bAnotherCorrespondent){
             go.path('correspondentDevices.correspondentDevice');
