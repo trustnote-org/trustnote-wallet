@@ -33,6 +33,7 @@ angular.module('copayApp.controllers').controller('recoveryFromSeeddir', functio
 	self.xPrivKey = '';
 	self.assocIndexesToWallets = {};
 	self.credentialsEncrypted = false;
+	var reg = new RegExp(/^[a-z]+$/);
 
 	// 定义模态框 的显示
 	self.show = false;
@@ -545,110 +546,98 @@ angular.module('copayApp.controllers').controller('recoveryFromSeeddir', functio
 	self.funReg1 = function () {
 		self.m1 = self.jumpNum = 1;
 
-		if(reg.test(self.mnemonic1)) return  false;
-
-		self.str = self.mnemonic1;
-		self.funReg();
-		//self.strMnemonic();
+		if(reg.test(self.mnemonic1)){
+			self.str = self.mnemonic1;
+			self.funReg();
+		}
 	};
 	self.funReg2 = function () {
 		self.m1 = self.jumpNum = 2;
 
-		if(reg.test(self.mnemonic2)) return  false;
-
-		self.str = self.mnemonic2;
-		self.funReg();
-		//self.strMnemonic();
+		if(reg.test(self.mnemonic2)){
+			self.str = self.mnemonic2;
+			self.funReg();
+		}
 	};
 	self.funReg3 = function () {
 		self.m1 = self.jumpNum = 3;
 
-		if(reg.test(self.mnemonic3)) return  false;
-
-		self.str = self.mnemonic3;
-		self.funReg();
-		//self.strMnemonic();
+		if(reg.test(self.mnemonic3)){
+			self.str = self.mnemonic3;
+			self.funReg();
+		}
 	};
 	self.funReg4 = function () {
 		self.m1 = self.jumpNum = 4;
 
-		if(reg.test(self.mnemonic4)) return  false;
-
-		self.str = self.mnemonic4;
-		self.funReg();
-		//self.strMnemonic();
+		if(reg.test(self.mnemonic4)){
+			self.str = self.mnemonic4;
+			self.funReg();
+		}
 	};
 	self.funReg5 = function () {
 		self.m1 = self.jumpNum = 5;
 
-		if(reg.test(self.mnemonic5)) return  false;
-
-		self.str = self.mnemonic5;
-		self.funReg();
-		//self.strMnemonic();
+		if(reg.test(self.mnemonic5)){
+			self.str = self.mnemonic5;
+			self.funReg();
+		}
 	};
 	self.funReg6 = function () {
 		self.m1 = self.jumpNum = 6;
 
-		if(reg.test(self.mnemonic6)) return  false;
-
-		self.str = self.mnemonic6;
-		self.funReg();
-		//self.strMnemonic();
+		if(reg.test(self.mnemonic6)){
+			self.str = self.mnemonic6;
+			self.funReg();
+		}
 	};
 	self.funReg7 = function () {
 		self.m1 = self.jumpNum = 7;
 
-		if(reg.test(self.mnemonic7)) return  false;
-
-		self.str = self.mnemonic7;
-		self.funReg();
-		//self.strMnemonic();
+		if(reg.test(self.mnemonic7)){
+			self.str = self.mnemonic7;
+			self.funReg();
+		}
 	};
 	self.funReg8 = function () {
 		self.m1 = self.jumpNum = 8;
 
-		if(reg.test(self.mnemonic8)) return  false;
-
-		self.str = self.mnemonic8;
-		self.funReg();
-		//self.strMnemonic();
+		if(reg.test(self.mnemonic8)){
+			self.str = self.mnemonic8;
+			self.funReg();
+		}
 	};
 	self.funReg9 = function () {
 		self.m1 = self.jumpNum = 9;
 
-		if(reg.test(self.mnemonic9)) return  false;
-
-		self.str = self.mnemonic9;
-		self.funReg();
-		//self.strMnemonic();
+		if(reg.test(self.mnemonic9)){
+			self.str = self.mnemonic9;
+			self.funReg();
+		}
 	};
 	self.funReg10 = function () {
 		self.m1 = self.jumpNum = 10;
 
-		if(reg.test(self.mnemonic10)) return  false;
-
-		self.str = self.mnemonic10;
-		self.funReg();
-		//self.strMnemonic();
+		if(reg.test(self.mnemonic10)){
+			self.str = self.mnemonic10;
+			self.funReg();
+		}
 	};
 	self.funReg11 = function () {
 		self.m1 = self.jumpNum = 11;
 
-		if(reg.test(self.mnemonic11)) return  false;
-
-		self.str = self.mnemonic11;
-		self.funReg();
-		//self.strMnemonic();
+		if(reg.test(self.mnemonic11)){
+			self.str = self.mnemonic11;
+			self.funReg();
+		}
 	};
 	self.funReg12 = function () {
 		self.m1 = self.jumpNum = 12;
 
-		if(reg.test(self.mnemonic12)) return  false;
-
-		self.str = self.mnemonic12;
-		self.funReg();  // 设置了一个 self.items 列表
-		//self.strMnemonic();  // 12个input 输入框 拼接为一个 整体
+		if(reg.test(self.mnemonic12)){
+			self.str = self.mnemonic12;
+			self.funReg();
+		}
 	};
 
 // 拼接12个助记词

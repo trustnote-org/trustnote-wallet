@@ -33,7 +33,7 @@ angular.module('copayApp.controllers').controller('recoveryFromSeed', function (
 	self.assocIndexesToWallets = {};
 	self.credentialsEncrypted = false;
 	self.isCordova = isCordova;
-	var reg = new RegExp(/[^a-z]/g);
+	var reg = new RegExp(/^[a-z]+$/);
 
 	// 删除口令 （ 修改后 ）
 	self.delteConfirm = function () {
@@ -481,121 +481,113 @@ angular.module('copayApp.controllers').controller('recoveryFromSeed', function (
 		self.items = []
 		self.m1 = self.jumpNum = 1;
 
-		if(reg.test(self.mnemonic1)) return  false;
-
-		self.str = self.mnemonic1;
-		self.funReg();
-		//self.strMnemonic();
+		if(reg.test(self.mnemonic1)){
+			self.str = self.mnemonic1;
+			console.log(self.str);
+			self.funReg();
+		}
 	};
 	self.funReg2 = function () {
 		self.items = []
 		self.m1 = self.jumpNum = 2;
 
-		if(reg.test(self.mnemonic2)) return  false;
-
-		self.str = self.mnemonic2;
-		self.funReg();
-		//self.strMnemonic();
+		if(reg.test(self.mnemonic2)){
+			self.str = self.mnemonic2;
+			console.log(self.str);
+			self.funReg();
+		}
 	};
 	self.funReg3 = function () {
 		self.items = []
 		self.m1 = self.jumpNum = 3;
 
-		if(reg.test(self.mnemonic3)) return  false;
-
-		self.str = self.mnemonic3;
-		self.funReg();
-		//self.strMnemonic();
+		if(reg.test(self.mnemonic3)){
+			self.str = self.mnemonic3;
+			console.log(self.str);
+			self.funReg();
+		}
 	};
 	self.funReg4 = function () {
 		self.items = []
 		self.m1 = self.jumpNum = 4;
 
-		if(reg.test(self.mnemonic4)) return  false;
-
-		self.str = self.mnemonic4;
-		self.funReg();
-		//self.strMnemonic();
+		if(reg.test(self.mnemonic4)){
+			self.str = self.mnemonic4;
+			console.log(self.str);
+			self.funReg();
+		}
 	};
 	self.funReg5 = function () {
 		self.items = []
 		self.m1 = self.jumpNum = 5;
 
-		if(reg.test(self.mnemonic5)) return  false;
-
-		self.str = self.mnemonic5;
-		self.funReg();
-		//self.strMnemonic();
+		if(reg.test(self.mnemonic5)){
+			self.str = self.mnemonic5;
+			self.funReg();
+		}
 	};
 	self.funReg6 = function () {
 		self.items = []
 		self.m1 = self.jumpNum = 6;
 
-		if(reg.test(self.mnemonic6)) return  false;
-
-		self.str = self.mnemonic6;
-		self.funReg();
-		//self.strMnemonic();
+		if(reg.test(self.mnemonic6)){
+			self.str = self.mnemonic6;
+			self.funReg();
+		}
 	};
 	self.funReg7 = function () {
 		self.items = []
 		self.m1 = self.jumpNum = 7;
 
-		if(reg.test(self.mnemonic7)) return  false;
-
-		self.str = self.mnemonic7;
-		self.funReg();
-		//self.strMnemonic();
+		if(reg.test(self.mnemonic7)){
+			self.str = self.mnemonic7;
+			self.funReg();
+		}
 	};
 	self.funReg8 = function () {
 		self.items = []
 		self.m1 = self.jumpNum = 8;
 
-		if(reg.test(self.mnemonic8)) return  false;
-
-		self.str = self.mnemonic8;
-		self.funReg();
-		//self.strMnemonic();
+		if(reg.test(self.mnemonic8)){
+			self.str = self.mnemonic8;
+			self.funReg();
+		}
 	};
 	self.funReg9 = function () {
 		self.items = []
 		self.m1 = self.jumpNum = 9;
 
-		if(reg.test(self.mnemonic9)) return  false;
-
-		self.str = self.mnemonic9;
-		self.funReg();
-		//self.strMnemonic();
+		if(reg.test(self.mnemonic9)){
+			self.str = self.mnemonic9;
+			self.funReg();
+		}
 	};
 	self.funReg10 = function () {
 		self.items = []
 		self.m1 = self.jumpNum = 10;
 
-		if(reg.test(self.mnemonic10)) return  false;
-
-		self.str = self.mnemonic10;
-		self.funReg();
-		//self.strMnemonic();
+		if(reg.test(self.mnemonic10)){
+			self.str = self.mnemonic10;
+			self.funReg();
+		}
 	};
 	self.funReg11 = function () {
 		self.items = []
 		self.m1 = self.jumpNum = 11;
 
-		if(reg.test(self.mnemonic11)) return  false;
-
-		self.str = self.mnemonic11;
-		self.funReg();
-		//self.strMnemonic();
+		if(reg.test(self.mnemonic11)){
+			self.str = self.mnemonic11;
+			self.funReg();
+		}
 	};
 	self.funReg12 = function () {
 		self.items = []
 		self.m1 = self.jumpNum = 12;
 
-		if(reg.test(self.mnemonic12)) return  false;
-
-		self.str = self.mnemonic12;
-		self.funReg();  // 设置了一个 self.items 列表
-		//self.strMnemonic();  // 12个input 输入框 拼接为一个 整体
+		if(reg.test(self.mnemonic12)){
+			self.str = self.mnemonic12;
+			self.funReg();
+		}
 	};
 
 // 拼接12个助记词
@@ -807,8 +799,7 @@ angular.module('copayApp.controllers').controller('recoveryFromSeed', function (
 		//var str = self.mnemonic1;
 		var newStr = '';
 		try {
-			var temp = self.str.replace(/[^a-z]/g,'');
-			var reg1 = new RegExp('^' + temp + '.*');
+			var reg1 = new RegExp('^' + self.str + '.*');
 			for (var i = 0; i < mnemonic.length; i++) {
 				if (reg1.test(mnemonic[i])) {
 					newStr = mnemonic[i].substr(self.str.length);
