@@ -76,6 +76,11 @@
 		#backupSubmit:active{
 			background-color: #c0c0c0 !important;
 		}
+		#backupDelSeedSubmit:active{
+			color: #FFFFFF !important;
+			background: #0095ff !important;
+			border: 1px solid #FFFFFF !important;
+		}
 	</style>
 	<!--本页面样式 结束-->
 	<!-- 添加一个色块 -->
@@ -285,6 +290,7 @@
 						ng-show="!recFromSeeddir.scanning"
 						ng-disabled="recFromSeeddir.credentialsEncrypted"
 						type="submit"
+						id="backupDelSeedSubmit"
 						class="button expand black round"
 						value="{{'Restore Wallet and Delete Seed Phrase'|translate}}"
 						style="color: #0095ff;width: 85%;display: block;margin: 5px auto 20px;background: #fff; border: 1px solid #0095ff;">
