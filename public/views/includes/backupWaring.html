@@ -73,6 +73,9 @@
 		li.notiLi span{
 			color: #333;
 		}
+		#backupSubmit:active{
+			background-color: #c0c0c0 !important;
+		}
 	</style>
 	<!--本页面样式 结束-->
 	<!-- 添加一个色块 -->
@@ -257,6 +260,7 @@
 						ng-show="!recFromSeeddir.scanning"
 						ng-disabled="recFromSeeddir.credentialsEncrypted"
 						type="submit"
+						id="backupSubmit"
 						class="button expand black round"
 						value="{{'Restore Wallet from Seed Phrase'|translate}}"
 						style="background: #0095ff; width: 85%;display: block; margin: 0 auto;">
