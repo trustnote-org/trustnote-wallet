@@ -45,6 +45,9 @@
 	li.notiLi span{
 		color: #333;
 	}
+	#recSubmit:active{
+		background-color: #c0c0c0 !important;
+	}
 </style>
 <!--本页面样式 结束-->
 <!--钱包种子备份-->
@@ -178,7 +181,7 @@
 				<!--清除浮动-->
 				<div class="clearB"></div>
 
-
+			</div>
 
 			<!--<textarea-->
 				<!--style="height: 100px; font-size: 16px; color: #000; line-height: 26px; resize:none"-->
@@ -191,6 +194,7 @@
 			<input
 				ng-show="!recFromSeed.scanning"
 				type="submit"
+				id="recSubmit"
 				class="button expand black round"
 				value="{{'Recover'|translate}}"
 				style="background: #0095ff;margin-top:20px;">
