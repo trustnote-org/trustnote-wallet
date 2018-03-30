@@ -1,12 +1,76 @@
-
+<!--本页面样式-->
+<style>
+	/*input的外层*/
+	div.inptWrap{
+		width: 23.8%;
+		float: left;
+		margin-right:1.5%;
+		position: relative;
+	}
+	/*margin-right 设定0*/
+	div.noMarginR{ margin-right:0; }
+	/*清除浮动*/
+	div.clearB{ clear:both; }
+	/*助记词输入框*/
+	input.inptMnemonic{
+		width: 100%;
+		height: 25px;
+		text-align: center;
+		margin-bottom:3px;
+		font-size: 1rem;
+		padding-left: 0.4rem;
+		padding-right: 0.4rem;
+	}
+	/*下面的提示ul > li列表*/
+	ul.notiUl{
+		width: 100%;
+		position: absolute;
+		margin:0;
+		z-index: 999!important;
+		border:1px #f3f3f3 solid;
+	}
+	ul.mobileUl{
+		width: 100%;
+		position: absolute;
+		margin:0;
+		z-index: 999!important;
+		border:1px #f3f3f3 solid;
+		transition: linear 0.1s;
+		height: 0 !important;
+		overflow: hidden;
+		opacity: 0;
+	}
+	ul.showList{
+		opacity: 1;
+		height: 8.1rem !important;
+	}
+	/*下面的助记词 li表 */
+	li.notiLi{
+		text-align: center;
+		padding:10px 0!important;
+		cursor:pointer;
+		color: #999;
+	}
+	li.active{
+		background: #f3f3f3;
+	}
+	li.notiLi:hover{
+		background: #f3f3f3;
+	}
+	li.notiLi span{
+		color: #333;
+	}
+	#recSubmit:active{
+		background-color: #c0c0c0 !important;
+	}
+</style>
+<!--本页面样式 结束-->
 <!--钱包种子备份-->
 <div class="passModalMask" style="opacity: 0.3; padding: 0; background: #000;" ng-if="index.showneikuang"> </div>
 
-
 <div class="topbar-container" ng-include="'views/includes/topbar.html'" ng-init="titleSection='Recovery'; goBackToState = true"> </div>
 
-
-<div class="content preferences" ng-controller="recoveryFromSeed as recFromSeed">
+<div class="content preferences" ng-controller="recoveryFromSeed as recFromSeed" style="background: #fff">
 
 	<!--恢复成功 弹出-->
 	<div ng-include="'views/recoveryFromSeedAlert.html'" ng-if="recFromSeed.showAlert"></div>
@@ -32,25 +96,217 @@
 	</div>
 
 	<div>
-		<form name="settingsDeviceNameForm" class="columns" ng-submit="recFromSeed.recoveryForm()">
+		<form name="settingsDeviceNameForm" class="columns" ng-submit="recFromSeed.recoveryForm()" onkeydown=" if( event.keyCode==13 )return false ">
 			<label style="margin: 10px 0 8px;">
 				<span class="size-12 color333" style="text-transform: capitalize" translate>Your Wallet Seed:</span>
 			</label>
 
-			<textarea
-				style="height: 100px; font-size: 16px; color: #000; line-height: 26px; resize:none"
-				id="inputMnemonic"
-				ng-model="recFromSeed.inputMnemonic"
-				autocomplete="off">
-			</textarea>
+			<!--  更改为12个输入框  =================================================================================================================================================--->
+			<div ng-if="!index.isCordova">
+				<div style=" height: 120px; padding: 0 5px; margin-bottom:30px;">
+				<!--111-->
+				<div class="inptWrap">
+					<input class="inptMnemonic inptMnemonic3" lang="en" ng-model="recFromSeed.mnemonic1" ng-change="recFromSeed.funReg1()" ng-focus="recFromSeed.funReg1()" onkeyup="this.value=this.value.replace(/[^a-z]/g,'');" onchange="this.value=this.value.replace(/[^a-z]/g,'');" ng-keyup="recFromSeed.handleKeyboard1($event)" maxlength="8">
+					<ul class="notiUl" ng-if="recFromSeed.m1 == 1 && recFromSeed.mnemonic1">
+						<li class="notiLi" ng-class="{'active':$index == recFromSeed.num}" ng-repeat="item in recFromSeed.items" ng-click="recFromSeed.mnemonic1 = recFromSeed.mnemonic1+item; recFromSeed.hideUlclearItems()"> <span>{{recFromSeed.mnemonic1}}</span>{{item}} </li>
+					</ul>
+				</div>
+				<!--222-->
+				<div class="inptWrap">
+					<input class="inptMnemonic inptMnemonic3" lang="en" ng-model="recFromSeed.mnemonic2" ng-change="recFromSeed.funReg2()" ng-focus="recFromSeed.funReg2()" onkeyup="this.value=this.value.replace(/[^a-z]/g,'');" onchange="this.value=this.value.replace(/[^a-z]/g,'');" ng-keyup="recFromSeed.handleKeyboard2($event)" maxlength="8">
+					<ul class="notiUl" ng-if="recFromSeed.m1 == 2 && recFromSeed.mnemonic2">
+						<li class="notiLi" ng-class="{'active':$index == recFromSeed.num}" ng-repeat="item in recFromSeed.items" ng-click="recFromSeed.mnemonic2 = recFromSeed.mnemonic2+item; recFromSeed.hideUlclearItems()"> <span>{{recFromSeed.mnemonic2}}</span>{{item}} </li>
+					</ul>
+				</div>
+				<!--333-->
+				<div class="inptWrap">
+					<input class="inptMnemonic inptMnemonic3" lang="en" ng-model="recFromSeed.mnemonic3" ng-change="recFromSeed.funReg3()" ng-focus="recFromSeed.funReg3()" onkeyup="this.value=this.value.replace(/[^a-z]/g,'');" onchange="this.value=this.value.replace(/[^a-z]/g,'');" ng-keyup="recFromSeed.handleKeyboard3($event)" maxlength="8">
+					<ul class="notiUl" ng-if="recFromSeed.m1 == 3 && recFromSeed.mnemonic3">
+						<li class="notiLi" ng-class="{'active':$index == recFromSeed.num}" ng-repeat="item in recFromSeed.items" ng-click="recFromSeed.mnemonic3 = recFromSeed.mnemonic3+item; recFromSeed.hideUlclearItems()"> <span>{{recFromSeed.mnemonic3}}</span>{{item}} </li>
+					</ul>
+				</div>
+				<!--444-->
+				<div class="inptWrap noMarginR">
+					<input class="inptMnemonic inptMnemonic3" lang="en" ng-model="recFromSeed.mnemonic4" ng-change="recFromSeed.funReg4()" ng-focus="recFromSeed.funReg4()" onkeyup="this.value=this.value.replace(/[^a-z]/g,'');" onchange="this.value=this.value.replace(/[^a-z]/g,'');" ng-keyup="recFromSeed.handleKeyboard4($event)" maxlength="8">
+					<ul class="notiUl" ng-if="recFromSeed.m1 == 4 && recFromSeed.mnemonic4">
+						<li class="notiLi" ng-class="{'active':$index == recFromSeed.num}" ng-repeat="item in recFromSeed.items" ng-click="recFromSeed.mnemonic4 = recFromSeed.mnemonic4+item; recFromSeed.hideUlclearItems()"> <span>{{recFromSeed.mnemonic4}}</span>{{item}} </li>
+					</ul>
+				</div>
+				<!--清除浮动-->
+				<div class="clearB"></div>
+				<!--555-->
+				<div class="inptWrap">
+					<input class="inptMnemonic inptMnemonic3" lang="en" ng-model="recFromSeed.mnemonic5" ng-change="recFromSeed.funReg5()" ng-focus="recFromSeed.funReg5()" onkeyup="this.value=this.value.replace(/[^a-z]/g,'');" onchange="this.value=this.value.replace(/[^a-z]/g,'');" ng-keyup="recFromSeed.handleKeyboard5($event)" maxlength="8">
+					<ul class="notiUl" ng-if="recFromSeed.m1 == 5 && recFromSeed.mnemonic5">
+						<li class="notiLi" ng-class="{'active':$index == recFromSeed.num}" ng-repeat="item in recFromSeed.items" ng-click="recFromSeed.mnemonic5 = recFromSeed.mnemonic5+item; recFromSeed.hideUlclearItems()"> <span>{{recFromSeed.mnemonic5}}</span>{{item}} </li>
+					</ul>
+				</div>
+				<!--666-->
+				<div class="inptWrap">
+					<input class="inptMnemonic inptMnemonic3" lang="en" ng-model="recFromSeed.mnemonic6" ng-change="recFromSeed.funReg6()" ng-focus="recFromSeed.funReg6()" onkeyup="this.value=this.value.replace(/[^a-z]/g,'');" onchange="this.value=this.value.replace(/[^a-z]/g,'');" ng-keyup="recFromSeed.handleKeyboard6($event)" maxlength="8">
+					<ul class="notiUl" ng-if="recFromSeed.m1 == 6 && recFromSeed.mnemonic6">
+						<li class="notiLi" ng-class="{'active':$index == recFromSeed.num}" ng-repeat="item in recFromSeed.items" ng-click="recFromSeed.mnemonic6 = recFromSeed.mnemonic6+item; recFromSeed.hideUlclearItems()"> <span>{{recFromSeed.mnemonic6}}</span>{{item}} </li>
+					</ul>
+				</div>
+				<!--777	-->
+				<div class="inptWrap">
+					<input class="inptMnemonic inptMnemonic3" lang="en" ng-model="recFromSeed.mnemonic7" ng-change="recFromSeed.funReg7()" ng-focus="recFromSeed.funReg7()" onkeyup="this.value=this.value.replace(/[^a-z]/g,'');" onchange="this.value=this.value.replace(/[^a-z]/g,'');" ng-keyup="recFromSeed.handleKeyboard7($event)" maxlength="8">
+					<ul class="notiUl" ng-if="recFromSeed.m1 == 7 && recFromSeed.mnemonic7">
+						<li class="notiLi" ng-class="{'active':$index == recFromSeed.num}" ng-repeat="item in recFromSeed.items" ng-click="recFromSeed.mnemonic7 = recFromSeed.mnemonic7+item; recFromSeed.hideUlclearItems()"> <span>{{recFromSeed.mnemonic7}}</span>{{item}} </li>
+					</ul>
+				</div>
+				<!--888	-->
+				<div class="inptWrap noMarginR">
+					<input class="inptMnemonic inptMnemonic3" lang="en" ng-model="recFromSeed.mnemonic8" ng-change="recFromSeed.funReg8()" ng-focus="recFromSeed.funReg8()" onkeyup="this.value=this.value.replace(/[^a-z]/g,'');" onchange="this.value=this.value.replace(/[^a-z]/g,'');" ng-keyup="recFromSeed.handleKeyboard8($event)" maxlength="8">
+					<ul class="notiUl" ng-if="recFromSeed.m1 == 8 && recFromSeed.mnemonic8">
+						<li class="notiLi" ng-class="{'active':$index == recFromSeed.num}" ng-repeat="item in recFromSeed.items" ng-click="recFromSeed.mnemonic8 = recFromSeed.mnemonic8+item; recFromSeed.hideUlclearItems()"> <span>{{recFromSeed.mnemonic8}}</span>{{item}} </li>
+					</ul>
+				</div>
+				<!--清除浮动-->
+				<div class="clearB"></div>
+				<!--999-->
+				<div class="inptWrap">
+					<input class="inptMnemonic inptMnemonic3" lang="en" ng-model="recFromSeed.mnemonic9" ng-change="recFromSeed.funReg9()" ng-focus="recFromSeed.funReg9()" onkeyup="this.value=this.value.replace(/[^a-z]/g,'');" onchange="this.value=this.value.replace(/[^a-z]/g,'');" ng-keyup="recFromSeed.handleKeyboard9($event)" maxlength="8">
+					<ul class="notiUl" ng-if="recFromSeed.m1 == 9 && recFromSeed.mnemonic9">
+						<li class="notiLi" ng-class="{'active':$index == recFromSeed.num}" ng-repeat="item in recFromSeed.items" ng-click="recFromSeed.mnemonic9 = recFromSeed.mnemonic9+item; recFromSeed.hideUlclearItems()"> <span>{{recFromSeed.mnemonic9}}</span>{{item}} </li>
+					</ul>
+				</div>
+				<!--10 10 10-->
+				<div class="inptWrap">
+					<input class="inptMnemonic inptMnemonic3" lang="en" ng-model="recFromSeed.mnemonic10" ng-change="recFromSeed.funReg10()" ng-focus="recFromSeed.funReg10()" onkeyup="this.value=this.value.replace(/[^a-z]/g,'');" onchange="this.value=this.value.replace(/[^a-z]/g,'');" ng-keyup="recFromSeed.handleKeyboard10($event)" maxlength="8">
+					<ul class="notiUl" ng-if="recFromSeed.m1 == 10 && recFromSeed.mnemonic10">
+						<li class="notiLi" ng-class="{'active':$index == recFromSeed.num}" ng-repeat="item in recFromSeed.items" ng-click="recFromSeed.mnemonic10 = recFromSeed.mnemonic10+item; recFromSeed.hideUlclearItems()"> <span>{{recFromSeed.mnemonic10}}</span>{{item}} </li>
+					</ul>
+				</div>
+				<!--11 11 11-->
+				<div class="inptWrap">
+					<input class="inptMnemonic inptMnemonic3" lang="en" ng-model="recFromSeed.mnemonic11" ng-change="recFromSeed.funReg11()" ng-focus="recFromSeed.funReg11()" onkeyup="this.value=this.value.replace(/[^a-z]/g,'');" onchange="this.value=this.value.replace(/[^a-z]/g,'');" ng-keyup="recFromSeed.handleKeyboard11($event)" maxlength="8">
+					<ul class="notiUl" ng-if="recFromSeed.m1 == 11 && recFromSeed.mnemonic11">
+						<li class="notiLi" ng-class="{'active':$index == recFromSeed.num}" ng-repeat="item in recFromSeed.items" ng-click="recFromSeed.mnemonic11 = recFromSeed.mnemonic11+item; recFromSeed.hideUlclearItems()"> <span>{{recFromSeed.mnemonic11}}</span>{{item}} </li>
+					</ul>
+				</div>
+				<!--12 12 12-->
+				<div class="inptWrap noMarginR">
+					<input class="inptMnemonic inptMnemonic3"lang="en" ng-model="recFromSeed.mnemonic12" ng-change="recFromSeed.funReg12()" ng-focus="recFromSeed.funReg12()" onkeyup="this.value=this.value.replace(/[^a-z]/g,'');" onchange="this.value=this.value.replace(/[^a-z]/g,'');" ng-keyup="recFromSeed.handleKeyboard12($event)" maxlength="8">
+					<ul class="notiUl" ng-if="recFromSeed.m1 == 12 && recFromSeed.mnemonic12">
+						<li class="notiLi" ng-class="{'active':$index == recFromSeed.num}" ng-repeat="item in recFromSeed.items" ng-click="recFromSeed.mnemonic12 = recFromSeed.mnemonic12+item; recFromSeed.hideUlclearItems()"> <span>{{recFromSeed.mnemonic12}}</span>{{item}} </li>
+					</ul>
+				</div>
+				<!--清除浮动-->
+				<div class="clearB"></div>
+
+			</div>
+			</div>
+			<div ng-if="index.isCordova">
+				<div style=" height: 120px; padding: 0 5px; margin-bottom:30px;">
+					<!--111-->
+					<div class="inptWrap">
+						<input class="inptMnemonic inptMnemonic3" lang="en" ng-model="recFromSeed.mnemonic1" ng-change="recFromSeed.funReg1()" ng-focus="recFromSeed.funReg1()" onkeyup="this.value=this.value.replace(/[^a-z]/g,'');" onchange="this.value=this.value.replace(/[^a-z]/g,'');" ng-keyup="recFromSeed.handleKeyboard1($event)" maxlength="8">
+						<ul class="mobileUl" ng-class="{'showList':recFromSeed.m1 == 1 && recFromSeed.items.length > 0 }">
+							<li class="notiLi" ng-class="{'active':$index == recFromSeed.num}" ng-repeat="item in recFromSeed.items" ng-click="recFromSeed.mnemonic1 = recFromSeed.mnemonic1+item; recFromSeed.hideUlclearItems()"> <span>{{recFromSeed.mnemonic1}}</span>{{item}} </li>
+						</ul>
+					</div>
+					<!--222-->
+					<div class="inptWrap">
+						<input class="inptMnemonic inptMnemonic3" lang="en" ng-model="recFromSeed.mnemonic2" ng-change="recFromSeed.funReg2()" ng-focus="recFromSeed.funReg2()" onkeyup="this.value=this.value.replace(/[^a-z]/g,'');" onchange="this.value=this.value.replace(/[^a-z]/g,'');" ng-keyup="recFromSeed.handleKeyboard2($event)" maxlength="8">
+						<ul class="mobileUl" ng-class="{'showList':recFromSeed.m1 == 2 && recFromSeed.items.length > 0 }">
+							<li class="notiLi" ng-class="{'active':$index == recFromSeed.num}" ng-repeat="item in recFromSeed.items" ng-click="recFromSeed.mnemonic2 = recFromSeed.mnemonic2+item; recFromSeed.hideUlclearItems()"> <span>{{recFromSeed.mnemonic2}}</span>{{item}} </li>
+						</ul>
+					</div>
+					<!--333-->
+					<div class="inptWrap">
+						<input class="inptMnemonic inptMnemonic3" lang="en" ng-model="recFromSeed.mnemonic3" ng-change="recFromSeed.funReg3()" ng-focus="recFromSeed.funReg3()" onkeyup="this.value=this.value.replace(/[^a-z]/g,'');" onchange="this.value=this.value.replace(/[^a-z]/g,'');" ng-keyup="recFromSeed.handleKeyboard3($event)" maxlength="8">
+						<ul class="mobileUl" ng-class="{'showList':recFromSeed.m1 == 3 && recFromSeed.items.length > 0 }">
+							<li class="notiLi" ng-class="{'active':$index == recFromSeed.num}" ng-repeat="item in recFromSeed.items" ng-click="recFromSeed.mnemonic3 = recFromSeed.mnemonic3+item; recFromSeed.hideUlclearItems()"> <span>{{recFromSeed.mnemonic3}}</span>{{item}} </li>
+						</ul>
+					</div>
+					<!--444-->
+					<div class="inptWrap noMarginR">
+						<input class="inptMnemonic inptMnemonic3" lang="en" ng-model="recFromSeed.mnemonic4" ng-change="recFromSeed.funReg4()" ng-focus="recFromSeed.funReg4()" onkeyup="this.value=this.value.replace(/[^a-z]/g,'');" onchange="this.value=this.value.replace(/[^a-z]/g,'');" ng-keyup="recFromSeed.handleKeyboard4($event)" maxlength="8">
+						<ul class="mobileUl" ng-class="{'showList':recFromSeed.m1 == 4 && recFromSeed.items.length > 0 }">
+							<li class="notiLi" ng-class="{'active':$index == recFromSeed.num}" ng-repeat="item in recFromSeed.items" ng-click="recFromSeed.mnemonic4 = recFromSeed.mnemonic4+item; recFromSeed.hideUlclearItems()"> <span>{{recFromSeed.mnemonic4}}</span>{{item}} </li>
+						</ul>
+					</div>
+					<!--清除浮动-->
+					<div class="clearB"></div>
+					<!--555-->
+					<div class="inptWrap">
+						<input class="inptMnemonic inptMnemonic3" lang="en" ng-model="recFromSeed.mnemonic5" ng-change="recFromSeed.funReg5()" ng-focus="recFromSeed.funReg5()" onkeyup="this.value=this.value.replace(/[^a-z]/g,'');" onchange="this.value=this.value.replace(/[^a-z]/g,'');" ng-keyup="recFromSeed.handleKeyboard5($event)" maxlength="8">
+						<ul class="mobileUl" ng-class="{'showList':recFromSeed.m1 == 5 && recFromSeed.items.length > 0 }">
+							<li class="notiLi" ng-class="{'active':$index == recFromSeed.num}" ng-repeat="item in recFromSeed.items" ng-click="recFromSeed.mnemonic5 = recFromSeed.mnemonic5+item; recFromSeed.hideUlclearItems()"> <span>{{recFromSeed.mnemonic5}}</span>{{item}} </li>
+						</ul>
+					</div>
+					<!--666-->
+					<div class="inptWrap">
+						<input class="inptMnemonic inptMnemonic3" lang="en" ng-model="recFromSeed.mnemonic6" ng-change="recFromSeed.funReg6()" ng-focus="recFromSeed.funReg6()" onkeyup="this.value=this.value.replace(/[^a-z]/g,'');" onchange="this.value=this.value.replace(/[^a-z]/g,'');" ng-keyup="recFromSeed.handleKeyboard6($event)" maxlength="8">
+						<ul class="mobileUl" ng-class="{'showList':recFromSeed.m1 == 6 && recFromSeed.items.length > 0 }">
+							<li class="notiLi" ng-class="{'active':$index == recFromSeed.num}" ng-repeat="item in recFromSeed.items" ng-click="recFromSeed.mnemonic6 = recFromSeed.mnemonic6+item; recFromSeed.hideUlclearItems()"> <span>{{recFromSeed.mnemonic6}}</span>{{item}} </li>
+						</ul>
+					</div>
+					<!--777	-->
+					<div class="inptWrap">
+						<input class="inptMnemonic inptMnemonic3" lang="en" ng-model="recFromSeed.mnemonic7" ng-change="recFromSeed.funReg7()" ng-focus="recFromSeed.funReg7()" onkeyup="this.value=this.value.replace(/[^a-z]/g,'');" onchange="this.value=this.value.replace(/[^a-z]/g,'');" ng-keyup="recFromSeed.handleKeyboard7($event)" maxlength="8">
+						<ul class="mobileUl" ng-class="{'showList':recFromSeed.m1 == 7 && recFromSeed.items.length > 0 }"">
+							<li class="notiLi" ng-class="{'active':$index == recFromSeed.num}" ng-repeat="item in recFromSeed.items" ng-click="recFromSeed.mnemonic7 = recFromSeed.mnemonic7+item; recFromSeed.hideUlclearItems()"> <span>{{recFromSeed.mnemonic7}}</span>{{item}} </li>
+						</ul>
+					</div>
+					<!--888	-->
+					<div class="inptWrap noMarginR">
+						<input class="inptMnemonic inptMnemonic3" lang="en" ng-model="recFromSeed.mnemonic8" ng-change="recFromSeed.funReg8()" ng-focus="recFromSeed.funReg8()" onkeyup="this.value=this.value.replace(/[^a-z]/g,'');" onchange="this.value=this.value.replace(/[^a-z]/g,'');" ng-keyup="recFromSeed.handleKeyboard8($event)" maxlength="8">
+						<ul class="mobileUl" ng-class="{'showList':recFromSeed.m1 == 8 && recFromSeed.items.length > 0 }">
+							<li class="notiLi" ng-class="{'active':$index == recFromSeed.num}" ng-repeat="item in recFromSeed.items" ng-click="recFromSeed.mnemonic8 = recFromSeed.mnemonic8+item; recFromSeed.hideUlclearItems()"> <span>{{recFromSeed.mnemonic8}}</span>{{item}} </li>
+						</ul>
+					</div>
+					<!--清除浮动-->
+					<div class="clearB"></div>
+					<!--999-->
+					<div class="inptWrap">
+						<input class="inptMnemonic inptMnemonic3" lang="en" ng-model="recFromSeed.mnemonic9" ng-change="recFromSeed.funReg9()" ng-focus="recFromSeed.funReg9()" onkeyup="this.value=this.value.replace(/[^a-z]/g,'');" onchange="this.value=this.value.replace(/[^a-z]/g,'');" ng-keyup="recFromSeed.handleKeyboard9($event)" maxlength="8">
+						<ul class="mobileUl" ng-class="{'showList':recFromSeed.m1 == 9 && recFromSeed.items.length > 0 }">
+							<li class="notiLi" ng-class="{'active':$index == recFromSeed.num}" ng-repeat="item in recFromSeed.items" ng-click="recFromSeed.mnemonic9 = recFromSeed.mnemonic9+item; recFromSeed.hideUlclearItems()"> <span>{{recFromSeed.mnemonic9}}</span>{{item}} </li>
+						</ul>
+					</div>
+					<!--10 10 10-->
+					<div class="inptWrap">
+						<input class="inptMnemonic inptMnemonic3" lang="en" ng-model="recFromSeed.mnemonic10" ng-change="recFromSeed.funReg10()" ng-focus="recFromSeed.funReg10()" onkeyup="this.value=this.value.replace(/[^a-z]/g,'');" onchange="this.value=this.value.replace(/[^a-z]/g,'');" ng-keyup="recFromSeed.handleKeyboard10($event)" maxlength="8">
+						<ul class="mobileUl" ng-class="{'showList':recFromSeed.m1 == 10 && recFromSeed.items.length > 0 }">
+							<li class="notiLi" ng-class="{'active':$index == recFromSeed.num}" ng-repeat="item in recFromSeed.items" ng-click="recFromSeed.mnemonic10 = recFromSeed.mnemonic10+item; recFromSeed.hideUlclearItems()"> <span>{{recFromSeed.mnemonic10}}</span>{{item}} </li>
+						</ul>
+					</div>
+					<!--11 11 11-->
+					<div class="inptWrap">
+						<input class="inptMnemonic inptMnemonic3" lang="en" ng-model="recFromSeed.mnemonic11" ng-change="recFromSeed.funReg11()" ng-focus="recFromSeed.funReg11()" onkeyup="this.value=this.value.replace(/[^a-z]/g,'');" onchange="this.value=this.value.replace(/[^a-z]/g,'');" ng-keyup="recFromSeed.handleKeyboard11($event)" maxlength="8">
+						<ul class="mobileUl" ng-class="{'showList':recFromSeed.m1 == 11 && recFromSeed.items.length > 0 }">
+							<li class="notiLi" ng-class="{'active':$index == recFromSeed.num}" ng-repeat="item in recFromSeed.items" ng-click="recFromSeed.mnemonic11 = recFromSeed.mnemonic11+item; recFromSeed.hideUlclearItems()"> <span>{{recFromSeed.mnemonic11}}</span>{{item}} </li>
+						</ul>
+					</div>
+					<!--12 12 12-->
+					<div class="inptWrap noMarginR">
+						<input class="inptMnemonic inptMnemonic3"lang="en" ng-model="recFromSeed.mnemonic12" ng-change="recFromSeed.funReg12()" ng-focus="recFromSeed.funReg12()" onkeyup="this.value=this.value.replace(/[^a-z]/g,'');" onchange="this.value=this.value.replace(/[^a-z]/g,'');" ng-keyup="recFromSeed.handleKeyboard12($event)" maxlength="8">
+						<ul class="mobileUl" ng-class="{'showList':recFromSeed.m1 == 12 && recFromSeed.items.length > 0 }">
+							<li class="notiLi" ng-class="{'active':$index == recFromSeed.num}" ng-repeat="item in recFromSeed.items" ng-click="recFromSeed.mnemonic12 = recFromSeed.mnemonic12+item; recFromSeed.hideUlclearItems()"> <span>{{recFromSeed.mnemonic12}}</span>{{item}} </li>
+						</ul>
+					</div>
+					<!--清除浮动-->
+					<div class="clearB"></div>
+
+				</div>
+			</div>
+			<!--<textarea-->
+				<!--style="height: 100px; font-size: 16px; color: #000; line-height: 26px; resize:none"-->
+				<!--id="inputMnemonic"-->
+				<!--ng-model="recFromSeed.inputMnemonic"-->
+				<!--autocomplete="off">-->
+			<!--</textarea>-->
 
 			<!--按钮 点击恢复钱包-->
 			<input
 				ng-show="!recFromSeed.scanning"
 				type="submit"
+				id="recSubmit"
 				class="button expand black round"
 				value="{{'Recover'|translate}}"
-				style="background: #0095ff;">
+				style="background: #0095ff;margin-top:20px;">
 			<!--按钮 点击恢复钱包 结束-->
 
 		</form>

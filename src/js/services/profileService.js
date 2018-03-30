@@ -14,8 +14,8 @@ angular.module('copayApp.services').factory('profileService', function profileSe
 
 	root.formatAmount = function(amount, asset, opts) {
       	var config = configService.getSync().wallet.settings;
-      	//if (config.unitCode == 'byte') return amount;
 
+      	//if (config.unitCode == 'byte') return amount;
       	//TODO : now only works for english, specify opts to change thousand separator and decimal separator
 		if(asset == 'blackbytes') {
 			return this.Utils.formatAmount(amount, config.bbUnitCode, opts);
@@ -98,6 +98,7 @@ angular.module('copayApp.services').factory('profileService', function profileSe
     function saveTempKeys(tempDeviceKey, prevTempDeviceKey, onDone){
 		$timeout(function(){
 			console.log("will save temp device keys");//, tempDeviceKey, prevTempDeviceKey);
+
 			root.profile.tempDeviceKey = tempDeviceKey.toString('base64');
 			if (prevTempDeviceKey)
 				root.profile.prevTempDeviceKey = prevTempDeviceKey.toString('base64');
@@ -108,16 +109,17 @@ angular.module('copayApp.services').factory('profileService', function profileSe
     }
 
     function unlockWalletAndInitDevice(){
-        // wait till the wallet fully loads
-		breadcrumbs.add('unlockWalletAndInitDevice');
-		//Hide the mainSection
-		var mainSectionElement = angular.element( document.querySelector( '#mainSection' ) );
+
+		breadcrumbs.add('unlockWalletAndInitDevice');   // wait till the wallet fully loads
+
+		var mainSectionElement = angular.element( document.querySelector( '#mainSection' ) );   //Hide the mainSection
 		mainSectionElement.css('visibility','hidden');
 
         var removeListener = $rootScope.$on('Local/BalanceUpdated', function(){
             removeListener();
 			breadcrumbs.add('unlockWalletAndInitDevice BalanceUpdated');
-            root.insistUnlockFC(null, function(){
+
+			root.insistUnlockFC(null, function(){
 				breadcrumbs.add('unlockWalletAndInitDevice unlocked');
 
 				//After unlock, make mainSection visible again
@@ -127,9 +129,9 @@ angular.module('copayApp.services').factory('profileService', function profileSe
                 if (!root.focusedClient.credentials.xPrivKey)
                     throw Error("xPrivKey still not set after unlock");
                 console.log('unlocked: '+root.focusedClient.credentials.xPrivKey);
+
                 var config = configService.getSync();
-                root.focusedClient.initDeviceProperties(
-                    root.focusedClient.credentials.xPrivKey, root.profile.my_device_address, config.hub, config.deviceName);
+                root.focusedClient.initDeviceProperties( root.focusedClient.credentials.xPrivKey, root.profile.my_device_address, config.hub, config.deviceName );
 				$rootScope.$emit('Local/BalanceUpdatedAndWalletUnlocked');
             });
         });
@@ -146,16 +148,21 @@ angular.module('copayApp.services').factory('profileService', function profileSe
             $log.debug('Preferences read');
             if (err)
                 return cb(err);
+
             root.setWalletClients();
+
             storageService.getFocusedWalletId(function(err, focusedWalletId) {
                 if (err) 
                     return cb(err);
+
                 root._setFocus(focusedWalletId, true, function() {
-                    console.log("focusedWalletId", focusedWalletId);
-					require('trustnote-common/wallet.js');
+                	console.log("focusedWalletId", focusedWalletId);
+
+                	require('trustnote-common/wallet.js');
 					var device = require('trustnote-common/device.js');
                     var config = configService.getSync();
                     var firstWc = root.walletClients[lodash.keys(root.walletClients)[0]];
+
                     if (root.profile.xPrivKeyEncrypted){
                         console.log('priv key is encrypted, will wait for UI and request password');
                         // assuming bindProfile is called on encrypted keys only at program startup
@@ -178,32 +185,35 @@ angular.module('copayApp.services').factory('profileService', function profileSe
         });
     };
 
-    root.loadAndBindProfile = function(cb) {
-	  	breadcrumbs.add('loadAndBindProfile');
-      storageService.gethaschoosen(function (err, val) {root.haschoosen = val;});
-      	storageService.getDisclaimerFlag(function(err, val) {
-        	if (!val) {
-		  		breadcrumbs.add('Non agreed disclaimer');
-          		return cb(new Error('NONAGREEDDISCLAIMER: Non agreed disclaimer'));
-        	} else {
-          		storageService.getProfile(function(err, profile) {
-            		if (err) {
-              			$rootScope.$emit('Local/DeviceError', err);
-              			return cb(err);
-            		}
-            		if (!profile) {
-						breadcrumbs.add('no profile');
-                		return cb(new Error('NOPROFILE: No profile'));
-            		}
-            		else {
-              			$log.debug('Profile read');
-              			return root.bindProfile(profile, cb);
-            		}
+	root.loadAndBindProfile = function (cb) {
+		breadcrumbs.add('loadAndBindProfile');
 
-          		});
-        	}
-      	});
-    };
+		storageService.gethaschoosen(function (err, val) {
+			root.haschoosen = val;
+		});
+
+		storageService.getDisclaimerFlag(function (err, val) {
+			if (!val) {
+				breadcrumbs.add('Non agreed disclaimer');
+				return cb( new Error('NONAGREEDDISCLAIMER: Non agreed disclaimer') );
+			} else {
+				storageService.getProfile(function (err, profile) {
+					if (err) {
+						$rootScope.$emit('Local/DeviceError', err);
+						return cb(err);
+					}
+					if (!profile) {
+						breadcrumbs.add('no profile');
+						return cb(new Error('NOPROFILE: No profile'));
+					}
+					else {
+						$log.debug('Profile read');
+						return root.bindProfile(profile, cb);
+					}
+				});
+			}
+		});
+	};
 
     
     root._seedWallet = function(opts, cb) {
@@ -247,7 +257,8 @@ angular.module('copayApp.services').factory('profileService', function profileSe
       	} else {
         	var lang = uxLanguage.getCurrentLanguage();
           	console.log("will seedFromRandomWithMnemonic for language "+lang);
-        	try {
+
+          	try {
           		walletClient.seedFromRandomWithMnemonic({
 					network: network,
 					passphrase: opts.passphrase,
@@ -271,50 +282,58 @@ angular.module('copayApp.services').factory('profileService', function profileSe
       	return cb(null, walletClient);
     };
 
-    
+
+	// 第一个钱包 the first wallet is created in _createNewProfile()
     root._createNewProfile = function(opts, cb) {
         console.log("_createNewProfile");
         if (opts.noWallet)
-            return cb(null, Profile.create());
+            return cb(null, Profile.create());	// Profile.create() profile.js中的create函数
+
         root._seedWallet({}, function(err, walletClient) {
             if (err)
                 return cb(err);
             var config = configService.getSync();
-			require('trustnote-common/wallet.js'); // load hub/ message handlers
+			require('trustnote-common/wallet.js'); // load hub / message handlers
+
 			var device = require('trustnote-common/device.js');
             var tempDeviceKey = device.genPrivKey();
-			// initDeviceProperties sets my_device_address needed by walletClient.createWallet
-			walletClient.initDeviceProperties(walletClient.credentials.xPrivKey, null, config.hub, config.deviceName);
+
+			walletClient.initDeviceProperties(walletClient.credentials.xPrivKey, null, config.hub, config.deviceName);	// initDeviceProperties sets my_device_address needed by walletClient.createWallet
             var walletName = gettextCatalog.getString('TTT Wallet');
-            walletClient.createWallet(walletName, 1, 1, {
-                network: 'livenet'
-            }, function(err) {
-                if (err)
-                    return cb(gettext('Error creating wallet')+": "+err);
-                console.log("created wallet, client: ", JSON.stringify(walletClient));
-                var xPrivKey = walletClient.credentials.xPrivKey;
-                var mnemonic = walletClient.credentials.mnemonic;
-                console.log("mnemonic: "+mnemonic+', xPrivKey: '+xPrivKey);
-                var p = Profile.create({
-                    credentials: [JSON.parse(walletClient.export())],
-                    xPrivKey: xPrivKey,
-                    mnemonic: mnemonic,
-                    tempDeviceKey: tempDeviceKey.toString('base64'),
-                    my_device_address: device.getMyDeviceAddress()
-                });
+
+			walletClient.createWallet(walletName, 1, 1, {
+				network: 'livenet'
+			}, function (err) {
+				if (err)
+					return cb(gettext('Error creating wallet') + ": " + err);
+				console.log("created wallet, client: ", JSON.stringify(walletClient));
+
+				var xPrivKey = walletClient.credentials.xPrivKey;
+				var mnemonic = walletClient.credentials.mnemonic;
+				console.log("mnemonic: " + mnemonic + ', xPrivKey: ' + xPrivKey);
+
+				var p = Profile.create({
+					credentials: [JSON.parse(walletClient.export())],
+					xPrivKey: xPrivKey,
+					mnemonic: mnemonic,
+					tempDeviceKey: tempDeviceKey.toString('base64'),
+					my_device_address: device.getMyDeviceAddress()
+				});
+
 				device.setTempKeys(tempDeviceKey, null, saveTempKeys);
-                return cb(null, p);
-            });
+
+				return cb(null, p);
+			});
         });
     };
 
 
-	// 创建新钱包
-    // 创建额外的钱包 第一个钱包在 上面的函数中创建的 create additional wallet (the first wallet is created in _createNewProfile())
-    root.createWallet = function(opts, cb) {
-        $log.debug('Creating Wallet:', opts);
-		if (!root.focusedClient.credentials.xPrivKey){ // locked
-			root.unlockFC(null, function(err){
+    // 创建新钱包 （ 第一个钱包在 上面的函数中创建的 ） create additional wallet (the first wallet is created in _createNewProfile())
+	root.createWallet = function (opts, cb) {
+		$log.debug('Creating Wallet:', opts);  // Creating Wallet: {"m":1,"n":1,"name":"wwwddd","networkName":"livenet","cosigners":[]}
+
+		if (!root.focusedClient.credentials.xPrivKey) { // locked
+			root.unlockFC(null, function (err) {
 				if (err)
 					return cb(err.message);
 				root.createWallet(opts, cb);
@@ -323,36 +342,62 @@ angular.module('copayApp.services').factory('profileService', function profileSe
 		}
 
 		var walletDefinedByKeys = require('trustnote-common/wallet_defined_by_keys.js');
-        walletDefinedByKeys.readNextAccount(function(account){
-            console.log("next account = "+account);
-            if (!opts.extendedPrivateKey && !opts.mnemonic){
+		walletDefinedByKeys.readNextAccount(function (account) {
+
+			console.log("next account = " + account);
+			if (!opts.extendedPrivateKey && !opts.mnemonic) {
 				if (!root.focusedClient.credentials.xPrivKey)
 					throw Error("no root.focusedClient.credentials.xPrivKey");
-                $log.debug("reusing xPrivKey from focused client");
-                opts.extendedPrivateKey = root.focusedClient.credentials.xPrivKey;
-                opts.mnemonic = root.profile.mnemonic;
-                opts.account = account;
-            }
-            root._seedWallet(opts, function(err, walletClient) {
-                if (err)
-                    return cb(err);
+				$log.debug("reusing xPrivKey from focused client");
 
-                walletClient.createWallet(opts.name, opts.m, opts.n, {
-                    network: opts.networkName,
-                    account: opts.account,
-                    cosigners: opts.cosigners
-                }, function(err) {
-                    if (err) 
-                        return cb(gettext('Error creating wallet')+": "+err);
-                    root._addWalletClient(walletClient, opts, cb);
-                });
-            });
-        });
-    };
+				opts.extendedPrivateKey = root.focusedClient.credentials.xPrivKey;
+				opts.mnemonic = root.profile.mnemonic;
+				opts.account = account;
+			}
+			root._seedWallet(opts, function (err, walletClient) {
+				if (err)
+					return cb(err);
+
+				walletClient.createWallet(opts.name, opts.m, opts.n, {
+					network: opts.networkName,
+					account: opts.account,
+					cosigners: opts.cosigners
+				}, function (err) {
+					if (err)
+						return cb(gettext('Error creating wallet') + ": " + err);
+					root._addWalletClient(walletClient, opts, cb);
+				});
+			});
+		});
+	};
     // 创建新钱包 结束
 
+	//克隆钱包同步
 	root.synchronization = function(opts, cb) {
-		$log.debug('Creating Wallet:', opts);
+		// opts：
+		// {
+		//  "m":1,
+		// 	"n":1,
+		// 	"name":"Wallet #0",
+		// 	"network":"livenet",
+		// 	"extendedPrivateKey":{    扩展私钥
+		// 		"network":"livenet",
+		// 		"depth":0,
+		// 		"fingerPrint":953664,
+		// 		"parentFingerPrint":0,
+		// 		"childIndex":0,
+		// 		"chainCode":"9a22e7c830b0ad83e63fb3eee6a2b5e4c7b803189317bb44878eb8",  链码
+		// 		"privateKey":"643660c1cee52460d815cd070ff02fe0e29b31f54c9c9818b824d3543", 专用（私人的）密钥
+		// 		"checksum":-310396521,
+		// 		"xprivkey":"xprv9s21ZrQH143K3bN22jAJ35LZXV4WNGPMqpGdNq7g2KVacwHyuBJQdGydza9E9qsqsABkj4X2mRCWuNVNzQaZ"
+		//  },
+		// 	"cosigners":[],
+		// 	"account":0
+		// }
+		$log.debug('synchronization :', opts);
+		console.log(opts.extendedPrivateKey);
+		//alert(JSON.stringify(opts.extendedPrivateKey));
+
 		if (!root.focusedClient.credentials.xPrivKey){ // locked
 			root.unlockFC(null, function(err){
 				if (err)
@@ -361,9 +406,14 @@ angular.module('copayApp.services').factory('profileService', function profileSe
 			});
 			return console.log('need password to create new wallet');
 		}
+
 		var walletDefinedByKeys = require('trustnote-common/wallet_defined_by_keys.js');
 		walletDefinedByKeys.readNextAccount(function(account){
 			opts.extendedPrivateKey = root.focusedClient.credentials.xPrivKey;
+
+			console.log(opts.extendedPrivateKey);
+			//alert(JSON.stringify(opts.extendedPrivateKey));
+
 			root._seedWallet(opts, function(err, walletClient) {
 				if (err)
 					return cb(err);
@@ -380,24 +430,53 @@ angular.module('copayApp.services').factory('profileService', function profileSe
 			});
 		});
 	};
+	// 克隆钱包同步 结束
 
 
     root.getClient = function(walletId) {
       return root.walletClients[walletId];
     };
 
+    // 删除钱包
     root.deleteWallet = function(opts, cb) {
-        var client = opts.client || root.focusedClient;
+		var client = opts.client || root.focusedClient;
+		// client = opts.client(空) || root.focusedClient：
+		// {
+		// 	"verbose":false, 详细
+		// 	"timeout":50000,
+		// 	"credentials":{
+		// 			"version":"1.0.0",
+		// 			"derivationStrategy":"BIP44",
+		// 			"account":5,
+		// 			"walletId":"6x/uR6kGOKxNGTWS2e2mu/Y951lcATW8i", 钱包Id
+		// 			"network":"livenet",
+		// 			"xPrivKey":"xprv9s21ZrQH143K3r9EZgkS8ruGPraQCH3wM38GpXf75kb57Kj9Upw8vmzBWRLuNAbh7E5ejvmTpLnq51ku42jD",
+		// 			"xPubKey":"xpub6BgSwBHLeQ24vpku7NMt2Piz3xDBPq4iPncdBWLCWHmmP9rKeNjpmDRrtFWMDtV5f3MeRY5ctaYNTXk7c6jPJTZ",
+		// 			"publicKeyRing":[{"xPubKey":"xpub6BgSwBHLeQ24vpku7NMt2Piz3xDBPq4iPncdBWLCWHmmP9rKeNjpmDRrtFWMDtV5f3MeRY5ctaYNTXk7c6jPJTZj"}],
+		// 			"walletName":"钱包名字",
+		// 			"m":1,
+		// 			"n":1,
+		// 			"mnemonic":"maid screen asset grace across second toe into click",
+		// 			"mnemonicHasPassphrase":false
+		// 	},
+		// 	"started":true,
+		// 	"backgroundColor":"#FF599E"
+		// }
+
         var walletId = client.credentials.walletId;
         $log.debug('Deleting Wallet:', client.credentials.walletName);
         breadcrumbs.add('Deleting Wallet: ' + client.credentials.walletName);
 
+		// alert(JSON.stringify(root.profile.credentials))
         root.profile.credentials = lodash.reject(root.profile.credentials, {
             walletId: walletId
         });
+        // alert(JSON.stringify(root.profile.credentials))
 
+		//alert(JSON.stringify(root.walletClients))
         delete root.walletClients[walletId];
         root.focusedClient = null;
+		//alert(JSON.stringify(root.walletClients))
 
         storageService.clearBackupFlag(walletId, function(err) {
             if (err) $log.warn(err);
@@ -430,30 +509,30 @@ angular.module('copayApp.services').factory('profileService', function profileSe
       	});
     }
 
-    root._addWalletClient = function(walletClient, opts, cb) {
-        var walletId = walletClient.credentials.walletId;
+	root._addWalletClient = function (walletClient, opts, cb) {
+		var walletId = walletClient.credentials.walletId;
 
-        // check if exists
-        var w = lodash.find(root.profile.credentials, { 'walletId': walletId });
-        if (w)
-            return cb(gettext('Wallet already in trustnote' + ": ") + w.walletName);
+		// check if exists
+		var w = lodash.find(root.profile.credentials, {'walletId': walletId});
+		if (w)
+			return cb(gettext('Wallet already in trustnote' + ": ") + w.walletName);
 
-        root.profile.credentials.push(JSON.parse(walletClient.export()));
-        root.setWalletClients();
+		root.profile.credentials.push(JSON.parse(walletClient.export()));
+		root.setWalletClients();
 
-		// assign wallet color based on first character of walletId
+		// assign（分配） wallet color based on first character of walletId
 		var color = configService.colorOpts[walletId.charCodeAt(0) % configService.colorOpts.length];
 		var configOpts = {colorFor: {}};
 		configOpts.colorFor[walletId] = color;
-		configService.set(configOpts, function(err){
-			root.setAndStoreFocus(walletId, true, function() {
-				storageService.storeProfile(root.profile, function(err) {
+		configService.set(configOpts, function (err) {
+			root.setAndStoreFocus(walletId, true, function () {
+				storageService.storeProfile(root.profile, function (err) {
 					var config = configService.getSync();
 					return cb(err, walletId);
 				});
 			});
-        });
-    };
+		});
+	};
 
     
     root.importWallet = function(str, opts, cb) {
@@ -496,6 +575,7 @@ angular.module('copayApp.services').factory('profileService', function profileSe
       	});
     };
 
+    // 规范化 助记词
     root._normalizeMnemonic = function(words) {
       	var isJA = words.indexOf('\u3000') > -1;
       	var wordList = words.split(/[\u3000\s]+/);
@@ -581,6 +661,7 @@ angular.module('copayApp.services').factory('profileService', function profileSe
     root.clearMnemonic = function(cb){
         delete root.profile.mnemonic;
         delete root.profile.mnemonicEncrypted;
+
         for (var wid in root.walletClients)
             root.walletClients[wid].clearMnemonic();
         	storageService.storeProfile(root.profile, cb);
@@ -588,20 +669,23 @@ angular.module('copayApp.services').factory('profileService', function profileSe
 
     root.setPrivateKeyEncryptionFC = function(password, cb) {
         var fc = root.focusedClient;
-        $log.debug('Encrypting private key for', fc.credentials.walletName);
+        $log.debug('Encrypting private key for', fc.credentials.walletName);  // root.focusedClient (fc)  ---.credentials.walletName
 
         fc.setPrivateKeyEncryption(password);
         if (!fc.credentials.xPrivKeyEncrypted)
             throw Error("no xPrivKeyEncrypted after setting encryption");
-        root.profile.xPrivKeyEncrypted = fc.credentials.xPrivKeyEncrypted;
+
+        root.profile.xPrivKeyEncrypted = fc.credentials.xPrivKeyEncrypted;  // root.focusedClient (fc)  ---.credentials.xPrivKeyEncrypted
         root.profile.mnemonicEncrypted = fc.credentials.mnemonicEncrypted;
         delete root.profile.xPrivKey;
         delete root.profile.mnemonic;
         root.lockFC();
+
         for (var wid in root.walletClients){
             root.walletClients[wid].credentials.xPrivKeyEncrypted = root.profile.xPrivKeyEncrypted;
             delete root.walletClients[wid].credentials.xPrivKey;
         }
+
         storageService.storeProfile(root.profile, function() {
             $log.debug('Wallet encrypted');
                 return cb();
@@ -628,6 +712,7 @@ angular.module('copayApp.services').factory('profileService', function profileSe
         root.profile.mnemonic = fc.credentials.mnemonic;
         delete root.profile.xPrivKeyEncrypted;
         delete root.profile.mnemonicEncrypted;
+
         for (var wid in root.walletClients){
             root.walletClients[wid].credentials.xPrivKey = root.profile.xPrivKey;
             delete root.walletClients[wid].credentials.xPrivKeyEncrypted;
@@ -698,7 +783,7 @@ angular.module('copayApp.services').factory('profileService', function profileSe
                 return cb();
             $timeout(function(){
                 root.insistUnlockFC(err.message, cb);
-            }, 1000);
+            }, 100);
         });
     };
 

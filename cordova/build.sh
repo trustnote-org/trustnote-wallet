@@ -83,7 +83,7 @@ if [ ! -d $PROJECT ]; then
 #  checkOK
 
 	if [ $CURRENT_OS == "IOS" ]; then
-		cordova plugin add https://github.com/phonegap/phonegap-plugin-barcodescanner.git
+		cordova plugin add https://github.com/trustnote/phonegap-plugin-barcodescanner.git
 		checkOK
 
 		cordova plugin add cordova-plugin-exitapp-ios
@@ -108,7 +108,7 @@ if [ ! -d $PROJECT ]; then
 	cordova plugin add cordova-plugin-x-toast && cordova prepare
 	checkOK
 
-	cordova plugin add https://github.com/VersoSolutions/CordovaClipboard
+	cordova plugin add https://github.com/trustnote/CordovaClipboard.git
 	checkOK
 
 	cordova plugin add https://github.com/EddyVerbruggen/SocialSharing-PhoneGap-Plugin.git && cordova prepare
@@ -141,7 +141,7 @@ if [ ! -d $PROJECT ]; then
 	cordova plugin add cordova-ios-requires-fullscreen
 	checkOK
 
-	cordova plugin add https://gitee.com/trustnote/cordova-sqlite-plugin.git
+	cordova plugin add https://github.com/trustnote/cordova-sqlite-plugin.git
 	checkOK
 
 	cordova plugin add cordova-plugin-device-name

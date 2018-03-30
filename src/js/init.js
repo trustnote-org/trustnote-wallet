@@ -1,5 +1,5 @@
 'use strict';
-
+// 页面加载完成后,再加载模块
 angular.element(document).ready(function () {
 
 	// Run copayApp after device is ready.

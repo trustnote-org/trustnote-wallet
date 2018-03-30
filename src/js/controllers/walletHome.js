@@ -839,7 +839,7 @@ angular.module('copayApp.controllers').controller('walletHomeController', functi
 
 
 
-					// 发送多付款
+					//  发 送 资 金 发生错误的情况
 					fc.sendMultiPayment(opts, function (err) {
 						// if multisig, it might take very long before the callback is called
 						indexScope.setOngoingProcess(gettext('sending'), false);
@@ -854,7 +854,11 @@ angular.module('copayApp.controllers').controller('walletHomeController', functi
 							else if (err.match(/device address/))
 								err = "This is a private asset, please send it only by clicking links from chat";
 							else if (err.match(/no funded/))
-								err = "Not enough spendable funds";
+								err = gettextCatalog.getString('Not enough spendable funds') ;
+							else if (err.match(/connection closed/))
+								err = gettextCatalog.getString('[internal] connection closed') ;
+							else if (err.match(/funds from/))
+								err = err.substring(err.indexOf("from")+4, err.indexOf("for")) + gettextCatalog.getString(err.substr(0,err.indexOf("from"))) + gettextCatalog.getString(". It needs atleast ")  + parseInt(err.substring(err.indexOf("for")+3, err.length))/1000000 + "MN";
 							return self.setSendError(err);
 						}
 						var binding = self.binding;
