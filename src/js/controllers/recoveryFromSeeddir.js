@@ -523,13 +523,15 @@ angular.module('copayApp.controllers').controller('recoveryFromSeeddir', functio
 
 	self.jumpNum = 1;
 	self.jumpNext = function () {
+		window.clearTimeout(self.t)
 		var inputList = document.getElementsByClassName('inptMnemonic1');
 		if(self.jumpNum == 12){
 			return;
 		}else{
-			inputList[self.jumpNum].focus();
-			self.jumpNum++;
-			//console.log(self.jumpNum)
+			self.t = setTimeout(function () {
+				inputList[self.jumpNum].focus();
+				self.jumpNum++;
+			},100);
 		}
 	};
 
@@ -544,14 +546,15 @@ angular.module('copayApp.controllers').controller('recoveryFromSeeddir', functio
 
 // input框中 内容变化时 触发对应函数
 	self.funReg1 = function () {
+		self.items = []
 		self.m1 = self.jumpNum = 1;
-
 		if(reg.test(self.mnemonic1)){
 			self.str = self.mnemonic1;
 			self.funReg();
 		}
 	};
 	self.funReg2 = function () {
+		self.items = []
 		self.m1 = self.jumpNum = 2;
 
 		if(reg.test(self.mnemonic2)){
@@ -560,6 +563,7 @@ angular.module('copayApp.controllers').controller('recoveryFromSeeddir', functio
 		}
 	};
 	self.funReg3 = function () {
+		self.items = []
 		self.m1 = self.jumpNum = 3;
 
 		if(reg.test(self.mnemonic3)){
@@ -568,6 +572,7 @@ angular.module('copayApp.controllers').controller('recoveryFromSeeddir', functio
 		}
 	};
 	self.funReg4 = function () {
+		self.items = []
 		self.m1 = self.jumpNum = 4;
 
 		if(reg.test(self.mnemonic4)){
@@ -576,6 +581,7 @@ angular.module('copayApp.controllers').controller('recoveryFromSeeddir', functio
 		}
 	};
 	self.funReg5 = function () {
+		self.items = []
 		self.m1 = self.jumpNum = 5;
 
 		if(reg.test(self.mnemonic5)){
@@ -584,6 +590,7 @@ angular.module('copayApp.controllers').controller('recoveryFromSeeddir', functio
 		}
 	};
 	self.funReg6 = function () {
+		self.items = []
 		self.m1 = self.jumpNum = 6;
 
 		if(reg.test(self.mnemonic6)){
@@ -592,14 +599,17 @@ angular.module('copayApp.controllers').controller('recoveryFromSeeddir', functio
 		}
 	};
 	self.funReg7 = function () {
+		self.items = []
 		self.m1 = self.jumpNum = 7;
 
 		if(reg.test(self.mnemonic7)){
+			self.items = []
 			self.str = self.mnemonic7;
 			self.funReg();
 		}
 	};
 	self.funReg8 = function () {
+		self.items = []
 		self.m1 = self.jumpNum = 8;
 
 		if(reg.test(self.mnemonic8)){
@@ -608,6 +618,7 @@ angular.module('copayApp.controllers').controller('recoveryFromSeeddir', functio
 		}
 	};
 	self.funReg9 = function () {
+		self.items = []
 		self.m1 = self.jumpNum = 9;
 
 		if(reg.test(self.mnemonic9)){
@@ -616,6 +627,7 @@ angular.module('copayApp.controllers').controller('recoveryFromSeeddir', functio
 		}
 	};
 	self.funReg10 = function () {
+		self.items = []
 		self.m1 = self.jumpNum = 10;
 
 		if(reg.test(self.mnemonic10)){
@@ -624,6 +636,7 @@ angular.module('copayApp.controllers').controller('recoveryFromSeeddir', functio
 		}
 	};
 	self.funReg11 = function () {
+		self.items = []
 		self.m1 = self.jumpNum = 11;
 
 		if(reg.test(self.mnemonic11)){
@@ -632,6 +645,7 @@ angular.module('copayApp.controllers').controller('recoveryFromSeeddir', functio
 		}
 	};
 	self.funReg12 = function () {
+		self.items = []
 		self.m1 = self.jumpNum = 12;
 
 		if(reg.test(self.mnemonic12)){
