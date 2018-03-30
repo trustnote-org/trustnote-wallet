@@ -46,17 +46,15 @@ angular.module('copayApp.controllers').controller('wordsController', function ($
 
 	self.jumpNum = 1;
 	self.jumpNext = function () {
+		window.clearTimeout(self.t)
 		var inputList = document.getElementsByClassName('inptMnemonic2');
 		if(self.jumpNum == 12){
 			return;
 		}else{
-			// inputList[self.jumpNum].focus();
-			// self.jumpNum++;
 			self.t = setTimeout(function () {
 				inputList[self.jumpNum].focus();
 				self.jumpNum++;
 			},100);
-			//console.log(self.jumpNum)
 		}
 	};
 

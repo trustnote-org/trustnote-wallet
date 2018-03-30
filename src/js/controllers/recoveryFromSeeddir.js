@@ -523,18 +523,15 @@ angular.module('copayApp.controllers').controller('recoveryFromSeeddir', functio
 
 	self.jumpNum = 1;
 	self.jumpNext = function () {
-		window.clearInterval(self.t)
+		window.clearTimeout(self.t)
 		var inputList = document.getElementsByClassName('inptMnemonic1');
 		if(self.jumpNum == 12){
 			return;
 		}else{
-			// inputList[self.jumpNum].focus();
 			self.t = setTimeout(function () {
 				inputList[self.jumpNum].focus();
 				self.jumpNum++;
 			},100);
-
-			//console.log(self.jumpNum)
 		}
 	};
 
