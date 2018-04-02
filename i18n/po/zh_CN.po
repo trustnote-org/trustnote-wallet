@@ -1949,4 +1949,30 @@ msgstr "观察钱包"
 msgid "Observe wallets need to import cold wallet authentication code for daily viewing of accounts and transactions. The wallet of large sums of money recommends the use of cold wallet management to avoid disclosure and theft."
 msgstr "观察钱包需要导入冷钱包认证码，用来日常查看账户、交易。大额资金的钱包建议使用冷钱包管理，避免泄露被盗。"
 
+msgid "Wallet PubKey"
+msgstr "钱包公钥"
+
+msgid "Cold wallet Certified"
+msgstr "冷钱包认证"
+
+msgid "Cold wallet PubKey"
+msgstr "冷钱包认公钥"
+
+msgid "Start importing"
+msgstr "开始导入"
+
+msgid "authorized signature"
+msgstr "授权签名"
+
+msgid "Please use the address's cold wallet (v1.1.1) to scan the QR code to authorize observations.After the authorization is completed, proceed to the next step."
+msgstr "请用该地址的冷钱包（v1.1.1），扫描二维码授权观察，待授权完成后进入下一步。"
+
+msgid "Complete the authorization"
+msgstr "完成授权"
+
+msgid "Authorization signature details"
+msgstr "授权签名详情"
+
+
+
 

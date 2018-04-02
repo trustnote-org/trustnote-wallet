@@ -372,6 +372,25 @@ angular.module('copayApp.services').factory('profileService', function profileSe
 	};
     // 创建新钱包 结束
 
+	// 创建观察钱包 开始
+	root.createColdWallet = function (opts, addr, cb) {
+		$log.debug('Creating ColdWallet:', opts);  // Creating Wallet: {"m":1,"n":1,"name":"wwwddd","networkName":"livenet","cosigners":[]}
+		var device = require('trustnote-common/device.js');
+		device.setMyColdDeviceAddress(addr);
+		var walletClient = bwcService.getClient();
+		walletClient.import(JSON.stringify(opts));
+		walletClient.createWallet(opts.name, opts.m, opts.n, {
+			network: opts.network,
+			account: opts.account,
+			cosigners: opts.cosigners
+		}, function (err) {
+			if (err)
+				return cb(gettext('Error creating wallet') + ": " + err);
+			root._addWalletClient(walletClient, opts, cb);
+		});
+	};
+
+
 	//克隆钱包同步
 	root.synchronization = function(opts, cb) {
 		// opts：

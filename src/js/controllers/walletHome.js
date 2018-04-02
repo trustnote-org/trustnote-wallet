@@ -640,6 +640,7 @@ angular.module('copayApp.controllers').controller('walletHomeController', functi
 	this.submitForm = function () {
 		if ($scope.index.arrBalances.length === 0)
 			return console.log('send payment: no balances yet');
+
 		var fc = profileService.focusedClient;
 		var unitValue = this.unitValue;
 		var bbUnitValue = this.bbUnitValue;

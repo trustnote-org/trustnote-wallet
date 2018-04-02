@@ -36,5 +36,4 @@ angular.module('copayApp.controllers').controller('topbarController', function($
 		}
 		go.wallet();
 	};
-
 });

@@ -1,48 +1,85 @@
-
 <!--邀请其他设备-->
+<style>
+	div.invitWrap{
+		position: absolute;
+		width: 100%;
+		top:45px;
+		bottom: 37px;
+		background: #F5F5F5;
+	}
+	div.colorBlocks{
+		background: url('img/bg.png');
+		height: 130px;
+	}
+	div.pr{
+		position: relative;
+	}
+	div.boxWrap{
+		background: #fff;
+		position: absolute;
+		top: -100px;
+		width: 92%;
+		left: 4%;
+		border-radius: 5px;
+		padding-bottom: 25px;
+	}
+	h4.title{
+		background: #F5F5F5;
+		height: 45px;
+		width: 100%;
+		font-size: 14px;
+		line-height: 45px;
+		margin-top:0;
+	}
+	div.w90ml5{
+		width: 90%;
+		margin-left:5%;
+	}
+	div.color999{
+		color:#999;
+	}
+	input.inptSty{
+		padding: 10px 0;
+		color: #0095ff!important;
+		width: 90%;
+		border:1px solid #0095ff;
+	}
+</style>
 
-<div class="topbar-container" ng-include="'views/includes/topbar.html'" ng-init="titleSection='Invite new device'|translate; goBackToState = true; showCamera = true; "></div>
 
-<!--<div ng-controller="inviteCorrespondentDeviceController" style="position: absolute; width: 100%; top:45px; bottom: 37px; overflow: scroll;">-->
-<div ng-controller="inviteCorrespondentDeviceController" style="position: absolute; width: 100%; top:45px; bottom: 37px;background: #F5F5F5;">
+<div class="topbar-container" ng-include="'views/includes/topbar.html'" ng-init="titleSection='Invite new device'|translate; goBackToState = true; showCamera = true; "> </div>
 
+<div class="invitWrap" ng-controller="inviteCorrespondentDeviceController">
 	<!--添加色块-->
-	<div style="background: url('img/bg.png');height: 130px;"></div>
+	<div class="colorBlocks"> </div>
 
 	<div class="m20b">
-
 		<div class="text-center">
-
-			<div class="columns m10t" style="position: relative;">
+			<div class="columns m10t pr">
 
 				<!--添加一个外层div-->
-				<div class="oh" style="background: #fff;position: absolute;top: -100px;width: 92%;left: 4%;border-radius: 5px; padding-bottom: 25px;">
-
+				<div class="oh boxWrap">
 					<!--标题-->
-					<h4 translate style="background: #F5F5F5;height: 45px;width: 100%;font-size: 14px;line-height: 45px;margin-top:0;">Invite new device</h4>
-
+					<h4 class="title" translate> Invite new device </h4>
 					<!--二维码-->
-					<div ng-click="copyCode()">  <qrcode size="155" version="{{qr_version}}" data="{{protocol}}:{{code}}"></qrcode>  </div>
+					<div ng-click="copyCode()">
+						<qrcode size="155" version="{{qr_version}}" data="{{protocol}}:{{code}}"></qrcode>
+					</div>
 
 					<!--文字介绍-->
-					<div class="m5t enable_text_select" style="width: 90%;margin-left:5%;">
+					<div class="m5t enable_text_select w90ml5">
 						<span translate class="size-12">Scan the above QR code using the other device, or send this pairing code to the other device:</span>
-						<div class="secret m5t m20b enable_text_select" style="color: #999;">{{code}}</div>
+						<div class="secret m5t m20b enable_text_select color999">{{code}}</div>
 					</div>
 
 					<!--点击完成-->
 					<div class="row">
-						<input type="button" class="button expand outline round size-14" ng-click="$root.go('^', true); goBackToState = null" value="{{'Done'|translate}}" style="padding: 10px 0;color: #0095ff;width: 90%;border:1px solid #0095ff;">
+						<input type="button" class="button expand outline round size-14 inptSty" ng-click="$root.go('^', true); goBackToState = null" value="{{'Done'|translate}}">
 					</div>
 				</div>
-
-
 			</div>
-
 		</div>
-
 	</div>
-
-    
 </div>
+
 <div ng-include="'views/includes/menu.html'" ng-show="!index.noFocusedWallet"></div>

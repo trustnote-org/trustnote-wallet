@@ -695,6 +695,10 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 		self.pendingTxProposalsCountForUs = null;
 		self.setSpendUnconfirmed();
 
+		var device = require('trustnote-common/device.js');
+		console.log(fc.credentials.walletId);
+		device.uPMyColdDeviceAddress(fc.credentials.walletId);
+
 		$timeout(function () {
 			//$rootScope.$apply();
 			self.hasProfile = true;
@@ -1613,7 +1617,7 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 	});
 
 
-// 添加代码弹出二维码页面
+// 添加代码： 弹出二维码页面
 	self.showQrcode = function () {
 		backButton.showQrcode = true;
 		self.askqr = true;
@@ -1643,4 +1647,69 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 	});
 
 
+
+// 创建 观察钱包 冷钱包 //*****************************////
+	self.ifQr = 0; // 显示：冷钱包的 授权信息
+
+	//self.qrcode = '{"type":"c1","name":"TTT","pub":"' + self.credentials.xPubKey + '","n":0,"value":1234}';
+
+	// 处理二维码
+	this.BeforeScan = function() {};
+	this.handleQrcode = function parseUri(str, callbacks) {
+		var crypto = require("crypto");
+		var xpub = profileService.focusedClient.credentials.xPubKey; // 得到：设备公钥
+		self.myDeviceAddress = require('trustnote-common/device.js').getMyDeviceAddress(); // 得到：设备地址
+		self.wallet_Id = crypto.createHash("sha256").update(xpub.toString(), "utf8").digest("base64"); // 通过公钥 生成钱包地址
+
+		var arr = str.split('?');
+		self.hotaddr = arr[0];
+
+		if(arr[0] == self.wallet_Id && arr[1] == 1234){
+			self.ifQr = 1;
+			self.addr = '{"type":"c2","addr":"' + self.myDeviceAddress + '","value":1234}';
+			//console.log(arr[0])
+		}else {
+		 	console.log('hhhhh')
+		}
+
+		// switch (str.type) {
+		// 	case "c1" :
+		// 		self.tempValue = str.value;
+		// 		self.tempPubKey = str.pub;
+		// 		self.tempAccount = str.n;
+		// 		self.qrCodeColdwallet1 = JSON.stringify(str);
+		// 		break;
+		// 	case "c2" :
+		// 		if (self.tempValue === str.value) {
+		// 			var opts = {
+		// 				m: 1,
+		// 				n: 1,
+		// 				name: "TTT(*)",
+		// 				xPubKey: self.tempPubKey,
+		// 				account: self.tempAccount,
+		// 				network: 'livenet',
+		// 				cosigners: []
+		// 			};
+		// 			var coldDeviceAddr = str.addr;
+		// 			$timeout(function () {
+		// 				profileService.createColdWallet(opts, coldDeviceAddr, function (err, walletId) {
+		// 					if (err) {
+		// 						$log.warn(err);
+		// 						self.error = err;
+		// 						$timeout(function () {
+		// 							$rootScope.$apply();
+		// 						});
+		// 						return;
+		// 					}
+		// 					if (opts.externalSource) {
+		// 						if (opts.n == 1) {
+		// 							$rootScope.$emit('Local/WalletImported', walletId);
+		// 						}
+		// 					}
+		// 				});
+		// 			}, 100);
+		// 		}
+		// 		break;
+		// }
+	}
 });

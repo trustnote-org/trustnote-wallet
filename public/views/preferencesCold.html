@@ -1,0 +1,65 @@
+<!-- 冷钱包认证 钱包公钥页面 -->
+<style>
+	div.qrcodeWrap{
+		text-align: center;
+		padding-top:20px;
+		padding-bottom:20px;
+	}
+	p.title{
+		background: #fff;
+		padding:10px 10px 5px;
+		margin:20px 0 0 0;
+	}
+	p.xpub{
+		padding:0 10px 10px;
+		word-wrap:break-word;
+		background: #fff;
+		margin-bottom:0;
+	}
+	p.pButton{
+		text-align: center;
+		line-height:45px;
+		color: #fff;
+		width: 180px;
+		height:45px;
+		background: #0095ff;
+		margin:0 auto;
+		border-radius: 22.5px;
+		cursor: pointer;
+	}
+</style>
+
+
+<!--top顶部-->
+<nav ng-controller="topbarController as topbar" class="tab-bar oh">
+	<section class="left-small">
+		<a ng-click="$root.go('^', true); goBackToState = null">
+			<i class="icon-arrow-left3  icon-back"></i>
+			<span class="text-back">{{'Back'|translate}}</span>
+		</a>
+	</section>
+	<section class="right-small">
+		<qr-scanner on-scan="index.handleQrcode(data)" before-scan="index.BeforeScan()"></qr-scanner>
+	</section>
+	<section class="middle tab-bar-section">
+		<span class="size-17 colorfff" translate>Wallet PubKey</span>
+	</section>
+</nav>
+
+
+<div class="content preferences" ng-controller="preferencesColdController as pCold">
+
+	<p class="title" translate>Cold wallet PubKey</p>
+	<p class="xpub enable_text_select" ng-init="Xpub = pCold.credentials.xPubKey">{{Xpub}}</p>
+
+	<div class="qrcodeWrap">
+		<qrcode size="180" version="10" data="{{pCold.qrcode}}"></qrcode>
+	</div>
+
+	<p class="pButton" translate ng-click="index.ifQr = 1">Next</p>
+</div>
+
+<div class="extra-margin-bottom"></div>
+
+
+
