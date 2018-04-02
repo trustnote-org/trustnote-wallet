@@ -34,7 +34,7 @@
 
 	<!--钱包 ID-->
 	<h4 class="title m0" translate>Wallet Id</h4>
-	<ul class="no-bullet m0 size-14">
+	<ul class="enable_text_select no-bullet m0 size-14">
 
 		<li class="oh">
 			<div class="enable_text_select ellipsis size-14">
@@ -43,14 +43,14 @@
 		</li>
 	</ul>
 
-
+ 
 	<!--每个钱包有多少钱-->
-	<ul class="no-bullet m0 size-14" ng-show="addrs">
+	<ul class="enable_text_select no-bullet m0 size-14" ng-show="addrs">
 		<ul class="no-bullet m0 size-14" ng-show="hasListOfBalances()">
 			<div>
 				<h4 class="title m0" translate>Balance By Address</h4>
 
-				<li class="line-b p20 oh" ng-repeat="(key, value) in assocListOfBalances">
+				<li class="enable_text_select line-b p20 oh" ng-repeat="(key, value) in assocListOfBalances">
 					<div class="enable_text_select ellipsis">
 						{{key}}
 					</div>
