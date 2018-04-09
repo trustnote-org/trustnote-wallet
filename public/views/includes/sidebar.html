@@ -46,21 +46,21 @@
 				ng-if="!index.isCordova" 
 				ng-click="sidebar.switchWallet(item.id, index.walletId); index.updateTxHistory();" 
 				class="oh" 
-				style="border: none;width: 85%;>
+				style="border: none;width: 85%;">
 
 	  	  		 <!--<input type="checkbox" name="" id="" value="" ng-if="{'selected': item.id == index.walletId}" style="float: left;"/>-->
 
 				<!--被选中显示图标-->
-				<div style="width: 20px;height: 100%;color: #0095ff;position: absolute;left: 0;top: 0;padding:20px 0 0 5px" ng-if="item.id == index.walletId" >
+				<div style="width: 7%;height: 100%;color: #0095ff;position: absolute;left: 0;top: 0;padding:20px 0 0 5px" ng-if="item.id == index.walletId" >
 					<i class="icon-valid"></i>
 				</div>
 				<!--没有选中显示图标-->
-			  	<div style="color: #aaaaaa;width: 20px;height: 100%;position: absolute;left: 0;top: 0;padding:20px 0 0 8px" ng-if="item.id != index.walletId" >
+			  	<div style="color: #aaaaaa;width: 7%;height: 100%;position: absolute;left: 0;top: 0;padding:20px 0 0 8px" ng-if="item.id != index.walletId" >
 				  	<i class=""></i>
 			  	</div>
 
 				<!--钱包圆头像-->
-			  	<div class="avatar-wallet"   ng-style="{'background-color':item.color}" style="float: left;color:#fff;border-radius: 50%;width: 45px;height: 45px;text-align: center;line-height: 45px;margin-left:15px;">
+			  	<div class="avatar-wallet"   ng-style="{'background-color':item.color}" style="float: left;color:#fff;border-radius: 50%;width: 15%;height: 45px;text-align: center;line-height: 45px;margin-left:15px;">
 					{{(item.name || item.id) | limitTo: 1}}
 				</div>
 				<!--钱包名字-->
