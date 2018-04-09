@@ -485,7 +485,6 @@ angular.module('copayApp.controllers').controller('recoveryFromSeed', function (
 
 		if(reg.test(self.mnemonic1)){
 			self.str = self.mnemonic1;
-			console.log(self.str);
 			self.funReg();
 		}
 	};
@@ -495,7 +494,6 @@ angular.module('copayApp.controllers').controller('recoveryFromSeed', function (
 
 		if(reg.test(self.mnemonic2)){
 			self.str = self.mnemonic2;
-			console.log(self.str);
 			self.funReg();
 		}
 	};
@@ -505,7 +503,6 @@ angular.module('copayApp.controllers').controller('recoveryFromSeed', function (
 
 		if(reg.test(self.mnemonic3)){
 			self.str = self.mnemonic3;
-			console.log(self.str);
 			self.funReg();
 		}
 	};
@@ -515,7 +512,6 @@ angular.module('copayApp.controllers').controller('recoveryFromSeed', function (
 
 		if(reg.test(self.mnemonic4)){
 			self.str = self.mnemonic4;
-			console.log(self.str);
 			self.funReg();
 		}
 	};

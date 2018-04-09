@@ -35,7 +35,7 @@
 	<preference name="android-minSdkVersion" value="19"/>
 	<preference name="deployment-target" value="9.0"/>
 	<preference name="AndroidLaunchMode" value="singleTask"/>
-	<preference name="KeyboardDisplayRequiresUserAction" value="false" />
+	<preference name="KeyboardDisplayRequiresUserAction" value="true" />
 	<platform name="ios">
 		<!-- iOS 8.0+ -->
 		<!-- iPad Pro  -->

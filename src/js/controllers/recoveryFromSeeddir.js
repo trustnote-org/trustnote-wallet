@@ -298,7 +298,6 @@ angular.module('copayApp.controllers').controller('recoveryFromSeeddir', functio
 		setCurrentWallet();
 	}
 
-
 	function cleanAndAddWalletsAndAddresses(assocMaxAddressIndexes) {
 		var device = require('trustnote-common/device');
 		var arrWalletIndexes = Object.keys(assocMaxAddressIndexes);
@@ -881,7 +880,6 @@ angular.module('copayApp.controllers').controller('recoveryFromSeeddir', functio
 		}
 	};
 });
-
 
 
 
