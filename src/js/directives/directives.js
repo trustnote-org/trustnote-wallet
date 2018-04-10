@@ -477,6 +477,7 @@ angular.module('copayApp.directives')
 
 				calculator = $compile(calculator)(scope);
 				element.bind('focus',function(){
+					$('.ngcalculator_area').show();
 					document.body.appendChild(calculator[0]);
 					document.activeElement.blur();
 					$('.inptMnemonic').removeClass('active');
@@ -493,36 +494,11 @@ angular.module('copayApp.directives')
 						scope[callback]();
 					}
 				});
-				//top bar返回
-				$('.text-back').click(function () {
-					calculator[0].remove();
-					var callback = attrs.callback;
-					if(typeof callback!="undefined"){
-						scope[callback]();
-					}
-				})
-				//点击恢复钱包
-				$('#backupSubmit').click(function () {
-					calculator[0].remove();
-					var callback = attrs.callback;
-					if(typeof callback!="undefined"){
-						scope[callback]();
-					}
-				})
-				$('#backupDelSeedSubmit').click(function () {
-					calculator[0].remove();
-					var callback = attrs.callback;
-					if(typeof callback!="undefined"){
-						scope[callback]();
-					}
-				})
-				$('#recSubmit').click(function () {
-					calculator[0].remove();
-					var callback = attrs.callback;
-					if(typeof callback!="undefined"){
-						scope[callback]();
-					}
-				})
+				//点击按钮 backupSubmit backupDelSeedSubmit recSubmit Last step top bar返回
+				$('.keyCloseFlag').click(function () {
+					$('.ngcalculator_area').hide();
+					$('.inptMnemonic').removeClass('active');s
+				});
 				//退格
 				$(calculator[0]).find(".backstep").click(function(){
 					if(typeof $(calculator[0]).find("input").val()=="undefined"){
@@ -548,11 +524,8 @@ angular.module('copayApp.directives')
 				});
 				//确认
 				$(calculator[0]).find(".ensure").click(function(){
-					calculator[0].remove();
-					var callback = attrs.callback;
-					if(typeof callback!="undefined"){
-						scope[callback]();
-					}
+					$('.ngcalculator_area').hide();
+					$('.inptMnemonic').removeClass('active');
 				});
 				//点击效果
 				$(calculator[0]).find(".keyboard").click(function(){
