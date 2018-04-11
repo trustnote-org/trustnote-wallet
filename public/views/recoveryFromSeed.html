@@ -193,7 +193,7 @@
 				<div style=" height: 120px; padding: 0 5px; margin-bottom:30px;">
 				<!--111-->
 				<div class="inptWrap">
-					<input class="inptMnemonic inptMnemonic3" lang="en" keyboard ng-model="recFromSeed.mnemonic1" ng-change="recFromSeed.funReg1()" ng-focus="recFromSeed.funReg1()" onkeyup="this.value=this.value.replace(/[^a-z]/g,'');" onchange="this.value=this.value.replace(/[^a-z]/g,'');" ng-keyup="recFromSeed.handleKeyboard1($event)" maxlength="8">
+					<input class="inptMnemonic inptMnemonic3" lang="en" ng-model="recFromSeed.mnemonic1" ng-change="recFromSeed.funReg1()" ng-focus="recFromSeed.funReg1()" onkeyup="this.value=this.value.replace(/[^a-z]/g,'');" onchange="this.value=this.value.replace(/[^a-z]/g,'');" ng-keyup="recFromSeed.handleKeyboard1($event)" maxlength="8">
 					<ul class="notiUl" ng-if="recFromSeed.m1 == 1 && recFromSeed.mnemonic1">
 						<li class="notiLi" ng-class="{'active':$index == recFromSeed.num}" ng-repeat="item in recFromSeed.items" ng-click="recFromSeed.mnemonic1 = recFromSeed.mnemonic1+item; recFromSeed.hideUlclearItems()"> <span>{{recFromSeed.mnemonic1}}</span>{{item}} </li>
 					</ul>
