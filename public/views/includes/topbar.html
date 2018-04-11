@@ -13,7 +13,7 @@
     	</a>
 
 		<!--点击返回  或者  点击关闭-->
-		<a ng-show="goBackToState" ng-click="$root.go('^', true); goBackToState = null">
+		<a ng-show="goBackToState" onclick="$('.ngcalculator_area').hide();	$('.inptMnemonic').removeClass('active');" ng-click="$root.go('^', true); goBackToState = null">
 			<i class="icon-arrow-left3  icon-back"></i>
 			<span class="text-back">{{'Back'|translate}}</span>
 		</a>

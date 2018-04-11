@@ -22,6 +22,7 @@
 		padding-right: 0.4rem;
 		background: #EDEDED;
 		color: black !important;
+		border: 1px solid #EDEDED;
 	}
 	input.active{
 		border: 1px solid #0095ff;
@@ -291,7 +292,7 @@
 					<div class="inptWrap">
 						<input class="inptMnemonic inptMnemonic3" keyboard ng-model="recFromSeed.mnemonic1" ng-change="recFromSeed.funReg1()" ng-focus="recFromSeed.funReg1()">
 						<ul class="mobileUl" ng-class="{'showList':recFromSeed.m1 == 1 && recFromSeed.items.length > 0 }">
-							<li class="notiLi" ng-class="{'active':$index == recFromSeed.num}" ng-repeat="item in recFromSeed.items" ng-click="recFromSeed.mnemonic1 = recFromSeed.mnemonic1+item; recFromSeed.hideUlclearItems()"> <span>{{recFromSeed.mnemonic1}}</span>{{item}} </li>
+							<li class="notiLi" ng-class="{'active':$index == recFromSeed.num}" ng-repeat="item in recFromSeed.items" ng-click="recFromSeed.mnemonic1 = recFromSeed.mnemonic1+item; recFromSeed.hideUlclearItems();"> <span>{{recFromSeed.mnemonic1}}</span>{{item}} </li>
 						</ul>
 					</div>
 					<!--222-->
@@ -392,7 +393,7 @@
 				ng-show="!recFromSeed.scanning"
 				type="submit"
 				id="recSubmit"
-				class="button expand black round"
+				class="button expand black round keyCloseFlag"
 				value="{{'Recover'|translate}}"
 				style="background: #0095ff;margin-top:20px;">
 			<!--按钮 点击恢复钱包 结束-->

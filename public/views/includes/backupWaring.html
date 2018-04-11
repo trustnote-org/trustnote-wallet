@@ -47,7 +47,7 @@
 				padding-right: 0.4rem;
 				background: #EDEDED;
 				color: black !important;
-				/*ime-mode: disabled;*/
+				border: 1px solid #EDEDED;
 			}
 			input.active{
 				border: 1px solid #0095ff;
@@ -214,7 +214,7 @@
 				<div style="background: #12172e; height: 45px; line-height: 45px; text-align: center; font-size: 17px; color:#fff; " translate>
 					<span translate>Restore Wallet</span>
 
-					<a ng-if="!recFromSeeddir.scanning" ng-click="wordsC.step = 'show_waring'" style="color:#fff; position: absolute; left: 0;width: 60px;">
+					<a ng-if="!recFromSeeddir.scanning" onclick="$('.ngcalculator_area').hide();$('.inptMnemonic').removeClass('active');" ng-click="wordsC.step = 'show_waring'" style="color:#fff; position: absolute; left: 0;width: 60px;">
 						<i class="icon-arrow-left3  icon-back" style="font-size: 24px; position: absolute; left: 0; top: 10px;"></i>
 						<span class="text-back" style="font-size: 16px;position: absolute; left:20px;" >{{'Back'|translate}}</span>
 					</a>
@@ -349,7 +349,7 @@
 								<div class="inptWrap">
 									<input class="inptMnemonic inptMnemonic1" keyboard ng-model="recFromSeeddir.mnemonic1" ng-change="recFromSeeddir.funReg1()" ng-focus="recFromSeeddir.funReg1()">
 									<ul class="mobileUl" ng-class="{'showList':recFromSeeddir.m1 == 1 && recFromSeeddir.items.length > 0 }">
-										<li class="notiLi" ng-class="{'active':$index == recFromSeeddir.num}" ng-repeat="item in recFromSeeddir.items" ng-click="recFromSeeddir.mnemonic1 = recFromSeeddir.mnemonic1+item; recFromSeeddir.hideUlclearItems()"> <span>{{recFromSeeddir.mnemonic1}}</span>{{item}} </li>
+										<li class="notiLi" ng-class="{'active':$index == recFromSeeddir.num}" ng-repeat="item in recFromSeeddir.items" ng-click="recFromSeeddir.mnemonic1 = recFromSeeddir.mnemonic1+item; recFromSeeddir.hideUlclearItems();"> <span>{{recFromSeeddir.mnemonic1}}</span>{{item}} </li>
 									</ul>
 								</div>
 								<!--222-->
@@ -452,7 +452,7 @@
 							ng-disabled="recFromSeeddir.credentialsEncrypted"
 							type="submit"
 							id="backupSubmit"
-							class="button expand black round"
+							class="button expand black round keyCloseFlag"
 							value="{{'Restore Wallet from Seed Phrase'|translate}}"
 							style="background: #0095ff; width: 85%;display: block; margin: 0 auto;">
 						<!--按钮 点击恢复钱包 结束-->
@@ -476,7 +476,7 @@
 							ng-disabled="recFromSeeddir.credentialsEncrypted"
 							type="submit"
 							id="backupDelSeedSubmit"
-							class="button expand black round"
+							class="button expand black round keyCloseFlag"
 							value="{{'Restore Wallet and Delete Seed Phrase'|translate}}"
 							style="color: #0095ff;width: 85%;display: block;margin: 5px auto 20px;background: #fff; border: 1px solid #0095ff;">
 						<!--按钮 点击恢复钱包 结束-->
@@ -757,7 +757,7 @@
 			<!--建议删除种子文件-->
 			<p ng-if="wordsC.dis() && wordsC.value" style="text-align: center; color:red;margin-top: 10px;" translate>Invalid mnemonic</p>
 			<!--点击 上一步-->
-			<p class="pbutton" ng-if="wordsC.dis()" translate ng-click="wordsC.gono()" style="text-transform: uppercase;"> Last step </p>
+			<p class="pbutton" onclick="$('.ngcalculator_area').hide();$('.inptMnemonic').removeClass('active');" ng-if="wordsC.dis()" translate ng-click="wordsC.gono()" style="text-transform: uppercase;"> Last step </p>
 
 			<p class="size-14 text-center" style="width: 90%; margin: 20px auto 10px;color:#ff5665; font-weight: bold" ng-if="!wordsC.dis()" translate>Your mnemonic words are correct. To make your wallet safe, we highly recommend you delete mnemonic words from app.</p>
 
