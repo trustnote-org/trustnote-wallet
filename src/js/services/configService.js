@@ -152,7 +152,11 @@ angular.module('copayApp.services').factory('configService', function (storageSe
 				config = JSON.parse(config);
 			}
 			if (lodash.isString(newOpts)) {
-				newOpts = JSON.parse(newOpts);
+				try {
+					newOpts = JSON.parse(newOpts);
+				}catch (e){
+					newOpts = oldOpts;
+				}
 			}
 			lodash.merge(config, oldOpts, newOpts);
 			checkAndReplaceOldUnitCode(config.wallet.settings);

@@ -62,7 +62,7 @@ angular.module('copayApp.controllers').controller('recoveryFromSeeddir', functio
 					return;
 				if (err.message === "Wrong password") {
 					$timeout(function () {
-						self.passwordRequest(err.message);
+						self.passwordRequest(gettextCatalog.getString(err.message));
 					}, 500);
 				}
 				return;
@@ -380,7 +380,7 @@ angular.module('copayApp.controllers').controller('recoveryFromSeeddir', functio
 
 	// 点击恢复钱包
 	self.recoveryForm = function () {
-
+		self.m1 = 0;
 		// 首先拼接一下 12个 助记词
 		self.strMnemonic();
 		if (self.inputMnemonic) {
@@ -427,7 +427,7 @@ angular.module('copayApp.controllers').controller('recoveryFromSeeddir', functio
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// 回复钱包并删除口令
 	self.recoveryFormdel = function () {
-
+		self.m1 = 0;
 		// 首先拼接一下 12个 助记词
 		self.strMnemonic();
 		if (self.inputMnemonic) {

@@ -18,7 +18,6 @@ angular.module('copayApp.controllers').controller('preferencesGlobalController',
 		this.torEnabled = conf.socksHost && conf.socksPort;
 		$scope.pushNotifications = config.pushNotifications.enabled;
 
-
 // 更改代码 iOS客户端 不显示全备份
 		if(typeof (window.cordova) == 'undefined'){
 			this.isIOS = false;
@@ -48,6 +47,7 @@ angular.module('copayApp.controllers').controller('preferencesGlobalController',
 
 	//监听switch开关
 	var unwatchEncrypt = $scope.$watch('encrypt', function (val) {
+		profileService.checkPassClose = false;
 		var fc = profileService.focusedClient;
 		if (!fc) return;
 
@@ -64,7 +64,25 @@ angular.module('copayApp.controllers').controller('preferencesGlobalController',
 			});
 		} else {
 			if (!val && fc.hasPrivKeyEncrypted()) {
-				profileService.unlockFC(null, function (err) {
+				// profileService.unlockFC(null, function (err) {
+				// 	if (err) {
+				// 		$scope.encrypt = true;
+				// 		return;
+				// 	}
+				// 	profileService.disablePrivateKeyEncryptionFC(function (err) {
+				// 		$rootScope.$emit('Local/NewEncryptionSetting');
+				// 		if (err) {
+				// 			$scope.encrypt = true;
+				// 			$log.error(err);
+				// 			return;
+				// 		}
+				// 		$scope.encrypt = false;
+				// 	});
+				// });
+				profileService.passWrongUnlockFC(null,function (err) {
+					if(err == 1){
+						console.log('**********cancel Unclock**********');
+					}
 					if (err) {
 						$scope.encrypt = true;
 						return;
@@ -78,7 +96,7 @@ angular.module('copayApp.controllers').controller('preferencesGlobalController',
 						}
 						$scope.encrypt = false;
 					});
-				});
+				})
 			}
 		}
 	});

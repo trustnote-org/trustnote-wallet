@@ -1536,7 +1536,6 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 
 
 // 更改代码 监听到状态 没有钱包 go.path 进入种子恢复钱包页
-
 	$rootScope.$on('Local/NoWallets', function (event) {
 		$timeout(function () {
 			self.hasProfile = true;
@@ -1546,15 +1545,11 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 
 			// 监听 没有钱包状态 删除profile 重置app 然后进入选择钱包类型页
 			// self.profile = {};
-			storageService.deleteProfile(function () {
-				return cb();
-			});
+			storageService.deleteProfile(function () {});
 			// alert('meiyouqianbao')
 			go.path('splash');
 		});
 	});
-
-
 	// 进入首页前 满足1：option是真 2： 存储中已经写入2  3： 恢复页面的模态框不显示
 	$rootScope.$on('Local/NewFocusedWallet', function (e, option) {
 		// alert(option)

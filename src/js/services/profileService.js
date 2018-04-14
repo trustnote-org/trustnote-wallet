@@ -42,9 +42,7 @@ angular.module('copayApp.services').factory('profileService', function profileSe
         	root.focusedClient = root.walletClients[lodash.keys(root.walletClients)[0]];
       	}
 
-
       	// 仍然没有钱包 emit一个事件 Still nothing?
-
 		if (lodash.isEmpty(root.focusedClient)) {
         	$rootScope.$emit('Local/NoWallets');
         	return;
@@ -740,7 +738,7 @@ angular.module('copayApp.services').factory('profileService', function profileSe
       	$log.debug('Wallet is encrypted');
       	$rootScope.$emit('Local/NeedsPassword', false, error_message, function(err2, password) {
         	if (err2 || !password) {
-          		return cb({
+				return cb({
             		message: (err2 || gettext('Password needed'))
           		});
         	}
@@ -751,8 +749,8 @@ angular.module('copayApp.services').factory('profileService', function profileSe
 		  		root.password = password;
         	} catch (e) {
           		$log.debug(e);
-          		return cb({
-            	message: gettext('Wrong password')
+				return cb({
+            		message: gettext('Wrong password')
           		});
         	}
 			var autolock = function() {
@@ -788,7 +786,20 @@ angular.module('copayApp.services').factory('profileService', function profileSe
             }, 100);
         });
     };
-
+	//preferencesGlobal encrypt switch on password wrong
+	root.checkPassClose = false;
+	root.passWrongUnlockFC = function (error_message,cb) {
+		if (root.checkPassClose) {
+			return cb(1);
+		}
+		root.unlockFC(error_message, function(err){
+			if (!err)
+				return cb();
+			$timeout(function(){
+				root.passWrongUnlockFC(err.message, cb);
+			}, 100);
+		});
+	};
     root.getWallets = function(network) {
       	if (!root.profile) return [];
 
