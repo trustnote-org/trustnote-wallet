@@ -18,7 +18,7 @@ angular.module('copayApp.controllers').controller('preferencesColorController',
         colorFor: {}
       };
       opts.colorFor[walletId] = color;
-      configService.set('cvb', function(err) {
+      configService.set(opts ,function(err) {
         if (err) {
           	$scope.$emit('Local/DeviceError', err);
 			return;
