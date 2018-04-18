@@ -26,8 +26,6 @@ angular.module('copayApp.controllers').controller('topbarController', function($
 // 		}
 // 		go.wallet();
 // 	};
-
-
 	this.goWallet = function() {
 		if((typeof(profileService.tempWalletId) != "undefined") && (profileService.tempWalletId != $scope.index.walletId)) {
 			profileService.setAndStoreFocus(profileService.tempWalletId, false, function() {
@@ -36,5 +34,4 @@ angular.module('copayApp.controllers').controller('topbarController', function($
 		}
 		go.wallet();
 	};
-
 });

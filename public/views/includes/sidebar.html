@@ -1,5 +1,13 @@
-
-<!--mywallet-顶部+钱包-->
+<style>
+	span.observedWallet{
+		border:1px solid #0095ff;
+		font-size:12px;
+		padding:2px 5px ;
+		margin-left:10px;
+		border-radius: 3px;
+		color: #0095ff;
+	}
+</style>
 
 <!--top顶部栏-->
 <nav ng-controller="topbarController as topbar" class="tab-bar" ng-init="showCamera = true" style="border: none">
@@ -66,12 +74,11 @@
 				<!--钱包名字-->
 		        <div class="name-wallet" ng-class="{'m8t':item.n == 1}" style="width: 70%; float: left;margin-top:11px;margin-left:5px;color: #333;font-size: 16px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
 					{{item.name || item.id}}
+					<!-- is观察钱包? -->
+					<span class="observedWallet" translate ng-if="item.observed">Watching</span>
 					<div class="size-12" ng-show="item.n > 1" translate style="color: #666;">( {{item.m}}-of-{{item.n}} )</div>
 				</div>
-
 			</a>
-
-
 
 
 
@@ -98,9 +105,14 @@
 				<!--钱包的名字-->
 				<div class="name-wallet" ng-class="{'m8t':item.n == 1}" style="width: 70%; float: left;margin-top:11px;margin-left:5px;color: #333; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
 					{{item.name || item.id}}
+					<!-- is观察钱包? -->
+					<span class="observedWallet" translate ng-if="item.observed">Watching</span>
 					<!--多签名钱包-->
 					<div class="size-12" ng-show="item.n > 1" translate style="color: #666;">( {{item.m}}-of-{{item.n}} )</div>
 				</div>
+				<!-- is观察钱包? -->
+				<div class="observedWallet" translate ng-if="item.observed">Watching</div>
+
 			</a>
 
 

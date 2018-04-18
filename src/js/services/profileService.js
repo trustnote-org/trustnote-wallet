@@ -4,7 +4,6 @@ var breadcrumbs = require('trustnote-common/breadcrumbs.js');
 
 angular.module('copayApp.services').factory('profileService', function profileServiceFactory($rootScope, $location, $timeout, $filter, $log, lodash, storageService, bwcService, configService, pushNotificationsService, isCordova, gettext, gettextCatalog, nodeWebkit, uxLanguage) {
 
-	// 声明一个空对象 ，最后返回root这个对象
     var root = {};
 
     root.profile = null;
@@ -27,7 +26,7 @@ angular.module('copayApp.services').factory('profileService', function profileSe
     };
 
 
-	// 更改代码  添加选项：option（第一次改）     设置主钱包
+	// 更改代码  添加选项：option（第一次改）
     root._setFocus = function(walletId, option, cb) {
     	// alert("----"+option)
       	$log.debug('Set focus:', walletId);
@@ -44,10 +43,10 @@ angular.module('copayApp.services').factory('profileService', function profileSe
 
 
       	// 仍然没有钱包 emit一个事件 Still nothing?
-
 		if (lodash.isEmpty(root.focusedClient)) {
         	$rootScope.$emit('Local/NoWallets');
         	return;
+
       	} else {
         	$rootScope.$emit('Local/NewFocusedWallet', option);
       	}
@@ -76,6 +75,8 @@ angular.module('copayApp.services').factory('profileService', function profileSe
         
         root.walletClients[credentials.walletId] = client;
 
+		if("observed" in credentials)
+			root.walletClients[credentials.walletId].observed = true;
         root.walletClients[credentials.walletId].started = true;
 
         client.initialize({}, function(err) {
@@ -142,8 +143,10 @@ angular.module('copayApp.services').factory('profileService', function profileSe
 
     root.bindProfile = function(profile, cb) {
 		breadcrumbs.add('bindProfile');
-
 		root.profile = profile;
+
+		console.log('**********************************'+JSON.stringify(root.profile));
+
         configService.get(function(err) {
             $log.debug('Preferences read');
             if (err)
@@ -344,8 +347,8 @@ angular.module('copayApp.services').factory('profileService', function profileSe
 		}
 
 		var walletDefinedByKeys = require('trustnote-common/wallet_defined_by_keys.js');
-		walletDefinedByKeys.readNextAccount(function (account) {
 
+		walletDefinedByKeys.readNextAccount(function (account) {
 			console.log("next account = " + account);
 			if (!opts.extendedPrivateKey && !opts.mnemonic) {
 				if (!root.focusedClient.credentials.xPrivKey)
@@ -373,6 +376,28 @@ angular.module('copayApp.services').factory('profileService', function profileSe
 		});
 	};
     // 创建新钱包 结束
+
+	// 创建观察钱包 开始
+	root.createColdWallet = function (opts, addr, cb) {
+		$log.debug('Creating ColdWallet:', opts);  // Creating Wallet: {"m":1,"n":1,"name":"wwwddd","networkName":"livenet","cosigners":[]}
+		var device = require('trustnote-common/device.js');
+		device.setMyColdDeviceAddress(addr);
+		var walletClient = bwcService.getClient();
+
+		walletClient.import(JSON.stringify(opts));
+
+		walletClient.createWallet(opts.name, opts.m, opts.n, {
+			network: opts.network,
+			account: opts.account,
+			cosigners: opts.cosigners
+		}, function (err) {
+			if (err)
+				return cb(gettext('Error creating wallet') + ": " + err);
+			opts.observed = true;
+			root._addWalletClient(walletClient, opts, cb);
+		});
+	};
+
 
 	//克隆钱包同步
 	root.synchronization = function(opts, cb) {
@@ -442,28 +467,6 @@ angular.module('copayApp.services').factory('profileService', function profileSe
     // 删除钱包
     root.deleteWallet = function(opts, cb) {
 		var client = opts.client || root.focusedClient;
-		// client = opts.client(空) || root.focusedClient：
-		// {
-		// 	"verbose":false, 详细
-		// 	"timeout":50000,
-		// 	"credentials":{
-		// 			"version":"1.0.0",
-		// 			"derivationStrategy":"BIP44",
-		// 			"account":5,
-		// 			"walletId":"6x/uR6kGOKxNGTWS2e2mu/Y951lcATW8i", 钱包Id
-		// 			"network":"livenet",
-		// 			"xPrivKey":"xprv9s21ZrQH143K3r9EZgkS8ruGPraQCH3wM38GpXf75kb57Kj9Upw8vmzBWRLuNAbh7E5ejvmTpLnq51ku42jD",
-		// 			"xPubKey":"xpub6BgSwBHLeQ24vpku7NMt2Piz3xDBPq4iPncdBWLCWHmmP9rKeNjpmDRrtFWMDtV5f3MeRY5ctaYNTXk7c6jPJTZ",
-		// 			"publicKeyRing":[{"xPubKey":"xpub6BgSwBHLeQ24vpku7NMt2Piz3xDBPq4iPncdBWLCWHmmP9rKeNjpmDRrtFWMDtV5f3MeRY5ctaYNTXk7c6jPJTZj"}],
-		// 			"walletName":"钱包名字",
-		// 			"m":1,
-		// 			"n":1,
-		// 			"mnemonic":"maid screen asset grace across second toe into click",
-		// 			"mnemonicHasPassphrase":false
-		// 	},
-		// 	"started":true,
-		// 	"backgroundColor":"#FF599E"
-		// }
 
         var walletId = client.credentials.walletId;
         $log.debug('Deleting Wallet:', client.credentials.walletName);
@@ -520,6 +523,8 @@ angular.module('copayApp.services').factory('profileService', function profileSe
 			return cb(gettext('Wallet already in trustnote' + ": ") + w.walletName);
 
 		root.profile.credentials.push(JSON.parse(walletClient.export()));
+		if(opts.observed)
+			root.profile.credentials[root.profile.credentials.length-1].observed = opts.observed;
 		root.setWalletClients();
 
 		// assign（分配） wallet color based on first character of walletId

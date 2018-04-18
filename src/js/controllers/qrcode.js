@@ -33,7 +33,7 @@ angular.module('copayApp.controllers').controller('qrcodeController', function($
 		document.getElementsByClassName("passModalMask")[0].style.zIndex = -1;
 		var elem = document.getElementById("showqrcode");
 		elem.style.display = "none";
-	}
+	};
 	
 	this.setAddress = function(forceNew) {
 		self.addrError = null;
@@ -68,17 +68,11 @@ angular.module('copayApp.controllers').controller('qrcodeController', function($
 	};
 
 
-	// 点击按钮 复制钱包地址到粘贴板  然后判断 移动端还是电脑端
+	// 复制 钱包地址 到粘贴板
 	this.copyAddress = function(addr) {
 		if (isCordova) {
 			window.cordova.plugins.clipboard.copy(addr);
 			window.plugins.toast.showShortCenter(gettextCatalog.getString('Copied to clipboard'));
-
-			// document.getElementsByClassName("copyed")[0].innerHTML = gettextCatalog.getString('Copied');
-			// setTimeout(function () {
-			// 	document.getElementsByClassName("copyed")[0].innerHTML = gettextCatalog.getString('Copy wallet address');
-			// },3000)
-
 		} else if (nodeWebkit.isDefined()) {
 			nodeWebkit.writeToClipboard(addr);
 			document.getElementsByClassName("copyedd")[0].style.display = 'block';
@@ -90,15 +84,16 @@ angular.module('copayApp.controllers').controller('qrcodeController', function($
 		}
 	};
 
-	this.shareAddress = function(addr) {
-		if (isCordova) {
-			if (isMobile.Android() || isMobile.Windows()) {
-				window.ignoreMobilePause = true;
-			}
-			window.plugins.socialsharing.share(self.protocol+':' + addr, null, null, null);
-		}
-	};
+	// this.shareAddress = function(addr) {
+	// 	if (isCordova) {
+	// 		if (isMobile.Android() || isMobile.Windows()) {
+	// 			window.ignoreMobilePause = true;
+	// 		}
+	// 		window.plugins.socialsharing.share(self.protocol+':' + addr, null, null, null);
+	// 	}
+	// };
 
+	// 定制金额模式
 	this.openCustomizedAmountModal = function(addr) {
 		$rootScope.modalOpened = true;
 		var self = this;
@@ -115,7 +110,7 @@ angular.module('copayApp.controllers').controller('qrcodeController', function($
 			$scope.buttonLabel = gettextCatalog.getString('Generate QR Code');
 			$scope.protocol = conf.program;
 
-
+// 定义新属性 修改原有属性
 			Object.defineProperty($scope, "_customAmount", {
 				get: function() {
 					return $scope.customAmount;

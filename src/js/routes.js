@@ -269,6 +269,19 @@ angular
 				}
 			})
 
+			// 路由到： 冷钱包认证码
+			.state('preferences.preferencesCold', {
+				url: '/cold',
+				templateUrl: 'views/preferencesCold.html',
+				walletShouldBeComplete: true,
+				needProfile: true,
+				views: {
+					'main@': {
+						templateUrl: 'views/preferencesCold.html'
+					},
+				}
+			})
+
 			.state('preferences.preferencesAlias', {
 				url: '/alias',
 				templateUrl: 'views/preferencesAlias.html',

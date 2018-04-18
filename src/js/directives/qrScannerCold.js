@@ -2,7 +2,7 @@
 
 var breadcrumbs = require('trustnote-common/breadcrumbs.js');
 
-angular.module('copayApp.directives').directive('qrScanner', ['$rootScope', '$timeout', '$modal', 'isCordova', 'gettextCatalog', function ($rootScope, $timeout, $modal, isCordova, gettextCatalog) {
+angular.module('copayApp.directives').directive('qrScannerCold', ['$rootScope', '$timeout', '$modal', 'isCordova', 'gettextCatalog', function ($rootScope, $timeout, $modal, isCordova, gettextCatalog) {
 
 	var controller = function ($scope) {
 
@@ -52,7 +52,7 @@ angular.module('copayApp.directives').directive('qrScanner', ['$rootScope', '$ti
 				var prevResult;
 
 				var _scan = function (evt) {
-					if (localMediaStream) {
+					if (localMediaStream) { // 本地媒体流
 						context.drawImage(video, 0, 0, 300, 225);
 						try {
 							qrcode.decode();
