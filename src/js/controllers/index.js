@@ -15,9 +15,7 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 	breadcrumbs.add('index.js');
 	var self = this;
 
-
 // 更改代码
-
 	self.splashClick = true;
 
 	self.BLACKBYTES_ASSET = constants.BLACKBYTES_ASSET;
@@ -32,9 +30,60 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 	self.$state = $state;
 	self.usePushNotifications = isCordova && !isMobile.Windows() && isMobile.Android();
 
-
 	self.showneikuang = false;
 	self.showneikuangsync = false;
+
+	self.isObserved = function () {
+		return go.observed;
+	};
+
+	// 观察钱包发送交易 冷钱包授权 页面
+	self.toPay = function () {
+		return go.toPay;
+	};
+	self.closeToPay = function () {
+		go.toPay = 0;
+	};
+	self.to_address = function () {
+		return go.objDetail.to_address;
+	};
+	self.amount = function () {
+		return go.objDetail.amount;
+	};
+	self.showToPay = function () {
+		if (profileService.focusedClient.isPrivKeyEncrypted()) {
+			profileService.unlockFC(null, function (err) {
+				if (err){
+					return;
+				}
+				return self.showToPay();
+			});
+			return;
+		}
+		self.passModalMaskColdQr1 = 1;
+
+		var path = go.paths;
+
+		var xPrivKey = new Bitcore.HDPrivateKey.fromString(profileService.focusedClient.credentials.xPrivKey);
+		var privateKey = xPrivKey.derive(path).privateKey;
+		var privKeyBuf = privateKey.bn.toBuffer({size: 32});
+		var text_to_sign = go.text_to_sign;
+
+		self.signature = ecdsaSig.sign(text_to_sign, privKeyBuf);
+		self.signatureObj = {
+			"type": "sign",
+			"signature": self.signature
+		};
+		self.signatureObj = JSON.stringify(self.signatureObj);
+	};
+
+
+
+
+
+	// 首页+交易： 初始状态 =1 显示title
+	self.showTitle = 1;
+
 	/*
 	 console.log("process", process.env);
 	 var os = require('os');
@@ -338,7 +387,6 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 	// objAddress is local wallet address, top_address is the address that requested the signature, 
 	// it may be different from objAddress if it is a shared address
 	eventBus.on("signing_request", function (objAddress, top_address, objUnit, assocPrivatePayloads, from_address, signing_path) {
-
 		function createAndSendSignature() {
 			var coin = "0";
 			var path = "m/44'/" + coin + "'/" + objAddress.account + "'/" + objAddress.is_change + "/" + objAddress.address_index;
@@ -358,6 +406,7 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 			console.log("priv key buf:", privKeyBuf);
 			var buf_to_sign = objectHash.getUnitHashToSign(objUnit);
 			var signature = ecdsaSig.sign(buf_to_sign, privKeyBuf);
+
 			bbWallet.sendSignature(from_address, buf_to_sign.toString("base64"), signature, signing_path, top_address);
 			console.log("sent signature " + signature);
 		}
@@ -665,10 +714,10 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 		});
 	};
 
+// 设置 当前选中钱包：
 	self.setFocusedWallet = function () {
 		var fc = profileService.focusedClient;
 		if (!fc) return;
-
 		breadcrumbs.add('setFocusedWallet ' + fc.credentials.walletId);
 
 		// Clean status
@@ -695,10 +744,14 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 		self.pendingTxProposalsCountForUs = null;
 		self.setSpendUnconfirmed();
 
+		var device = require('trustnote-common/device.js');
+		console.log('-----fc.credentials.walletId:'+ fc.credentials.walletId);
+		console.log(JSON.stringify(fc.credentials));
+		device.uPMyColdDeviceAddress(fc.credentials.walletId);
+
 		$timeout(function () {
 			//$rootScope.$apply();
 			self.hasProfile = true;
-
 
 // 更改代码
 			storageService.gethaschoosen(function (err, val) {
@@ -730,6 +783,8 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 			self.updateColor();
 			self.updateAlias();
 			self.setAddressbook();
+
+			//console.log('fc.credentials-------------'+JSON.stringify(fc.credentials));
 
 			console.log("reading cosigners");
 			var walletDefinedByKeys = require('trustnote-common/wallet_defined_by_keys.js');
@@ -1613,7 +1668,7 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 	});
 
 
-// 添加代码弹出二维码页面
+// 添加代码： 弹出二维码页面
 	self.showQrcode = function () {
 		backButton.showQrcode = true;
 		self.askqr = true;
@@ -1643,4 +1698,48 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 	});
 
 
+// 创建 观察钱包 冷钱包 //*****************************////
+	self.ifQr = 0; // 显示：冷钱包的 授权信息
+
+	//self.qrcode = '{"type":"c1","name":"TTT","pub":"' + self.credentials.xPubKey + '","n":0,"value":1234}';
+
+	// 处理二维码
+	this.BeforeScan = function() {};
+	this.handleQrcode = function parseUri(str, callbacks) {
+		try{
+			var obj_from_hotWallet = JSON.parse(str);
+		}catch(e){
+			//console.log(e);
+			return;
+		}
+
+		if (obj_from_hotWallet.type) {
+			switch (obj_from_hotWallet.type) {
+				case "h1" :   // ******************* （ 冷钱包 在认证页面 扫描的时候 ） 来自 观察钱包的二维码 （ 创建 观察钱包时候 ） ******************* //
+					var crypto = require("crypto");
+					var xpub = profileService.focusedClient.credentials.xPubKey; // 得到：设备公钥
+					self.wallet_Id = crypto.createHash("sha256").update(xpub.toString(), "utf8").digest("base64"); // 通过公钥 生成钱包地址
+
+					if(obj_from_hotWallet.tempValue == profileService.tmpeNum && obj_from_hotWallet.wallet_Id == self.wallet_Id){
+						self.myDeviceAddress = require('trustnote-common/device.js').getMyDeviceAddress(); // 得到：设备地址
+						self.ifQr = 1;
+						self.objForHot = {
+							"type": "c2",
+							"addr": self.myDeviceAddress,
+							"value": obj_from_hotWallet.tempValue
+						};
+						self.objForHot = JSON.stringify(self.objForHot);
+						self.scanErr = 0;
+					}else{
+						self.scanErr = 1;
+						return;
+					}
+					break;
+
+				case "sign" :   // ******************* （ 观察钱包 在发送交易中。。。 等待签名 ） 来自 普通钱包的二维码 （ 发送交易 时候 ） ******************* //
+					eventBus.emit('finishScaned', obj_from_hotWallet.signature);
+					break;
+			}
+		}
+	}
 });

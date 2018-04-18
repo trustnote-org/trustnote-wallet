@@ -34,14 +34,14 @@
 					<!-- 弹出二维码页面  -->
 					<div ng-include="'views/includes/qrcode.html'" ng-if="index.askqr"></div>
 
-
-					<!-- 首次启动  打开备份提示  -->
-					<!--<div ng-include="'views/includes/backupWaring.html'"  ng-if="index.hasProfile && index.splashClick"></div>-->
-					<!--<div ng-include="'views/includes/backupWaring.html'"  ng-if="index.hasProfile"></div>-->
-					<!--<div ng-include="'views/includes/backupWaring.html'"  ng-if="index.hasProfile && (index.haschoosen == 1) && index.splashClick"></div>-->
-
 					<!-- 弹出提示框 -->
 					<div ng-include="'views/includes/alert.html'" ng-if="index.showAlert"></div>
+
+					<!-- 冷钱包 授权页面 -->
+					<div ng-include="'views/includes/coldQrcode.html'" ng-if="index.ifQr == 1"></div>
+
+					<!-- 冷钱包扫码后显示 授权交易 -->
+					<div ng-include="'views/includes/toPay.html'"  ng-if="index.toPay() == 1"></div>
 
 
 					<!-- main info -->

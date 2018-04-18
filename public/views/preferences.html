@@ -5,16 +5,13 @@
 
 
 <!--top顶部-->
-
 <nav ng-controller="topbarController as topbar" class="tab-bar oh" ng-init="closeToHome = true">
-
 	<section class="left-small">
 		<a ng-show="closeToHome" class="p10 "
 		   ng-click="topbar.goWallet();closeToHome = null;index.updateHistoryFromNetwork();  index.onClick()">
 			<span class="text-close">{{'Close'|translate}}</span>
 		</a>
 	</section>
-
 
 	<!-- 中间部分 -->
 	<section class="middle tab-bar-section">
@@ -24,12 +21,6 @@
 	</section>
 	<!-- 中间部分结束 -->
 </nav>
-
-
-
-
-
-
 
 
 <div class="content preferences" ng-controller="preferencesController as preferences" ng-init="preferences.init()">
@@ -65,6 +56,15 @@
       		</div>
       		<div translate>Color</div>
     	</li>
+
+		<!--冷钱包 认证-->
+		<li ng-click="preferences.toShowPubKey()" ng-if="index.isObserved() == 0">
+			<div class="right text-gray">
+				<i class="icon-arrow-right3 size-14"></i>
+			</div>
+			<div translate>Cold wallet Certified</div>
+		</li>
+		<!--冷钱包 认证 -- 结束 -->
 
     	<li ng-show="index.isPrivKeyExternal">
       		<div class="right text-gray">

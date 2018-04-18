@@ -1,0 +1,67 @@
+<!--冷钱包 授权二维码-->
+<style>
+	div.passModalMaskColdQr {
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		z-index: 1099;
+		opacity:1;
+		background: #f5f5f5;
+	}
+	div.header{
+		height:45px;
+		background: #12172e;
+		text-align: center;
+		line-height:45px;
+	}
+	span.close{
+		color: #fff;
+		position: fixed;
+		left:10px;
+		cursor: pointer;
+	}
+	p.bbutton{
+		text-align: center;
+		line-height:45px;
+		color: #fff;
+		width: 90%;
+		height:45px;
+		background: #0095ff;
+		/*margin:0 auto;*/
+		border-radius: 22.5px;
+		cursor: pointer;
+		position: fixed;
+		bottom:25px;
+		left:5%;
+	}
+	div.passModalMaskColdQr1{
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		z-index: 1199;
+		opacity:0.5;
+		background: #000;
+	}
+	div.deviceAddrQr{
+		background: #fff;
+		padding:30px;
+		text-align: center;
+	}
+
+</style>
+
+<div class="passModalMaskColdQr">
+	<div class="header">
+		<span class="close" ng-click="index.ifQr = 0;">
+			<span class="text-close">{{'Close'|translate}}</span>
+		</span>
+		<span class="size-17 colorfff" translate>Signature detail</span>
+	</div>
+
+	<div class="deviceAddrQr">
+		<qrcode size="180" version="10" data="{{index.objForHot}}"></qrcode>
+	</div>
+
+	<p style="text-align: center; color: #666; font-size: 14px;" translate>Scan signature QR code by hot wallet</p>
+	<p class="bbutton" translate ng-click="index.ifQr = 0;">Finish</p>
+</div>

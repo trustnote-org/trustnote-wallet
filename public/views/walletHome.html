@@ -1,14 +1,129 @@
 
 <!--钱包首页+交易-->
 
-<style>	#binding-drop {  max-width: 250px;  left: 15px;  width: auto !important;  text-align: left; /*line-height: 1em;*/  }</style>
+<style>
+	#binding-drop {  max-width: 250px;  left: 15px;  width: auto !important;  text-align: left; /*line-height: 1em;*/  }
+	div.passModalMaskColdQr {
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		z-index: 1099;
+		opacity:1;
+		background: #f5f5f5;
+	}
+	div.passModalMaskColdQrNext {
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		z-index: 1100;
+		opacity:0.7;
+		background: #000;
+	}
+	div.passModalMaskColdQrNext1 {
+		/*position: absolute;*/
+		/*width: 90%;*/
+		/*margin-left: 5%;*/
+		/*height: 80%;*/
+		/*margin-top:15%;*/
+		/*z-index: 1101;*/
+		/*!*opacity:0.7;*!*/
+		/*background: #fff;*/
+		padding-top:10px;
+		border-radius: 10px;
+		overflow: hidden;
+		position: absolute;
+		width: 90%;
+		margin-left: 5%;
+		height: 80%;
+		margin-top:15%;
+		z-index: 1101;
+		opacity:1;
+		background: #fff;
+		text-align: center;
+	}
+	div.passModalMaskColdQrNext1 .xuyao i{
+		font-size: 50px!important;
+		color: #333;
+	}
+	p.ppbutton{
+		width: 300px;
+		height:45px;
+		text-align: center;
+		line-height:45px;
+		border-radius: 22.5px;
+		background: #0095ff;
+		color: #fff;
+		cursor: pointer;
+		margin:0 auto 30px;
+	}
+</style>
 
 <!-- 第一部分 顶部topbar-->
-<div class="topbar-container"  ng-include="'views/includes/topbar.html'"  ng-init="showCamera = true"> </div>
+<div class="topbar-container"  ng-include="'views/includes/topbar.html'"  ng-init="showCamera = true" ng-if="index.showTitle == 1"> </div>
 
 
 <!-- 第二部分 wallethome 所有tab标签-->
 <div ng-controller="walletHomeController as home">
+
+	<!--当观察钱包 发送交易时 弹出 -------- ************* ******* -->
+	<div class="passModalMaskColdQr" ng-if="home.showTitle == 1">
+		<div class="topbar-container" style="background: #12172e; height: 45px;">
+			<section class="left-small" ng-click="home.showTitle = 0; index.showTitle = 1; home.closeColdPay()">
+				<a class="p10">
+					<span class="text-close">{{'Close'|translate}}</span>
+				</a>
+			</section>
+			<section class="middle tab-bar-section">
+				<h1 class="ellipsis" ng-style="{ 'max-width': '100%'}">
+					<span style="color: #fff; font-size: 17px;" translate>Preview the transaction</span>
+				</h1>
+			</section>
+		</div>
+		<!--top 结束-->
+		<div>
+			<p style="font-size: 14px; color: #333; padding-left: 10px; margin: 10px 0 0 0;" translate>Receiver</p>
+			<p style="font-size: 14px; color: #666; padding-left: 15px; margin: 0 0 10px 0;">{{home.sendtoaddress}}</p>
+
+			<p style="font-size: 14px; color: #333; padding-left: 10px; margin: 0;" translate>Amount</p>
+			<p style="font-size: 14px; color: #666; padding-left: 15px; margin: 0; ">{{home.sendamount}}</p>
+		</div>
+		<!--详细信息 结束-->
+		<div style="padding: 30px; text-align: center">
+			<qrcode size="220" version="10" data="{{home.text_to_sign_qr}}"></qrcode>
+		</div>
+		<div>
+			<p translate style="text-align: center; color: #666; ">Scan the QR code with  your offline wallet, then go to the next step when the signature is done</p>
+		</div>
+		<p translate ng-click="index.transactionNext = 1;" class="ppbutton">Next</p>
+
+	</div>
+
+	<div class="passModalMaskColdQrNext" ng-if="index.transactionNext == 1"></div>
+	<div class="passModalMaskColdQrNext1" ng-if="index.transactionNext == 1">
+		<div class="topbar-container">
+
+			<span style="position: absolute;right: 10px;top: 5px;color: gray;" ng-click="index.transactionNext = 0">
+				<i class="icon-notvalid size-28 "></i>
+			</span>
+			<section class="middle tab-bar-section">
+				<h1 class="ellipsis" ng-style="{ 'max-width': '100%'}">
+					<span style="color: #333; font-size: 17px;margin-top:10px;" translate>Preview the transaction</span>
+				</h1>
+			</section>
+		</div>
+		<p style="margin-top:100px;">
+		<span class="xuyao" ng-click="home.showTitle = 0; index.showTitle = 1;index.transactionNext = 0" style="font-size: 50px;">
+			<qr-scanner-cold on-scan="index.handleQrcode(data)" before-scan="index.BeforeScan()"></qr-scanner-cold>
+		</span>
+		</p>
+		<p translate style="text-align: center; color: #666;">Please scan signature QR code with your offline wallet</p>
+	</div>
+	<!--当观察钱包 发送交易时 弹出 -------- ************* *******结束  -->
+
+
+
+
+
   	<div class="row columns m20tp" ng-show="index.noFocusedWallet">
     	<div class="text-center text-warning m20b">
 			<i class="fi-alert"></i> 
@@ -154,39 +269,6 @@
           		</div>
         	</div>
    			<!-- amount -->
-
-  			<!-- 钱包头像 + 点击设置 -->
-        	<!--<div class="pr columns line-b">-->
-				<!--钱包头像-->
-          		<!--<div class="avatar-wallet left"  style="border-radius: 50%;"  ng-style="{'background-color':index.backgroundColor}">{{ (index.alias || index.walletName) | limitTo: 1}} </div>-->
-          		<!--<div class="right">-->
-					<!--点击进入钱包设置-->
-            		<!--<a ng-click="$root.go('preferences')" class="button outline round light-gray tiny preferences-icon m0" ng-if="!index.shared_address">-->
-						<!--<i class="fi-widget size-18 vm wallet-settings"></i>-->
-						<!--<span class="show-for-medium-up" translate>Preferences</span>-->
-					<!--</a>-->
-						<!--点击进入智能钱包-->
-            		<!--<a ng-click="openSharedAddressDefinitionModal(index.shared_address)" class="button outline round light-gray tiny preferences-icon m0" ng-if="index.shared_address">-->
-						<!--<i class="fi-eye size-24 vm wallet-settings"></i>-->
-						<!--<span class="show-for-medium-up" translate>Definition</span>-->
-					<!--</a>-->
-          		<!--</div>-->
-
-          		<!--<div class="wallet-info">-->
-              		<!--<p class="m0">-->
-						<!--{{(index.alias || index.walletName)}}-->
-						<!--<span ng-if="index.shared_address" style="overflow:hidden; text-overflow: ellipsis; white-space: nowrap;">-->
-							<!--<br>-->
-							<!--Smart wallet:-->
-							<!--{{index.shared_address | limitTo: 6}}-->
-							<!--...-->
-						<!--</span>-->
-					<!--</p>-->
-              		<!--<div class="size-12 text-gray" ng-if="!index.shared_address">-->
-						<!--<span ng-include="'views/includes/walletInfo.html'"></span>-->
-					<!--</div>-->
-          		<!--</div>-->
-        	<!--</div>-->
 
 			<!--在智能钱包中显示-->
 			<a ng-click="openSharedAddressDefinitionModal(index.shared_address)"
@@ -714,10 +796,8 @@
 										<span class="size-12 color333" translate>Amount</span>
 										<a ng-click="home.setSendAll()" ng-show="!home.bSendAll && !home.lockAmount" style="text-transform: none; margin-left: 10px;color:#0095ff;font-size: 12px;" translate>Send all</a>
 									</label>
-									<div class="input">
 
-										<!--ng-minlength="0.00000001" ng-maxlength="10000000000"-->
-										<!--ng-attr-placeholder="{{(home.bSendAll ? (index.arrBalances[index.assetIndex].asset === 'base' ? 'All minus fees' : 'All') : 'Amount')|translate}}"-->
+									<div class="input">
 										<input type="number" id="amount" minlength="0.000001" max="999999999.999999"
 											   style="height: 45px; font-size: 14px; padding-right:30px;"
 											   ng-disabled="home.blockUx || home.lockAmount || home.bSendAll"
@@ -736,9 +816,6 @@
 									</div>
 								</div>
 								<!-- 发送金额 结束 -->
-
-
-
 
 
               				</div>
@@ -760,6 +837,7 @@
 							</div>
 						</div>
 
+						<!--隐藏dom 隐藏dom 隐藏dom-->
 						<div class="row" ng-hide="home.hideNote">
 							<div class="large-12 columns">
 								<label for="comment">
@@ -801,14 +879,13 @@
 						</div>
 
 
-						<!--点击发送notes-->
+						<!--点击发送-->
 						<div class="row" ng-show="!home.onGoingProcess">
-
 							<div class="large-6 medium-6 small-6 columns" ng-show="!home.blockUx && (home.lockAddress || home.lockAmount || home.bSendAll)">
 								<a ng-click="home.resetForm(sendForm)" class="button expand outline dark-gray round black size-14" translate>Cancel</a>
 							</div>
 
-							<div class="columns" ng-class="{'small-6 medium-6 large-6':(home.lockAddress || home.lockAmount || home.bSendAll)}">
+							<div class="columns" ng-class="{'small-6 medium-6 large-6':(home.lockAddress || home.lockAmount || home.bSendAll)}" ng-if="home.observed != 1">
 								<button type="submit" class="button black round expand bg0745bc size-14"
 										ng-disabled="home.current_payment_key || sendForm.$invalid || home.blockUx || index.isOffline || !index.isEnoughSignersSelected()"
 										translate>
@@ -816,13 +893,29 @@
 								</button>
 							</div>
 
+							<div class="columns" ng-class="{'small-6 medium-6 large-6':(home.lockAddress || home.lockAmount || home.bSendAll)}" ng-if="home.observed == 1">
+								<button class="button black round expand bg0745bc size-14" ng-click="home.submitForm(); "
+										ng-disabled="home.current_payment_key || sendForm.$invalid || home.blockUx || index.isOffline || !index.isEnoughSignersSelected()"
+										translate>
+									Send
+								</button>
+							</div>
+							<!--<div style="background: red;">-->
+								<!--&lt;!&ndash;<div style="background: red;" ng-if="home.observed == 1">&ndash;&gt;-->
+								<!--<h1 ng-click="index.showTitle = 0; home.showTitle = 1;" ng-if="home.observed == 1">这里是 观察钱包</h1>-->
+							<!--</div>-->
 						</div>
 					</form>
+
+					<div ng-if="home.observed == 1">
+						<p style="margin: 10px 0 0 0; color: #333; text-align: center; font-size: 14px;" translate>This is a Watching Only Wallet which requires a offline wallet holding the Mnemonic phrase to sign the transactions.</p>
+						<p style="margin: 0; color: #0095ff; text-align: center; font-size: 14px;" translate>See How does offline signing work?</p>
+					</div>
 				</div>
 			</div>
 
 			<!--div class="row columns m20t" ng-hide="home.canSendPayment()">This is a private asset, please send it only by clicking links in the chat.</div-->
-      		<div class="extra-margin-bottom"></div>
+      		<!--<div class="extra-margin-bottom"></div>-->
     	</div>
 		<!-- END Send 交易页面 结束-->
 

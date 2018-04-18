@@ -1,0 +1,69 @@
+<!--创建观察钱包 生成 walletID + value 二维码-->
+<style>
+	div.qrcode{
+		text-align: center;
+	}
+	p.text{
+		padding:0 15px;
+		line-height:initial;
+		margin-top:20px;
+	}
+	p.bbutton{
+		width: 300px;
+		height:45px;
+		text-align: center;
+		line-height:45px;
+		border-radius: 22.5px;
+		background: #0095ff;
+		color: #fff;
+		cursor: pointer;
+		margin:0 auto 30px;
+	}
+	p.scan{
+		text-align: center;
+		margin-top: 40px;
+	}
+	p.scan span i{
+		font-size:50px!important;
+		color:#333;
+	}
+	p.finished{
+		text-align: center;
+		margin-top:210px;
+	}
+</style>
+
+
+<div class="passModalMask"></div>
+
+<div class="passModal">
+	<div class="large-12 columns m10t" style="position: relative;">
+		<span style="position: absolute;right: 10px;top: 0px;color: gray;" ng-click="index.askColdwalletQrcode = false">
+			<i class="icon-notvalid size-28 "></i>
+		</span>
+
+
+		<div ng-if="create.finishHot == 1">
+			<h2 class="text-center m10t m10b" translate>Sign</h2>
+
+			<div class="qrcode">
+				<qrcode size="180" version="10" data="{{create.qrCodeColdwallet2}}"></qrcode>
+			</div>
+
+			<p translate class="text">Please use the address's offline wallet (v1.1.1), scan the QR code, waiting until being authorized and then go to the next.</p>
+			<p translate class="bbutton" ng-click="create.finishHot = 2">Next</p>
+		</div>
+	</div>
+
+	<div ng-if="create.finishHot == 2" style="margin-top:20px;">
+		<h2 class="text-center m10t m10b" translate>Authorized</h2>
+
+		<p class="scan">
+		<span ng-click="index.askColdwalletQrcode = false">
+			<qr-scanner-cold on-scan="create.handleQrcode(data)" before-scan="create.BeforeScan()"></qr-scanner-cold>
+		</span>
+		</p>
+
+		<p class="finished" translate>Please scan QR code on the offline wallet to import the signature</p>
+	</div>
+</div>

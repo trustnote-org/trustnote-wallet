@@ -1946,7 +1946,83 @@ msgstr "当扫描时发生一个错误，请稍后再试。"
 msgid "Observe Wallet"
 msgstr "观察钱包"
 
-msgid "Observe wallets need to import cold wallet authentication code for daily viewing of accounts and transactions. The wallet of large sums of money recommends the use of cold wallet management to avoid disclosure and theft."
+msgid "Watching Only Wallet needs to import verification QR code from the offline wallet in order to check your daily balance and transactions. It's suggested to use offline wallet to manage large amount of crypto-currencies in order to avoid theft or leaks."
 msgstr "观察钱包需要导入冷钱包认证码，用来日常查看账户、交易。大额资金的钱包建议使用冷钱包管理，避免泄露被盗。"
+
+msgid "Wallet PubKey"
+msgstr "钱包公钥"
+
+msgid "Cold wallet Certified"
+msgstr "冷钱包认证"
+
+msgid "Cold wallet PubKey"
+msgstr "冷钱包公钥"
+
+msgid "Start importing"
+msgstr "开始导入"
+
+msgid "Sign"
+msgstr "授权签名"
+
+msgid "Please use the address's offline wallet (v1.1.1), scan the QR code, waiting until being authorized and then go to the next."
+msgstr "请用该地址的冷钱包（v1.1.1），扫描二维码授权观察，待授权完成后进入下一步。"
+
+msgid "Authorized"
+msgstr "完成授权"
+
+msgid "Signature detail"
+msgstr "授权签名详情"
+
+msgid "Note: Watching Only Wallet needs a offline wallet to help siging. You can use a retired smartphone and enable its aeroplane mode as a offline wallet for the offline signing purpose."
+msgstr "注意：观察钱包发送交易时需要冷钱包配合签名。你可以使用另一台闲置手机，开飞行模式作为冷钱包，配合离线签名。"
+
+msgid "How offline signing works?"
+msgstr "如何使用冷钱包进行离线签名？"
+
+msgid "Invalid verification Code"
+msgstr "无效的认证码"
+
+msgid "Offline wallet verification QR Code"
+msgstr "冷钱包认证码"
+
+msgid "Please scan QR code on the offline wallet to import the signature"
+msgstr "扫描授权钱包页面的二维码，导入签名"
+
+msgid "Copy offline wallet QR code"
+msgstr "复制冷钱包认证码"
+
+msgid "Scan signature QR code by hot wallet"
+msgstr "使用对应观察钱包扫描上方二维码完成授权"
+
+msgid "Finish"
+msgstr "完成"
+
+msgid "This is a Watching Only Wallet which requires a offline wallet holding the Mnemonic phrase to sign the transactions."
+msgstr "当前为观察钱包，需要存有助记词的冷钱包配合签名。"
+
+msgid "See How does offline signing work?"
+msgstr "查看如何进行离线签名？"
+
+msgid "Preview the transaction"
+msgstr "交易预览"
+
+msgid "Receiver"
+msgstr "接收者"
+
+msgid "Scan the QR code with  your offline wallet, then go to the next step when the signature is done"
+msgstr "请用冷钱包扫描二维码，待签名完成后进入下一步"
+
+msgid "Please scan signature QR code with your offline wallet"
+msgstr "扫描冷钱包签名数据二维码"
+
+msgid "Please scan signature QR code with your hot wallet"
+msgstr "请用在线签名扫描二维码发出交易"
+
+msgid "Watching"
+msgstr "观察"
+
+
+
+
 
 
