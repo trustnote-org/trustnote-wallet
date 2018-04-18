@@ -36,6 +36,22 @@ angular.module('copayApp.controllers').controller('wordsController', function ($
 
 	self.dis = function () { return self.value == fc.getMnemonic() ? false : true };
 
+
+	//self.mnemonic1 = 'lll'
+	// self.arrStr = [self.mnemonic1, self.mnemonic2, self.mnemonic3, self.mnemonic4, self.mnemonic5, self.mnemonic6, self.mnemonic7, self.mnemonic8, self.mnemonic9, self.mnemonic10, self.mnemonic11, self.mnemonic12];
+	// self.addStr = function (e) {
+	// 	var inputList = document.getElementsByClassName('inptMnemonic2');
+	// 	inputList[0].focus();
+	// 	inputList[0].value = e;
+    //
+	// 	function aaa() {
+	// 		return self.arrStr[0] = e;
+	// 	}
+	// 	aaa();
+    //
+	// 	console.log(self.arrStr[0])
+	// };
+
 	self.value = "";
 
 	self.items = [];

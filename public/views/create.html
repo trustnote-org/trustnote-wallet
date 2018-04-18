@@ -6,10 +6,39 @@
 		text-align: center;
 		line-height: 45px;
 		border-radius: 22.5px;
-		background: #0095ff;
+		background: #a1a1a1;
 		color: #fff;
 		cursor: pointer;
 		margin:0 auto;
+		margin-top:70px;
+	}
+	div.active{
+		background: #0095ff;
+	}
+	p.tittext{
+		color:#656565;
+		font-size: 13px;
+		line-height:15px;
+		margin-top:15px;
+	}
+	p.note{
+		color: #6a6a6a;
+		font-size:13px;
+		line-height:15px;
+		background: #f6f6f5;
+		border-radius: 10px;
+		margin-top: 70px;
+		margin-bottom: 15px;
+		padding:10px;
+	}
+	span.title{
+		color: #333;
+		font-weight: bold;
+	}
+	p.center{
+		color: #0095ff;
+		font-size:12px;
+		text-align: center;
 	}
 </style>
 
@@ -17,8 +46,10 @@
 
 
 <div class="content" ng-controller="createController as create" ng-init="create.setTotalCosigners(1)" style="padding-bottom: 20px">
-	<!--观察钱包 认证-->
-	<div ng-include="'views/includes/askColdwalletQrcode.html'" ng-if="index.askColdwalletQrcode"></div>
+
+<!-- *****  创建 观察钱包 认证 等待冷钱包认证 ***** -->
+	<div ng-include="'views/includes/askColdwalletQrcode.html'" ng-if="index.askColdwalletQrcode && totalCosigners != 1 && !!create.qrCodeColdwallet1"></div>
+<!-- *****  创建 观察钱包 认证 等待冷钱包认证 ***** 结束 -->
 
 	<!--添加状态-->
 	<div class="onGoingProcess" ng-show="create.loading">
@@ -82,18 +113,24 @@
 				<div class="row m10t" ng-show="totalCosigners != 1">
 					<!--观察钱包 note-->
 					<div class="large-6 medium-6 columns m10t">
-						<p translate>Observe wallets need to import cold wallet authentication code for daily viewing of accounts and transactions. The wallet of large sums of money recommends the use of cold wallet management to avoid disclosure and theft.</p>
+						<p class="tittext" translate>Watching Only Wallet needs to import verification QR code from the offline wallet in order to check your daily balance and transactions. It's suggested to use offline wallet to manage large amount of crypto-currencies in order to avoid theft or leaks.</p>
 					</div>
 
 					<div>
 						<h4>
-							冷钱包认证码
+							<span class="title" translate>Offline wallet verification QR Code</span>
 							<qr-scanner-cold on-scan="create.handleQrcode(data)" before-scan="create.BeforeScan()"></qr-scanner-cold>
 						</h4>
 
-						<textarea name="qrcode" id="qrcode" cols="30" rows="5" ng-model="create.qrCodeColdwallet1"></textarea>
+						<textarea name="qrcode" id="qrcode" cols="30" rows="5" ng-model="create.qrCodeColdwallet1" placeholder="扫码或输入冷钱包认证码"></textarea>
 
-						<div translate class="importing" ng-click="index.askColdwalletQrcode = true">Start importing</div>
+						<p style="color: #f00;" ng-if="create.isErr == 1" translate>Invalid verification Code</p>
+
+						<!--<div translate class="importing" ng-class="{active:create.isErr == 0}" ng-click="index.askColdwalletQrcode = true">Start importing</div>-->
+						<div translate class="importing" ng-class="{active:create.isErr == 0}" ng-click="create.askColdwalletQrcode()">Start importing</div>
+
+						<p class="note" translate> Note: Watching Only Wallet needs a offline wallet to help siging. You can use a retired smartphone and enable its aeroplane mode as a offline wallet for the offline signing purpose. </p>
+						<p class="center" translate>How offline signing works?</p>
 					</div>
 				</div>
 				<!--观察者钱包 结束-->

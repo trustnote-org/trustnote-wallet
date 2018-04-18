@@ -17,6 +17,10 @@ var _ = require('lodash');
 var $ = require('preconditions').singleton();
 var util = require('util');
 var events = require('events');
+
+/////********* 添加一个依赖：
+var eventBus = require('trustnote-common/event_bus.js');
+
 var Bitcore = require('bitcore-lib');
 
 var Common = require('./common');
@@ -517,11 +521,25 @@ API.prototype.sendMultiPayment = function (opts, cb) {
 
 	opts.signWithLocalPrivateKey = function (wallet_id, account, is_change, address_index, text_to_sign, handleSig) {
 		var path = "m/44'/" + coin + "'/" + account + "'/" + is_change + "/" + address_index;
+
 		var xPrivKey = new Bitcore.HDPrivateKey.fromString(self.credentials.xPrivKey);
 		var privateKey = xPrivKey.derive(path).privateKey;
-		//var privKeyBuf = privateKey.toBuffer();
 		var privKeyBuf = privateKey.bn.toBuffer({size: 32}); // https://github.com/bitpay/bitcore-lib/issues/47
-		handleSig(ecdsaSig.sign(text_to_sign, privKeyBuf));
+
+		eventBus.emit('apiTowalletHome', account, is_change, address_index, text_to_sign, function (sig) {
+			// if(num == 1){
+			// 	handleSig(sig);
+			// 	num = 2;
+			// }
+			if(sig && typeof(handleSig) == "function" ){
+				handleSig(sig);
+			}
+			else{
+				typeof cb == "function" ?cb("close") : null;
+			}
+		});
+		
+		//handleSig(ecdsaSig.sign(text_to_sign, privKeyBuf));
 	};
 
 	if (opts.shared_address) {
@@ -536,11 +554,11 @@ API.prototype.sendMultiPayment = function (opts, cb) {
 			opts.wallet = self.credentials.walletId;
 		if (opts.change_address)
 			return Wallet.sendMultiPayment(opts, cb);
-		// create a new change address or select first unused one
-		walletDefinedByKeys.issueOrSelectNextChangeAddress(self.credentials.walletId, function (objAddr) {
-			opts.change_address = objAddr.address;
-			Wallet.sendMultiPayment(opts, cb);
-		});
+			// create a new change address or select first unused one
+			walletDefinedByKeys.issueOrSelectNextChangeAddress(self.credentials.walletId, function (objAddr) {
+				opts.change_address = objAddr.address;
+				Wallet.sendMultiPayment(opts, cb);
+			});
 	}
 };
 
