@@ -36,6 +36,7 @@
 	<preference name="deployment-target" value="9.0"/>
 	<preference name="AndroidLaunchMode" value="singleTask"/>
 	<preference name="KeyboardDisplayRequiresUserAction" value="true" />
+	<preference name="orientation" value="portrait" />
 	<platform name="ios">
 		<!-- iOS 8.0+ -->
 		<!-- iPad Pro  -->
