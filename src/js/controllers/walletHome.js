@@ -905,6 +905,9 @@ angular.module('copayApp.controllers').controller('walletHomeController', functi
 								"amount": opts.amount
 							};
 							self.text_to_sign_qr = 'TTT:' + JSON.stringify(obj);
+							$timeout(function() {
+								$scope.$apply();
+							}, 10);
 							eventBus.once('finishScaned', function (signature) {
 								cb(signature);
 							});
