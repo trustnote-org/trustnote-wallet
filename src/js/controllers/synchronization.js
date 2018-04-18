@@ -39,7 +39,7 @@ angular.module('copayApp.controllers').controller('synchronization',
 						return;
 					if (err.message === "Wrong password") {
 						$timeout(function(){
-	                		self.passwordRequest(err.message, cb);
+	                		self.passwordRequest(gettextCatalog.getString(err.message), cb);
 	            		}, 500);
 					}
 					return;

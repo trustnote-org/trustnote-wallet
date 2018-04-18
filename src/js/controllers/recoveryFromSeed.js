@@ -61,7 +61,7 @@ angular.module('copayApp.controllers').controller('recoveryFromSeed', function (
 					return;
 				if (err.message === "Wrong password") {
 					$timeout(function () {
-						self.passwordRequest(err.message, cb);
+						self.passwordRequest(gettextCatalog.getString(err.message), cb);
 					}, 500);
 				}
 				// 输入密码 取消
@@ -411,6 +411,7 @@ angular.module('copayApp.controllers').controller('recoveryFromSeed', function (
 
 	// 点击恢复钱包
 	self.recoveryForm = function () {
+		self.m1 = 0;
 		self.strMnemonic();
 		if (self.inputMnemonic) {
 			self.error = '';

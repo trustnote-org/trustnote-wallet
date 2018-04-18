@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('copayApp.controllers').controller('wordsController', function ($rootScope, $scope, $timeout, profileService, go, gettext, confirmDialog, notification, $log, isCordova, storageService) {
+angular.module('copayApp.controllers').controller('wordsController', function ($rootScope, $scope, $timeout, profileService, go, gettext, gettextCatalog, confirmDialog, notification, $log, isCordova, storageService) {
 
 	var msg = gettext('Are you sure you want to delete the backup words?');
 	var successMsg = gettext('Backup words deleted');
@@ -518,7 +518,7 @@ angular.module('copayApp.controllers').controller('wordsController', function ($
 
 				profileService.unlockFC(null, function (err) {
 					if (err) {
-						self.error = gettext('Could not decrypt') + ': ' + err.message;
+						self.error = gettextCatalog.getString('Could not decrypt') + ': ' + err.message;
 						$log.warn('Error decrypting credentials:', self.error); //TODO
 						return;
 					}

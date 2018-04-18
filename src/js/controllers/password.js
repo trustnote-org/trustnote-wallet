@@ -6,7 +6,7 @@ angular.module('copayApp.controllers').controller('passwordController',
 		var self = this;
 
 		var pass1;
-
+		self.checkPassClose = profileService.checkPassClose;
 		self.isVerification = false;
 
 		var fc = profileService.focusedClient;
@@ -15,6 +15,7 @@ angular.module('copayApp.controllers').controller('passwordController',
 		document.getElementById("passwordInput").focus();
 
 		self.close = function (cb) {
+			profileService.checkPassClose = true;
 			return cb(gettext('No password given'));
 		};
 
