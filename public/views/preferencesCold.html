@@ -45,18 +45,21 @@
 		<span class="size-17 colorfff" translate>Wallet PubKey</span>
 	</section>
 </nav>
+<!--top顶部 -- 结束 -->
 
 
 <div class="content preferences" ng-controller="preferencesColdController as pCold">
 
 	<p class="title" translate>Cold wallet PubKey</p>
 	<p class="xpub enable_text_select" ng-init="Xpub = pCold.credentials.xPubKey">{{Xpub}}</p>
+	
+	<p style="color: #f00;" ng-if="index.scanErr == 1">重新开始 扫描本认证码</p>
 
 	<div class="qrcodeWrap">
 		<qrcode size="180" version="10" data="{{pCold.qrcode}}"></qrcode>
 	</div>
 
-	<p class="pButton" translate ng-click="index.ifQr = 1">Next</p>
+	<p class="pButton" translate ng-click="pCold.copyxPubKey()">Copy offline wallet QR code</p>
 </div>
 
 <div class="extra-margin-bottom"></div>

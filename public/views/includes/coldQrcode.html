@@ -44,6 +44,8 @@
 	}
 	div.deviceAddrQr{
 		background: #fff;
+		padding:30px;
+		text-align: center;
 	}
 	p.finish{
 		text-align: center;
@@ -59,41 +61,37 @@
 		bottom:25px;
 		left:25px;
 	}
-	div.passModalMaskColdQr2{
-		background: #fff;
-		z-index: 1222;
-		position: relative;
-	}
+	/*div.passModalMaskColdQr2{*/
+		/*background: #fff;*/
+		/*z-index: 1222;*/
+		/*position: relative;*/
+	/*}*/
 </style>
 
 <div class="passModalMaskColdQr">
 	<div class="header">
-		<span class="close" ng-click="index.ifQr = 2;">
+		<span class="close" ng-click="index.ifQr = 0;">
 			<span class="text-close">{{'Close'|translate}}</span>
 		</span>
-		<span class="size-17 colorfff" translate>Authorization signature details</span>
+		<span class="size-17 colorfff" translate>Signature detail</span>
 	</div>
-	
-	<p class="title" translate>Authorized address</p>
-	<p class="txt" translate>{{index.hotaddr}}</p>
 
-
-	<p class="title" translate>Authorized address</p>
-	<p class="txt" translate>{{index.hotaddr}}</p>
-	
-	<p class="bbutton" translate ng-click="index.ifQr1 = 2;">Next</p>
-</div>
-
-
-
-<div  class="passModalMaskColdQr1" ng-if="index.ifQr1 == 2;"></div>
-
-
-<div class="passModalMaskColdQr2" ng-if="index.ifQr1 == 2;">
 	<div class="deviceAddrQr">
-		<qrcode size="180" version="10" data="{{index.addr}}"></qrcode>
+		<qrcode size="180" version="10" data="{{index.objForHot}}"></qrcode>
 	</div>
-	<p class="finish" translate ng-click="index.ifQr = 2">Finish</p>
+
+	<p style="text-align: center; color: #666; font-size: 14px;" translate>Scan signature QR code by hot wallet</p>
+	<p class="bbutton" translate ng-click="index.ifQr = 0;">Finish</p>
 </div>
+
+
+
+<!--<div  class="passModalMaskColdQr1" ng-if="index.ifQr1 == 2;"></div>-->
+
+
+<!--<div class="passModalMaskColdQr2" ng-if="index.ifQr1 == 2;">-->
+	<!---->
+	<!--<p class="finish" translate ng-click="index.ifQr = 2">Finish</p>-->
+<!--</div>-->
 
 

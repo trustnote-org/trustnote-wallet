@@ -4,7 +4,12 @@ var constants = require('trustnote-common/constants.js');
 var eventBus = require('trustnote-common/event_bus.js');
 var breadcrumbs = require('trustnote-common/breadcrumbs.js');
 
-angular.module('copayApp.controllers').controller('walletHomeController', function ($scope, $rootScope, $timeout, $filter, $modal, $log, notification, isCordova, profileService, lodash, configService, storageService, gettext, gettextCatalog, nodeWebkit, addressService, confirmDialog, animationService, addressbookService, correspondentListService, newVersion, autoUpdatingWitnessesList) {
+///*********添加依赖：
+var Bitcore = require('bitcore-lib');
+var objectHash = require('trustnote-common/object_hash.js');
+var ecdsaSig = require('trustnote-common/signature.js');
+
+angular.module('copayApp.controllers').controller('walletHomeController', function ($scope, $rootScope, $timeout, $filter, $modal, $log, notification, isCordova, profileService, lodash, configService, storageService, gettext, gettextCatalog, nodeWebkit, addressService, confirmDialog, animationService, addressbookService, correspondentListService, newVersion, autoUpdatingWitnessesList, go) {
 
 	var self = this;
 	var home = this;
@@ -38,6 +43,24 @@ angular.module('copayApp.controllers').controller('walletHomeController', functi
 	this.isTestnet = constants.version.match(/t$/);
 	this.testnetName = (constants.alt === '2') ? '[NEW TESTNET]' : '[TESTNET]';
 	$scope.index.tab = 'walletHome'; // for some reason, current tab state is tracked in index and survives re-instatiations of walletHome.js
+
+
+	// 首先判断 fc中存在observed与否
+	var fc = profileService.focusedClient;
+	if(fc.observed){
+		go.observed = 1;
+	}else{
+		go.observed = 0;
+	}
+	// 引入 go.js中的 变量：表示为 1:观察钱包  0:普通钱包
+	self.observed = go.observed;
+
+
+	// 观察钱包时 初始=0 不显示 title
+	self.showTitle = 0;
+
+
+
 
 
 // 做旧版本兼容 升级后 内存中不存在值 或没有 2 写入2
@@ -631,12 +654,13 @@ angular.module('copayApp.controllers').controller('walletHomeController', functi
 				$rootScope.$apply();
 			});
 		}
-		;
 	};
 
+	eventBus.on('apiTowalletHome', function (account, is_change, address_index, text_to_sign, cb) {
+		self.callApiToWalletHome(account, is_change, address_index, text_to_sign, cb);
+	});
 
-
-
+// 发起交易 *************************************************************************************///////////////////////////////////////////***********************************//
 	this.submitForm = function () {
 		if ($scope.index.arrBalances.length === 0)
 			return console.log('send payment: no balances yet');
@@ -659,15 +683,22 @@ angular.module('copayApp.controllers').controller('walletHomeController', functi
 			this.error = gettext('Unable to send transaction proposal');
 			return;
 		}
-
+// ***** 判断 当前设备 是否有密码加密 *****
 		if (fc.isPrivKeyEncrypted()) {
 			profileService.unlockFC(null, function (err) {
-				if (err)
+				if (err){
 					return self.setSendError(err.message);
+				}
 				return self.submitForm();
 			});
 			return;
 		}
+// ***** 判断 当前设备 是否是--观察钱包 *****
+		if(self.observed == 1){
+			$scope.index.showTitle = 0;
+			self.showTitle = 1;
+		}
+
 
 		var comment = form.comment.$modelValue;
 
@@ -683,9 +714,11 @@ angular.module('copayApp.controllers').controller('walletHomeController', functi
 		var address = form.address.$modelValue;
 		var recipient_device_address = assocDeviceAddressesByPaymentAddress[address];
 		var amount = form.amount.$modelValue;
+
 		var merkle_proof = '';
 		if (form.merkle_proof && form.merkle_proof.$modelValue)
 			merkle_proof = form.merkle_proof.$modelValue.trim();
+
 		if (asset === "base")
 			amount *= unitValue;
 		if (asset === constants.BLACKBYTES_ASSET)
@@ -698,10 +731,9 @@ angular.module('copayApp.controllers').controller('walletHomeController', functi
 			return $rootScope.$emit('Local/ShowErrorAlert', "This payment is already under way");
 		self.current_payment_key = current_payment_key;
 
-
 		indexScope.setOngoingProcess(gettext('sending'), true);
-		$timeout(function () {
 
+		$timeout(function () {
 			profileService.requestTouchid(function (err) {
 				if (err) {
 					profileService.lockFC();
@@ -715,14 +747,16 @@ angular.module('copayApp.controllers').controller('walletHomeController', functi
 				}
 
 				var device = require('trustnote-common/device.js');
+
 				if (self.binding) {
 					if (!recipient_device_address)
 						throw Error('recipient device address not known');
+
 					var walletDefinedByAddresses = require('trustnote-common/wallet_defined_by_addresses.js');
 					var walletDefinedByKeys = require('trustnote-common/wallet_defined_by_keys.js');
 					var my_address;
-					// never reuse addresses as the required output could be already present
-					walletDefinedByKeys.issueNextAddress(fc.credentials.walletId, 0, function (addressInfo) {
+
+					walletDefinedByKeys.issueNextAddress(fc.credentials.walletId, 0, function (addressInfo) {  // never reuse addresses as the required output could be already present
 						my_address = addressInfo.address;
 						if (self.binding.type === 'reverse_payment') {
 							var arrSeenCondition = ['seen', {
@@ -756,17 +790,19 @@ angular.module('copayApp.controllers').controller('walletHomeController', functi
 							};
 						}
 						else {
-							var arrExplicitEventCondition =
-								['in data feed', [[self.binding.oracle_address], self.binding.feed_name, '=', self.binding.feed_value]];
-							var arrMerkleEventCondition =
-								['in merkle', [[self.binding.oracle_address], self.binding.feed_name, self.binding.feed_value]];
+							var arrExplicitEventCondition = ['in data feed', [[self.binding.oracle_address], self.binding.feed_name, '=', self.binding.feed_value]];
+							var arrMerkleEventCondition = ['in merkle', [[self.binding.oracle_address], self.binding.feed_name, self.binding.feed_value]];
 							var arrEventCondition;
+
 							if (self.binding.feed_type === 'explicit')
 								arrEventCondition = arrExplicitEventCondition;
+
 							else if (self.binding.feed_type === 'merkle')
 								arrEventCondition = arrMerkleEventCondition;
+
 							else if (self.binding.feed_type === 'either')
 								arrEventCondition = ['or', [arrMerkleEventCondition, arrExplicitEventCondition]];
+
 							else
 								throw Error("unknown feed type: " + self.binding.feed_type);
 							var arrDefinition = ['or', [
@@ -816,6 +852,7 @@ angular.module('copayApp.controllers').controller('walletHomeController', functi
 				// compose and send
 				function composeAndSend(to_address) {
 					var arrSigningDeviceAddresses = []; // empty list means that all signatures are required (such as 2-of-2)
+
 					if (fc.credentials.m < fc.credentials.n)
 						$scope.index.copayers.forEach(function (copayer) {
 							if (copayer.me || copayer.signs)
@@ -825,8 +862,10 @@ angular.module('copayApp.controllers').controller('walletHomeController', functi
 						arrSigningDeviceAddresses = indexScope.copayers.map(function (copayer) {
 							return copayer.device_address;
 						});
+
 					breadcrumbs.add('sending payment in ' + asset);
 					profileService.bKeepUnlocked = true;
+
 					var opts = {
 						shared_address: indexScope.shared_address,
 						merkle_proof: merkle_proof,
@@ -837,16 +876,45 @@ angular.module('copayApp.controllers').controller('walletHomeController', functi
 						arrSigningDeviceAddresses: arrSigningDeviceAddresses,
 						recipient_device_address: recipient_device_address
 					};
+					self.sendtoaddress = opts.to_address;
+					self.sendamount = opts.amount/1000000 + "MN";
 
 
+					///// on
+					self.callApiToWalletHome = function (account, is_change, address_index, text_to_sign, cb) {
+						var coin = (profileService.focusedClient.credentials.network == 'livenet' ? "0" : "1");
+						var path = "m/44'/" + coin + "'/" + account + "'/" + is_change + "/" + address_index;
 
-					//  发 送 资 金 发生错误的情况
+						var xPrivKey = new Bitcore.HDPrivateKey.fromString(profileService.focusedClient.credentials.xPrivKey);
+						var privateKey = xPrivKey.derive(path).privateKey;
+						var privKeyBuf = privateKey.bn.toBuffer({size: 32}); // https://github.com/bitpay/bitcore-lib/issues/47
+
+						if (self.observed == 1) { // 如果是 观察钱包
+							// alert("观察钱包 交易中。。。");
+							var obj = {
+								"type": "w1",
+								"text_to_sign": text_to_sign.toString("base64"),
+								"path": path,
+								"to_address": opts.to_address,
+								"amount": opts.amount
+							};
+							self.text_to_sign_qr = 'TTT:' + JSON.stringify(obj);
+							eventBus.on('finishScaned', function (signature) {
+								cb(signature);
+							});
+						} else {  // 如果是 普通钱包
+							// alert("普通钱包 交易中。。。");
+							var signature = ecdsaSig.sign(text_to_sign, privKeyBuf);
+							cb(signature)
+						}
+					};
+
 					fc.sendMultiPayment(opts, function (err) {
-						// if multisig, it might take very long before the callback is called
-						indexScope.setOngoingProcess(gettext('sending'), false);
+						indexScope.setOngoingProcess(gettext('sending'), false);  // if multisig, it might take very long before the callback is called
 						breadcrumbs.add('done payment in ' + asset + ', err=' + err);
 						delete self.current_payment_key;
 						profileService.bKeepUnlocked = false;
+
 						if (err) {
 							if (typeof err === 'object') {
 								err = JSON.stringify(err);
@@ -854,18 +922,26 @@ angular.module('copayApp.controllers').controller('walletHomeController', functi
 							}
 							else if (err.match(/device address/))
 								err = "This is a private asset, please send it only by clicking links from chat";
+
 							else if (err.match(/no funded/))
 								err = gettextCatalog.getString('Not enough spendable funds') ;
+
 							else if (err.match(/connection closed/))
 								err = gettextCatalog.getString('[internal] connection closed') ;
+
 							else if (err.match(/funds from/))
 								err = err.substring(err.indexOf("from")+4, err.indexOf("for")) + gettextCatalog.getString(err.substr(0,err.indexOf("from"))) + gettextCatalog.getString(". It needs atleast ")  + parseInt(err.substring(err.indexOf("for")+3, err.length))/1000000 + "MN";
+							else if(err == "close") {
+								err = "suspend transaction.";
+							}
 							return self.setSendError(err);
 						}
+
 						var binding = self.binding;
 						self.resetForm();
 						$rootScope.$emit("NewOutgoingTx");
-						if (recipient_device_address) { // show payment in chat window
+
+						if (recipient_device_address) {  // show payment in chat window
 							eventBus.emit('sent_payment', recipient_device_address, amount || 'all', asset, !!binding);
 							if (binding && binding.reverseAmount) { // create a request for reverse payment
 								if (!my_address)
@@ -880,25 +956,22 @@ angular.module('copayApp.controllers').controller('walletHomeController', functi
 								});
 
 								// issue next address to avoid reusing the reverse payment address
-								walletDefinedByKeys.issueNextAddress(fc.credentials.walletId, 0, function () {
-								});
+								walletDefinedByKeys.issueNextAddress(fc.credentials.walletId, 0, function () {});
 							}
-						}
-						else // redirect to history
+						}else{ // redirect to history
 							$rootScope.$emit('Local/SetTab', 'walletHome');
-					});
-					/*
-					 if (fc.credentials.n > 1){
-					 $rootScope.$emit('Local/ShowAlert', "Transaction created.\nPlease approve it on the other devices.", 'fi-key', function(){
-					 go.walletHome();
-					 });
-					 }*/
-				}
+						}
 
+					});
+				}
 			});
 		}, 100);
 	};
+// 发起交易 *** 结束  *************************************************************************************///////////////////////////////////////////***********************************//
 
+	this.closeColdPay = function () {
+		eventBus.emit('finishScaned', false);
+	};
 
 	var assocDeviceAddressesByPaymentAddress = {};
 

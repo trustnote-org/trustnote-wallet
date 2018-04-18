@@ -2,8 +2,11 @@
 
 var eventBus = require('trustnote-common/event_bus.js');
 
-angular.module('copayApp.services').factory('go', function($window, $rootScope, $location, $state, profileService, fileSystemService, nodeWebkit, notification, gettextCatalog, authService, $deepStateRedirect, $stickyState) {
+angular.module('copayApp.services').factory('go', function($window, $rootScope,  $location, $state, profileService, fileSystemService, nodeWebkit, notification, gettextCatalog, authService, $deepStateRedirect, $stickyState) {
 	var root = {};
+	var self = this;
+
+	root.toPay = 0;
 
 	var hideSidebars = function() {
 		if (typeof document === 'undefined')
@@ -31,8 +34,6 @@ angular.module('copayApp.services').factory('go', function($window, $rootScope, 
 		}
 	};
 
-
-	// 开始定义了一个root的空对象
 	root.openExternalLink = function(url, target) {
 		if (nodeWebkit.isDefined()) {
 			nodeWebkit.openExternalLink(url);
@@ -134,6 +135,9 @@ angular.module('copayApp.services').factory('go', function($window, $rootScope, 
 	};
 
 
+// 添加变量：控制观察钱包 (交易页面） 默认是0 普通钱包
+	root.observed = 0;
+
 	function handleUri(uri){
 		console.log("handleUri "+uri);
 
@@ -143,17 +147,31 @@ angular.module('copayApp.services').factory('go', function($window, $rootScope, 
 				notification.error(err);
 				//notification.success(gettextCatalog.getString('Success'), err);
 			},
+
 			ifOk: function(objRequest){
 				console.log("request: "+JSON.stringify(objRequest));
 				if (objRequest.type === 'address'){
-					root.send(function(){
+					root.send(function () {
 						$rootScope.$emit('paymentRequest', objRequest.address, objRequest.amount, objRequest.asset);
 					});
 				}
+
+				// ***************** 冷钱包扫描结果在这儿处理 ********************************************
+				else if (objRequest.type === 'ob_walletToPay'){
+					root.toPay = 1;
+					root.objDetail = {
+						"to_address": objRequest.to_address,
+						"amount": objRequest.amount
+					};
+					root.paths = objRequest.path;
+					root.text_to_sign = new Buffer(objRequest.text_to_sign, "base64");
+				}
+				// ***************** 冷钱包扫描结果在这儿处理 *** 结束 *****************************************
+
 				else if (objRequest.type === 'pairing'){
 					$rootScope.$emit('Local/CorrespondentInvitation', objRequest.pubkey, objRequest.hub, objRequest.pairing_secret);
 				}
-				else if (objRequest.type === 'auth'){
+				else if (objRequest.type === 'auth') {
 					authService.objRequest = objRequest;
 					root.path('authConfirmation');
 				}

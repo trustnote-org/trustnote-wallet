@@ -39,6 +39,9 @@
 					<!-- 冷钱包 授权页面 -->
 					<div ng-include="'views/includes/coldQrcode.html'" ng-if="index.ifQr == 1"></div>
 
+					<!-- 冷钱包扫码后显示 授权交易 -->
+					<div ng-include="'views/includes/toPay.html'"  ng-if="index.toPay() == 1"></div>
+
 
 					<!-- main info -->
 					<div id="sectionContainer">

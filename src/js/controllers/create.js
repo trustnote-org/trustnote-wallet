@@ -213,62 +213,87 @@ angular.module('copayApp.controllers').controller('createController', function (
 
 	self.finishHot = 0;
 
-// 添加代码： 处理二维码 /***************************************************/
+// 创建新钱包中---： 处理二维码 ： 观察钱包扫描冷钱包 /***************************************************/
 	var crypto = require("crypto");
-
 	this.BeforeScan = function() {};
-
 	this.handleQrcode = function parseUri(str, callbacks) {
-		console.log(str);
-		console.log(callbacks);
-		var str = JSON.parse(str);
-
-
-		switch (str.type) {
-			case "c1" :
-				self.tempValue = str.value;
-				self.tempPubKey = str.pub;
-				self.tempAccount = str.n;
-				self.qrCodeColdwallet1 = JSON.stringify(str);
-
-				self.wallet_Id = crypto.createHash("sha256").update(self.tempPubKey.toString(), "utf8").digest("base64");
-				//console.log(self.wallet_Id);
-				self.qrCodeColdwallet2 = self.wallet_Id + "?" + self.tempValue;
-				break;
-			case "c2" :
-				if (self.tempValue == str.value) {
-					
-					console.log('creating.....')
-					
-					var opts = {
-						m: 1,
-						n: 1,
-						name: "TTT(*)",
-						xPubKey: self.tempPubKey,
-						account: self.tempAccount,
-						network: 'livenet',
-						cosigners: []
-					};
-					var coldDeviceAddr = str.addr;
-					$timeout(function () {
-						profileService.createColdWallet(opts, coldDeviceAddr, function (err, walletId) {
-							if (err) {
-								$log.warn(err);
-								self.error = err;
-								$timeout(function () {
-									$rootScope.$apply();
-								});
-								return;
-							}
-							if (opts.externalSource) {
-								if (opts.n == 1) {
-									$rootScope.$emit('Local/WalletImported', walletId);
-								}
-							}
-						});
-					}, 100);
-				}
-				break;
+		// console.log(callbacks); // undefined
+		try{
+			var obj_from_coldWallet = JSON.parse(str);
+		}catch(e){
+			//console.log(e);
+			self.isErr = 1;
+			return;
 		}
+		if (obj_from_coldWallet.type) {
+			switch (obj_from_coldWallet.type) {
+				case "c1" :
+					self.tempValue = obj_from_coldWallet.value;
+					self.tempPubKey = obj_from_coldWallet.pub;
+					self.tempAccount = obj_from_coldWallet.n;
+					self.qrCodeColdwallet1 = "xpub:" + self.tempPubKey;
+
+					// 用传值过来的xpub 派生出walletId
+					self.wallet_Id = crypto.createHash("sha256").update(self.tempPubKey.toString(), "utf8").digest("base64");
+					self.obj_to_sign = {
+						"type": "h1",
+						"wallet_Id": self.wallet_Id,
+						"tempValue": self.tempValue
+					};
+					// 需要展示的信息（ 二维码 ）
+					self.qrCodeColdwallet2 = JSON.stringify(self.obj_to_sign);
+					self.isErr = 0;
+					$scope.index.askColdwalletQrcode = false;
+					break;
+
+				case "c2" :
+					if (self.tempValue == obj_from_coldWallet.value) {
+						var opts = {
+							m: 1,
+							n: 1,
+							name: "TTT(*)",
+							xPubKey: self.tempPubKey,
+							account: self.tempAccount,
+							network: 'livenet',
+							cosigners: []
+						};
+						var coldDeviceAddr = obj_from_coldWallet.addr;
+						$timeout(function () {
+							profileService.createColdWallet(opts, coldDeviceAddr, function (err, walletId) {
+								if (err) {
+									$log.warn(err);
+									self.error = err;
+									$timeout(function () {
+										$rootScope.$apply();
+									});
+									return;
+								}
+								if (opts.externalSource) {
+									if (opts.n == 1) {
+										$rootScope.$emit('Local/WalletImported', walletId);
+									}
+								}
+							});
+						}, 100);
+					}else {
+						// 错误！！！
+						self.isErr = 1;
+					}
+					break;
+
+				default:
+					self.isErr = 1;
+			}
+		}
+
+	};
+
+	// 点击开始导入   判断所扫描的认证码是否有效 以确定按键能否点击
+	self.askColdwalletQrcode = function () {
+		if(self.isErr != 0){
+			return;
+		}
+		$scope.index.askColdwalletQrcode = true;
+		self.finishHot = 1;
 	};
 });

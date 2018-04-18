@@ -364,7 +364,7 @@
 
 
 	<!--第四步 校验您的钱包口令-->
-	<div ng-if="wordsC.step === 'show_input'" style=" height: 100%;">
+	<div ng-if="wordsC.step === 'show_input'" style=" height: 100%; ">
 		<div style="background: #12172e; height: 45px; line-height: 45px; text-align: center; font-size: 17px; color:#fff; " translate>Backup Your Seed Phrase</div>
 		<h1 class="color333; text-center" style="font-size: 18px; font-weight: bold; margin-top:45px; " translate>Confirm Your Mnemonic Words</h1>
 		<p class="size-14 text-center" style="width: 90%; margin: 15px auto 30px;" translate>Please write the mnemonic words in order and make sure your mnemonic was correct written.</p>
@@ -378,6 +378,14 @@
 					<li class="notiLi" ng-class="{'active':$index == wordsC.num}" ng-repeat="item in wordsC.items" ng-click="wordsC.mnemonic1 = wordsC.mnemonic1+item; wordsC.hideUlclearItems(); "> <span>{{wordsC.mnemonic1}}</span>{{item}} </li>
 				</ul>
 			</div>
+
+
+			<!--<div class="inptWrap">-->
+				<!--<input class="inptMnemonic inptMnemonic2" ng-model="wordsC.arrStr[0]" ng-change="wordsC.funReg1()" ng-focus="wordsC.funReg1()" >-->
+				<!--<ul class="notiUl"  ng-if="wordsC.arrStr[0]">-->
+					<!--<li class="notiLi" ng-class="{'active':$index == wordsC.num}" ng-repeat="item in wordsC.items" > <span>{{wordsC.arrStr[0]}}</span>{{item}} </li>-->
+				<!--</ul>-->
+			<!--</div>-->
 		<!--222-->
 			<div class="inptWrap">
 				<input class="inptMnemonic inptMnemonic2" ng-model="wordsC.mnemonic2" ng-change="wordsC.funReg2()" ng-focus="wordsC.funReg2()" onkeyup="this.value=this.value.replace(/[^a-z]/g,'');" ng-keyup="wordsC.handleKeyboard2($event)" maxlength="8">
@@ -462,7 +470,6 @@
 		<!--清除浮动-->
 			<div class="clearB"></div>
 
-
 		</div>
 		<!--  更改为12个输入框  结束 ----=====================================================================================================================================--->
 		<!--<textarea ng-model="wordsC.value"></textarea>-->
@@ -492,6 +499,16 @@
 				Skip
 			</button>
 		</div>
+
+		<!--自定义键盘-->
+		<!--<div style="height: 120px; background: green;">-->
+			<!--<span style="border: 1px solid #000;" ng-click="wordsC.addStr('q')">q</span>-->
+			<!--<span style="border: 1px solid #000;">w</span>-->
+			<!--<span style="border: 1px solid #000;">e</span>-->
+			<!--<span style="border: 1px solid #000;">r</span>-->
+			<!--<span style="border: 1px solid #000;">t</span>-->
+			<!--<span style="border: 1px solid #000;">y</span>-->
+		<!--</div>-->
 
 
 		<!--确认要删除么？-->
