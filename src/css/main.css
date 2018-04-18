@@ -1445,7 +1445,7 @@ input.ng-invalid-match, input.ng-invalid-match:focus {
   width: 90%;
   left: 5%;
   top: 15%;
-  z-index: 1100;
+  z-index: 3100;
 }
 
 .passModal {

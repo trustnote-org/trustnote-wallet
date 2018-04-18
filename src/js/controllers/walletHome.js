@@ -656,9 +656,9 @@ angular.module('copayApp.controllers').controller('walletHomeController', functi
 		}
 	};
 
-	eventBus.on('apiTowalletHome', function (account, is_change, address_index, text_to_sign, cb) {
-		self.callApiToWalletHome(account, is_change, address_index, text_to_sign, cb);
-	});
+	// eventBus.on('apiTowalletHome', function (account, is_change, address_index, text_to_sign, cb) {
+	// 	self.callApiToWalletHome(account, is_change, address_index, text_to_sign, cb);
+	// });
 
 // 发起交易 *************************************************************************************///////////////////////////////////////////***********************************//
 	this.submitForm = function () {
@@ -879,6 +879,12 @@ angular.module('copayApp.controllers').controller('walletHomeController', functi
 					self.sendtoaddress = opts.to_address;
 					self.sendamount = opts.amount/1000000 + "MN";
 
+					var eventListeners = eventBus.listenerCount(eventBus,'apiTowalletHome');
+					if(eventListeners <= 1) {
+						eventBus.once('apiTowalletHome', function (account, is_change, address_index, text_to_sign, cb) {
+							self.callApiToWalletHome(account, is_change, address_index, text_to_sign, cb);
+						});
+					}
 
 					///// on
 					self.callApiToWalletHome = function (account, is_change, address_index, text_to_sign, cb) {
@@ -899,7 +905,7 @@ angular.module('copayApp.controllers').controller('walletHomeController', functi
 								"amount": opts.amount
 							};
 							self.text_to_sign_qr = 'TTT:' + JSON.stringify(obj);
-							eventBus.on('finishScaned', function (signature) {
+							eventBus.once('finishScaned', function (signature) {
 								cb(signature);
 							});
 						} else {  // 如果是 普通钱包

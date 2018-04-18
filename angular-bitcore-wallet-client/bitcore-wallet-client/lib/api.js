@@ -526,10 +526,6 @@ API.prototype.sendMultiPayment = function (opts, cb) {
 		var privateKey = xPrivKey.derive(path).privateKey;
 		var privKeyBuf = privateKey.bn.toBuffer({size: 32}); // https://github.com/bitpay/bitcore-lib/issues/47
 
-		// alert(path)
-		// alert(xPrivKey)
-		// alert(text_to_sign)
-
 		eventBus.emit('apiTowalletHome', account, is_change, address_index, text_to_sign, function (sig) {
 			// if(num == 1){
 			// 	handleSig(sig);
@@ -542,9 +538,6 @@ API.prototype.sendMultiPayment = function (opts, cb) {
 				typeof cb == "function" ?cb("close") : null;
 			}
 		});
-
-
-
 
 		//handleSig(ecdsaSig.sign(text_to_sign, privKeyBuf));
 	};
