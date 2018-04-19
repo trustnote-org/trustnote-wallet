@@ -218,7 +218,7 @@ angular.module('copayApp.controllers').controller('createController', function (
 	this.BeforeScan = function() {};
 	this.handleQrcode = function parseUri(str, callbacks) {
 
-		var re = new RegExp('TTT:(.+)$', 'i');
+		var re = new RegExp('^TTT:(.+)$', 'i');
 		var arrMatches = str.match(re);
 		if (!arrMatches){
 			self.isErr = 1;
