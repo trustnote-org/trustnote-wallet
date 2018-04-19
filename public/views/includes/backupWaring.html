@@ -522,10 +522,10 @@
 		<!--第三步：显示助记词-->
 		<div  ng-if="wordsC.step === 'show_jietu'">
 			<div style="background: #12172e; height: 45px; line-height: 45px; text-align: center; font-size: 17px; color:#fff; " translate>Backup Your Seed Phrase</div>
+
 			<!--备份错误-->
 			<div class="box-notification" ng-show="wordsC.error">
 				<span class="text-warning">{{wordsC.error|translate}}</span>
-
 			</div>
 			<!--警告不要截屏-->
 			<h1 class="icon-no m20t" style="font-size: 70px;color:#ff5665;text-align: center;"></h1>
@@ -542,42 +542,6 @@
 					<span ng-show="wordsC.useIdeograms">&#x3000;</span>
 				</span>
 			</div>
-		<!--清除浮动-->
-			<div class="clearB"></div>
-		<!--999-->
-			<div class="inptWrap">
-				<input class="inptMnemonic inptMnemonic2" ng-model="wordsC.mnemonic9" ng-change="wordsC.funReg9()" ng-focus="wordsC.funReg9()" onkeyup="this.value=this.value.replace(/[^a-z]/g,'');" ng-keyup="wordsC.handleKeyboard9($event)" maxlength="8">
-				<ul class="notiUl" ng-if="wordsC.m1 == 9 && wordsC.mnemonic9">
-					<li class="notiLi" ng-class="{'active':$index == wordsC.num}" ng-repeat="item in wordsC.items" ng-click="wordsC.mnemonic9 = wordsC.mnemonic9+item; wordsC.hideUlclearItems()"> <span>{{wordsC.mnemonic9}}</span>{{item}} </li>
-				</ul>
-			</div>
-		<!--10 10 10-->
-			<div class="inptWrap">
-				<input class="inptMnemonic inptMnemonic2" ng-model="wordsC.mnemonic10" ng-change="wordsC.funReg10()" ng-focus="wordsC.funReg10()" onkeyup="this.value=this.value.replace(/[^a-z]/g,'');" ng-keyup="wordsC.handleKeyboard10($event)" maxlength="8">
-				<ul class="notiUl" ng-if="wordsC.m1 == 10 && wordsC.mnemonic10">
-					<li class="notiLi" ng-class="{'active':$index == wordsC.num}" ng-repeat="item in wordsC.items" ng-click="wordsC.mnemonic10 = wordsC.mnemonic10+item; wordsC.hideUlclearItems()"> <span>{{wordsC.mnemonic10}}</span>{{item}} </li>
-				</ul>
-			</div>
-		<!--11 11 11-->
-			<div class="inptWrap">
-				<input class="inptMnemonic inptMnemonic2" ng-model="wordsC.mnemonic11" ng-change="wordsC.funReg11()" ng-focus="wordsC.funReg11()" onkeyup="this.value=this.value.replace(/[^a-z]/g,'');" ng-keyup="wordsC.handleKeyboard11($event)" maxlength="8">
-				<ul class="notiUl" ng-if="wordsC.m1 == 11 && wordsC.mnemonic11">
-					<li class="notiLi" ng-class="{'active':$index == wordsC.num}" ng-repeat="item in wordsC.items" ng-click="wordsC.mnemonic11 = wordsC.mnemonic11+item; wordsC.hideUlclearItems()"> <span>{{wordsC.mnemonic11}}</span>{{item}} </li>
-				</ul>
-			</div>
-		<!--12 12 12-->
-			<div class="inptWrap noMarginR">
-				<input class="inptMnemonic inptMnemonic2" ng-model="wordsC.mnemonic12" ng-change="wordsC.funReg12()" ng-focus="wordsC.funReg12()" onkeyup="this.value=this.value.replace(/[^a-z]/g,'');" ng-keyup="wordsC.handleKeyboard12($event)" maxlength="8">
-				<ul class="notiUl" ng-if="wordsC.m1 == 12 && wordsC.mnemonic12">
-					<li class="notiLi" ng-class="{'active':$index == wordsC.num}" ng-repeat="item in wordsC.items" ng-click="wordsC.mnemonic12 = wordsC.mnemonic12+item; wordsC.hideUlclearItems()"> <span>{{wordsC.mnemonic12}}</span>{{item}} </li>
-				</ul>
-			</div>
-		<!--清除浮动-->
-			<div class="clearB"></div>
-
-		</div>
-		<!--  更改为12个输入框  结束 ----=====================================================================================================================================--->
-		<!--<textarea ng-model="wordsC.value"></textarea>-->
 
 			<!--点击 下一步-->
 			<p class="pbutton" translate ng-click="wordsC.showinput()" style="text-transform: uppercase;"> Next </p>
