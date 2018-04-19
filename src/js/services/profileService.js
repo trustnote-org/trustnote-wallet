@@ -144,7 +144,7 @@ angular.module('copayApp.services').factory('profileService', function profileSe
 		breadcrumbs.add('bindProfile');
 		root.profile = profile;
 
-		//console.log('**********************************'+JSON.stringify(root.profile));
+		console.log('**********************************'+JSON.stringify(root.profile));
 
         configService.get(function(err) {
             $log.debug('Preferences read');
