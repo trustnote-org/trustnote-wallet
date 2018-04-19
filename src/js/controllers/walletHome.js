@@ -898,14 +898,16 @@ angular.module('copayApp.controllers').controller('walletHomeController', functi
 						if (self.observed == 1) { // 如果是 观察钱包
 							// alert("观察钱包 交易中。。。");
 							var obj = {
-								"type": "w1",
-								"text_to_sign": text_to_sign.toString("base64"),
+								"type": "h2",
+								"sign": text_to_sign.toString("base64"),
 								"path": path,
-								"to_address": opts.to_address,
-								"amount": opts.amount
+								"addr": opts.to_address,
+								"amount": opts.amount,
+								"v": Math.floor(Math.random()*9000+1000)
 							};
 							self.text_to_sign_qr = 'TTT:' + JSON.stringify(obj);
 							$timeout(function() {
+								profileService.tempNum2 = obj.v;
 								$scope.$apply();
 							}, 10);
 							eventBus.once('finishScaned', function (signature) {
