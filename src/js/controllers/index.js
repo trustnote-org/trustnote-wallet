@@ -1703,10 +1703,12 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 	this.BeforeScan = function() {};
 	this.handleQrcode = function parseUri(str, callbacks) {
 
-		var re = new RegExp('^'+protocol+':(.+)$', 'i');
+		var re = new RegExp('^TTT:(.+)$', 'i');
 		var arrMatches = str.match(re);
-		if (!arrMatches)
-			return callbacks.ifError("no "+protocol+" prefix");
+		if (!arrMatches){
+			self.scanErr = 1;
+			return;
+		}
 		str = arrMatches[1];
 
 		try{
