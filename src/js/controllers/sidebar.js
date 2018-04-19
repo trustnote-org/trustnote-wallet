@@ -39,6 +39,9 @@ angular.module('copayApp.controllers').controller('sidebarController', function 
 		}else{
 			go.observed = 0; // go.js中： 表示为: 0 普通钱包
 		}
+		$timeout(function () {
+			$rootScope.$apply();
+		});
 	};
 
 

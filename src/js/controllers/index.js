@@ -71,10 +71,11 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 
 		self.signature = ecdsaSig.sign(text_to_sign, privKeyBuf);
 		self.signatureObj = {
-			"type": "sign",
-			"signature": self.signature
+			"type": "c3",
+			"sign": self.signature,
+			"v": go.objDetail.v
 		};
-		self.signatureObj = JSON.stringify(self.signatureObj);
+		self.signatureObj = "TTT:" + JSON.stringify(self.signatureObj);
 	};
 
 
@@ -745,8 +746,8 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 		self.setSpendUnconfirmed();
 
 		var device = require('trustnote-common/device.js');
-		console.log('-----fc.credentials.walletId:'+ fc.credentials.walletId);
-		console.log(JSON.stringify(fc.credentials));
+		//console.log('-----fc.credentials.walletId:'+ fc.credentials.walletId);
+		//console.log(JSON.stringify(fc.credentials));
 		device.uPMyColdDeviceAddress(fc.credentials.walletId);
 
 		$timeout(function () {
@@ -1701,6 +1702,13 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 	// 处理二维码
 	this.BeforeScan = function() {};
 	this.handleQrcode = function parseUri(str, callbacks) {
+
+		var re = new RegExp('^'+protocol+':(.+)$', 'i');
+		var arrMatches = str.match(re);
+		if (!arrMatches)
+			return callbacks.ifError("no "+protocol+" prefix");
+		str = arrMatches[1];
+
 		try{
 			var obj_from_hotWallet = JSON.parse(str);
 		}catch(e){
@@ -1715,15 +1723,15 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 					var xpub = profileService.focusedClient.credentials.xPubKey; // 得到：设备公钥
 					self.wallet_Id = crypto.createHash("sha256").update(xpub.toString(), "utf8").digest("base64"); // 通过公钥 生成钱包地址
 
-					if(obj_from_hotWallet.tempValue == profileService.tmpeNum && obj_from_hotWallet.wallet_Id == self.wallet_Id){
+					if(obj_from_hotWallet.v == profileService.tmpeNum && obj_from_hotWallet.id == self.wallet_Id){
 						self.myDeviceAddress = require('trustnote-common/device.js').getMyDeviceAddress(); // 得到：设备地址
 						self.ifQr = 1;
 						self.objForHot = {
 							"type": "c2",
 							"addr": self.myDeviceAddress,
-							"value": obj_from_hotWallet.tempValue
+							"v": obj_from_hotWallet.v
 						};
-						self.objForHot = JSON.stringify(self.objForHot);
+						self.objForHot = "TTT:" + JSON.stringify(self.objForHot);
 						self.scanErr = 0;
 					}else{
 						self.scanErr = 1;
@@ -1731,8 +1739,10 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 					}
 					break;
 
-				case "sign" :   // ******************* （ 观察钱包 在发送交易中。。。 等待签名 ） 来自 普通钱包的二维码 （ 发送交易 时候 ） ******************* //
-					eventBus.emit('finishScaned', obj_from_hotWallet.signature);
+				case "c3" :   // ******************* （ 观察钱包 在发送交易中。。。 等待签名 ） 来自 普通钱包的二维码 （ 发送交易 时候 ） ******************* //
+					if(profileService.tempNum2 == obj_from_hotWallet.v){
+						eventBus.emit('finishScaned', obj_from_hotWallet.sign);
+					}
 					break;
 			}
 		}
