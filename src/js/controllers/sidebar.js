@@ -39,9 +39,9 @@ angular.module('copayApp.controllers').controller('sidebarController', function 
 		}else{
 			go.observed = 0; // go.js中： 表示为: 0 普通钱包
 		}
-		$timeout(function () {
-			$rootScope.$apply();
-		});
+		// $timeout(function () {
+		// 	$rootScope.$apply();
+		// });
 	};
 
 
@@ -78,6 +78,12 @@ angular.module('copayApp.controllers').controller('sidebarController', function 
 		if (itemID !== currentID) {
 			profileService.setAndStoreFocus(itemID, false, function () {
 			});
+		}
+		self.fc = profileService.focusedClient;
+		if(self.fc.observed){
+			go.observed = 1; // go.js中 表示为： 1 观察钱包
+		}else{
+			go.observed = 0; // go.js中： 表示为: 0 普通钱包
 		}
 		$rootScope.go('preferences');
 	};
