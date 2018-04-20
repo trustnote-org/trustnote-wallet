@@ -217,7 +217,15 @@ angular.module('copayApp.controllers').controller('createController', function (
 	var crypto = require("crypto");
 	this.BeforeScan = function() {};
 	this.handleQrcode = function parseUri(str, callbacks) {
-		// console.log(callbacks); // undefined
+
+		var re = new RegExp('^TTT:(.+)$', 'i');
+		var arrMatches = str.match(re);
+		if (!arrMatches){
+			self.isErr = 1;
+			return;
+		}
+		str = arrMatches[1];
+
 		try{
 			var obj_from_coldWallet = JSON.parse(str);
 		}catch(e){
@@ -228,7 +236,7 @@ angular.module('copayApp.controllers').controller('createController', function (
 		if (obj_from_coldWallet.type) {
 			switch (obj_from_coldWallet.type) {
 				case "c1" :
-					self.tempValue = obj_from_coldWallet.value;
+					self.tempValue = obj_from_coldWallet.v;
 					self.tempPubKey = obj_from_coldWallet.pub;
 					self.tempAccount = obj_from_coldWallet.n;
 					self.qrCodeColdwallet1 = "xpub:" + self.tempPubKey;
@@ -237,17 +245,17 @@ angular.module('copayApp.controllers').controller('createController', function (
 					self.wallet_Id = crypto.createHash("sha256").update(self.tempPubKey.toString(), "utf8").digest("base64");
 					self.obj_to_sign = {
 						"type": "h1",
-						"wallet_Id": self.wallet_Id,
-						"tempValue": self.tempValue
+						"id": self.wallet_Id,
+						"v": self.tempValue
 					};
 					// 需要展示的信息（ 二维码 ）
-					self.qrCodeColdwallet2 = JSON.stringify(self.obj_to_sign);
+					self.qrCodeColdwallet2 = "TTT:" + JSON.stringify(self.obj_to_sign);
 					self.isErr = 0;
 					$scope.index.askColdwalletQrcode = false;
 					break;
 
 				case "c2" :
-					if (self.tempValue == obj_from_coldWallet.value) {
+					if (self.tempValue == obj_from_coldWallet.v) {
 						var opts = {
 							m: 1,
 							n: 1,

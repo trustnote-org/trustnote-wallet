@@ -144,7 +144,7 @@ angular.module('copayApp.services').factory('profileService', function profileSe
 		breadcrumbs.add('bindProfile');
 		root.profile = profile;
 
-		console.log('**********************************'+JSON.stringify(root.profile));
+		//console.log('**********************************'+JSON.stringify(root.profile));
 
         configService.get(function(err) {
             $log.debug('Preferences read');
@@ -794,6 +794,7 @@ angular.module('copayApp.services').factory('profileService', function profileSe
     };
 	//preferencesGlobal encrypt switch on password wrong
 	root.checkPassClose = false;
+
 	root.passWrongUnlockFC = function (error_message,cb) {
 		if (root.checkPassClose) {
 			return cb(1);
@@ -806,6 +807,7 @@ angular.module('copayApp.services').factory('profileService', function profileSe
 			}, 100);
 		});
 	};
+
     root.getWallets = function(network) {
       	if (!root.profile) return [];
 

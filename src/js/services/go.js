@@ -4,7 +4,6 @@ var eventBus = require('trustnote-common/event_bus.js');
 
 angular.module('copayApp.services').factory('go', function($window, $rootScope,  $location, $state, profileService, fileSystemService, nodeWebkit, notification, gettextCatalog, authService, $deepStateRedirect, $stickyState) {
 	var root = {};
-	var self = this;
 
 	root.toPay = 0;
 
@@ -150,6 +149,7 @@ angular.module('copayApp.services').factory('go', function($window, $rootScope, 
 
 			ifOk: function(objRequest){
 				console.log("request: "+JSON.stringify(objRequest));
+
 				if (objRequest.type === 'address'){
 					root.send(function () {
 						$rootScope.$emit('paymentRequest', objRequest.address, objRequest.amount, objRequest.asset);
@@ -161,7 +161,8 @@ angular.module('copayApp.services').factory('go', function($window, $rootScope, 
 					root.toPay = 1;
 					root.objDetail = {
 						"to_address": objRequest.to_address,
-						"amount": objRequest.amount
+						"amount": objRequest.amount,
+						"v": objRequest.v
 					};
 					root.paths = objRequest.path;
 					root.text_to_sign = new Buffer(objRequest.text_to_sign, "base64");
