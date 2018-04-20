@@ -477,7 +477,8 @@ angular.module('copayApp.directives')
 
 				calculator = $compile(calculator)(scope);
 				element.bind('focus',function(){
-					$('.ngcalculator_area').show();
+					$('.ngcalculator_area').removeClass('keyboardHidden');
+					$('.ngcalculator_area').addClass('keyboardShow');
 					document.body.appendChild(calculator[0]);
 					document.activeElement.blur();
 					$('.inptMnemonic').removeClass('active');
@@ -496,7 +497,8 @@ angular.module('copayApp.directives')
 				});
 				//点击按钮 backupSubmit backupDelSeedSubmit recSubmit Last step top bar返回
 				$('.keyCloseFlag').click(function () {
-					$('.ngcalculator_area').hide();
+					$('.ngcalculator_area').removeClass('keyboardShow');
+					$('.ngcalculator_area').addClass('keyboardHidden');
 					$('.inptMnemonic').removeClass('active');
 				});
 				//退格
@@ -522,9 +524,10 @@ angular.module('copayApp.directives')
 					$(calculator[0]).find("input").val(val).trigger('change');
 					element.val(val).trigger('ngChange');
 				});
-				//确认
+				//确认$('.ngcalculator_area').removeClass('keyboardShow');$('.ngcalculator_area').addClass('keyboardHidden');
 				$(calculator[0]).find(".ensure").click(function(){
-					$('.ngcalculator_area').hide();
+					$('.ngcalculator_area').removeClass('keyboardShow');
+					$('.ngcalculator_area').addClass('keyboardHidden');
 					$('.inptMnemonic').removeClass('active');
 				});
 				//点击效果

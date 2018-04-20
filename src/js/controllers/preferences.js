@@ -82,7 +82,7 @@ angular.module('copayApp.controllers').controller('preferencesController', funct
 
 		if (fc.isPrivKeyEncrypted()) {
 			profileService.passWrongUnlockFC(null, function (err) {
-				if (err == 1){
+				if (err == 'cancel'){
 					profileService.checkPassClose = true;
 				}else if(err){
 					return;
