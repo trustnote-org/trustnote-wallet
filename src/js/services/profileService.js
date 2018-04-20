@@ -797,7 +797,7 @@ angular.module('copayApp.services').factory('profileService', function profileSe
 
 	root.passWrongUnlockFC = function (error_message,cb) {
 		if (root.checkPassClose) {
-			return cb(1);
+			return cb('cancel');
 		}
 		root.unlockFC(error_message, function(err){
 			if (!err)

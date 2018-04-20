@@ -60,7 +60,7 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 
 		if (profileService.focusedClient.isPrivKeyEncrypted()) {
 			profileService.passWrongUnlockFC(null, function (err) {
-				if (err == 1){  // 点击取消
+				if (err == 'cancel'){  // 点击取消
 					profileService.checkPassClose = true;
 				}else if(err){  // 密码输入错误
 					return;
