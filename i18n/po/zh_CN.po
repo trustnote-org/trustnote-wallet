@@ -2021,6 +2021,8 @@ msgstr "请用在线签名扫描二维码发出交易"
 msgid "Watching"
 msgstr "观察"
 
+msgid "Note: It is not recommended to create watching wallet on your PC or laptop."
+msgstr "注：不建议使用PC端作为观察钱包"
 
 
 
