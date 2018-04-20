@@ -127,13 +127,13 @@
 
 						<textarea name="qrcode" id="qrcode" cols="30" rows="5" ng-model="create.qrCodeColdwallet1" placeholder="扫码或输入冷钱包认证码"></textarea>
 
-						<p style="color: #f00;" ng-if="create.isErr == 1" translate>Invalid verification Code</p>
+						<p style="color: #f00;" ng-if="create.isErr == 1 && create.isError() == 0" translate>Invalid verification Code</p>
 
 						<!--<div translate class="importing" ng-class="{active:create.isErr == 0}" ng-click="index.askColdwalletQrcode = true">Start importing</div>-->
-						<div translate class="importing" ng-class="{active:create.isErr == 0}" ng-click="create.askColdwalletQrcode()">Start importing</div>
+						<div translate class="importing" ng-class="{active:create.isError() == 0}" ng-click="create.askColdwalletQrcode()">Start importing</div>
 
 						<p class="note" translate> Note: Watching Only Wallet needs a offline wallet to help siging. You can use a retired smartphone and enable its aeroplane mode as a offline wallet for the offline signing purpose. </p>
-						<p class="center" translate>How offline signing works?</p>
+						<!--<p class="center" translate>How offline signing works?</p>-->
 					</div>
 				</div>
 				<!--观察者钱包 结束-->

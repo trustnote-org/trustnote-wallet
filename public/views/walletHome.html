@@ -34,7 +34,7 @@
 		position: absolute;
 		width: 90%;
 		margin-left: 5%;
-		height: 80%;
+		/*height: 80%;*/
 		margin-top:15%;
 		z-index: 1101;
 		opacity:1;
@@ -55,6 +55,15 @@
 		color: #fff;
 		cursor: pointer;
 		margin:0 auto 30px;
+	}
+	p.textArea{
+		height: 80px;
+		width: 90%;
+		margin-left: 5%;
+		border: 1px solid #999;
+		border-radius: 5px;
+		padding: 5px;
+		text-align: left;
 	}
 </style>
 
@@ -116,7 +125,8 @@
 			<qr-scanner-cold on-scan="index.handleQrcode(data)" before-scan="index.BeforeScan()"></qr-scanner-cold>
 		</span>
 		</p>
-		<p translate style="text-align: center; color: #666;">Please scan signature QR code with your offline wallet</p>
+		<p translate class="textArea" readonly="readonly">Import the signature</p>
+		<p translate style="text-align: center; color: #666; margin-top:45px;">Please scan signature QR code with your offline wallet</p>
 	</div>
 	<!--当观察钱包 发送交易时 弹出 -------- ************* *******结束  -->
 
@@ -898,7 +908,7 @@
 
 					<div ng-if="home.observed == 1">
 						<p style="margin: 10px 0 0 0; color: #333; text-align: center; font-size: 14px;" translate>This is a Watching Only Wallet which requires a offline wallet holding the Mnemonic phrase to sign the transactions.</p>
-						<p style="margin: 0; color: #0095ff; text-align: center; font-size: 14px;" translate>See How does offline signing work?</p>
+						<!--<p style="margin: 0; color: #0095ff; text-align: center; font-size: 14px;" translate>See How does offline signing work?</p>-->
 					</div>
 				</div>
 			</div>
