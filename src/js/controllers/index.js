@@ -51,24 +51,35 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 		return go.objDetail.amount;
 	};
 	self.showToPay = function () {
-		if (profileService.focusedClient.isPrivKeyEncrypted()) {
-			profileService.unlockFC(null, function (err) {
-				if (err){
-					return;
-				}
-				return self.showToPay();
-			});
-			return;
-		}
-		self.passModalMaskColdQr1 = 1;
-
+		profileService.checkPassClose = false;
 		var path = go.paths;
-
 		var xPrivKey = new Bitcore.HDPrivateKey.fromString(profileService.focusedClient.credentials.xPrivKey);
 		var privateKey = xPrivKey.derive(path).privateKey;
 		var privKeyBuf = privateKey.bn.toBuffer({size: 32});
 		var text_to_sign = go.text_to_sign;
 
+		if (profileService.focusedClient.isPrivKeyEncrypted()) {
+			profileService.passWrongUnlockFC(null, function (err) {
+				if (err == 1){  // 点击取消
+					profileService.checkPassClose = true;
+				}else if(err){  // 密码输入错误
+					return;
+				}
+				else{
+					self.passModalMaskColdQr1 = 1;
+					self.signature = ecdsaSig.sign(text_to_sign, privKeyBuf);
+					self.signatureObj = {
+						"type": "c3",
+						"sign": self.signature,
+						"v": go.objDetail.v
+					};
+					self.signatureObj = "TTT:" + JSON.stringify(self.signatureObj);
+				}
+			});
+			return;
+		}
+
+		self.passModalMaskColdQr1 = 1;
 		self.signature = ecdsaSig.sign(text_to_sign, privKeyBuf);
 		self.signatureObj = {
 			"type": "c3",
