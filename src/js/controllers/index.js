@@ -745,8 +745,6 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 		self.setSpendUnconfirmed();
 
 		var device = require('trustnote-common/device.js');
-		console.log('-----fc.credentials.walletId:'+ fc.credentials.walletId);
-		console.log(JSON.stringify(fc.credentials));
 		device.uPMyColdDeviceAddress(fc.credentials.walletId);
 
 		$timeout(function () {
