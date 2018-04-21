@@ -4,7 +4,8 @@ angular.module('copayApp.controllers').controller('preferencesDeleteWalletContro
 	function ($scope, $rootScope, $filter, $timeout, $modal, $log, storageService, notification, profileService, isCordova, go, gettext, gettextCatalog, animationService) {
 		this.isCordova = isCordova;
 		this.error = null;
-
+		var async = require('async');
+		var db = require('trustnote-common/db.js');
 		var delete_msg = gettextCatalog.getString('Are you sure you want to delete this wallet?');
 		var accept_msg = gettextCatalog.getString('Accept');
 		var cancel_msg = gettextCatalog.getString('Cancel');
@@ -49,16 +50,26 @@ angular.module('copayApp.controllers').controller('preferencesDeleteWalletContro
 			var walletName = (fc.alias || '') + ' [' + name + ']';
 			var self = this;
 
-			profileService.deleteWallet({}, function (err) {
+			profileService.deleteWallet({}, function (walletId, err) {
 				if (err) {
 					self.error = err.message || err;
 				} else {
-
+					if(walletId)
+						removeAddressesAndWallets(walletId, function(){console.log("delete wallet in datebase")});
 					// 占位符的应用
 					notification.success(gettextCatalog.getString('Success'), gettextCatalog.getString('The wallet "{{walletName}}" was deleted', {walletName: walletName}));
 				}
 			});
 		};
+
+		function removeAddressesAndWallets(walletId, cb) {
+			var arrQueries = [];
+			db.addQuery(arrQueries, "DELETE FROM my_addresses WHERE wallet='"+walletId+"'");
+			db.addQuery(arrQueries, "DELETE FROM wallet_signing_paths WHERE wallet='"+walletId+"'");
+			db.addQuery(arrQueries, "DELETE FROM extended_pubkeys WHERE wallet='"+walletId+"'");
+			db.addQuery(arrQueries, "DELETE FROM wallets WHERE wallet='"+walletId+"'");
+			async.series(arrQueries, cb);
+		}
 
 		this.deleteWallet = function () {
 			if (profileService.profile.credentials.length === 1 || profileService.getWallets().length === 1)

@@ -468,6 +468,7 @@ angular.module('copayApp.services').factory('profileService', function profileSe
 		var client = opts.client || root.focusedClient;
 
         var walletId = client.credentials.walletId;
+        var isObserved = client.observed;
         $log.debug('Deleting Wallet:', client.credentials.walletName);
         breadcrumbs.add('Deleting Wallet: ' + client.credentials.walletName);
 
@@ -490,8 +491,11 @@ angular.module('copayApp.services').factory('profileService', function profileSe
             root.setWalletClients();
             root.setAndStoreFocus(null, true, function() {
                 storageService.storeProfile(root.profile, function(err) {
-                    if (err) return cb(err);
-                    return cb();
+                    if (err) return cb(null, err);
+                    if(isObserved)
+                    	return cb(walletId);
+                    else
+                    	return cb(null);
                 });
             });
         });
