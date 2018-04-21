@@ -1964,8 +1964,8 @@ msgstr "开始导入"
 msgid "Sign"
 msgstr "授权签名"
 
-msgid "Please use the address's offline wallet (v1.1.1), scan the QR code, waiting until being authorized and then go to the next."
-msgstr "请用该地址的冷钱包（v1.1.1），扫描二维码授权观察，待授权完成后进入下一步。"
+msgid "Please use the address's offline wallet (the latest version), scan the QR code, waiting until being authorized and then go to the next."
+msgstr "请用该地址的冷钱包（最新版本），扫描二维码授权观察，待授权完成后进入下一步。"
 
 msgid "Authorized"
 msgstr "完成授权"
@@ -2021,8 +2021,11 @@ msgstr "请用在线签名扫描二维码发出交易"
 msgid "Watching"
 msgstr "观察"
 
+msgid "Note: It is not recommended to create watching wallet on your PC or laptop."
+msgstr "注：不建议使用PC端作为观察钱包"
 
-
+msgid "Import the signature"
+msgstr "导入签名"
 
 
 

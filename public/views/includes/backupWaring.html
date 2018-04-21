@@ -99,87 +99,6 @@
 				background: #0095ff !important;
 				border: 1px solid #FFFFFF !important;
 			}
-
-			/*软键盘样式*/
-			div.ngcalculator_area{
-				width: 100%;
-				position: fixed;
-				bottom: 0;
-				z-index: 999999999;
-			}
-			.calculator {
-				width: 100%;
-				padding: 0.5rem 0;
-				font-size: 0.65rem;
-				background: #C4CAD3;
-				border-radius: 0.1rem;
-				box-shadow: 1px 3px 5px rgba(0, 0, 0, 0.3);
-				opacity: 1;
-			}
-			.inputarea {
-				background: #fff;
-				padding: 0 0.5rem;
-			}
-			.con {
-				overflow: hidden;
-			}
-			.line1 , .line2 , .line3{
-				text-align: center;
-			}
-			.num  {
-				font-size: 1rem;
-				text-align: center;
-				height: 0;
-				line-height: 0;
-				padding: 1.2rem 0;
-				display: inline-block;
-				width: 8%;
-				border-radius: 0.3rem;
-				background: #fff;
-				color: black;
-				font-weight: 600;
-				box-shadow: 1px 3px 5px #ccc;
-				margin: 0.2rem 0.15rem;
-			}
-			.blueIcon {
-				font-size: 0.85rem;
-				text-align: center;
-				height: 0;
-				width: 2.5rem;
-				line-height: 0;
-				padding: 1.2rem 0;
-				display: inline-block;
-				border-radius: 0.3rem;
-				color: black;
-				font-weight: 400;
-				box-shadow: 1px 3px 5px #ccc;
-				margin: 0.2rem 0.15rem;
-			}
-			.close{
-				background-color: #98A2AE;
-			}
-			.backstep{
-				background: #98A2AE url("img/backspace.png") no-repeat center center;
-				background-size: 1.8rem;
-			}
-			.ensure {
-				background-color: #98A2AE;
-			}
-			.keydown {
-				box-shadow: 0 0 0 0 #000;
-				-webkit-transform: translateY(1px);
-				-moz-transform: translateY(1px);
-				-ms-transform: translateY(1px);
-				-o-transform: translateY(1px);
-				transform: translateY(1px);
-			}
-			#text{
-				width: 100%;
-				height: 0;
-				border: none;
-				padding: 0;
-				margin: 0;
-			}
 		</style>
 		<!--本页面样式 结束-->
 		<!-- 添加一个色块 -->
@@ -212,7 +131,7 @@
 				<div style="background: #12172e; height: 45px; line-height: 45px; text-align: center; font-size: 17px; color:#fff; " translate>
 					<span translate>Restore Wallet</span>
 
-					<a ng-if="!recFromSeeddir.scanning" onclick="$('.ngcalculator_area').hide();$('.inptMnemonic').removeClass('active');" ng-click="wordsC.step = 'show_waring'" style="color:#fff; position: absolute; left: 0;width: 60px;">
+					<a ng-if="!recFromSeeddir.scanning" onclick="$('.ngcalculator_area').removeClass('keyboardShow');$('.ngcalculator_area').addClass('keyboardHidden');$('.inptMnemonic').removeClass('active');" ng-click="wordsC.step = 'show_waring'" style="color:#fff; position: absolute; left: 0;width: 60px;">
 						<i class="icon-arrow-left3  icon-back" style="font-size: 24px; position: absolute; left: 0; top: 10px;"></i>
 						<span class="text-back" style="font-size: 16px;position: absolute; left:20px;" >{{'Back'|translate}}</span>
 					</a>
@@ -755,7 +674,7 @@
 			<!--建议删除种子文件-->
 			<p ng-if="wordsC.dis() && wordsC.value" style="text-align: center; color:red;margin-top: 10px;" translate>Invalid mnemonic</p>
 			<!--点击 上一步-->
-			<p class="pbutton" onclick="$('.ngcalculator_area').hide();$('.inptMnemonic').removeClass('active');" ng-if="wordsC.dis()" translate ng-click="wordsC.gono()" style="text-transform: uppercase;"> Last step </p>
+			<p class="pbutton" onclick="$('.ngcalculator_area').removeClass('keyboardShow');$('.ngcalculator_area').addClass('keyboardHidden');$('.inptMnemonic').removeClass('active');" ng-if="wordsC.dis()" translate ng-click="wordsC.gono()" style="text-transform: uppercase;"> Last step </p>
 
 			<p class="size-14 text-center" style="width: 90%; margin: 20px auto 10px;color:#ff5665; font-weight: bold" ng-if="!wordsC.dis()" translate>Your mnemonic words are correct. To make your wallet safe, we highly recommend you delete mnemonic words from app.</p>
 
@@ -763,7 +682,7 @@
 			<div style="text-align: center;">
 				<button
 						style="width: 210px; text-align:center; height: 45px; background: #0095ff; border-radius: 40px; color: #fff; margin: 0px auto 0; padding: 0;"
-						ng-click="wordsC.del()"
+						ng-click="wordsC.del();"
 						ng-if="!wordsC.dis()" translate>DELETE SEED PHRASE</button>
 			</div>
 
@@ -772,6 +691,7 @@
 				<button
 						style="width: 210px; text-align:center; height: 45px; background: #fff; border-radius: 40px; color: #0095ff; padding: 0;margin: 0; border: 1px solid #0095ff;text-transform: uppercase;"
 						ng-click="wordsC.haschoosen(); index.splashClick = false"
+						onclick="$('.ngcalculator_area').removeClass('keyboardShow');$('.ngcalculator_area').addClass('keyboardHidden');"
 						ng-if="!wordsC.dis()" translate>
 					Skip
 				</button>
@@ -787,9 +707,9 @@
 				<p class="size-14 text-center" style="width: 90%; margin: 0px auto 10px;" translate>It will delete the seed phrase in the app and can not be restored, please be sure that you have the seed phrase back to a safe place</p>
 
 				<!--点击 跳过删除口令 进入钱包-->
-				<p class="pbutton" style="margin: 75px auto 0;text-transform: uppercase;" translate ng-click="wordsC.delteConfirm();wordsC.haschoosen(); index.splashClick = false">  Confirm delete </p>
+				<p class="pbutton" style="margin: 75px auto 0;text-transform: uppercase;" translate onclick="$('.ngcalculator_area').removeClass('keyboardShow');$('.ngcalculator_area').addClass('keyboardHidden');" ng-click="wordsC.delteConfirm();wordsC.haschoosen(); index.splashClick = false">  Confirm delete </p>
 				<!--点击 确定删除口令 进入钱包-->
-				<p class="pbutton" translate ng-click="wordsC.haschoosen(); index.splashClick = false " style="background: #fff; color: #0095ff; border: 1px solid #0095ff;text-transform: uppercase;"> Skip </p>
+				<p class="pbutton" translate onclick="$('.ngcalculator_area').removeClass('keyboardShow');$('.ngcalculator_area').addClass('keyboardHidden');" ng-click="wordsC.haschoosen(); index.splashClick = false " style="background: #fff; color: #0095ff; border: 1px solid #0095ff;text-transform: uppercase;"> Skip </p>
 			</div>
 		</div>
 		<!--第四步 结束-->

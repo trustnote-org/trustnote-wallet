@@ -80,7 +80,7 @@ angular.module('copayApp.controllers').controller('preferencesGlobalController',
 				// 	});
 				// });
 				profileService.passWrongUnlockFC(null,function (err) {
-					if(err == 1){
+					if(err == 'cancel'){
 						console.log('**********cancel Unclock**********');
 					}
 					if (err) {

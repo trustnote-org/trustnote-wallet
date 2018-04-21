@@ -29,7 +29,15 @@
 	}
 	p.finished{
 		text-align: center;
-		margin-top:210px;
+		margin-top:85px;
+	}
+	p.textArea{
+		height: 80px;
+		width: 90%;
+		margin-left: 5%;
+		border: 1px solid #999;
+		border-radius: 5px;
+		padding: 5px;
 	}
 </style>
 
@@ -50,7 +58,7 @@
 				<qrcode size="180" version="10" data="{{create.qrCodeColdwallet2}}"></qrcode>
 			</div>
 
-			<p translate class="text">Please use the address's offline wallet (v1.1.1), scan the QR code, waiting until being authorized and then go to the next.</p>
+			<p translate class="text">Please use the address's offline wallet (the latest version), scan the QR code, waiting until being authorized and then go to the next.</p>
 			<p translate class="bbutton" ng-click="create.finishHot = 2">Next</p>
 		</div>
 	</div>
@@ -63,6 +71,8 @@
 			<qr-scanner-cold on-scan="create.handleQrcode(data)" before-scan="create.BeforeScan()"></qr-scanner-cold>
 		</span>
 		</p>
+
+		<p translate class="textArea" readonly="readonly">Import the signature</p>
 
 		<p class="finished" translate>Please scan QR code on the offline wallet to import the signature</p>
 	</div>

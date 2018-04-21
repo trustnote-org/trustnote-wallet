@@ -77,16 +77,24 @@ angular.module('copayApp.controllers').controller('preferencesController', funct
 
 	// ***** 点击进入 查看钱包公钥（ 创建观察钱包时 ）
 	self.toShowPubKey = function () {
+		profileService.checkPassClose = false;
 		var fc = profileService.focusedClient;
+
 		if (fc.isPrivKeyEncrypted()) {
-			profileService.unlockFC(null, function (err) {
-				if (err){
+			profileService.passWrongUnlockFC(null, function (err) {
+				if (err == 'cancel'){
+					profileService.checkPassClose = true;
+				}else if(err){
 					return;
 				}
-				return self.toShowPubKey();
+				else{
+					$rootScope.go('preferences.preferencesCold')
+				}
+				// return self.toShowPubKey();
 			});
 			return;
 		}
+
 		$rootScope.go('preferences.preferencesCold')
 	};
 });

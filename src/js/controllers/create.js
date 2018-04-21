@@ -216,8 +216,16 @@ angular.module('copayApp.controllers').controller('createController', function (
 // 创建新钱包中---： 处理二维码 ： 观察钱包扫描冷钱包 /***************************************************/
 	var crypto = require("crypto");
 	this.BeforeScan = function() {};
+
 	this.handleQrcode = function parseUri(str, callbacks) {
-		// console.log(callbacks); // undefined
+		var re = new RegExp('^TTT:(.+)$', 'i');
+		var arrMatches = str.match(re);
+		if (!arrMatches){
+			self.isErr = 1; // 报错 显示无效认证码
+			return;
+		}
+
+		str = arrMatches[1];
 		try{
 			var obj_from_coldWallet = JSON.parse(str);
 		}catch(e){
@@ -225,29 +233,17 @@ angular.module('copayApp.controllers').controller('createController', function (
 			self.isErr = 1;
 			return;
 		}
+
 		if (obj_from_coldWallet.type) {
 			switch (obj_from_coldWallet.type) {
 				case "c1" :
-					self.tempValue = obj_from_coldWallet.value;
-					self.tempPubKey = obj_from_coldWallet.pub;
-					self.tempAccount = obj_from_coldWallet.n;
-					self.qrCodeColdwallet1 = "xpub:" + self.tempPubKey;
-
-					// 用传值过来的xpub 派生出walletId
-					self.wallet_Id = crypto.createHash("sha256").update(self.tempPubKey.toString(), "utf8").digest("base64");
-					self.obj_to_sign = {
-						"type": "h1",
-						"wallet_Id": self.wallet_Id,
-						"tempValue": self.tempValue
-					};
-					// 需要展示的信息（ 二维码 ）
-					self.qrCodeColdwallet2 = JSON.stringify(self.obj_to_sign);
+					self.qrCodeColdwallet1 = "TTT:" + JSON.stringify(obj_from_coldWallet);
 					self.isErr = 0;
 					$scope.index.askColdwalletQrcode = false;
 					break;
 
 				case "c2" :
-					if (self.tempValue == obj_from_coldWallet.value) {
+					if (self.tempValue == obj_from_coldWallet.v) {
 						var opts = {
 							m: 1,
 							n: 1,
@@ -288,11 +284,54 @@ angular.module('copayApp.controllers').controller('createController', function (
 
 	};
 
-	// 点击开始导入   判断所扫描的认证码是否有效 以确定按键能否点击
+	self.isError = function () {
+		if(!!self.qrCodeColdwallet1){
+			return 0 // 有值 返回0
+		}
+	};
+
+
+	// 点击开始导入
 	self.askColdwalletQrcode = function () {
-		if(self.isErr != 0){
+		if(self.isError() != 0){ // 没有值 返回
 			return;
 		}
+
+		var re = new RegExp('^TTT:(.+)$', 'i');
+		var arrMatches = self.qrCodeColdwallet1.match(re);
+		if (!arrMatches){
+			self.isErr = 1; // 没有TTT开头 返回
+			return;
+		}
+
+		var objForColdwallet = arrMatches[1];
+		try{
+			objForColdwallet = JSON.parse(objForColdwallet);
+		}catch(e){
+			self.isErr = 1;  // 不是obj 返回
+			return;
+		}
+
+		if(objForColdwallet.type != 'c1'){
+			self.isErr = 1;
+			return;  // 不是c1类型 返回
+		}
+		if(!objForColdwallet.v || !objForColdwallet.pub){
+			self.isErr = 1;
+			return;  // 没有以上三个属性 返回
+		}
+
+		self.tempValue = objForColdwallet.v;
+		self.tempPubKey = objForColdwallet.pub;
+		self.tempAccount = objForColdwallet.n;
+		self.wallet_Id = crypto.createHash("sha256").update(self.tempPubKey.toString(), "utf8").digest("base64");
+		self.obj_to_sign = {
+			"type": "h1",
+			"id": self.wallet_Id,
+			"v": self.tempValue
+		};
+		self.qrCodeColdwallet2 = "TTT:" + JSON.stringify(self.obj_to_sign);  // 需要展示的信息（ 二维码 ）
+
 		$scope.index.askColdwalletQrcode = true;
 		self.finishHot = 1;
 	};
