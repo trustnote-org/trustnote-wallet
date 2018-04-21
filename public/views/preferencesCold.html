@@ -1,4 +1,4 @@
-<!-- 冷钱包公钥 以及 相关信息 -->
+<!-- 冷钱包认证码 -->
 <style>
 	div.qrcodeWrap{
 		text-align: center;
@@ -49,12 +49,10 @@
 
 
 <div class="content preferences" ng-controller="preferencesColdController as pCold">
-
 	<p class="title" translate>Offline wallet verification QR Code</p>
-	<!--<p class="xpub enable_text_select" ng-init="Xpub = pCold.credentials.xPubKey">{{Xpub}}</p>-->
 	<p class="xpub enable_text_select">{{pCold.qrcode}}</p>
 	
-	<p style="color: #f00;" ng-if="index.scanErr == 1">重新开始 扫描本认证码</p>
+	<p style="color: #f00;" ng-if="index.scanErr == 1">重新开始扫描本认证码</p>
 
 	<div class="qrcodeWrap">
 		<qrcode size="180" version="10" data="{{pCold.qrcode}}"></qrcode>
@@ -64,6 +62,3 @@
 </div>
 
 <div class="extra-margin-bottom"></div>
-
-
-
