@@ -1330,7 +1330,7 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 
 // 点击下载CSV文件
 	this.csvHistory = function () {
-
+		//console.log(profileService.focusedClient)
 		function saveFile(name, data) {
 			var chooser = document.querySelector(name);
 			chooser.addEventListener("change", function (evt) {
