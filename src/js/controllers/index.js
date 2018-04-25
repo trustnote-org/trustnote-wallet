@@ -224,6 +224,214 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 		});
 	}
 
+	function determineIfAddressUsed(address, db, cb) {
+		db.query("SELECT 1 FROM outputs WHERE address = ? LIMIT 1", [address], function (outputsRows) {
+			if (outputsRows.length === 1)
+				cb(true);
+			else {
+				db.query("SELECT 1 FROM unit_authors WHERE address = ? LIMIT 1", [address], function (unitAuthorsRows) {
+					cb(unitAuthorsRows.length === 1);
+				});
+			}
+		});
+	}
+
+	function scanForAddresses(cb) {
+		var wallet_defined_by_keys = require('trustnote-common/wallet_defined_by_keys.js');
+		var db = require('trustnote-common/db.js');
+		var fc = profileService.focusedClient;
+		var xPubKey = fc.credentials.xPubKey;
+		var walletId = fc.credentials.walletId;
+		var currentAddressIndex = 0;
+		var lastUsedAddressIndex = -1;
+		var assocMaxAddressIndexes = {};
+		var readNextAddressCount = 0;
+
+		function checkAndAddCurrentAddress(is_change) {
+
+			if (!assocMaxAddressIndexes[walletId])
+				assocMaxAddressIndexes[walletId] = {
+					init_main: 0,
+					main: 0,
+					init_change: 0,
+					change: 0
+				};
+
+			if(((!is_change)&&(!readNextAddressCount))||(is_change&&readNextAddressCount)) {
+				wallet_defined_by_keys.readNextAddressIndex(walletId, is_change, function (index) {
+					currentAddressIndex = index;
+					lastUsedAddressIndex = index;
+					if (is_change) {
+						assocMaxAddressIndexes[walletId].init_change = index;
+						readNextAddressCount = 0;
+						// console.log("\n+++++++++++++++++++changeinitindex: " + index);
+						checkHistory();
+					}
+					else {
+						assocMaxAddressIndexes[walletId].init_main = index;
+						readNextAddressCount = 1;
+						// console.log("\n+++++++++++++++++++maininitindex: " + index);
+						checkHistory();
+					}
+				});
+			}
+			else {
+				checkHistory();
+			}
+
+			function checkHistory() {
+				var address = objectHash.getChash160(["sig", {"pubkey": wallet_defined_by_keys.derivePubkey(xPubKey, 'm/' + is_change + '/' + currentAddressIndex)}]);
+				determineIfAddressUsed(address, db, function (bUsed) {
+					if (bUsed) {
+						lastUsedAddressIndex = currentAddressIndex;
+						if (is_change) {
+							assocMaxAddressIndexes[walletId].change = currentAddressIndex;
+						} else {
+							assocMaxAddressIndexes[walletId].main = currentAddressIndex;
+						}
+						currentAddressIndex++;
+						checkAndAddCurrentAddress(is_change);
+					} else {
+						currentAddressIndex++;
+						if (currentAddressIndex - lastUsedAddressIndex > 20) {
+							// console.log("\n+++++++++++++++++++++++++" + JSON.stringify(assocMaxAddressIndexes));
+							if (is_change) {
+								assocMaxAddressIndexes[walletId].init_main--;
+								cb(assocMaxAddressIndexes, walletId);
+							} else {
+								currentAddressIndex = 0;
+								lastUsedAddressIndex = -1;
+								checkAndAddCurrentAddress(1);
+							}
+						} else {
+							checkAndAddCurrentAddress(is_change);
+						}
+					}
+				})
+			}
+		}
+		checkAndAddCurrentAddress(0);
+	}
+
+	function scanForAddressesLignt(cb) {
+		var myWitnesses = require('trustnote-common/my_witnesses');
+		var wallet_defined_by_keys = require('trustnote-common/wallet_defined_by_keys.js');
+		var network = require('trustnote-common/network');
+		var fc = profileService.focusedClient;
+		var xPubKey = fc.credentials.xPubKey;
+		var walletId = fc.credentials.walletId;
+
+		var assocMaxAddressIndexes = {};
+		var readNextAddressCount = 0;
+
+		function checkAndAddCurrentAddresses(is_change) {
+			var wallet_address_index = 0;
+
+			if (!assocMaxAddressIndexes[walletId])
+				assocMaxAddressIndexes[walletId] = {
+					init_main: 0,
+					main: 0,
+					init_change: 0,
+					change: 0
+				};
+
+			if(((!is_change)&&(!readNextAddressCount))||(is_change&&readNextAddressCount)) {
+				wallet_defined_by_keys.readNextAddressIndex(walletId, is_change, function (index) {
+					wallet_address_index = index;
+					if (is_change) {
+						assocMaxAddressIndexes[walletId].init_change = index;
+						readNextAddressCount = 0;
+						// console.log("\n+++++++++++++++++++changeinitindex: " + index);
+						checkHistory();
+					}
+					else {
+						assocMaxAddressIndexes[walletId].init_main = index;
+						readNextAddressCount = 1;
+						// console.log("\n+++++++++++++++++++maininitindex: " + index);
+						checkHistory();
+					}
+				});
+			}
+			else {
+				checkHistory();
+			}
+			function checkHistory() {
+				var arrTmpAddresses = [];
+				for (var i = wallet_address_index; i < wallet_address_index + 20; i++) {
+					var index = (is_change ? assocMaxAddressIndexes[walletId].change : assocMaxAddressIndexes[walletId].main) + i;
+					arrTmpAddresses.push(objectHash.getChash160(["sig", {"pubkey": wallet_defined_by_keys.derivePubkey(xPubKey, 'm/' + is_change + '/' + index)}]));
+				}
+				// console.log("\n" + is_change + "++++++++++++++" + arrTmpAddresses);
+				myWitnesses.readMyWitnesses(function (arrWitnesses) {
+					network.requestFromLightVendor('light/get_history', {
+						addresses: arrTmpAddresses,
+						witnesses: arrWitnesses
+					}, function (ws, request, response) {
+						if (response && response.error) {
+							var breadcrumbs = require('trustnote-common/breadcrumbs.js');
+							breadcrumbs.add('Error scanForAddressesAndWalletsInLightClient: ' + response.error);
+							// console.log("\n+++++++++++++++++++++++" + response.error);
+							return;
+						}
+						if (Object.keys(response).length) {
+							if (is_change) {
+								assocMaxAddressIndexes[walletId].change += 20;
+							} else {
+								assocMaxAddressIndexes[walletId].main += 20;
+							}
+							// console.log("\n+++++++++++++++++++++++++" + JSON.stringify(assocMaxAddressIndexes));
+							checkAndAddCurrentAddresses(is_change);
+						} else {
+							if (is_change) {
+								if (assocMaxAddressIndexes[walletId].change === 0 && assocMaxAddressIndexes[walletId].main === 0)
+									delete assocMaxAddressIndexes[walletId];
+								else
+									cb(assocMaxAddressIndexes, walletId);
+							} else {
+								checkAndAddCurrentAddresses(1);
+							}
+						}
+					});
+				});
+			}
+		}
+		checkAndAddCurrentAddresses(0);
+	}
+
+	function addAddresses(assocMaxAddressIndexes, walletId) {
+		var wallet_defined_by_keys = require('trustnote-common/wallet_defined_by_keys.js');
+
+		function addAddress(wallet, is_change, index, maxIndex) {
+			console.log("\n+++++++++++++++++++++++"+is_change+"change"+index+"------"+maxIndex);
+			wallet_defined_by_keys.issueAddress(wallet, is_change, index, function (addressInfo) {
+				index++;
+				if (index <= maxIndex) {
+					addAddress(wallet, is_change, index, maxIndex);
+				} else {
+					if (is_change) {
+						return;
+					} else {
+						startAddToNewWallet(1);
+					}
+				}
+			});
+		}
+
+		function startAddToNewWallet(is_change) {
+			if (is_change) {
+				if (assocMaxAddressIndexes[walletId].change) {
+					addAddress(walletId, 1, assocMaxAddressIndexes[walletId].init_change, assocMaxAddressIndexes[walletId].change);
+				} else {
+					return;
+				}
+			} else {
+				addAddress(walletId, 0, assocMaxAddressIndexes[walletId].init_main, assocMaxAddressIndexes[walletId].main);
+			}
+		}
+		startAddToNewWallet(0);
+		self.updateHistory();
+	}
+
 	var catchup_balls_at_start = -1;
 	eventBus.on('catching_up_started', function () {
 		self.setOngoingProcess('Syncing', true);
@@ -244,6 +452,7 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 		catchup_balls_at_start = -1;
 		self.setOngoingProcess('Syncing', false);
 		self.syncProgress = "";
+		scanForAddresses(addAddresses);
 	});
 	eventBus.on('unhandled_private_payments_left', function (count_left) { // light only
 		var bChanged = (self.count_unhandled_private_payments !== count_left);
@@ -261,6 +470,7 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 	eventBus.on('refresh_light_done', function () {
 		console.log('refresh_light_done');
 		self.setOngoingProcess('Syncing', false);
+		scanForAddressesLignt(addAddresses);
 	});
 
 	eventBus.on("confirm_on_other_devices", function () {
@@ -939,6 +1149,10 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 					breadcrumbs.add('triggerTxUpdate');
 					self.updateTxHistory();
 				}, 1);
+			}
+			var conf = require('trustnote-common/conf.js');
+			if(!conf.bLight) {
+				scanForAddresses(addAddresses);
 			}
 		});
 	};
