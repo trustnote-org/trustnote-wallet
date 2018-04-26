@@ -56,8 +56,8 @@ angular.module('copayApp.controllers').controller('preferencesDeleteWalletContro
 				} else {
 					if(walletId)
 						removeAddressesAndWallets(walletId, function(){console.log("delete wallet in datebase")});
-					// 占位符的应用
-					notification.success(gettextCatalog.getString('Success'), gettextCatalog.getString('The wallet "{{walletName}}" was deleted', {walletName: walletName}));
+						// 占位符的应用
+						notification.success(gettextCatalog.getString('Success'), gettextCatalog.getString('The wallet "{{walletName}}" was deleted', {walletName: walletName}));
 				}
 			});
 		};
