@@ -32,7 +32,6 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 
 	self.showneikuang = false;
 	self.showneikuangsync = false;
-
 	self.isObserved = function () {
 		return go.observed;
 	};
