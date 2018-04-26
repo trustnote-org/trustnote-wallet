@@ -2010,10 +2010,10 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 		if(newVersion.msg){
 			self.arrToUpdate = newVersion.msg;
 			if(uxLanguage.getCurrentLanguage() == 'en'){
-				return self.arrToUpdate.msg.en;
+				return self.arrToUpdate.en;
 			}
 			if(uxLanguage.getCurrentLanguage() == 'zh_CN'){
-				return self.arrToUpdate.msg.cn;
+				return self.arrToUpdate.cn;
 			}
 		}
 	};
