@@ -771,10 +771,6 @@ msgstr "网络"
 msgid "New Random Seed"
 msgstr "新的随机口令"
 
-#: public/views/modals/newVersionIsAvailable.html:3
-msgid "New version is available!"
-msgstr "有新版本可用！"
-
 #: public/views/modals/approveNewWitnesses.html:9
 msgid "New witnesses"
 msgstr "新的证人"
@@ -2026,6 +2022,12 @@ msgstr "注：不建议使用PC端作为观察钱包"
 
 msgid "Import the signature"
 msgstr "导入签名"
+
+msgid "Update"
+msgstr "前往下载"
+
+msgid "Upgrade prompt"
+msgstr "升级提示"
 
 
 
