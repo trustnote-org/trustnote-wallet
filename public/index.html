@@ -43,6 +43,9 @@
 					<!-- 冷钱包扫码后显示 授权交易 -->
 					<div ng-include="'views/includes/toPay.html'"  ng-if="index.toPay() == 1"></div>
 
+					<!-- 提示升级 -->
+					<div ng-include="'views/modals/newVersionIsAvailable.html'" ng-if="index.showUpdate() == 1"></div>
+
 
 					<!-- main info -->
 					<div id="sectionContainer">

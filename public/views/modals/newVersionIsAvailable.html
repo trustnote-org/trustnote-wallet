@@ -1,41 +1,69 @@
 <!-- 新版本可用 -->
 <style>
-	#buttons {
-		margin-top: 30px;
+	div.newVwrap{
+		width: 100%;
+		height: 100%;
+		position: absolute;
+		left: 0;
+		top: 0;
+		opacity: 0.5;
+		background: #000;
+		z-index: 6660;
 	}
-	#btnOk {
-		background-color: #0095ff;
-		padding: 15px 0;
-		font-size: 14px;
-		width: 180px;
-		margin-bottom: 20px;
+	div.newV{
+		position: absolute;
+		left: 10%;
+		width: 80%;
+		top: 30%;
+		background: #fff;
+		color: #000;
+		z-index: 6666;
+		padding: 10px 0 0 0 ;
+		border-radius: 10px;
+		overflow: hidden;
 	}
-	#btnCanl {
-		background-color: #fff;
-		padding: 15px 0;
-		font-size: 14px;
-		width: 180px;
+	ul.newUl{
+		word-break: break-all;
+		list-style: none;
+		margin:15px 0;
+	}
+	li.newLi{
+		list-style: none;
+		padding: 0 15px;
+		color: #666;
+		margin-bottom:5px;
+	}
+	p.pbtn{
+		float: left;
+		border-top:1px solid #d8d8d8;
+		width: 50%;
+		text-align: center;
+		height:50px;
+		line-height: 50px;
+		font-size:16px;
+		margin-bottom: 0;
+		cursor: pointer;
+	}
+	p.borderR{
+		border-left:1px solid #d8d8d8;
 		color: #0095ff;
-		border: 1px solid #0095ff;
 	}
+	h1.title{
+		font-size:18px;
+		color: #333;
+	}
+
+
 </style>
 
-<div class="m20tp p20h text-center">
-	<div class="row">
-		<h1 class="text-center" translate>New version is available!</h1>
-		<!--<h2 class="text-center" ng-show="msg">{{msg}}</h2>-->
+<div class="newVwrap"></div>
 
-		<ul ng-show="msg" style="padding-left: 35px; margin-top: 25px; text-align:left; padding-right: 20px; word-break: break-all; ">
-			<li ng-repeat="item in msg">{{ item }}</li>
-		</ul>
+<div class="newV">
+	<h1 class="text-center title" translate>Upgrade prompt</h1>
+	<ul class="newUl">
+		<li class="newLi" ng-repeat="item in index.textToUpdate()">{{$index + 1}}. {{item}}</li>
+	</ul>
 
-		<div id="buttons" class="row">
-			<div>
-				<button class="button black  round m0" id="btnOk" ng-click="openDownloadLink()" translate> Upgrade to {{version}} </button>
-			</div>
-			<div>
-				<button class="button black expand round m0" id="btnCanl" ng-click="later()" translate>Later</button>
-			</div>
-		</div>
-	</div>
+	<p class="pbtn" translate ng-click="index.cancelUpdate()">Later</p>
+	<p class="pbtn  borderR" translate ng-click="index.openDownloadLink()">Update</p>
 </div>

@@ -2,35 +2,22 @@
 
 var eventBus = require('trustnote-common/event_bus.js');
 
-angular.module('copayApp.services')
-.factory('newVersion', function($modal, $timeout, $rootScope){
-  var root = {};
-  root.shown = false;
-  root.timerNextShow = false;
+angular.module('copayApp.services').factory('newVersion', function(){
+	var root = {};
+	root.showUpdate = 0;
 
-  eventBus.on('new_version', function(ws, data){
-    root.version = data.version;
-    if(data.msg)
-    	root.msg = data.msg;
-    if(!root.shown) {
-      var modalInstance = $modal.open({
-          templateUrl: 'views/modals/newVersionIsAvailable.html',
-          controller: 'newVersionIsAvailable'
-      });
-      $rootScope.$on('closeModal', function() {
-      	  modalInstance.dismiss('cancel');
-      });
-      root.shown = true;
-      startTimerNextShow();
-    }
-  });
+	eventBus.on('new_version', function (ws, data) {
+		if (data.msg){
+			if(typeof (data.msg) == 'string'){
+				root.msg = JSON.parse(data.msg)
+			}
+			root.msg = data.msg;
+		}
 
-  function startTimerNextShow(){
-    if (root.timerNextShow) $timeout.cancel(root.timerNextShow);
-    root.timerNextShow = $timeout(function(){
-      root.shown = false;
-    }, 1000 * 60 * 60 * 24);
-  }
+		if (root.showUpdate == 0) {
+			root.showUpdate = 1;
+		}
+	});
 
-  return root;
+	return root;
 });

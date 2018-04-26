@@ -11,7 +11,7 @@ var Bitcore = require('bitcore-lib');
 var EventEmitter = require('events').EventEmitter;
 
 
-angular.module('copayApp.controllers').controller('indexController', function ($rootScope, $scope, $log, $filter, $timeout, lodash, go, profileService, configService, isCordova, storageService, addressService, gettext, gettextCatalog, amMoment, nodeWebkit, addonManager, txFormatService, uxLanguage, $state, isMobile, addressbookService, notification, animationService, $modal, bwcService, backButton, pushNotificationsService) {
+angular.module('copayApp.controllers').controller('indexController', function ($rootScope, $scope, $log, $filter, $timeout, lodash, go, profileService, configService, isCordova, storageService, addressService, gettext, gettextCatalog, amMoment, nodeWebkit, addonManager, txFormatService, uxLanguage, $state, isMobile, addressbookService, notification, animationService, $modal, bwcService, backButton, pushNotificationsService, newVersion) {
 	breadcrumbs.add('index.js');
 	var self = this;
 
@@ -1331,7 +1331,6 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 
 // 点击下载CSV文件
 	this.csvHistory = function () {
-		//console.log(profileService.focusedClient)
 		function saveFile(name, data) {
 			var chooser = document.querySelector(name);
 			chooser.addEventListener("change", function (evt) {
@@ -1922,9 +1921,7 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 
 // 创建 观察钱包 冷钱包 //*****************************////
 	self.ifQr = 0; // 显示：冷钱包的 授权信息
-
-	//self.qrcode = '{"type":"c1","name":"TTT","pub":"' + self.credentials.xPubKey + '","n":0,"value":1234}';
-
+	
 	// 处理二维码
 	this.BeforeScan = function() {};
 	this.handleQrcode = function parseUri(str, callbacks) {
@@ -1974,5 +1971,50 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 					break;
 			}
 		}
-	}
+	};
+	
+// 提示 新版本更新 //*****************************////
+// 前往下载
+	self.openDownloadLink = function () {
+		var link = '';
+		var appPlatform = '/application.html';
+		link = 'https://trustnote.org' + appPlatform;
+
+		if (typeof nw !== 'undefined')
+			nw.Shell.openExternal(link);
+		else
+			cordova.InAppBrowser.open(link, '_system');
+
+		if (navigator && navigator.app)
+			navigator.app.exitApp();
+		else if (process.exit)
+			process.exit();
+	};
+
+// 稍后提示 24小时后再次提示
+	self.cancelUpdate = function () {
+		newVersion.showUpdate = 0;
+		$timeout(function () {
+			newVersion.showUpdate = 1;
+		}, 1000 * 60 * 60 * 24)
+	};
+
+// 显示 升级提示
+	self.showUpdate = function () {
+		return newVersion.showUpdate
+	};
+
+// 升级 的内容
+	self.textToUpdate = function () {
+		self.arrToUpdate = null;
+		if(newVersion.msg){
+			self.arrToUpdate = newVersion.msg;
+			if(uxLanguage.getCurrentLanguage() == 'en'){
+				return self.arrToUpdate.msg.en;
+			}
+			if(uxLanguage.getCurrentLanguage() == 'zh_CN'){
+				return self.arrToUpdate.msg.cn;
+			}
+		}
+	};
 });
