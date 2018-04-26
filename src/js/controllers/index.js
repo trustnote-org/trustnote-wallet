@@ -909,17 +909,18 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 		$timeout(function () {
 
 			if (!opts.quiet)
-				self.setOngoingProcess('updatingStatus', true);
+				self.setOngoingProcess('updatingStatus', true); // onGoingProcess updatingStatus true
 
-			$log.debug('Updating Status:', fc.credentials.walletName);
+			$log.debug('Updating Status:', fc.credentials.walletName); // Updating Status: Wallet #0
+
 			if (!opts.quiet)
-				self.setOngoingProcess('updatingStatus', false);
+				self.setOngoingProcess('updatingStatus', false); // onGoingProcess updatingStatus null
 
 
 			fc.getBalance(self.shared_address, function (err, assocBalances, assocSharedBalances) {
 				if (err)
 					throw "impossible getBal";
-				$log.debug('updateAll Wallet Balance:', assocBalances, assocSharedBalances);
+				$log.debug('updateAll Wallet Balance:', assocBalances, assocSharedBalances); // updateAll Wallet Balance: {} {}
 				self.setBalance(assocBalances, assocSharedBalances);
 				// Notify external addons or plugins
 				$rootScope.$emit('Local/BalanceUpdated', assocBalances);
@@ -1237,13 +1238,13 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 		}, 60000);
 		client.getTxHistory(self.arrBalances[self.assetIndex].asset, self.shared_address, function onGotTxHistory(txs) {
 			self.updateTimeout = false;
-			var newHistory = self.processNewTxs(txs);
-			$log.debug('Tx History synced. Total Txs: ' + newHistory.length);
+			var newHistory = self.processNewTxs(txs); // self.processNewTxs(txs) 返回交易历史数组
+			$log.debug('Tx History synced. Total Txs: ' + newHistory.length); // Tx History synced. Total Txs: 54
 
 			if (walletId == profileService.focusedClient.credentials.walletId) {
 				self.completeHistory = newHistory;
 				self.txHistory = newHistory.slice(0, self.historyShowLimit);
-				self.historyShowShowAll = newHistory.length >= self.historyShowLimit;
+				self.historyShowShowAll = newHistory.length >= self.historyShowLimit; // true or false
 			}
 
 			return cb();
@@ -1269,7 +1270,7 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 
 		if (!fc.isComplete() || self.updatingTxHistory[walletId]) return;
 
-		$log.debug('Updating Transaction History');
+		$log.debug('Updating Transaction History'); // Updating Transaction History
 		self.txHistoryError = false;
 		self.updatingTxHistory[walletId] = true;
 
@@ -1285,7 +1286,7 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 		});
 	};
 
-	self.updateTxHistory = lodash.debounce(function () {
+	self.updateTxHistory = lodash.debounce(function () {  // 创建一个 debounced（防抖动）函数，该函数会从上一次被调用后，延迟 wait 毫秒后调用 func 方法。
 		self.updateHistory();
 	}, 1000);
 
@@ -1304,11 +1305,11 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 	};
 
 	// for light clients only
-	self.updateHistoryFromNetwork = lodash.throttle(function () {
+	self.updateHistoryFromNetwork = lodash.throttle(function () {  // 创建一个节流函数，在 5 秒内最多执行 func 一次的函数
 		setTimeout(function () {
 			if (self.assetIndex !== self.oldAssetIndex) // it was a swipe
 				return console.log("== swipe");
-			console.log('== updateHistoryFromNetwork');
+			console.log('== updateHistoryFromNetwork'); // == updateHistoryFromNetwork
 			var lightWallet = require('trustnote-common/light_wallet.js');
 			lightWallet.refreshLightClientHistory();
 		}, 500);
