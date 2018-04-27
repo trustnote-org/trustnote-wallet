@@ -148,7 +148,7 @@ angular.module('copayApp.services').factory('go', function($window, $rootScope, 
 			},
 
 			ifOk: function(objRequest){
-				console.log("request: "+JSON.stringify(objRequest));
+				// console.log("request: "+JSON.stringify(objRequest));
 
 				if (objRequest.type === 'address'){
 					root.send(function () {
