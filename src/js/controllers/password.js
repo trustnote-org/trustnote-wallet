@@ -12,7 +12,7 @@ angular.module('copayApp.controllers').controller('passwordController',
 		var fc = profileService.focusedClient;
 		self.bHasMnemonic = (fc.credentials && fc.credentials.mnemonic);
 
-		document.getElementById("passwordInput").focus();
+		//document.getElementById("passwordInput").focus();
 
 		self.close = function (cb) {
 			profileService.checkPassClose = true;
