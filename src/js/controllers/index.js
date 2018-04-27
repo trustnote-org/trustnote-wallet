@@ -32,7 +32,6 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 
 	self.showneikuang = false;
 	self.showneikuangsync = false;
-
 	self.isObserved = function () {
 		return go.observed;
 	};
@@ -53,9 +52,6 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 	self.showToPay = function () {
 		profileService.checkPassClose = false;
 		var path = go.paths;
-		var xPrivKey = new Bitcore.HDPrivateKey.fromString(profileService.focusedClient.credentials.xPrivKey);
-		var privateKey = xPrivKey.derive(path).privateKey;
-		var privKeyBuf = privateKey.bn.toBuffer({size: 32});
 		var text_to_sign = go.text_to_sign;
 
 		if (profileService.focusedClient.isPrivKeyEncrypted()) {
@@ -66,6 +62,9 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 					return;
 				}
 				else{
+					var xPrivKey = new Bitcore.HDPrivateKey.fromString(profileService.focusedClient.credentials.xPrivKey);
+					var privateKey = xPrivKey.derive(path).privateKey;
+					var privKeyBuf = privateKey.bn.toBuffer({size: 32});
 					self.passModalMaskColdQr1 = 1;
 					self.signature = ecdsaSig.sign(text_to_sign, privKeyBuf);
 					self.signatureObj = {
@@ -79,6 +78,9 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 			return;
 		}
 
+		var xPrivKey = new Bitcore.HDPrivateKey.fromString(profileService.focusedClient.credentials.xPrivKey);
+		var privateKey = xPrivKey.derive(path).privateKey;
+		var privKeyBuf = privateKey.bn.toBuffer({size: 32});
 		self.passModalMaskColdQr1 = 1;
 		self.signature = ecdsaSig.sign(text_to_sign, privKeyBuf);
 		self.signatureObj = {

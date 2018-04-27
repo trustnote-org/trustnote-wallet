@@ -683,6 +683,7 @@
 				<button
 						style="width: 210px; text-align:center; height: 45px; background: #0095ff; border-radius: 40px; color: #fff; margin: 0px auto 0; padding: 0;"
 						ng-click="wordsC.del();"
+						onclick="$('.ngcalculator_area').removeClass('keyboardShow');$('.ngcalculator_area').addClass('keyboardHidden');"
 						ng-if="!wordsC.dis()" translate>DELETE SEED PHRASE</button>
 			</div>
 
@@ -690,8 +691,8 @@
 			<div style="text-align: center;margin: 15px;">
 				<button
 						style="width: 210px; text-align:center; height: 45px; background: #fff; border-radius: 40px; color: #0095ff; padding: 0;margin: 0; border: 1px solid #0095ff;text-transform: uppercase;"
-						ng-click="wordsC.haschoosen(); index.splashClick = false"
 						onclick="$('.ngcalculator_area').removeClass('keyboardShow');$('.ngcalculator_area').addClass('keyboardHidden');"
+						ng-click="wordsC.haschoosen(); index.splashClick = false"
 						ng-if="!wordsC.dis()" translate>
 					Skip
 				</button>
