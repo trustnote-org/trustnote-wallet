@@ -20,12 +20,25 @@
 		text-align: center;
 		line-height:45px;
 		color: #fff;
-		width: 180px;
+		width: 220px;
 		height:45px;
 		background: #0095ff;
 		margin:0 auto;
 		border-radius: 22.5px;
 		cursor: pointer;
+	}
+	p.toast_showCopy{
+		position: absolute;
+		bottom: 20px;
+		width:30%;
+		left:35%;
+		background: #333;
+		color: #fff;
+		font-size: 12px;
+		text-align: center;
+		padding: 5px 0;
+		border-radius: 5px;
+		display: none;
 	}
 </style>
 
@@ -59,6 +72,8 @@
 	</div>
 
 	<p class="pButton" translate ng-click="pCold.copyxPubKey()">Copy offline wallet QR code</p>
+
+	<p class="toast_showCopy" translate>Copied to clipboard</p>
 </div>
 
 <div class="extra-margin-bottom"></div>
