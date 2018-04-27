@@ -239,6 +239,7 @@ angular.module('copayApp.controllers').controller('createController', function (
 				case "c1" :
 					self.qrCodeColdwallet1 = "TTT:" + JSON.stringify(obj_from_coldWallet);
 					self.isErr = 0;
+					self.isExists = 0;
 					$scope.index.askColdwalletQrcode = false;
 					break;
 
@@ -286,13 +287,16 @@ angular.module('copayApp.controllers').controller('createController', function (
 
 	self.isError = function () {
 		if(!!self.qrCodeColdwallet1){
-			return 0 // 有值 返回0
+			return 0; // 有值 返回0
 		}
 	};
 
 
 	// 点击开始导入
 	self.askColdwalletQrcode = function () {
+		self.isExists = 0;
+		self.isErr = 0;
+
 		if(self.isError() != 0){ // 没有值 返回
 			return;
 		}
@@ -330,6 +334,12 @@ angular.module('copayApp.controllers').controller('createController', function (
 			"id": self.wallet_Id,
 			"v": self.tempValue
 		};
+		for(var i = 0; i < profileService.profile.credentials.length; i++){
+			if(self.wallet_Id == profileService.profile.credentials[i].walletId){
+				self.isExists = 1;
+				return;
+			}
+		}
 		self.qrCodeColdwallet2 = "TTT:" + JSON.stringify(self.obj_to_sign);  // 需要展示的信息（ 二维码 ）
 
 		$scope.index.askColdwalletQrcode = true;

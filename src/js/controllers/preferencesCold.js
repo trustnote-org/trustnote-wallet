@@ -27,14 +27,23 @@ angular.module('copayApp.controllers').controller('preferencesColdController', f
 
 	// 复制 钱包公钥 到粘贴板
 	self.copyxPubKey = function() {
-		var xPub = profileService.focusedClient.credentials.xPubKey;
+		var xPub = self.qrcode;
 		if (isCordova) {
 			window.cordova.plugins.clipboard.copy(xPub);
 			//window.plugins.toast.showShortCenter(gettextCatalog.getString('Copied to clipboard'));
+			document.getElementsByClassName("toast_showCopy")[0].style.display = 'block';
+			setTimeout(function () {
+				if(document.getElementsByClassName("toast_showCopy")[0])
+					document.getElementsByClassName("toast_showCopy")[0].style.display = 'none';
+			},1000)
 		}
 		else if (nodeWebkit.isDefined()) {
 			nodeWebkit.writeToClipboard(xPub);
-			//window.plugins.toast.showShortCenter(gettextCatalog.getString('Copied to clipboard'));
+			document.getElementsByClassName("toast_showCopy")[0].style.display = 'block';
+			setTimeout(function () {
+				if(document.getElementsByClassName("toast_showCopy")[0])
+					document.getElementsByClassName("toast_showCopy")[0].style.display = 'none';
+			},1000)
 		}
 	};
 });
