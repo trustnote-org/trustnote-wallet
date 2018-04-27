@@ -2029,5 +2029,8 @@ msgstr "前往下载"
 msgid "Upgrade prompt"
 msgstr "升级提示"
 
+msgid "The wallet already exists"
+msgstr "此钱包已存在"
+
 
 
