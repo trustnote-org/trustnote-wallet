@@ -359,6 +359,7 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 			}
 			function checkHistory() {
 				var arrTmpAddresses = [];
+				if(wallet_address_index < 0) wallet_address_index = 0;
 				for (var i = wallet_address_index; i < wallet_address_index + 20; i++) {
 					var index = (is_change ? assocMaxAddressIndexes[walletId].change : assocMaxAddressIndexes[walletId].main) + i;
 					arrTmpAddresses.push(objectHash.getChash160(["sig", {"pubkey": wallet_defined_by_keys.derivePubkey(xPubKey, 'm/' + is_change + '/' + index)}]));
