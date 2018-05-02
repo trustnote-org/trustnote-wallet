@@ -2,23 +2,14 @@
 
 angular.module('copayApp.controllers').controller('synchronization', function ($rootScope, $scope, $log, gettext, $timeout, lodash, gettextCatalog, profileService, storageService, configService) {
 
-	var async = require('async');
 	var conf = require('trustnote-common/conf.js');
 	var wallet_defined_by_keys = require('trustnote-common/wallet_defined_by_keys.js');
 	var objectHash = require('trustnote-common/object_hash.js');
-
-	try {
-		var ecdsa = require('secp256k1');
-	}
-	catch (e) {
-		var ecdsa = require('trustnote-common/node_modules/secp256k1' + '');
-	}
 
 	var Bitcore = require('bitcore-lib');
 	var db = require('trustnote-common/db.js');
 	var network = require('trustnote-common/network');
 	var myWitnesses = require('trustnote-common/my_witnesses');
-	var fc = profileService.focusedClient;
 
 	var self = this;
 
@@ -27,50 +18,9 @@ angular.module('copayApp.controllers').controller('synchronization', function ($
 	self.scanning = false;
 	self.xPrivKey = '';
 	self.assocIndexesToWallets = {};
+	self.assocWallets = {};
 	self.credentialsEncrypted = false;
-
-	self.passwordRequest = function (msg, cb) {
-		self.credentialsEncrypted = true;
-		$timeout(function () {
-			$scope.$apply();
-		});
-		profileService.unlockFC(msg, function (err) {
-			if (typeof(err) !== "undefined") {
-				if (typeof(err.message) === "undefined")
-					return;
-				if (err.message === "Wrong password") {
-					$timeout(function () {
-						self.passwordRequest(gettextCatalog.getString(err.message), cb);
-					}, 500);
-				}
-				return;
-			}
-			else if (err) {
-				return;
-			}
-			profileService.disablePrivateKeyEncryptionFC(function (err) {
-				$rootScope.$emit('Local/NewEncryptionSetting');
-				if (err) {
-					self.credentialsEncrypted = true;
-					return;
-				}
-			});
-			if (profileService.password)
-				self.password = profileService.password;
-			self.credentialsEncrypted = false;
-			return cb();
-		});
-	}
-
-	var config = configService.getSync();
-	var walletId = fc.credentials.walletId;
-	config.aliasFor = config.aliasFor || {};
-	var wallets = lodash.map(profileService.profile.credentials, function (c) {
-		return {
-			name: config.aliasFor[c.walletId] || c.walletName,
-			id: c.walletId,
-		};
-	});
+	self.totalWallet = 0;
 
 	function determineIfAddressUsed(address, cb) {
 		db.query("SELECT 1 FROM outputs WHERE address = ? LIMIT 1", [address], function (outputsRows) {
@@ -107,12 +57,12 @@ angular.module('copayApp.controllers').controller('synchronization', function ($
 					checkAndAddCurrentAddress(is_change);
 				} else {
 					currentAddressIndex++;
-					if (currentAddressIndex - lastUsedAddressIndex > 20) {
+					if (currentAddressIndex - lastUsedAddressIndex > 40) {
 						if (is_change) {
 							if (lastUsedAddressIndex !== -1) {
 								lastUsedWalletIndex = currentWalletIndex;
 							}
-							if (currentWalletIndex - lastUsedWalletIndex >= 20) {
+							if (currentWalletIndex >= self.totalWallet - 1) {
 								cb(assocMaxAddressIndexes);
 							} else {
 								currentWalletIndex++;
@@ -121,7 +71,7 @@ angular.module('copayApp.controllers').controller('synchronization', function ($
 						} else {
 							if (lastUsedAddressIndex !== -1) {
 								if (!assocMaxAddressIndexes[currentWalletIndex]) assocMaxAddressIndexes[currentWalletIndex] = {main: 0};
-								assocMaxAddressIndexes[currentWalletIndex].main = Math.floor((currentAddressIndex - 1) / 20) * 20;
+								assocMaxAddressIndexes[currentWalletIndex].main = Math.floor((currentAddressIndex - 1) / 40) * 40;
 							}
 							currentAddressIndex = 0;
 							checkAndAddCurrentAddress(1);
@@ -134,7 +84,7 @@ angular.module('copayApp.controllers').controller('synchronization', function ($
 		}
 
 		function setCurrentWallet() {
-			xPubKey = Bitcore.HDPublicKey(self.xPrivKey.derive("m/44'/0'/" + currentWalletIndex + "'"));
+			xPubKey = Bitcore.HDPublicKey.fromString(self.assocWallets[currentWalletIndex]);
 			lastUsedAddressIndex = -1;
 			currentAddressIndex = 0;
 			checkAndAddCurrentAddress(0);
@@ -143,27 +93,12 @@ angular.module('copayApp.controllers').controller('synchronization', function ($
 		setCurrentWallet();
 	}
 
-	function removeAddressesAndWallets(cb) {
-		var arrQueries = [];
-		db.addQuery(arrQueries, "DELETE FROM pending_shared_address_signing_paths");
-		db.addQuery(arrQueries, "DELETE FROM shared_address_signing_paths");
-		db.addQuery(arrQueries, "DELETE FROM pending_shared_addresses");
-		db.addQuery(arrQueries, "DELETE FROM shared_addresses");
-		db.addQuery(arrQueries, "DELETE FROM my_addresses");
-		db.addQuery(arrQueries, "DELETE FROM wallet_signing_paths");
-		db.addQuery(arrQueries, "DELETE FROM extended_pubkeys");
-		db.addQuery(arrQueries, "DELETE FROM wallets");
-		// db.addQuery(arrQueries, "DELETE FROM correspondent_devices");
-
-		async.series(arrQueries, cb);
-	}
-
 	function createAddresses(assocMaxAddressIndexes, cb) {
 		var accounts = Object.keys(assocMaxAddressIndexes);
 		var currentAccount = 0;
 
 		function addAddress(wallet, is_change, index, maxIndex) {
-			wallet_defined_by_keys.issueAddress(wallet, is_change, index, function (addressInfo) {
+			wallet_defined_by_keys.issueAddressSync(wallet, is_change, index, function (addressInfo) {
 				index++;
 				if (index <= maxIndex) {
 					addAddress(wallet, is_change, index, maxIndex);
@@ -187,35 +122,12 @@ angular.module('copayApp.controllers').controller('synchronization', function ($
 					(currentAccount < accounts.length) ? startAddToNewWallet(0) : cb();
 				}
 			} else {
-				addAddress(self.assocIndexesToWallets[accounts[currentAccount]], 0, 0, assocMaxAddressIndexes[accounts[currentAccount]].main + 20);
+				addAddress(self.assocIndexesToWallets[accounts[currentAccount]], 0, 0, assocMaxAddressIndexes[accounts[currentAccount]].main + 40);
 			}
 		}
 
 
 		startAddToNewWallet(0);
-	}
-
-	function createWallets(arrWalletIndexes, cb) {
-
-		function createWallet(n) {
-			var account = parseInt(arrWalletIndexes[n]);
-			var opts = {};
-			opts.m = 1;
-			opts.n = 1;
-			opts.name = 'Wallet #' + account;
-			opts.network = 'livenet';
-			opts.extendedPrivateKey = self.xPrivKey;
-			opts.cosigners = [];
-			opts.account = account;
-
-			profileService.synchronization(opts, function (err, walletId) {
-				self.assocIndexesToWallets[account] = walletId;
-				n++;
-				(n < arrWalletIndexes.length) ? createWallet(n) : cb();
-			});
-		}
-
-		createWallet(0);
 	}
 
 	function scanForAddressesAndWalletsInLightClient(cb) {
@@ -231,7 +143,7 @@ angular.module('copayApp.controllers').controller('synchronization', function ($
 			};
 
 			var arrTmpAddresses = [];
-			for (var i = 0; i < 20; i++) {
+			for (var i = 0; i < 40; i++) {
 				var index = (is_change ? assocMaxAddressIndexes[currentWalletIndex].change : assocMaxAddressIndexes[currentWalletIndex].main) + i;  // is_change 0：生成的地址 1：找零的地址
 				arrTmpAddresses.push(objectHash.getChash160(["sig", {"pubkey": wallet_defined_by_keys.derivePubkey(xPubKey, 'm/' + is_change + '/' + index)}]));
 			}
@@ -247,14 +159,6 @@ angular.module('copayApp.controllers').controller('synchronization', function ($
 						self.error = gettextCatalog.getString('please try again later.');
 						self.scanning = false;
 						$scope.index.showneikuangsync = false;
-						profileService.haschoosen = 2;
-						if (self.password) {
-							profileService.setPrivateKeyEncryptionFC(self.password, function () {
-								$rootScope.$emit('Local/NewEncryptionSetting');
-								$scope.encrypt = true;
-								delete self.password;
-							});
-						}
 						$timeout(function () {
 							$rootScope.$apply();
 						});
@@ -263,16 +167,16 @@ angular.module('copayApp.controllers').controller('synchronization', function ($
 					if (Object.keys(response).length) {
 						lastUsedWalletIndex = currentWalletIndex;
 						if (is_change) {
-							assocMaxAddressIndexes[currentWalletIndex].change += 20;
+							assocMaxAddressIndexes[currentWalletIndex].change += 40;
 						} else {
-							assocMaxAddressIndexes[currentWalletIndex].main += 20;
+							assocMaxAddressIndexes[currentWalletIndex].main += 40;
 						}
 						checkAndAddCurrentAddresses(is_change);
 					} else {
 						if (is_change) {
 							if (assocMaxAddressIndexes[currentWalletIndex].change === 0 && assocMaxAddressIndexes[currentWalletIndex].main === 0) delete assocMaxAddressIndexes[currentWalletIndex];
 							currentWalletIndex++;
-							if (currentWalletIndex - lastUsedWalletIndex > 3) {
+							if (currentWalletIndex > self.totalWallet - 1) {
 								cb(assocMaxAddressIndexes);
 							} else {
 								setCurrentWallet();
@@ -286,7 +190,7 @@ angular.module('copayApp.controllers').controller('synchronization', function ($
 		}
 
 		function setCurrentWallet() {
-			xPubKey = Bitcore.HDPublicKey(self.xPrivKey.derive("m/44'/0'/" + currentWalletIndex + "'"));
+			xPubKey = Bitcore.HDPublicKey.fromString(self.assocWallets[currentWalletIndex]);
 			checkAndAddCurrentAddresses(0);
 		}
 
@@ -294,115 +198,33 @@ angular.module('copayApp.controllers').controller('synchronization', function ($
 	}
 
 	function cleanAndAddWalletsAndAddresses(assocMaxAddressIndexes) {
-		var device = require('trustnote-common/device');
 		var arrWalletIndexes = Object.keys(assocMaxAddressIndexes);
 		if (arrWalletIndexes.length) {
-			removeAddressesAndWallets(function () {
-				var myDeviceAddress = objectHash.getDeviceAddress(ecdsa.publicKeyCreate(self.xPrivKey.derive("m/1'").privateKey.bn.toBuffer({size: 32}), true).toString('base64'));
-				profileService.replaceProfile(self.xPrivKey.toString(), self.inputMnemonic, myDeviceAddress, function () {
-					device.setDevicePrivateKey(self.xPrivKey.derive("m/1'").privateKey.bn.toBuffer({size: 32}));
-					createWallets(arrWalletIndexes, function () {
-						createAddresses(assocMaxAddressIndexes, function () {
-							self.scanning = false;
-							$scope.index.showneikuangsync = false;
-							profileService.haschoosen = 2;
-							if (self.password) {
-								profileService.setPrivateKeyEncryptionFC(self.password, function () {
-									$rootScope.$emit('Local/NewEncryptionSetting');
-									$scope.encrypt = true;
-									delete self.password;
-								});
-							}
+			createAddresses(assocMaxAddressIndexes, function () {
+				self.scanning = false;
+				$scope.index.showneikuangsync = false;
 
-// 更改代码
-							// $rootScope.$emit('Local/ShowAlert', "Synchronization completed", 'fi-check', function () {
-							$rootScope.$emit('Local/ShowAlert', gettextCatalog.getString("Synchronization completed"), 'fi-check', function () {
-								var opts = {
-									aliasFor: {}
-								};
-								for (item in wallets) {
-									opts.aliasFor[wallets[item].id] = wallets[item].name;
-									configService.set(opts, function (err) {
-										if (err) {
-											$scope.$emit('Local/DeviceError', err);
-											return;
-										}
-										$scope.$emit('Local/AliasUpdated');
-									});
-								}
-								$rootScope.$emit('Local/Synchronization');
-							});
-						});
-					});
-				});
-			});
-		} else {
-			removeAddressesAndWallets(function () {
-				arrWalletIndexes[0] = 0;
-				var myDeviceAddress = objectHash.getDeviceAddress(ecdsa.publicKeyCreate(self.xPrivKey.derive("m/1'").privateKey.bn.toBuffer({size: 32}), true).toString('base64'));
-				profileService.replaceProfile(self.xPrivKey.toString(), self.inputMnemonic, myDeviceAddress, function () {
-					device.setDevicePrivateKey(self.xPrivKey.derive("m/1'").privateKey.bn.toBuffer({size: 32}));
-					createWallets(arrWalletIndexes, function () {
-						self.scanning = false;
-						$scope.index.showneikuangsync = false;
-						profileService.haschoosen = 2;
-// 更改代码
-						if (self.password) {
-							profileService.setPrivateKeyEncryptionFC(self.password, function () {
-								$rootScope.$emit('Local/NewEncryptionSetting');
-								$scope.encrypt = true;
-								delete self.password;
-							});
-						}
-
-						$rootScope.$emit('Local/ShowAlert', gettextCatalog.getString("Synchronization completed"), 'fi-check', function () {
-							var opts = {
-								aliasFor: {}
-							};
-							for (item in wallets) {
-								opts.aliasFor[wallets[item].id] = wallets[item].name;
-								configService.set(opts, function (err) {
-									if (err) {
-										$scope.$emit('Local/DeviceError', err);
-										return;
-									}
-									$scope.$emit('Local/AliasUpdated');
-								});
-							}
-						});
-					});
+				$rootScope.$emit('Local/ShowAlert', gettextCatalog.getString("Synchronization completed"), 'fi-check', function () {
+					$rootScope.$emit('Local/Synchronization');
 				});
 			});
 		}
 	}
 
 	self.synchronization = function () {
-		if (fc.hasPrivKeyEncrypted()) {
-			self.passwordRequest(gettextCatalog.getString('During synchronization, please be patient.'), function () {
-				self.scanning = true;
-				$scope.index.showneikuangsync = true;
-				delete profileService.haschoosen;
-				self.xPrivKey = Bitcore.HDPrivateKey.fromString(profileService.profile.xPrivKey);
-				self.scanning = true;
-				if (self.bLight) {
-					scanForAddressesAndWalletsInLightClient(cleanAndAddWalletsAndAddresses);
-				} else {
-					scanForAddressesAndWallets(cleanAndAddWalletsAndAddresses);
-				}
-			});
+		self.scanning = true;
+		$scope.index.showneikuangsync = true;
+		delete profileService.haschoosen;
+		self.totalWallet = profileService.profile.credentials.length;
+		for (var i = 0; i < profileService.profile.credentials.length; i++) {
+			self.assocIndexesToWallets[i] = profileService.profile.credentials[i].walletId;
+			self.assocWallets[i] = profileService.profile.credentials[i].xPubKey;
 		}
-		else {
-			self.scanning = true;
-			$scope.index.showneikuangsync = true;
-			delete profileService.haschoosen;
-			self.xPrivKey = Bitcore.HDPrivateKey.fromString(profileService.profile.xPrivKey);
-			self.scanning = true;
-			if (self.bLight) {
-				scanForAddressesAndWalletsInLightClient(cleanAndAddWalletsAndAddresses);
-			} else {
-				scanForAddressesAndWallets(cleanAndAddWalletsAndAddresses);
-			}
+		self.scanning = true;
+		if (self.bLight) {
+			scanForAddressesAndWalletsInLightClient(cleanAndAddWalletsAndAddresses);
+		} else {
+			scanForAddressesAndWallets(cleanAndAddWalletsAndAddresses);
 		}
 	}
-
 });

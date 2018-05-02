@@ -89,10 +89,11 @@ if [ ! -d $PROJECT ]; then
 		cordova plugin add cordova-plugin-exitapp-ios
 		checkOK
 	else
-		cordova plugin add cordova-plugin-android-support-v4-jar
-		checkOK
+#		cordova plugin add cordova-plugin-android-support-v4-jar
+#		checkOK
 
-		cordova plugin add https://github.com/jrontend/phonegap-plugin-barcodescanner.git
+#		cordova plugin add https://github.com/joyious/phonegap-plugin-barcodescanner.git
+		cordova plugin add https://github.com/phonegap/phonegap-plugin-barcodescanner.git
 	fi
 	checkOK
 
@@ -148,11 +149,11 @@ if [ ! -d $PROJECT ]; then
 	checkOK
 
 	if [ $CURRENT_OS == "ANDROID" ]; then
-	cordova plugin add https://github.com/phonegap-build/PushPlugin.git
+	cordova plugin add https://github.com/kakegu/PushPlugin.git
 	checkOK
 	fi
 	
-	cordova plugin add https://github.com/xJeneKx/MFileChooser.git
+	cordova plugin add https://github.com/joyious/MFileChooser.git
 	checkOK
 
 fi
@@ -195,7 +196,7 @@ if [ $CURRENT_OS == "ANDROID" ]; then
 	
 	cat $BUILDDIR/android/android.css >> $PROJECT/www/css/trustnote.css
 
-	mkdir -p $PROJECT/platforms/android/res/xml/
+	mkdir -p $PROJECT/platforms/android/app/src/main/res/xml/
 	checkOK
 
 #  cp android/AndroidManifest.xml $PROJECT/platforms/android/AndroidManifest.xml
@@ -204,10 +205,10 @@ if [ $CURRENT_OS == "ANDROID" ]; then
 	cp android/build-extras.gradle $PROJECT/platforms/android/build-extras.gradle
 	checkOK
 
-	cp android/project.properties $PROJECT/platforms/android/project.properties
-	checkOK
+#	cp android/project.properties $PROJECT/platforms/android/project.properties
+#	checkOK
 
-	cp -R android/res/* $PROJECT/platforms/android/res
+	cp -R android/res/* $PROJECT/platforms/android/app/src/main/res
 	checkOK
 fi
 
@@ -235,6 +236,7 @@ if [ $CURRENT_OS == "IOS" ]; then
 #  cp -R ios/splash/* $PROJECT/platforms/ios/Trustnote/Resources/splash
 #  checkOK
 fi
+
 
 
 

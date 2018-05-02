@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="org.trustnote.smartwallet"
-		version="1.1.2.3"
-		android-versionCode="1051"
-		ios-CFBundleVersion="1.1.2.3">
+		version="1.1.2.4"
+		android-versionCode="10000"
+		ios-CFBundleVersion="1.1.2.4">
 	<name>TrustNote</name>
 	<description>
 		TrustNote wallet.
@@ -23,7 +23,7 @@
 	<preference name="FadeSplashScreenDuration" value="1000"/>
 	<preference name="SplashMaintainAspectRatio" value="true"/>
 	<preference name="BackgroundColor" value="#FAFAFA"/>
-	<preference name="StatusBarOverlaysWebView" value="true"/>
+	<preference name="StatusBarOverlaysWebView" value="false"/>
 
 	<!--更改手机状态栏背景色-->
 	<preference name="StatusBarBackgroundColor" value="#12172e"/>
@@ -35,7 +35,7 @@
 	<preference name="android-minSdkVersion" value="19"/>
 	<preference name="deployment-target" value="9.0"/>
 	<preference name="AndroidLaunchMode" value="singleTask"/>
-	<preference name="KeyboardDisplayRequiresUserAction" value="false" />+
+	<preference name="KeyboardDisplayRequiresUserAction" value="true" />
 	<preference name="orientation" value="portrait" />
 	<platform name="ios">
 		<!-- iOS 8.0+ -->

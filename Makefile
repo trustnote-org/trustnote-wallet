@@ -33,7 +33,9 @@ ios:
 android:
 	cordova/build.sh ANDROID
 	cd ../trustnotebuilds/project-ANDROID && cordova build android 2>&1 >/dev/null
-	mv ../trustnotebuilds/project-ANDROID/platforms/android/build/outputs/apk/android-debug.apk ../trustnotebuilds/trustnote.apk
+	mv ../trustnotebuilds/project-ANDROID/platforms/android/app/build/outputs/apk/debug/app-debug.apk ../trustnotebuilds/trustnote.apk
+
+	#mv ../trustnotebuilds/project-ANDROID/platforms/android/build/outputs/apk/android-debug.apk ../trustnotebuilds/trustnote.apk
 
 android-prod:
 	cordova/build.sh ANDROID --clear

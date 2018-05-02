@@ -72,22 +72,22 @@
                   			<!--<span translate>Share address</span>-->
                 		<!--</span>-->
 					<!--</div>-->
-					<div class=" size-12 text-center color999">
-						<span ng-if="index.shared_address" translate>This address is shared with {{index.shared_address_cosigners}}.</span>
-						<span ng-if="!index.shared_address" translate>Updating the address does not affect charging, and the previous address is still valid.</span>
-						<span ng-if="!index.shared_address && 0" translate>To protect your privacy, new addresses are generated automatically once you use them.</span>
-					</div>
+					<!--<div class=" size-12 text-center color999">-->
+						<!--<span ng-if="index.shared_address" translate>This address is shared with {{index.shared_address_cosigners}}.</span>-->
+						<!--<span ng-if="!index.shared_address" translate>Updating the address does not affect charging, and the previous address is still valid.</span>-->
+						<!--<span ng-if="!index.shared_address && 0" translate>To protect your privacy, new addresses are generated automatically once you use them.</span>-->
+					<!--</div>-->
 				</div>
 			</div>
 		</div>
 
-		<div class="row m15t" ng-if="!index.shared_address">
-			<div class="middle-12 columns">
-				<button class="button black expand round m0" ng-click="qrcode.setAddress(true)" style="background: #fff; color: #0095ff; border: 1px solid #0095ff;font-size: 14px" ng-disabled="qrcode.blockUx || index.isOffline ||qrcode.generatingAddress" translate>
-						Generate new address
-				</button>
-			</div>
-		</div>
+		<!--<div class="row m15t" ng-if="!index.shared_address">-->
+			<!--<div class="middle-12 columns">-->
+				<!--<button class="button black expand round m0" ng-click="qrcode.setAddress(true)" style="background: #fff; color: #0095ff; border: 1px solid #0095ff;font-size: 14px" ng-disabled="qrcode.blockUx || index.isOffline ||qrcode.generatingAddress" translate>-->
+						<!--Generate new address-->
+				<!--</button>-->
+			<!--</div>-->
+		<!--</div>-->
 
 		<!--更改代码-->
 		<div class="m20t text-center m30b" ng-disabled="!qrcode.generatingAddress && qrcode.addr[index.walletId]">
