@@ -298,7 +298,8 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 						if (currentAddressIndex - lastUsedAddressIndex > 20) {
 							// console.log("\n+++++++++++++++++++++++++" + JSON.stringify(assocMaxAddressIndexes));
 							if (is_change) {
-								assocMaxAddressIndexes[walletId].init_main--;
+								if(assocMaxAddressIndexes[walletId].init_main > 0)
+									assocMaxAddressIndexes[walletId].init_main--;
 								cb(assocMaxAddressIndexes, walletId);
 							} else {
 								currentAddressIndex = 0;
