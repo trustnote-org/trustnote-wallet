@@ -687,7 +687,7 @@ angular.module('copayApp.controllers').controller('walletHomeController', functi
 		if (fc.isPrivKeyEncrypted()) {
 			profileService.unlockFC(null, function (err) {
 				if (err){
-					return self.setSendError(err.message);
+					return self.setSendError(gettextCatalog.getString(err.message));
 				}
 				return self.submitForm();
 			});
