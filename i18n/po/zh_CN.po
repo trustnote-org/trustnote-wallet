@@ -132,7 +132,7 @@ msgstr "允许在其他设备上创建钱包"
 
 #: src/js/controllers/backup.js:6
 msgid "Are you sure you want to delete the backup words?"
-msgstr "您确定要删除备份文档吗？"
+msgstr "确定要删除助记词吗？"
 
 #: src/js/controllers/copayers.js:7
 #: src/js/controllers/preferencesDelete.js:8
@@ -178,7 +178,7 @@ msgstr "备份钱包口令"
 
 #: src/js/controllers/backup.js:7
 msgid "Backup words deleted"
-msgstr "备份文档已删除"
+msgstr "助记词已删除"
 
 #: public/views/preferencesInformation.html:107
 msgid "Balance By Address"
