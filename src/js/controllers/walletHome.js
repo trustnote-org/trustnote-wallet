@@ -945,6 +945,11 @@ angular.module('copayApp.controllers').controller('walletHomeController', functi
 							else if(err == "close") {
 								err = "suspend transaction.";
 							}
+							// 如果是 观察钱包
+							if(self.observed == 1){
+								$scope.index.showTitle = 1;
+								self.showTitle = 0;
+							}
 							return self.setSendError(err);
 						}
 
