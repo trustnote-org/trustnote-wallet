@@ -2032,5 +2032,6 @@ msgstr "升级提示"
 msgid "The wallet already exists"
 msgstr "此钱包已存在"
 
-
+msgid "one of the cosigners refused to sign"
+msgstr "未签名错误"
 

@@ -65,6 +65,11 @@
 		padding: 5px;
 		text-align: left;
 	}
+	.rn-carousel-control.rn-carousel-control-next, .rn-carousel-control.rn-carousel-control-prev{
+		position: absolute;
+		top:-40px;
+		background: none!important;
+	}
 </style>
 
 <!-- 第一部分 顶部topbar-->
@@ -238,7 +243,7 @@
 							</div>
 
 							<!-- <style ng-if="index.isCordova">  .rn-carousel-controls {display: none !important;}  </style> -->
-            				<style> .rn-carousel-control.rn-carousel-control-next, .rn-carousel-control.rn-carousel-control-prev { background-color: {{index.backgroundColor}};} </style>
+            				<!--<style> .rn-carousel-control.rn-carousel-control-next, .rn-carousel-control.rn-carousel-control-prev { background-color: {{index.backgroundColor}};} </style>-->
 
 							<!--显示普通钱包时：  存有XXX钱在智能钱包-->
 							<!--<div class="size-14" ng-if="balance.shared !== undefined">-->
