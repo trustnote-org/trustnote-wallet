@@ -518,19 +518,21 @@ API.prototype.sendMultiPayment = function (opts, cb) {
 	var self = this;
 	var coin = (this.credentials.network == 'livenet' ? "0" : "1");
 	var Wallet = require('trustnote-common/wallet.js');
-
+	var sigtemp;
 	opts.signWithLocalPrivateKey = function (wallet_id, account, is_change, address_index, text_to_sign, handleSig) {
 		var path = "m/44'/" + coin + "'/" + account + "'/" + is_change + "/" + address_index;
-
 		var xPrivKey = new Bitcore.HDPrivateKey.fromString(self.credentials.xPrivKey);
 		var privateKey = xPrivKey.derive(path).privateKey;
 		var privKeyBuf = privateKey.bn.toBuffer({size: 32}); // https://github.com/bitpay/bitcore-lib/issues/47
-
 		eventBus.emit('apiTowalletHome', account, is_change, address_index, text_to_sign, function (sig) {
-			// if(num == 1){
-			// 	handleSig(sig);
-			// 	num = 2;
-			// }
+			if(sig == "close") {
+				handleSig("[refused]");
+				return;
+			}
+			if(sigtemp != sig)
+				sigtemp= sig;
+			else
+				return;
 			if(sig && typeof(handleSig) == "function" ){
 				handleSig(sig);
 			}

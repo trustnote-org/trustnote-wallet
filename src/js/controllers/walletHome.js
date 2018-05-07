@@ -53,7 +53,7 @@ angular.module('copayApp.controllers').controller('walletHomeController', functi
 		go.observed = 0;
 	}
 	// 引入 go.js中的 变量：表示为 1:观察钱包  0:普通钱包
-	self.observed = go.observed;
+	self.observed = fc.observed;
 
 
 	// 观察钱包时 初始=0 不显示 title
@@ -687,7 +687,7 @@ angular.module('copayApp.controllers').controller('walletHomeController', functi
 		if (fc.isPrivKeyEncrypted()) {
 			profileService.unlockFC(null, function (err) {
 				if (err){
-					return self.setSendError(err.message);
+					return self.setSendError(gettextCatalog.getString(err.message));
 				}
 				return self.submitForm();
 			});
@@ -879,46 +879,62 @@ angular.module('copayApp.controllers').controller('walletHomeController', functi
 					self.sendtoaddress = opts.to_address;
 					self.sendamount = opts.amount/1000000 + "MN";
 
-					var eventListeners = eventBus.listenerCount(eventBus,'apiTowalletHome');
-					if(eventListeners <= 1) {
-						eventBus.once('apiTowalletHome', function (account, is_change, address_index, text_to_sign, cb) {
-							self.callApiToWalletHome(account, is_change, address_index, text_to_sign, cb);
-						});
-					}
+					var eventListeners = eventBus.listenerCount('apiTowalletHome');
 
-					///// on
-					self.callApiToWalletHome = function (account, is_change, address_index, text_to_sign, cb) {
+					self.reCallApiToWalletHome = function (account, is_change, address_index, text_to_sign, cb) {
 						var coin = (profileService.focusedClient.credentials.network == 'livenet' ? "0" : "1");
 						var path = "m/44'/" + coin + "'/" + account + "'/" + is_change + "/" + address_index;
 
 						var xPrivKey = new Bitcore.HDPrivateKey.fromString(profileService.focusedClient.credentials.xPrivKey);
 						var privateKey = xPrivKey.derive(path).privateKey;
-						var privKeyBuf = privateKey.bn.toBuffer({size: 32}); // https://github.com/bitpay/bitcore-lib/issues/47
+						var privKeyBuf = privateKey.bn.toBuffer({size: 32});
+						var signature = ecdsaSig.sign(text_to_sign, privKeyBuf);
+						cb(signature);
+						eventBus.once('apiTowalletHome', self.reCallApiToWalletHome);
+					}
 
-						if (self.observed == 1) { // 如果是 观察钱包
-							// alert("观察钱包 交易中。。。");
-							var obj = {
-								"type": "h2",
-								"sign": text_to_sign.toString("base64"),
-								"path": path,
-								"addr": opts.to_address,
-								"amount": opts.amount,
-								"v": Math.floor(Math.random()*9000+1000)
-							};
-							self.text_to_sign_qr = 'TTT:' + JSON.stringify(obj);
-							$timeout(function() {
-								profileService.tempNum2 = obj.v;
-								$scope.$apply();
-							}, 10);
-							eventBus.once('finishScaned', function (signature) {
-								cb(signature);
-							});
-						} else {  // 如果是 普通钱包
-							// alert("普通钱包 交易中。。。");
-							var signature = ecdsaSig.sign(text_to_sign, privKeyBuf);
-							cb(signature)
+					self.callApiToWalletHome = function (account, is_change, address_index, text_to_sign, cb) {
+						var coin = (profileService.focusedClient.credentials.network == 'livenet' ? "0" : "1");
+						var path = "m/44'/" + coin + "'/" + account + "'/" + is_change + "/" + address_index;
+
+						var obj = {
+							"type": "h2",
+							"sign": text_to_sign.toString("base64"),
+							"path": path,
+							"addr": opts.to_address,
+							"amount": opts.amount,
+							"v": Math.floor(Math.random()*9000+1000)
+						};
+						self.text_to_sign_qr = 'TTT:' + JSON.stringify(obj);
+						$timeout(function() {
+							profileService.tempNum2 = obj.v;
+							$scope.$apply();
+						}, 10);
+						eventBus.once('apiTowalletHome', self.callApiToWalletHome);
+
+						var finishListener = eventBus.listenerCount('finishScaned');
+						if(finishListener > 0) {
+							eventBus.removeAllListeners('finishScaned');
 						}
+						eventBus.once('finishScaned', function (signature) {
+							cb(signature);
+						});
 					};
+
+					if(eventListeners > 0) {
+						eventBus.removeAllListeners('apiTowalletHome');
+						if(fc.observed)
+							eventBus.once('apiTowalletHome', self.callApiToWalletHome);
+						else
+							eventBus.once('apiTowalletHome', self.reCallApiToWalletHome);
+					}
+					else {
+						if(fc.observed)
+							eventBus.once('apiTowalletHome', self.callApiToWalletHome);
+						else
+							eventBus.once('apiTowalletHome', self.reCallApiToWalletHome);
+					}
+
 
 					fc.sendMultiPayment(opts, function (err) {
 						indexScope.setOngoingProcess(gettext('sending'), false);  // if multisig, it might take very long before the callback is called
@@ -939,11 +955,17 @@ angular.module('copayApp.controllers').controller('walletHomeController', functi
 
 							else if (err.match(/connection closed/))
 								err = gettextCatalog.getString('[internal] connection closed') ;
-
+							else if (err.match(/one of the cosigners refused to sign/))
+								err = gettextCatalog.getString('one of the cosigners refused to sign') ;
 							else if (err.match(/funds from/))
 								err = err.substring(err.indexOf("from")+4, err.indexOf("for")) + gettextCatalog.getString(err.substr(0,err.indexOf("from"))) + gettextCatalog.getString(". It needs atleast ")  + parseInt(err.substring(err.indexOf("for")+3, err.length))/1000000 + "MN";
 							else if(err == "close") {
 								err = "suspend transaction.";
+							}
+							// 如果是 观察钱包
+							if(self.observed == 1){
+								$scope.index.showTitle = 1;
+								self.showTitle = 0;
 							}
 							return self.setSendError(err);
 						}
@@ -981,7 +1003,7 @@ angular.module('copayApp.controllers').controller('walletHomeController', functi
 // 发起交易 *** 结束  *************************************************************************************///////////////////////////////////////////***********************************//
 
 	this.closeColdPay = function () {
-		eventBus.emit('finishScaned', false);
+		eventBus.emit('finishScaned', "close");
 	};
 
 	var assocDeviceAddressesByPaymentAddress = {};
