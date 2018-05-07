@@ -287,7 +287,7 @@ angular.module('copayApp.controllers').controller('recoveryFromSeeddir', functio
 						}
 					}
 				});
-			});
+			},'wait');
 		}
 
 		function setCurrentWallet() {
