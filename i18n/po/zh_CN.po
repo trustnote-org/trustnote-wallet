@@ -2035,3 +2035,8 @@ msgstr "此钱包已存在"
 msgid "one of the cosigners refused to sign"
 msgstr "未签名错误"
 
+msgid "Generating QR code..."
+msgstr "正在生成二维码中..."
+
+
+

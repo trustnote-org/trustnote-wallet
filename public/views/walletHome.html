@@ -70,6 +70,25 @@
 		top:-40px;
 		background: none!important;
 	}
+	.onGoingProcessEx {
+		left: 0;
+		width: 100%;
+		bottom: 290px;
+		position: absolute;
+		z-index: 1020;
+	}
+	.onGoingProcess-contentEx {
+		text-align: center;
+		max-width: 16.5rem;
+		max-height: 3.5rem;
+		margin: auto;
+		color: #0095ff;
+		padding: 0.5rem;
+		font-size: 13px;
+	}
+	.spinnerEx > div{
+		background: #0095ff;
+	}
 </style>
 
 <!-- 第一部分 顶部topbar-->
@@ -102,8 +121,22 @@
 			<p style="font-size: 14px; color: #666; padding-left: 15px; margin: 0; ">{{home.sendamount}}</p>
 		</div>
 		<!--详细信息 结束-->
-		<div style="padding: 30px; text-align: center">
-			<qrcode size="220" version="10" data="{{home.text_to_sign_qr}}"></qrcode>
+		<div style="padding: 30px; text-align: center; height: 300px;">
+			<div class="onGoingProcessEx" ng-if="!home.text_to_sign_qr">
+				<div class="onGoingProcess-contentEx">
+					<div class="spinner spinnerEx">
+						<div class="rect1"></div>
+						<div class="rect2"></div>
+						<div class="rect3"></div>
+						<div class="rect4"></div>
+						<div class="rect5"></div>
+					</div>
+					<span translate>Generating QR code...</span>
+				</div>
+			</div>
+			<div ng-if="!!home.text_to_sign_qr">
+				<qrcode size="220" version="10" data="{{home.text_to_sign_qr}}"></qrcode>
+			</div>
 		</div>
 		<div>
 			<p translate style="text-align: center; color: #666; ">Scan the QR code with  your offline wallet, then go to the next step when the signature is done</p>
