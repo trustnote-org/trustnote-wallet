@@ -1286,7 +1286,7 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 			if (asset === "base" && !self.shared_address)
 				self.commonBalances = balanceInfo.totalStr;
 			self.arrBalances.push(balanceInfo);
-			// self.arrBalances.length = 1;
+			self.arrBalances.length = 1;
 		}
 		self.assetIndex = self.assetIndex || 0;
 		if (!self.arrBalances[self.assetIndex]) // if no such index in the subwallet, reset to bytes
