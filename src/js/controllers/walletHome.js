@@ -222,6 +222,9 @@ angular.module('copayApp.controllers').controller('walletHomeController', functi
 						return;
 					}
 					$scope.list = ab;
+					$timeout(function () {
+						$rootScope.$apply();
+					});
 				});
 			};
 
