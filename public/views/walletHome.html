@@ -89,6 +89,10 @@
 	.spinnerEx > div{
 		background: #0095ff;
 	}
+
+	.of-asset {
+		font-size: 20px;
+	}
 </style>
 
 <!-- 第一部分 顶部topbar-->
@@ -264,7 +268,7 @@
 									<div>
 										<strong class="size-24">{{balance.total.toLocaleString()}}</strong>
 									</div>
-									<div class="of-asset">of {{balance.asset}}</div>
+									<div class="of-asset">of {{balance.assetName.substr(0,10)}}</div>
 								</div>
 
 								<!--等待确认中-->
@@ -728,7 +732,7 @@
 							style="height: 45px; font-size: 14px;"
 							class="m10t"
 							ng-model="index.assetIndex"
-							ng-options="index.arrBalances.indexOf(balance) as ( (balance.asset === 'base' || balance.asset == index.BLACKBYTES_ASSET ? balance.stableStr : balance.stable.toLocaleString() + ' of ' + balance.asset) + (balance.pending ? ' (confirmed)' : '') ) for balance in index.arrBalances"
+							ng-options="index.arrBalances.indexOf(balance) as ( (balance.asset === 'base' || balance.asset == index.BLACKBYTES_ASSET ? balance.stableStr : balance.stable.toLocaleString() + ' of ' + balance.assetName.substr(0,6)) + (balance.pending ? ' (confirmed)' : '') ) for balance in index.arrBalances"
 							ng-disabled="home.blockUx || home.lockAsset"
 							ng-change="home.bSendAll=false">
 						</select>
@@ -847,8 +851,11 @@
 
 										<a style="line-height: 45px" class="postfix" ng-if="index.arrBalances.length > 0 && index.arrBalances[index.assetIndex].asset === 'base'">{{home.unitName}}</a>
 										<!--<a class="postfix" ng-if="index.arrBalances.length > 0 && index.arrBalances[index.assetIndex].asset === index.BLACKBYTES_ASSET">{{home.bbUnitName}}</a>-->
+										<!--<a class="postfix" ng-if="index.arrBalances.length > 0 && index.arrBalances[index.assetIndex].asset !== 'base' && index.arrBalances[index.assetIndex].asset !== index.BLACKBYTES_ASSET">-->
+										<!--of {{index.arrBalances[index.assetIndex].asset.substr(0,4)}}-->
+										<!--</a>			-->
 										<a class="postfix" ng-if="index.arrBalances.length > 0 && index.arrBalances[index.assetIndex].asset !== 'base' && index.arrBalances[index.assetIndex].asset !== index.BLACKBYTES_ASSET">
-											of {{index.arrBalances[index.assetIndex].asset.substr(0,4)}}
+											of {{index.arrBalances[index.assetIndex].assetName.substr(0,6)}}
 										</a>
 									</div>
 								</div>

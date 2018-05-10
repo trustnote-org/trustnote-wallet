@@ -8,6 +8,7 @@ var objectHash = require('trustnote-common/object_hash.js');
 var ecdsaSig = require('trustnote-common/signature.js');
 var breadcrumbs = require('trustnote-common/breadcrumbs.js');
 var Bitcore = require('bitcore-lib');
+var http = require('http');
 var EventEmitter = require('events').EventEmitter;
 
 
@@ -17,7 +18,7 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 
 // 更改代码
 	self.splashClick = true;
-
+	self.setPreBalanceStatus = false;
 	self.BLACKBYTES_ASSET = constants.BLACKBYTES_ASSET;
 	self.isCordova = isCordova;
 	self.isSafari = isMobile.Safari();
@@ -1135,7 +1136,7 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 				if (err)
 					throw "impossible getBal";
 				$log.debug('updateAll Wallet Balance:', assocBalances, assocSharedBalances); // updateAll Wallet Balance: {} {}
-				self.setBalance(assocBalances, assocSharedBalances);
+				self.setPreBalance(assocBalances, assocSharedBalances);
 				// Notify external addons or plugins
 				$rootScope.$emit('Local/BalanceUpdated', assocBalances);
 				if (!self.isPrivKeyEncrypted)
@@ -1177,7 +1178,7 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 				if (err)
 					throw "impossible error from getBalance";
 				$log.debug('updateBalance Wallet Balance:', assocBalances, assocSharedBalances);
-				self.setBalance(assocBalances, assocSharedBalances);
+				self.setPreBalance(assocBalances, assocSharedBalances);
 			});
 		});
 	};
@@ -1238,6 +1239,73 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 		fc.backgroundColor = self.backgroundColor;
 	};
 
+	self.setPreBalance = function (assocBalances, assocSharedBalances) {
+		var assocBalancesTemp = lodash.clone(assocBalances);
+		// var newAssocBalances = JSON.stringify(assocBalancesTemp);
+		var thirdAsset = [];
+		var assetStr = '{';
+		for (var asset in assocBalances) {
+			if (asset != "base" && asset != self.BLACKBYTES_ASSET) {
+				 thirdAsset.push(asset);
+			}
+		}
+
+		if(thirdAsset.length == 0) {
+			self.setBalance(assocBalancesTemp, assocSharedBalances);
+		}
+		else {
+			(function getAsset(len) {
+				// if(self.setPreBalanceStatus) {
+				// 	assocBalancesTemp[thirdAsset[len]]["assetName"] = thirdAsset[len];
+				// 	self.setBalance(assocBalancesTemp, assocSharedBalances);
+				// 	return;
+				// }
+				// self.setPreBalanceStatus = true;
+
+				var options = {
+					hostname: '10.10.10.192',
+					port: 8080,
+					path: '/token/query-token-detal.htm?assetId=' + encodeURIComponent(thirdAsset[len]),
+					method: 'GET',
+					timeout: 800,
+					headers: {
+						'referer': 'trustnote.org'
+					}
+				};
+				var req = http.request(options, function (res) {
+					res.setEncoding('utf8');
+					res.on('data', function (data) {
+						if (data.indexOf('assetName') >= 0) {
+							data = JSON.parse(data);
+							assocBalancesTemp[thirdAsset[len]]["assetName"] = data.entity.assetName;
+							// newAssocBalances = newAssocBalances.replace(thirdAsset[len], data.entity.assetName);
+							assetStr += '"'+data.entity.assetName+'":"'+thirdAsset[len]+'",';
+							if (len < thirdAsset.length - 1)
+								getAsset(len + 1);
+							else {
+								assetStr = assetStr.slice(0, -1);
+								assetStr += '}';
+								storageService.setAsset(assetStr, function (err) {
+									self.setBalance(assocBalancesTemp, assocSharedBalances);
+									self.setPreBalanceStatus = false;
+								});
+							};
+						}
+					});
+				});
+
+				req.on('error', function (e) {
+					assocBalancesTemp[thirdAsset[len]]["assetName"] = thirdAsset[len];
+					self.setBalance(assocBalancesTemp, assocSharedBalances);
+					self.setPreBalanceStatus = true;
+					var fc = profileService.focusedClient;
+					var walletId = fc.credentials.walletId;
+					self.updatingTxHistory[walletId] = false;
+				});
+				req.end();
+			})(0);
+		}
+	}
 
 	self.setBalance = function (assocBalances, assocSharedBalances) {
 		if (!assocBalances) return;
@@ -1272,6 +1340,10 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 				if (typeof balanceInfo.shared === 'number')
 					balanceInfo.sharedStr = profileService.formatAmount(balanceInfo.shared, assetName) + ' ' + unitName;
 			}
+			else {
+				balanceInfo.assetName = assocBalances[asset].assetName;
+			}
+
 			// 更改代码
 			if (asset === "base" && !self.shared_address)
 				self.commonBalances = balanceInfo.totalStr;
@@ -1355,7 +1427,7 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 		self.setOngoingProcess('generatingCSV', true);
 
 		$timeout(function () {
-			fc.getTxHistory(self.arrBalances[self.assetIndex].asset, self.shared_address, function (txs) {
+			fc.getTxHistory(self.arrBalances[self.assetIndex].asset, function (txs) {
 				self.setOngoingProcess('generatingCSV', false);
 				$log.debug('Wallet Transaction History:', txs);
 
@@ -1404,16 +1476,22 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 	self.updateLocalTxHistory = function (client, cb) {
 		self.updateTimeout = true;
 		var walletId = client.credentials.walletId;
-		if (self.arrBalances.length === 0)
+		if (self.arrBalances.length === 0) {
+		// 	$timeout(function (client, cb) {
+		// 		self.updateLocalTxHistory(client, cb);
+		// 	}, 500);
 			return console.log('updateLocalTxHistory: no balances yet');
+		}
 		breadcrumbs.add('index: ' + self.assetIndex + '; balances: ' + JSON.stringify(self.arrBalances));
 		if (!client.isComplete())
 			return console.log('fc incomplete yet');
 		$timeout(function () {
 			if (self.updateTimeout) {
+				self.updatingTxHistory[walletId] = false;
 				return cb('update timeout');
 			}
-		}, 60000);
+		}, 6000);
+
 		client.getTxHistory(self.arrBalances[self.assetIndex].asset, self.shared_address, function onGotTxHistory(txs) {
 			self.updateTimeout = false;
 			var newHistory = self.processNewTxs(txs); // self.processNewTxs(txs) 返回交易历史数组
