@@ -1263,7 +1263,7 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 				// self.setPreBalanceStatus = true;
 
 				var options = {
-					hostname: 'token.trustnote.org',
+					hostname: '150.109.44.78',
 					port: 80,
 					path: '/token/query-token-detal.htm?assetId=' + encodeURIComponent(thirdAsset[len]),
 					method: 'GET',
@@ -1292,6 +1292,11 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 									self.setPreBalanceStatus = false;
 								});
 							};
+						}
+						else {
+							assocBalancesTemp[thirdAsset[len]]["issuserName"] = "TTT user";
+							assocBalancesTemp[thirdAsset[len]]["symbol"] = thirdAsset[len];
+							self.setBalance(assocBalancesTemp, assocSharedBalances);
 						}
 					});
 				});
