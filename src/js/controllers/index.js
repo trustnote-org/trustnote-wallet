@@ -1263,8 +1263,8 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 				// self.setPreBalanceStatus = true;
 
 				var options = {
-					hostname: '10.10.10.192',
-					port: 8080,
+					hostname: 'token.trustnote.org',
+					port: 80,
 					path: '/token/query-token-detal.htm?assetId=' + encodeURIComponent(thirdAsset[len]),
 					method: 'GET',
 					timeout: 800,
@@ -1275,9 +1275,10 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 				var req = http.request(options, function (res) {
 					res.setEncoding('utf8');
 					res.on('data', function (data) {
+						console.log("data:"+data);
 						if (data.indexOf('assetName') >= 0) {
 							data = JSON.parse(data);
-							assocBalancesTemp[thirdAsset[len]]["assetName"] = data.entity.assetName;
+							assocBalancesTemp[thirdAsset[len]]["assetName"] = data.entity.assetName || thirdAsset[len];
 							// newAssocBalances = newAssocBalances.replace(thirdAsset[len], data.entity.assetName);
 							assetStr += '"'+data.entity.assetName+'":"'+thirdAsset[len]+'",';
 							if (len < thirdAsset.length - 1)
