@@ -1276,11 +1276,12 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 					res.setEncoding('utf8');
 					res.on('data', function (data) {
 						console.log("data:"+data);
-						if (data.indexOf('assetName') >= 0) {
+						if (data.indexOf('symbol') >= 0) {
 							data = JSON.parse(data);
-							assocBalancesTemp[thirdAsset[len]]["assetName"] = data.entity.assetName || thirdAsset[len];
+							assocBalancesTemp[thirdAsset[len]]["issuserName"] = data.entity.issuserName || "TTT user";
+							assocBalancesTemp[thirdAsset[len]]["symbol"] = data.entity.symbol || thirdAsset[len];
 							// newAssocBalances = newAssocBalances.replace(thirdAsset[len], data.entity.assetName);
-							assetStr += '"'+data.entity.assetName+'":"'+thirdAsset[len]+'",';
+							assetStr += '"'+data.entity.symbol+'":"'+thirdAsset[len]+'",';
 							if (len < thirdAsset.length - 1)
 								getAsset(len + 1);
 							else {
@@ -1296,7 +1297,8 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 				});
 
 				req.on('error', function (e) {
-					assocBalancesTemp[thirdAsset[len]]["assetName"] = thirdAsset[len];
+					assocBalancesTemp[thirdAsset[len]]["issuserName"] = "TTT user";
+					assocBalancesTemp[thirdAsset[len]]["symbol"] = thirdAsset[len];
 					self.setBalance(assocBalancesTemp, assocSharedBalances);
 					self.setPreBalanceStatus = true;
 					var fc = profileService.focusedClient;
@@ -1342,7 +1344,8 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 					balanceInfo.sharedStr = profileService.formatAmount(balanceInfo.shared, assetName) + ' ' + unitName;
 			}
 			else {
-				balanceInfo.assetName = assocBalances[asset].assetName;
+				balanceInfo.issuserName = assocBalances[asset].issuserName;
+				balanceInfo.symbol = assocBalances[asset].symbol;
 			}
 
 			// 更改代码
