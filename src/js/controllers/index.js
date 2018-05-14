@@ -1263,7 +1263,7 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 				// self.setPreBalanceStatus = true;
 
 				var options = {
-					hostname: '150.109.44.78',
+					hostname: '150.109.52.168',
 					port: 80,
 					path: '/token/query-token-detal.htm?assetId=' + encodeURIComponent(thirdAsset[len]),
 					method: 'GET',
