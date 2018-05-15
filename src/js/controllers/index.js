@@ -29,6 +29,7 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 	self.assetIndex = 0;
 	self.$state = $state;
 	self.usePushNotifications = isCordova && !isMobile.Windows() && isMobile.Android();
+	self.lightToHubTimeoutCount = 0;
 
 	self.showneikuang = false;
 	self.showneikuangsync = false;
@@ -475,6 +476,19 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 		console.log('refresh_light_done');
 		self.setOngoingProcess('Syncing', false);
 		scanForAddressesLignt(addAddresses);
+	});
+
+	eventBus.on('refresh_light_timeout', function () {
+		self.lightToHubTimeoutCount++;
+		console.log('refresh_light_timeout');
+		self.setOngoingProcess('Syncing', false);
+		var lightWallet = require('trustnote-common/light_wallet.js');
+		if(self.lightToHubTimeoutCount > 3) {
+			self.lightToHubTimeoutCount = 0;
+			console.log('refresh_light_timeout ' + configService.stableHub);
+			lightWallet.setLightVendorHost(configService.stableHub);
+		}
+		lightWallet.refreshLightClientHistory();
 	});
 
 	eventBus.on("confirm_on_other_devices", function () {

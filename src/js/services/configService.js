@@ -65,6 +65,7 @@ angular.module('copayApp.services').factory('configService', function (storageSe
 		'curry.trustnote.org/tn',
 		'kake.trustnote.org/tn'
 	]
+	root.stableHub = 'stable.trustnote.org/tn';
 	// 钱包默认配置
 	var defaultConfig = {
 		// wallet limits

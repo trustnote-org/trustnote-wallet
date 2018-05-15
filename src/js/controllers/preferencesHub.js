@@ -5,6 +5,7 @@ angular.module('copayApp.controllers').controller('preferencesHubController',
     var config = configService.getSync();
     var initHubEdit = false;
     this.hub = config.hub;
+    this.arrHub = configService.hub;
 
     this.currentAutoUpdWitnessesList = autoUpdatingWitnessesList.autoUpdate;
     $scope.autoUpdWitnessesList = autoUpdatingWitnessesList.autoUpdate;
