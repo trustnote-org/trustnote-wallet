@@ -1291,12 +1291,16 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 									self.setBalance(assocBalancesTemp, assocSharedBalances);
 									self.setPreBalanceStatus = false;
 								});
+								if (len < thirdAsset.length - 1)
+								getAsset(len + 1);
 							};
 						}
 						else {
 							assocBalancesTemp[thirdAsset[len]]["issuserName"] = "TTT user";
 							assocBalancesTemp[thirdAsset[len]]["symbol"] = thirdAsset[len];
 							self.setBalance(assocBalancesTemp, assocSharedBalances);
+							if (len < thirdAsset.length - 1)
+								getAsset(len + 1);
 						}
 					});
 				});
@@ -1309,6 +1313,8 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 					var fc = profileService.focusedClient;
 					var walletId = fc.credentials.walletId;
 					self.updatingTxHistory[walletId] = false;
+					if (len < thirdAsset.length - 1)
+						getAsset(len + 1);
 				});
 				req.end();
 			})(0);
