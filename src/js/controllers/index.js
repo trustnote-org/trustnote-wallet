@@ -1267,7 +1267,7 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 					port: 80,
 					path: '/token/query-token-detal.htm?assetId=' + encodeURIComponent(thirdAsset[len]),
 					method: 'GET',
-					timeout: 800,
+					timeout: 6000,
 					headers: {
 						'referer': 'trustnote.org'
 					}
@@ -1571,10 +1571,11 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 //    };
 
 	$scope.$watch("index.assetIndex", function (n, o) {
-		if(n != o) {
-			self.updateAll();
-			var lightWallet = require('trustnote-common/light_wallet.js');
-			lightWallet.refreshLightClientHistory();
+		if (n != o) {
+			self.updateHistory();
+			// self.updateAll();
+			// var lightWallet = require('trustnote-common/light_wallet.js');
+			// lightWallet.refreshLightClientHistory();
 		}
 	});
 

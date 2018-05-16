@@ -259,7 +259,7 @@
 
             		<ul rn-carousel rn-carousel-transition="hexagon" rn-carousel-index="index.assetIndex" rn-carousel-controls>
                 		<li ng-click='index.onClick()' ng-show="!index.updateError && index.walletScanStatus != 'error'" ng-repeat="balance in index.arrBalances"  ng-cloak class="ng-cloak">
-                      		<div ng-click='index.updateAll(); index.updateHistoryFromNetwork()'>
+                      		<div ng-click='index.updateHistoryFromNetwork()'>
 
 								<!--余额显示-->
 								<strong class="size-36" ng-if="balance.asset == 'base' || balance.asset == index.BLACKBYTES_ASSET">{{balance.totalStr}}</strong>
