@@ -128,7 +128,7 @@ angular.module('copayApp.services').factory('profileService', function profileSe
 
                 if (!root.focusedClient.credentials.xPrivKey)
                     throw Error("xPrivKey still not set after unlock");
-                console.log('unlocked: '+root.focusedClient.credentials.xPrivKey);
+                // console.log('unlocked: '+root.focusedClient.credentials.xPrivKey);
 
                 var config = configService.getSync();
                 root.focusedClient.initDeviceProperties( root.focusedClient.credentials.xPrivKey, root.profile.my_device_address, config.hub, config.deviceName );

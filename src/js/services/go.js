@@ -336,10 +336,10 @@ if (window.cordova){
 	window.handleOpenURL = tempHandleUri;
 }
 
-window.onerror = function(msg, url, line, col, error){
-	console.log("onerror");
-	eventBus.emit('uncaught_error', "Javascript error: "+msg, error);
-};
+// window.onerror = function(msg, url, line, col, error){
+// 	console.log("onerror");
+// 	eventBus.emit('uncaught_error', "Javascript error: "+msg, error);
+// };
 
 process.on('uncaughtException', function(e){
 	console.log("uncaughtException");

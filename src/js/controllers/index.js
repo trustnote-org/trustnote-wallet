@@ -29,6 +29,7 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 	self.assetIndex = 0;
 	self.$state = $state;
 	self.usePushNotifications = isCordova && !isMobile.Windows() && isMobile.Android();
+	self.lightToHubTimeoutCount = 0;
 
 	self.showneikuang = false;
 	self.showneikuangsync = false;
@@ -475,6 +476,19 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 		console.log('refresh_light_done');
 		self.setOngoingProcess('Syncing', false);
 		scanForAddressesLignt(addAddresses);
+	});
+
+	eventBus.on('refresh_light_timeout', function () {
+		self.lightToHubTimeoutCount++;
+		console.log('refresh_light_timeout');
+		self.setOngoingProcess('Syncing', false);
+		var lightWallet = require('trustnote-common/light_wallet.js');
+		if(self.lightToHubTimeoutCount > 3) {
+			self.lightToHubTimeoutCount = 0;
+			console.log('refresh_light_timeout ' + configService.stableHub);
+			lightWallet.setLightVendorHost(configService.stableHub);
+		}
+		lightWallet.refreshLightClientHistory();
 	});
 
 	eventBus.on("confirm_on_other_devices", function () {
@@ -1239,19 +1253,15 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 	};
 
 
-	// 设置总资产数
 	self.setBalance = function (assocBalances, assocSharedBalances) {
 		if (!assocBalances) return;
 		var config = configService.getSync().wallet.settings;
-
 		// Selected unit
 		self.unitValue = config.unitValue;
 		self.unitName = config.unitName;
 		self.bbUnitName = config.bbUnitName;
-
 		self.arrBalances = [];
 
-		// 循环资产类型
 		for (var asset in assocBalances) {
 			var balanceInfo = assocBalances[asset];
 			balanceInfo.asset = asset;
@@ -1260,7 +1270,6 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 			if (assocSharedBalances[asset]) {
 				balanceInfo.shared = 0;
 				balanceInfo.assocSharedByAddress = {};
-
 				for (var sa in assocSharedBalances[asset]) {
 					var total_on_shared_address = (assocSharedBalances[asset][sa].stable || 0) + (assocSharedBalances[asset][sa].pending || 0);
 					balanceInfo.shared += total_on_shared_address;
@@ -1271,23 +1280,19 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 			if (asset === "base" || asset == self.BLACKBYTES_ASSET) {
 				var assetName = asset !== "base" ? 'blackbytes' : 'base';
 				var unitName = asset !== "base" ? config.bbUnitName : config.unitName;
-
-
-				// 前端页面在这儿获得了数字
 				balanceInfo.totalStr = profileService.formatAmount(balanceInfo.total, assetName) + ' ' + unitName;
 				balanceInfo.stableStr = profileService.formatAmount(balanceInfo.stable, assetName) + ' ' + unitName;
 				balanceInfo.pendingStr = profileService.formatAmount(balanceInfo.pending, assetName) + ' ' + unitName;
-
 				if (typeof balanceInfo.shared === 'number')
 					balanceInfo.sharedStr = profileService.formatAmount(balanceInfo.shared, assetName) + ' ' + unitName;
 			}
-
-// 更改代码
+			// 更改代码
 			if (asset === "base" && !self.shared_address)
 				self.commonBalances = balanceInfo.totalStr;
 			self.arrBalances.push(balanceInfo);
 			self.arrBalances.length = 1;
 		}
+
 		self.assetIndex = self.assetIndex || 0;
 		if (!self.arrBalances[self.assetIndex]) // if no such index in the subwallet, reset to bytes
 			self.assetIndex = 0;
@@ -1297,39 +1302,9 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 		console.log('========= setBalance done, balances: ' + JSON.stringify(self.arrBalances));
 		breadcrumbs.add('setBalance done, balances: ' + JSON.stringify(self.arrBalances));
 
-		/*
-		 // SAT
-		 if (self.spendUnconfirmed) {
-		 self.totalBalanceBytes = balance.totalAmount;
-		 self.lockedBalanceBytes = balance.lockedAmount || 0;
-		 self.availableBalanceBytes = balance.availableAmount || 0;
-		 self.pendingAmount = null;
-		 } else {
-		 self.totalBalanceBytes = balance.totalConfirmedAmount;
-		 self.lockedBalanceBytes = balance.lockedConfirmedAmount || 0;
-		 self.availableBalanceBytes = balance.availableConfirmedAmount || 0;
-		 self.pendingAmount = balance.totalAmount - balance.totalConfirmedAmount;
-		 }
-
-		 //STR
-		 self.totalBalanceStr = profileService.formatAmount(self.totalBalanceBytes) + ' ' + self.unitName;
-		 self.lockedBalanceStr = profileService.formatAmount(self.lockedBalanceBytes) + ' ' + self.unitName;
-		 self.availableBalanceStr = profileService.formatAmount(self.availableBalanceBytes) + ' ' + self.unitName;
-
-		 if (self.pendingAmount) {
-		 self.pendingAmountStr = profileService.formatAmount(self.pendingAmount) + ' ' + self.unitName;
-		 } else {
-		 self.pendingAmountStr = null;
-		 }
-		 */
 		$timeout(function () {
 			$rootScope.$apply();
 		});
-
-
-		// self.arrBalances.length = 1;
-
-
 	};
 
 
@@ -1515,6 +1490,14 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 //        console.log('== mousedown');
 //        self.oldAssetIndex = self.assetIndex;
 //    };
+
+	$scope.$watch("index.assetIndex", function (n, o) {
+		if(n != o) {
+			self.updateAll();
+			var lightWallet = require('trustnote-common/light_wallet.js');
+			lightWallet.refreshLightClientHistory();
+		}
+	});
 
 	self.onClick = function () {
 		console.log('== click');
