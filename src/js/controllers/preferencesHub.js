@@ -33,9 +33,9 @@ angular.module('copayApp.controllers').controller('preferencesHubController',
 					go.path('preferencesGlobal');
 				}, 50);
 			});
-			if (this.currentAutoUpdWitnessesList != $scope.autoUpdWitnessesList) {
-				autoUpdatingWitnessesList.setAutoUpdate($scope.autoUpdWitnessesList);
-			}
+			// if (this.currentAutoUpdWitnessesList != $scope.autoUpdWitnessesList) {
+			// 	autoUpdatingWitnessesList.setAutoUpdate($scope.autoUpdWitnessesList);
+			// }
 		};
 
 		var unwatchEditHub = $scope.$watch(angular.bind(this, function(){
