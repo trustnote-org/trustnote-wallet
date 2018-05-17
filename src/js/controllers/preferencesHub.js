@@ -27,7 +27,7 @@ angular.module('copayApp.controllers').controller('preferencesHubController',
 				$timeout(function () {
 					device.setDeviceHub(self.hub);
 					lightWallet.setLightVendorHost(self.hub);
-				}, 300);
+				}, 800);
 
 				$timeout(function(){
 					go.path('preferencesGlobal');
