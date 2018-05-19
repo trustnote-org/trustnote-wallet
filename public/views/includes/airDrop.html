@@ -1,0 +1,271 @@
+<style type="text/css">
+	section::-webkit-scrollbar{
+		display: none;
+	}
+	.airDropBox{
+		padding: 0 15px;
+	}
+	.assetBox{
+		background: #F5F5F5;
+		margin: 0 -15px 20px -15px;
+		padding: 0 15px;
+	}
+	.submitBtn{
+		width: 100%;
+		height: 40px;
+		background-color: #0095FF;
+		padding: 0;
+		color: white;
+		border-radius: 50px !important;
+	}
+	.submitBtn:hover{
+		background-color: #0095FF;
+		opacity: 0.9;
+	}
+	.historyList{
+		margin: 0 -15px;
+		padding: 15px;
+	}
+	.historyList h4{
+		margin: 0;
+		padding-bottom: 10px;
+		color: black;
+		font-weight: 700;
+		border-bottom: 1px solid #CCCCCC;
+	}
+	.historyItem{
+		padding: 10px 0;
+		margin: 0;
+		cursor: pointer;
+		border-bottom: 1px solid #CCCCCC;
+	}
+	.item-amount{
+		color: black;
+		font-size: 15px;
+	}
+	.item-time{
+		float: right;
+		font-size: 12px;
+		color: black;
+		margin-top: 5px;
+	}
+	.tokenListModal{
+		position: absolute;
+		z-index: 99999;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		background-color: #fff;
+	}
+	.top-bar{
+		height: 45px;
+		line-height: 45px;
+		background-color: #12172E;
+		text-align: center;
+		color: #FFFFFF;
+	}
+	.top-left{
+		float: left;
+		padding-left: 10px;
+		cursor: pointer;
+	}
+	.top-right{
+		float: right;
+		padding-right: 10px;
+		cursor: pointer;
+	}
+	.tip{
+		color: #000000;
+	}
+	.tokenList{
+		padding: 10px;
+		background-color: #FFFFFF;
+	}
+	.newList p{
+		margin-bottom: 10px;
+	}
+	.line{
+		height: 15px;
+		margin: 0 -15px;
+		background: #f2f2f2;
+	}
+	.empty{
+		text-align: center;
+	}
+	.empty img{
+		margin-top: 25px;
+		width: 50px;
+	}
+	.empty p{
+		font-size: 13px;
+		color: #BBBBBB;
+		margin-top: 10px;
+	}
+	.warring{
+		height: 18px;
+		font-size: 12px;
+		color: #FF293C;
+	}
+	form .input{
+		margin-bottom: 7px;
+		position: relative;
+	}
+	form .input input{
+		height: 45px;
+		font-size: 14px;
+		padding-right:45px;
+		margin-bottom: 7px;
+		text-align: right;
+	}
+	form .input .placeholder{
+		position: absolute;
+		top: 10px;
+		left: 10px;
+	}
+	.amount-pop{
+		color: black;
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		opacity: 0.95;
+		text-align: center;
+		line-height: 33px;
+		background: #ccc;
+	}
+	.submit-disable{
+		background-color: #CCCCCC;
+	}
+</style>
+
+<!--top顶部-->
+<nav ng-controller="topbarController as topbar" class="tab-bar oh">
+	<section class="left-small">
+		<a class="p10 " ng-click="topbar.openSendScreen();closeToHome = null">
+			<span class="text-close">{{'Close'|translate}}</span>
+		</a>
+	</section>
+	<section class="middle tab-bar-section">
+		<h1 class="ellipsis" ng-style="{ 'max-width': '100%'}">
+			<span class="size-17 colorfff" translate>Generate T Code</span>
+		</h1>
+	</section>
+</nav>
+<div ng-controller="airDrop as airD" class="airDropBox">
+	<!--可用余额-->
+	<div class="assetBox">
+		<span class="db text-bold">
+			<span class="size-12 color333" translate>Available Balance</span>:
+		</span>
+		<select
+			style="height: 45px; font-size: 14px;background-color: #FFFFFF;"
+			class="m10t"
+			ng-model="index.assetIndex"
+			ng-options="index.arrBalances.indexOf(balance) as ( (balance.asset === 'base' || balance.asset == index.BLACKBYTES_ASSET ? balance.stableStr : balance.stable.toLocaleString() + ' of ' + balance.asset) + (balance.pending ? ' (confirmed)' : '') ) for balance in index.arrBalances"
+			>
+		</select>
+	</div>
+	<form name="sendCandyForm" ng-submit="airD.submitForm()">
+		<!-- 发送金额 -->
+		<div>
+			<label for="candyAmount">
+				<span class="size-12 color999" translate>Fixed Amount Each</span>
+			</label>
+			<div class="input">
+				<input type="number" name="candyAmount" id="candyAmount" step="0.000001"
+					   valid-amount="{{index.arrBalances[index.assetIndex].asset}}"
+					   ng-model="airD.candyAmount"
+					   autocomplete="off"
+					   placeholder="0.0000"
+					   ng-change="airD.checkNumber('amount')"
+				>
+				<span class="placeholder" translate>Amount each</span>
+				<a style="line-height: 45px;height: 45px;padding-right: 12px;" class="postfix" ng-if="index.arrBalances.length > 0 && index.arrBalances[index.assetIndex].asset === 'base'">
+					MN
+				</a>
+				<a class="postfix" ng-if="index.arrBalances.length > 0 && index.arrBalances[index.assetIndex].asset !== 'base' && index.arrBalances[index.assetIndex].asset !== index.BLACKBYTES_ASSET">
+					of {{index.arrBalances[index.assetIndex].asset.substr(0,4)}}
+				</a>
+				<div class="warring" ><span ng-show="airD.amountWarring">{{airD.amountWarringMsg}}</span></div>
+			</div>
+			<div class="input">
+				<input type="number" name="redPacketCount"
+					   style="padding-right: 30px;"
+					   ng-model="airD.redPacketCount"
+					   autocomplete="off"
+					   placeholder="{{airD.T_count_placeholder}}"
+					   ng-change="airD.checkNumber('count')"
+				>
+				<span class="placeholder" translate>Quantity</span>
+				<a style="line-height: 45px;height: 45px;padding-right: 12px;" class="postfix" translate>Number</a>
+				<div class="warring" ><span ng-show="airD.countWarring">{{airD.countWarringMsg}}</span></div>
+			</div>
+			<p style="text-align: center;position: relative" >
+				<span translate>Total amount</span>
+				<span ng-model="airD.candyTotalCount" style="font-size: 21px">{{(airD.redPacketCount * airD.candyAmount).toFixed(4)}}</span> MN
+				<span class="amount-pop" ng-if="!airD.submitAble" translate>Youe balance is not enough</span>
+			</p>
+		</div>
+		<button class="submitBtn" ng-disabled="airD.countWarring || airD.amountWarring" ng-class="{'submit-disable': airD.countWarring || airD.amountWarring}" translate>Generate</button>
+
+		<div class="row" ng-show="index.bHasMerkle">
+			<div class="large-12 columns">
+				<label for="merkle_proof">
+					<span translate>Merkle proof</span>
+					<small translate ng-hide="!sendCandyForm.merkle_proof.$pristine">optional</small>
+					<small translate class="has-error" ng-show="sendCandyForm.merkle_proof.$invalid && !sendCandyForm.merkle_proof.$pristine">
+						too long!
+					</small>
+				</label>
+				<div class="input">
+					<textarea id="merkle_proof" name="merkle_proof" maxlength="4096" ng-model="_merkle_proof"></textarea>
+				</div>
+			</div>
+		</div>
+	</form>
+	<div class="line"></div>
+	<div class="historyList" ng-if="!airD.showSeedList">
+		<h4 translate>T Code Log</h4>
+		<p class="historyItem" ng-repeat="data in airD.candyHistoryList track by $index" ng-click="airD.showHistory($index)">
+			<span class="item-amount">{{data.amount}} MN</span>
+			<span class="item-time">{{data.time}}</span>
+		</p>
+		<div class="empty" ng-show="!(airD.candyHistoryList.length > 0)">
+			<img src="img/candy-history.png" alt="">
+			<p translate>Records of sending T code are not available</p>
+		</div>
+	</div>
+	<div ng-show="airD.showSeedList" class="tokenListModal">
+		<div class="top-bar">
+			<span class="top-left" ng-click="airD.showSeedList = false;airD.showSeedFlag = '';" translate>Close</span>
+			<span translate>Send T Code</span>
+			<span class="top-right" ng-click="airD.seedCopy()" translate>Copy all</span>
+		</div>
+		<div class="tokenList">
+			<p class="tip" translate>Enter T code to redeem your asset at 'TrustNote Wallet/Transacrtion/Redeem T Code'</p>
+			<div class="newList enable_text_select" ng-if="(airD.showSeedFlag == 'new')">
+				<p class="seed" ng-repeat="token in airD.candyTokenArr">{{token}}</p>
+			</div>
+			<div class="newList enable_text_select" ng-if="(airD.showSeedFlag == 'old')">
+				<p class="seed" ng-repeat="token in airD.curentHistorySeed">{{token}}</p>
+			</div>
+		</div>
+
+	</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

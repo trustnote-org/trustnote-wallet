@@ -205,8 +205,6 @@ angular.module('copayApp.services')
 
 
 
-
-
 		// 存储 是否选择  回复钱包 创建新的钱包
 		root.hashaschoosen = function (value, cb) {
 			storage.set('haschoosen', value, cb);
@@ -218,6 +216,13 @@ angular.module('copayApp.services')
 			storage.get('haschoosen',cb);
 		};
 
+		//发送红包记录
+		root.setCandySendHistory = function (value, cb) {
+			storage.set('candySendHistory', value, cb);
+		};
+		root.getCandySendHistory = function (cb) {
+			storage.get('candySendHistory',cb);
+		};
 
 		return root;
 	});
