@@ -1464,7 +1464,7 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 		});
 	};
 
-	self.updateTxHistory = lodash.debounce(function () {  // 创建一个 debounced（防抖动）函数，该函数会从上一次被调用后，延迟 wait 毫秒后调用 func 方法。
+	self.updateTxHistory = lodash.debounce(function () {  // 创建一个 debounced（// 防抖动）函数，该函数会从上一次被调用后，延迟 wait 毫秒后调用 func 方法。
 		self.updateHistory();
 	}, 1000);
 

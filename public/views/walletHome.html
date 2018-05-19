@@ -20,21 +20,12 @@
 		background: #000;
 	}
 	div.passModalMaskColdQrNext1 {
-		/*position: absolute;*/
-		/*width: 90%;*/
-		/*margin-left: 5%;*/
-		/*height: 80%;*/
-		/*margin-top:15%;*/
-		/*z-index: 1101;*/
-		/*!*opacity:0.7;*!*/
-		/*background: #fff;*/
 		padding-top:10px;
 		border-radius: 10px;
 		overflow: hidden;
 		position: absolute;
 		width: 90%;
 		margin-left: 5%;
-		/*height: 80%;*/
 		margin-top:15%;
 		z-index: 1101;
 		opacity:1;
@@ -89,6 +80,22 @@
 	.spinnerEx > div{
 		background: #0095ff;
 	}
+	.sendCandy{
+		margin: 20px 0;
+		text-align: center;
+	}
+	.sendCandy .receive{
+		cursor: pointer;
+		background:url("img/get-T-red-package.png") left center no-repeat ;
+		padding: 10px 30px;
+		background-size: 18px;
+	}
+	.sendCandy .send{
+		cursor: pointer;
+		background:url("img/send-T-token.png") left center no-repeat;
+		padding: 10px 30px;
+		background-size: 20px;
+	}
 </style>
 
 <!-- 第一部分 顶部topbar-->
@@ -98,7 +105,7 @@
 <!-- 第二部分 wallethome 所有tab标签-->
 <div ng-controller="walletHomeController as home">
 
-	<!--当观察钱包 发送交易时 弹出 -------- ************* ******* -->
+	<!--当观察钱包 发送交易时 弹出 -------- ************* ************* ************* ************* ************* ************* ************* ************* ************* ******* -->
 	<div class="passModalMaskColdQr" ng-if="home.showTitle == 1">
 		<div class="topbar-container" style="background: #12172e; height: 45px;">
 			<section class="left-small" ng-click="home.showTitle = 0; index.showTitle = 1; home.closeColdPay()">
@@ -166,19 +173,17 @@
 		<p translate class="textArea" readonly="readonly">Import the signature</p>
 		<p translate style="text-align: center; color: #666; margin-top:45px;">Please scan signature QR code with your offline wallet</p>
 	</div>
-	<!--当观察钱包 发送交易时 弹出 -------- ************* *******结束  -->
-
-
+	<!--当观察钱包 发送交易时 弹出 -------- ************* ************ *********** *********** *********** *********** *********** *********** *********** *********** *********** ******结束  -->
 
 
 
   	<div class="row columns m20tp" ng-show="index.noFocusedWallet">
     	<div class="text-center text-warning m20b">
-			<i class="fi-alert"></i> 
-			<span translate>You do not have a wallet</span> 
+			<i class="fi-alert"></i>
+			<span translate>You do not have a wallet</span>
 		</div>
     	<button class="button black round expand" ng-click="$root.go('add')" translate>Create</button>
-    	<div class="text-center text-gray p20v" ng-click="$root.go('preferences')">  
+    	<div class="text-center text-gray p20v" ng-click="$root.go('preferences')">
 			<button class=" outline round dark-gray tiny" translate> Preferences </button>
 		</div>
   	</div>
@@ -944,9 +949,15 @@
 						</div>
 					</form>
 
+					<!--当前是观察钱包时 提示-->
 					<div ng-if="home.observed == 1">
 						<p style="margin: 10px 0 0 0; color: #333; text-align: center; font-size: 14px;" translate>This is a Watching Only Wallet which requires a offline wallet holding the Mnemonic phrase to sign the transactions.</p>
 						<!--<p style="margin: 0; color: #0095ff; text-align: center; font-size: 14px;" translate>See How does offline signing work?</p>-->
+					</div>
+					<!--发糖果-->
+					<div class="sendCandy" ng-if="home.observed != 1">
+						<span class="send" ng-click="$root.go('airDrop')" translate>Send T Code</span>
+						<span class="receive" ng-click="$root.go('airDropReceive')" translate>Redeem T Code</span>
 					</div>
 				</div>
 			</div>
