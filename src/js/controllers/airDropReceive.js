@@ -30,6 +30,9 @@ angular.module('copayApp.controllers').controller('airDropReceive', function ($s
 	self.clickOK = function () {
 		self.showMask = 0;
 		self.mnemonicStr = '';
+		if(self.isAvailable == 1){
+			self.isAvailable = 1;
+		}
 		self.isAvailable = 0;
 	};
 
@@ -40,6 +43,7 @@ angular.module('copayApp.controllers').controller('airDropReceive', function ($s
 		}
 
 		self.Redeeming = 1;
+		self.isAvailable = 0;
 		self.mnemonic = 'fury car kingdom design boat please trust enrich empower era paper erase';
 		var mnemonic = new Mnemonic(self.mnemonic);
 		var xPrivKey = mnemonic.toHDPrivateKey(self.mnemonicStr);
@@ -52,26 +56,53 @@ angular.module('copayApp.controllers').controller('airDropReceive', function ($s
 			if (!arrWitnesses || arrWitnesses.length != 12) {
 				self.errTextList[0] = gettextCatalog.getString('arrWitnesses error: try it later.');
 				self.Redeeming = 0;
-				return self.showMask = 1;
+				self.showMask = 1;
+				$timeout(function() {
+					$scope.$apply()
+				}, 10);
+				return false;
 			}
 			network.requestFromLightVendor('light/get_history', {
 				addresses: tempAddress,
 				witnesses: arrWitnesses
 			}, function (ws, request, response) {
-				console.log(JSON.stringify(response))
+				//console.log(JSON.stringify(response))
 				//alert('****************' + JSON.stringify(response))
 				if (!response.joints) {
 					self.errTextList[0] = gettextCatalog.getString('You are too late,');
 					self.errTextList[1] = gettextCatalog.getString('the T code has been claimed by other people');
 					self.Redeeming = 0;
-					return self.showMask = 1;
+					self.showMask = 1;
+					$timeout(function() {
+						$scope.$apply()
+					}, 10);
+					return false;
 				}
-				if (!response.joints[0].unit.unit || !response.joints[0].unit.messages[0].payload.outputs || !joints[0].unit.witness_list_unit) {
-					alert('****************' + JSON.stringify(response))
+
+				// alert(JSON.stringify(response))
+				if (!response.joints[0].unit.unit || !response.joints[0].unit.messages[0].payload.outputs || !response.joints[0].unit.witness_list_unit) {
+					//alert('****************' + JSON.stringify(response))
 					self.errTextList[0] = gettextCatalog.getString('You are too late,');
 					self.errTextList[1] = gettextCatalog.getString('the T code has been claimed by other people');
 					self.Redeeming = 0;
-					return self.showMask = 1;
+					self.showMask = 1;
+					$timeout(function() {
+						$scope.$apply()
+					}, 10);
+					return false;
+				}
+
+				for(var j = 0; j < response.unstable_mc_joints.length; j++){
+					if(response.unstable_mc_joints[j].unit.unit == response.joints[0].unit.unit){
+						self.errTextList[0] = gettextCatalog.getString('isNot stableed');
+						self.Redeeming = 0;
+						self.isAvailable = 1;
+						self.showMask = 1;
+						$timeout(function() {
+							$scope.$apply()
+						}, 10);
+						return false;
+					}
 				}
 
 				var inputUnit = response.joints[0].unit.unit;
@@ -81,8 +112,10 @@ angular.module('copayApp.controllers').controller('airDropReceive', function ($s
 						if (tempAddress[0] == tempArr[i].address) {
 							self.tmpAddr = tempArr[i].address;
 							self.tmpAmount = tempArr[i].amount;
+							break;
 						}
 					}
+					var output_index = i;
 				}
 				var witness_list_unit = response.joints[0].unit.witness_list_unit; // 公证人列表单元
 
@@ -90,12 +123,20 @@ angular.module('copayApp.controllers').controller('airDropReceive', function ($s
 					if (response.error) {
 						self.errTextList[0] = response.error;
 						self.Redeeming = 0;
-						return self.showMask = 1;
+						self.showMask = 1;
+						$timeout(function() {
+							$scope.$apply()
+						}, 10);
+						return false;
 					}
 					if (!response.parent_units || !response.last_stable_mc_ball || !response.last_stable_mc_ball_unit || typeof response.last_stable_mc_ball_mci !== 'number') {
 						self.errTextList[0] = gettextCatalog.getString('Incorrect T code, please re-enter');
 						self.Redeeming = 0;
-						return self.showMask = 1;
+						self.showMask = 1;
+						$timeout(function() {
+							$scope.$apply()
+						}, 10);
+						return false;
 					}
 					self.parent_units = response.parent_units;
 					self.last_ball = response.last_stable_mc_ball;
@@ -111,6 +152,7 @@ angular.module('copayApp.controllers').controller('airDropReceive', function ($s
 						} else {
 							if (addr)
 								self.to_address = addr;
+
 							var objUnit = {
 								"version": "1.0",
 								"alt": "1",
@@ -130,7 +172,7 @@ angular.module('copayApp.controllers').controller('airDropReceive', function ($s
 												{
 													"unit": inputUnit,
 													"message_index": 0,
-													"output_index": 0
+													"output_index": output_index
 												}
 											]
 										}
@@ -157,6 +199,16 @@ angular.module('copayApp.controllers').controller('airDropReceive', function ($s
 							objUnit.payload_commission = numPayloadCommission;
 							objUnit.messages[0].payload.outputs[0].amount = self.tmpAmount - numPayloadCommission - numHeadersCommission; // 一共可以发送多少钱
 
+							if(objUnit.messages[0].payload.outputs[0].amount <= 0){
+								self.errTextList[0] = gettextCatalog.getString('not enough fee');
+								self.Redeeming = 0;
+								self.showMask = 1;
+								$timeout(function() {
+									$scope.$apply()
+								}, 10);
+								return false;
+							}
+
 							var payload_hash = objectHash.getBase64Hash(objUnit.messages[0].payload);
 							objUnit.messages[0].payload_hash = payload_hash;
 
@@ -171,20 +223,33 @@ angular.module('copayApp.controllers').controller('airDropReceive', function ($s
 							var privateKey = xPrivKey.derive(path).privateKey;
 							var privKeyBuf = privateKey.bn.toBuffer({size: 32});
 							self.signature = ecdsaSig.sign(text_to_sign, privKeyBuf);
+
+
+
 							objUnit.authors[0].authentifiers.r = self.signature;
 							objUnit.unit = objectHash.getUnitHash(objUnit);
+
+
+
 							var obj = {unit: objUnit};
 							obj.unit.timestamp = Math.round(Date.now() / 1000);
 
 							// if (conf.bLight){ // light clients cannot save before receiving OK from light vendor
+
+							//alert(JSON.stringify(obj))
 							var network = require('trustnote-common/network.js');
 							network.postJointToLightVendor(obj, function (response) {
 								if (response === 'accepted') {
 									self.Redeeming = 0;
 									self.successful = 1;
+									self.mnemonicStr = '';
+									self.isAvailable = 0;
+									$timeout(function() {
+										$scope.$apply()
+									}, 10);
 									$timeout(function () {
 										self.successful = 0;
-									}, 2000)
+									}, 3000)
 								} else {
 									self.errTextList[0] = response.error;
 									self.Redeeming = 0;
@@ -201,3 +266,4 @@ angular.module('copayApp.controllers').controller('airDropReceive', function ($s
 		})
 	}
 });
+
