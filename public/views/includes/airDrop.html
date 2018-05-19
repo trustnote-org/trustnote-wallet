@@ -13,13 +13,13 @@
 	.submitBtn{
 		width: 100%;
 		height: 40px;
+		font-size: 18px;
 		background-color: #0095FF;
 		padding: 0;
 		color: white;
 		border-radius: 50px !important;
 	}
 	.submitBtn:hover{
-		background-color: #0095FF;
 		opacity: 0.9;
 	}
 	.historyList{
@@ -167,6 +167,11 @@
 			>
 		</select>
 	</div>
+	<!--无法发送交易-->
+	<div class="box-notification" ng-show="airD.error" ng-click="airD.resetError()">
+		<span class="text-warning">{{airD.error|translate}}</span>
+		<a class="close-notification text-warning">&#215;</a>
+	</div>
 	<form name="sendCandyForm" ng-submit="airD.submitForm()">
 		<!-- 发送金额 -->
 		<div>
@@ -208,7 +213,7 @@
 				<span class="amount-pop" ng-if="!airD.submitAble" translate>Youe balance is not enough</span>
 			</p>
 		</div>
-		<button class="submitBtn" ng-disabled="airD.countWarring || airD.amountWarring" ng-class="{'submit-disable': airD.countWarring || airD.amountWarring}" translate>Generate</button>
+		<input type="submit" class="submitBtn" ng-disabled="airD.countWarring || airD.amountWarring" ng-class="{'submit-disable': airD.countWarring || airD.amountWarring}" value="{{airD.submitText}}">
 
 		<div class="row" ng-show="index.bHasMerkle">
 			<div class="large-12 columns">

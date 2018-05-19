@@ -100,7 +100,7 @@ if [ ! -d $PROJECT ]; then
 	cordova plugin add cordova-plugin-statusbar
 	checkOK
 
-	cordova plugin add cordova-plugin-customurlscheme --variable URL_SCHEME=trustnote
+	cordova plugin add cordova-plugin-customurlscheme --variable URL_SCHEME=ttt
 	checkOK
 
 	cordova plugin add cordova-plugin-inappbrowser

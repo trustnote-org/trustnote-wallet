@@ -14,6 +14,7 @@ angular.module('copayApp.controllers').controller('preferencesGlobalController',
 		this.deviceName = config.deviceName;
 		this.myDeviceAddress = require('trustnote-common/device.js').getMyDeviceAddress();
 		this.hub = config.hub;
+		this.showHub = 0;
 		this.currentLanguageName = uxLanguage.getCurrentLanguageName();
 		this.torEnabled = conf.socksHost && conf.socksPort;
 		$scope.pushNotifications = config.pushNotifications.enabled;
@@ -27,7 +28,9 @@ angular.module('copayApp.controllers').controller('preferencesGlobalController',
 	};
 
 
-
+	this.countShowHub = function() {
+		this.showHub++;
+	};
 
 	var unwatchPushNotifications = $scope.$watch('pushNotifications', function (newVal, oldVal) {
 		if (newVal == oldVal) return;
