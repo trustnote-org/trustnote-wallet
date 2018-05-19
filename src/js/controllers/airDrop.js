@@ -40,6 +40,7 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 	self.amountWarringMsg = '';
 	self.countWarringMsg = '';
 	self.submitAble = true;
+	self.submitText = gettextCatalog.getString('Generate');
 
 	self.getCandyTokens = function (num) {
 		for(var i = 0 ; i < num ; i++){
@@ -87,7 +88,7 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 			}
 
 		}else if(msg == 'count'){
-			if(self.redPacketCount <= 0){
+			if(self.redPacketCount < 1){
 				self.countWarring = true;
 				self.countWarringMsg = gettextCatalog.getString('You are naughty. Please send 1 at least ');
 			}else if(self.redPacketCount > 100){
@@ -108,7 +109,6 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 			return false;
 		}
 		self.candyOutputArr = [];
-		self.showSeedList = true;
 		self.showSeedFlag = 'new';
 		var xPrivKey = '';
 		var wallet_xPubKey = '';
@@ -126,12 +126,6 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 		var unitValue = self.unitValue;
 		var bbUnitValue = self.bbUnitValue;
 
-		self.candyHistoryList.push({
-			amount:(amount * redPacketCount),
-			time: CurentTime(),
-			seeds:self.candyTokenArr
-		})
-		storageService.setCandySendHistory(JSON.stringify({data:self.candyHistoryList}),function () {})
 		// if (isCordova && self.isWindowsPhoneApp) {
 		// 	this.hideAddress = false;
 		// 	this.hideAmount = false;
@@ -314,6 +308,7 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 					}
 
 					fc.sendMultiPayment(opts, function (err) {
+
 						indexScope.setOngoingProcess(gettext('sending'), false);  // if multisig, it might take very long before the callback is called
 						breadcrumbs.add('done payment in ' + asset + ', err=' + err);
 						delete self.current_payment_key;
@@ -345,16 +340,15 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 								self.showTitle = 0;
 							}
 							return self.setSendError(err);
-						}
-
-						var binding = self.binding;
-						//self.resetForm();
-						$rootScope.$emit("NewOutgoingTx");
-
-						if (recipient_device_address) {  // show payment in chat window
-							eventBus.emit('sent_payment', recipient_device_address, amount || 'all', asset, !!binding);
-						}else{ // redirect to history
-							$rootScope.$emit('Local/SetTab', 'walletHome');
+						}else {
+							self.showSeedList = true;
+							self.candyHistoryList.push({
+								amount:(amount * redPacketCount),
+								time: CurentTime(),
+								seeds:self.candyTokenArr
+							})
+							storageService.setCandySendHistory(JSON.stringify({data:self.candyHistoryList}),function () {})
+							$rootScope.$emit("NewOutgoingTx");
 						}
 
 					});
@@ -399,16 +393,18 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 		var fc = profileService.focusedClient;
 		var prefix = fc.credentials.m > 1 ? gettextCatalog.getString('Could not create payment proposal') : gettextCatalog.getString('Could not send payment');
 
-		this.error = prefix + ": " + err;
+		self.error = prefix + ": " + err;
 		console.log(this.error);
 
 		$timeout(function () {
 			$scope.$digest();
 		}, 1);
 	};
+	self.resetError = function () {
+		self.error = null;
+	};
 	//获取当前时间
-	function CurentTime()
-	{
+	function CurentTime(){
 		var now = new Date();
 
 		var year = now.getFullYear();       //年
@@ -438,4 +434,5 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 		clock += mm;
 		return clock;
 	}
+
 });
