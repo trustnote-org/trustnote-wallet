@@ -2038,5 +2038,98 @@ msgstr "未签名错误"
 msgid "Generating QR code..."
 msgstr "正在生成二维码中..."
 
+msgid "Send T Code"
+msgstr "发送T口令"
+
+msgid "Generate T Code"
+msgstr "生成T口令"
+
+msgid "Available balance"
+msgstr "可用余额："
+
+msgid "Fixed Amount Each"
+msgstr "每一个T口令金额相等"
+
+msgid "Amount each"
+msgstr "单个金额"
+
+msgid "Quantity"
+msgstr "T口令个数"
+
+msgid "Enter number"
+msgstr "请输入个数"
+
+msgid "Number"
+msgstr "个"
+
+msgid "Total amount"
+msgstr "塞币总额"
+
+msgid "Invalid amount"
+msgstr "无效的金额"
+
+msgid "Single T Code should less than 200"
+msgstr "单个T口令的金额不超过200"
+
+msgid "You are naughty. Please send 1 at least "
+msgstr "调皮，至少发一个"
+
+msgid "Maximum T Code number 100"
+msgstr "最大T口令个数100个"
+
+msgid "T Code Log"
+msgstr "最近记录"
+
+msgid "Records of sending T code are not available"
+msgstr "暂无发送T口令记录"
+
+msgid "Youe balance is not enough"
+msgstr "可用余额不足"
+
+msgid "Generate"
+msgstr "生成"
+
+msgid "Enter T code to redeem your asset at 'TrustNote Wallet/Transacrtion/Redeem T Code'"
+msgstr "在“TrustNote钱包-交易-兑换T口令”界面，输入单个T口令立即兑换资产："
+
+msgid "Copy all"
+msgstr "复制全部"
+
+msgid "Redeem T Code"
+msgstr "兑换T口令"
+
+msgid "Please enter T Code"
+ msgstr "请输入T口令"
+
+  msgid "arrWitnesses error: try it later." 
+msgstr "公证人列表错误，请稍后再试"
+
+  msgid "You are too late," 
+msgstr "老铁，您来晚了！"  
+
+msgid "the T code has been claimed by other people"
+ msgstr "该T口令已被其他人领取。"
+
+  msgid "Incorrect T code, please re-enter" 
+msgstr "T口令有误，请检查后重试"
+
+  msgid "Error: my wallet address is not found"
+ msgstr "错误：我的钱包地址没找到"  
+
+msgid "Reminder: View your T code claims from the first page of your default wallet" 
+msgstr "温馨提示：请在默认钱包的首页查看T口令领取结果"
+
+  msgid "Reedem T code is a transcation which will incure a small fee"
+ msgstr "兑换T口令是一次转账操作，所以会产生一点费用"  
+
+msgid "Redeem Success"
+ msgstr "兑换成功"  
+
+msgid "Redeeming..." 
+msgstr "正在兑换..."  
+
+msgid "Redeem now" 
+msgstr "立即兑换"
+
 
 

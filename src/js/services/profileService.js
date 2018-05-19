@@ -144,8 +144,6 @@ angular.module('copayApp.services').factory('profileService', function profileSe
 		breadcrumbs.add('bindProfile');
 		root.profile = profile;
 
-		//console.log('**********************************'+JSON.stringify(root.profile));
-
         configService.get(function(err) {
             $log.debug('Preferences read');
             if (err)
@@ -287,11 +285,11 @@ angular.module('copayApp.services').factory('profileService', function profileSe
     };
 
 
-	// 第一个钱包 the first wallet is created in _createNewProfile()
+	// the first wallet is created in _createNewProfile()
     root._createNewProfile = function(opts, cb) {
         console.log("_createNewProfile");
         if (opts.noWallet)
-            return cb(null, Profile.create());	// Profile.create() profile.js中的create函数
+            return cb(null, Profile.create());
 
         root._seedWallet({}, function(err, walletClient) {
             if (err)
@@ -636,7 +634,7 @@ angular.module('copayApp.services').factory('profileService', function profileSe
       	});
     };
 
-    
+
     root.create = function(opts, cb) {
       	$log.info('Creating profile', opts);
       	var defaults = configService.getDefaults();
