@@ -29,10 +29,11 @@ angular.module('copayApp.controllers').controller('airDropReceive', function ($s
 	};
 	self.clickOK = function () {
 		self.showMask = 0;
-		self.mnemonicStr = '';
 		if(self.isAvailable == 1){
 			self.isAvailable = 1;
+			return false;
 		}
+		self.mnemonicStr = '';
 		self.isAvailable = 0;
 	};
 
@@ -92,9 +93,10 @@ angular.module('copayApp.controllers').controller('airDropReceive', function ($s
 					return false;
 				}
 
+				// 判断 交易单元是否已经稳定
 				for(var j = 0; j < response.unstable_mc_joints.length; j++){
 					if(response.unstable_mc_joints[j].unit.unit == response.joints[0].unit.unit){
-						self.errTextList[0] = gettextCatalog.getString('isNot stableed');
+						self.errTextList[0] = gettextCatalog.getString('T Code is not stable, please try again later');
 						self.Redeeming = 0;
 						self.isAvailable = 1;
 						self.showMask = 1;
@@ -200,7 +202,8 @@ angular.module('copayApp.controllers').controller('airDropReceive', function ($s
 							objUnit.messages[0].payload.outputs[0].amount = self.tmpAmount - numPayloadCommission - numHeadersCommission; // 一共可以发送多少钱
 
 							if(objUnit.messages[0].payload.outputs[0].amount <= 0){
-								self.errTextList[0] = gettextCatalog.getString('not enough fee');
+								self.errTextList[0] = gettextCatalog.getString('You are too late,');
+								self.errTextList[1] = gettextCatalog.getString('the T code has been claimed by other people');
 								self.Redeeming = 0;
 								self.showMask = 1;
 								$timeout(function() {

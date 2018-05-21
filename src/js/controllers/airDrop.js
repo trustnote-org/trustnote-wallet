@@ -171,7 +171,6 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 			xPrivKey = self.mnemonic.toHDPrivateKey(self.candyTokenArr[0]);
 			wallet_xPubKey = self.walletPubKey(xPrivKey, 0);
 			address = self.walletAddress(wallet_xPubKey, 0, 0);
-			console.log('**********', xPrivKey,wallet_xPubKey,address);
 		}
 		var assocDeviceAddressesByPaymentAddress = {};
 		var recipient_device_address = assocDeviceAddressesByPaymentAddress[address];

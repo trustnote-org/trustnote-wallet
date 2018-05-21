@@ -2131,5 +2131,10 @@ msgstr "正在兑换..."  
 msgid "Redeem now" 
 msgstr "立即兑换"
 
+msgid "T Code is not stable, please try again later" 
+msgstr "T口令未稳定，请稍后重试"
+
+
+
 
 
