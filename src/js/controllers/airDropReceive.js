@@ -51,7 +51,7 @@ angular.module('copayApp.controllers').controller('airDropReceive', function ($s
 		var wallet_xPubKey = Bitcore.HDPublicKey(xPrivKey.derive("m/44'/0'/0'")).toString();
 
 		var tempAddress = [];
-		tempAddress[0] = objectHash.getChash160(["sig", {"pubkey": wallet_defined_by_keys.derivePubkey(wallet_xPubKey, 'm/0/0')}]);
+		tempAddress[0] = objectHash.getChash160(["sig", {"pubkey": wallet_defined_by_keys.derivePubkey(wallet_xPubKey, 'm/0/0')}]); // 红包地址
 
 		myWitnesses.readMyWitnesses(function (arrWitnesses) {
 			if (!arrWitnesses || arrWitnesses.length != 12) {
@@ -80,7 +80,7 @@ angular.module('copayApp.controllers').controller('airDropReceive', function ($s
 					return false;
 				}
 
-				// alert(JSON.stringify(response))
+				//alert(JSON.stringify(response))
 				if (!response.joints[0].unit.unit || !response.joints[0].unit.messages[0].payload.outputs || !response.joints[0].unit.witness_list_unit) {
 					//alert('****************' + JSON.stringify(response))
 					self.errTextList[0] = gettextCatalog.getString('You are too late,');
@@ -109,6 +109,8 @@ angular.module('copayApp.controllers').controller('airDropReceive', function ($s
 
 				var inputUnit = response.joints[0].unit.unit;
 				var tempArr = response.joints[0].unit.messages[0].payload.outputs;
+				//alert(JSON.stringify(tempAddress[0]))
+				//alert(JSON.stringify(tempArr))
 				if (tempArr) {
 					for (var i = 0; i < tempArr.length; i++) {
 						if (tempAddress[0] == tempArr[i].address) {
@@ -118,6 +120,17 @@ angular.module('copayApp.controllers').controller('airDropReceive', function ($s
 						}
 					}
 					var output_index = i;
+				}
+				//alert(self.tmpAddr)
+				if(self.tmpAddr == undefined){
+					self.errTextList[0] = gettextCatalog.getString('You are too late,');
+					self.errTextList[1] = gettextCatalog.getString('the T code has been claimed by other people');
+					self.Redeeming = 0;
+					self.showMask = 1;
+					$timeout(function() {
+						$scope.$apply()
+					}, 10);
+					return false;
 				}
 				var witness_list_unit = response.joints[0].unit.witness_list_unit; // 公证人列表单元
 
@@ -248,6 +261,8 @@ angular.module('copayApp.controllers').controller('airDropReceive', function ($s
 									self.mnemonicStr = '';
 									self.isAvailable = 0;
 									$timeout(function() {
+										$scope.index.updateAll();
+										$scope.index.updateHistoryFromNetwork();
 										$scope.$apply()
 									}, 10);
 									$timeout(function () {
