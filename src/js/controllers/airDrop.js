@@ -40,6 +40,7 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 	self.amountWarringMsg = '';
 	self.countWarringMsg = '';
 	self.submitAble = true;
+	self.submitAction = false;
 	self.submitText = gettextCatalog.getString('Generate');
 	self.language = 'zh_CN';
 
@@ -115,6 +116,7 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 			},2000);
 			return false;
 		}
+		self.submitAction = true;
 		self.candyOutputArr = [];
 		self.showSeedFlag = 'new';
 		var xPrivKey = '';
@@ -133,16 +135,8 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 		var unitValue = self.unitValue;
 		var bbUnitValue = self.bbUnitValue;
 
-		// if (isCordova && self.isWindowsPhoneApp) {
-		// 	this.hideAddress = false;
-		// 	this.hideAmount = false;
-		// }
-
-		//var form = $scope.sendCandyForm;
 		if (!form)
 			return console.log('form is gone');
-		// if (self.bSendAll)
-		// 	form.amount.$setValidity('validAmount', true);
 		if (form.$invalid) {
 			this.error = gettext('Unable to send transaction proposal');
 			return;
@@ -157,19 +151,6 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 			});
 			return;
 		}
-
-		// ***** 判断 当前设备 是否是--观察钱包 *****
-		// if(self.observed == 1){
-		// 	$scope.index.showTitle = 0;
-		// 	self.showTitle = 1;
-		// }
-		// ToDo: use a credential's (or fc's) function for this
-		//var comment = form.comment.$modelValue;
-		// if (comment) {
-		// 	var msg = 'Could not add message to imported wallet without shared encrypting key';
-		// 	$log.warn(msg);
-		// 	return self.setSendError(gettext(msg));
-		// }
 
 		var asset = $scope.index.arrBalances[$scope.index.assetIndex].asset;
 		var address;
@@ -339,20 +320,18 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 							else if(err == "close") {
 								err = "suspend transaction.";
 							}
-							// 如果是 观察钱包
-							if(self.observed == 1){
-								$scope.index.showTitle = 1;
-								self.showTitle = 0;
-							}
 							return self.setSendError(err);
 						}else {
 							self.showSeedList = true;
-							self.candyHistoryList.push({
+							self.candyHistoryList.unshift({
 								amount:(amount * redPacketCount/1000000),
 								time: CurentTime(),
 								seeds:self.candyTokenArr
 							})
 							storageService.setCandySendHistory(JSON.stringify({data:self.candyHistoryList}),function () {})
+							$timeout(function () {
+								self.submitAction = false;
+							},2000);
 							$rootScope.$emit("NewOutgoingTx");
 						}
 

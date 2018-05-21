@@ -217,7 +217,7 @@
 				<span class="amount-pop" ng-if="!airD.submitAble" translate>Youe balance is not enough</span>
 			</p>
 		</div>
-		<input type="submit" class="submitBtn" ng-disabled="airD.countWarring || airD.amountWarring" ng-class="{'submit-disable': airD.countWarring || airD.amountWarring}" value="{{airD.submitText}}">
+		<input type="submit" class="submitBtn" ng-disabled="airD.countWarring || airD.amountWarring || airD.submitAction" ng-class="{'submit-disable': airD.countWarring || airD.amountWarring || airD.submitAction}" value="{{airD.submitText}}">
 
 		<div class="row" ng-show="index.bHasMerkle">
 			<div class="large-12 columns">
@@ -237,7 +237,7 @@
 	<div class="line"></div>
 	<div class="historyList" ng-if="!airD.showSeedList">
 		<h4 translate>T Code Log</h4>
-		<p class="historyItem" ng-repeat="data in airD.candyHistoryList track by $index" ng-click="airD.showHistory($index)">
+		<p class="historyItem" ng-repeat="data in airD.candyHistoryList|limitTo:10 track by $index" ng-click="airD.showHistory($index)">
 			<span class="item-amount">{{data.amount}} MN</span>
 			<span class="item-time">{{data.time}}</span>
 		</p>
