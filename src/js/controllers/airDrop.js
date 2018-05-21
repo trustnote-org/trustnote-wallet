@@ -8,7 +8,7 @@ var constants = require('trustnote-common/constants.js');
 // var chatStorage = require('trustnote-common/chat_storage.js');
 var eventBus = require('trustnote-common/event_bus.js');
 
-angular.module('copayApp.controllers').controller('airDrop', function ($scope, $rootScope, go, profileService,$timeout,gettext, gettextCatalog,isCordova,configService,storageService,nodeWebkit) {
+angular.module('copayApp.controllers').controller('airDrop', function ($scope, $rootScope, go, profileService,$timeout,gettext, gettextCatalog,isCordova,configService,storageService,nodeWebkit,uxLanguage) {
 	var self = this;
 	var indexScope = $scope.index;
 	var config = configService.getSync();
@@ -41,6 +41,13 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 	self.countWarringMsg = '';
 	self.submitAble = true;
 	self.submitText = gettextCatalog.getString('Generate');
+	self.language = 'zh_CN';
+
+	if(uxLanguage.getCurrentLanguage() == 'en'){
+		self.language = 'en';
+	}else {
+		self.language = 'zh_CN';
+	}
 
 	self.getCandyTokens = function (num) {
 		for(var i = 0 ; i < num ; i++){

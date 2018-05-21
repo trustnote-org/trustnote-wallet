@@ -118,6 +118,9 @@
 		margin-bottom: 7px;
 		text-align: right;
 	}
+	input.lang-en{
+		padding-right: 75px !important;
+	}
 	form .input .placeholder{
 		position: absolute;
 		top: 10px;
@@ -198,6 +201,7 @@
 			<div class="input">
 				<input type="number" name="redPacketCount"
 					   style="padding-right: 30px;"
+					   ng-class="{'lang-en':airD.language == 'en'}"
 					   ng-model="airD.redPacketCount"
 					   autocomplete="off"
 					   placeholder="{{airD.T_count_placeholder}}"
