@@ -38,7 +38,6 @@ angular.module('copayApp.controllers').controller('walletHomeController', functi
 	this.isWindowsPhoneApp = isMobile.Windows() && isCordova;
 	this.blockUx = false;
 	this.showScanner = false;
-	this.isMobile = isMobile.any();
 	this.addr = {};
 	this.isTestnet = constants.version.match(/t$/);
 	this.testnetName = (constants.alt === '2') ? '[NEW TESTNET]' : '[TESTNET]';

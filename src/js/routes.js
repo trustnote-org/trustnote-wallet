@@ -195,7 +195,6 @@ angular
 			// 聊天页面 点击编辑 结束
 
 
-
 			.state('correspondentDevices.addCorrespondentDevice', {
 				url: '/add',
 				needProfile: true,
@@ -280,6 +279,27 @@ angular
 						templateUrl: 'views/preferencesCold.html'
 					},
 				}
+			})
+
+			// 路由到： 接收/发送糖果
+			.state('airDrop', {
+				url: '/airDrop',
+				templateUrl: 'views/includes/airDrop.html',
+				walletShouldBeComplete: true,
+				needProfile: true,
+				views: {
+					'main@': {
+						templateUrl: 'views/includes/airDrop.html'
+					},
+				}
+			})
+
+			.state('airDropReceive', {
+				url: '/airDropReceive',
+				templateUrl: 'views/includes/airDropReceive.html',
+				walletShouldBeComplete: true,
+				needProfile: true,
+				views: {'main@': {templateUrl: 'views/includes/airDropReceive.html'},}
 			})
 
 			.state('preferences.preferencesAlias', {
@@ -480,7 +500,6 @@ angular
 					}
 				}
 			})
-
 
 
 			.state('preferencesGlobal.synchronization', {

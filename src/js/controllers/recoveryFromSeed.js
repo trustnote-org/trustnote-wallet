@@ -415,11 +415,7 @@ angular.module('copayApp.controllers').controller('recoveryFromSeed', function (
 		self.strMnemonic();
 		if (self.inputMnemonic) {
 			self.error = '';
-			// 首先转换成小写
 			self.inputMnemonic = self.inputMnemonic.toLowerCase();
-
-			// alert($rootScope.index.showneikuang)
-
 			if ((self.inputMnemonic.split(' ').length % 3 === 0) && Mnemonic.isValid(self.inputMnemonic)) {
 				// 钱包内部恢复的时候 让弹出框 显示出来
 				$scope.index.showneikuang = true;
