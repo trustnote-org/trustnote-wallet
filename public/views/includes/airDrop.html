@@ -217,7 +217,7 @@
 				<span class="amount-pop" ng-if="!airD.submitAble" translate>Youe balance is not enough</span>
 			</p>
 		</div>
-		<input type="submit" class="submitBtn" ng-disabled="airD.countWarring || airD.amountWarring" ng-class="{'submit-disable': airD.countWarring || airD.amountWarring}" value="{{airD.submitText}}">
+		<input type="submit" class="submitBtn" ng-disabled="airD.countWarring || airD.amountWarring || airD.submitAction" ng-class="{'submit-disable': airD.countWarring || airD.amountWarring || airD.submitAction}" value="{{airD.submitText}}">
 
 		<div class="row" ng-show="index.bHasMerkle">
 			<div class="large-12 columns">
