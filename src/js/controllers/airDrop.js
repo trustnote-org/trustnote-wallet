@@ -323,7 +323,7 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 							return self.setSendError(err);
 						}else {
 							self.showSeedList = true;
-							self.candyHistoryList.push({
+							self.candyHistoryList.unshift({
 								amount:(amount * redPacketCount/1000000),
 								time: CurentTime(),
 								seeds:self.candyTokenArr
