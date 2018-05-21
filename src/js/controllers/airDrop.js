@@ -114,7 +114,7 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 		var wallet_xPubKey = '';
 		var candyAddress = '';
 		var form = $scope.sendCandyForm;
-		var amount = form.candyAmount.$modelValue;
+		var amount = form.candyAmount.$modelValue;  // MN 个数
 		var redPacketCount = form.redPacketCount.$modelValue;
 
 		self.getCandyTokens(redPacketCount);
@@ -242,14 +242,14 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 						merkle_proof: merkle_proof,
 						asset: asset,
 						to_address: to_address,
-						amount: amount,
+						amount: amount * redPacketCount,
 						send_all: self.bSendAll,
 						arrSigningDeviceAddresses: arrSigningDeviceAddresses,
 						recipient_device_address: recipient_device_address,
 						candyOutput:self.candyOutputArr
 					};
 					self.sendtoaddress = opts.to_address;
-					self.sendamount = opts.amount/1000000 + "MN";
+					//self.sendamount = opts.amount/1000000 + "MN";
 
 					var eventListeners = eventBus.listenerCount('apiTowalletHome');
 
@@ -308,7 +308,6 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 					}
 
 					fc.sendMultiPayment(opts, function (err) {
-
 						indexScope.setOngoingProcess(gettext('sending'), false);  // if multisig, it might take very long before the callback is called
 						breadcrumbs.add('done payment in ' + asset + ', err=' + err);
 						delete self.current_payment_key;
@@ -434,5 +433,4 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 		clock += mm;
 		return clock;
 	}
-
 });
