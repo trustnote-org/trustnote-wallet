@@ -2099,42 +2099,43 @@ msgid "Redeem T Code"
 msgstr "兑换T口令"
 
 msgid "Please enter T Code"
- msgstr "请输入T口令"
+msgstr "请输入T口令"
 
-  msgid "arrWitnesses error: try it later." 
+msgid "arrWitnesses error: try it later."
 msgstr "公证人列表错误，请稍后再试"
 
-  msgid "You are too late," 
-msgstr "老铁，您来晚了！"  
+msgid "You are too late,"
+msgstr "老铁，您来晚了！"
 
 msgid "the T code has been claimed by other people"
- msgstr "该T口令已被其他人领取。"
+msgstr "该T口令已被其他人领取。"
 
-  msgid "Incorrect T code, please re-enter" 
+msgid "Incorrect T code, please re-enter"
 msgstr "T口令有误，请检查后重试"
 
   msgid "Error: my wallet address is not found"
- msgstr "错误：我的钱包地址没找到"  
+msgstr "错误：我的钱包地址没找到"
 
-msgid "Reminder: View your T code claims from the first page of your default wallet" 
+msgid "Reminder: View your T code claims from the first page of your default wallet"
 msgstr "温馨提示：请在默认钱包的首页查看T口令领取结果"
 
   msgid "Reedem T code is a transcation which will incure a small fee"
- msgstr "兑换T口令是一次转账操作，所以会产生一点费用"  
+msgstr "兑换T口令是一次转账操作，所以会产生一点费用"
 
 msgid "Redeem Success"
- msgstr "兑换成功"  
+msgstr "兑换成功"
 
-msgid "Redeeming..." 
+msgid "Redeeming..."
 msgstr "正在兑换..."  
 
-msgid "Redeem now" 
+msgid "Redeem now"
 msgstr "立即兑换"
 
-msgid "T Code is not stable, please try again later" 
+msgid "T Code is not stable, please try again later"
 msgstr "T口令未稳定，请稍后重试"
 
-
+msgid "Total amount"
+msgstr "塞币总额"
 
 
 
