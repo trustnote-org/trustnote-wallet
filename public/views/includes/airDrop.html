@@ -255,7 +255,7 @@
 			<span class="item-amount">{{data.amount}} MN</span>
 			<span class="item-time">{{data.time}}</span>
 		</p>
-		<div class="empty" ng-show="!(airD.candyHistoryList.length > 0)">
+		<div class="empty" ng-if="!(airD.candyHistoryList.length > 0)">
 			<img src="img/candy-history.png" alt="">
 			<p translate>Records of sending T code are not available</p>
 		</div>
