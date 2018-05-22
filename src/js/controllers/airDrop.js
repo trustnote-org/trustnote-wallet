@@ -102,6 +102,9 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 			if(self.candyAmount <= 0){
 				self.amountWarring = true;
 				self.amountWarringMsg = gettextCatalog.getString('Invalid amount');
+			}else if(typeof(self.candyAmount) != 'number'){
+				self.amountWarring = true;
+				self.amountWarringMsg = gettextCatalog.getString('Invalid amount');
 			}else if(self.candyAmount > 200){
 				self.amountWarring = true;
 				self.amountWarringMsg = gettextCatalog.getString('Single T Code should less than 200');
@@ -113,6 +116,9 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 			if(self.redPacketCount < 1){
 				self.countWarring = true;
 				self.countWarringMsg = gettextCatalog.getString('You are naughty. Please send 1 at least ');
+			}else if(typeof(self.candyAmount) != 'number'){
+				self.amountWarring = true;
+				self.amountWarringMsg = gettextCatalog.getString('Invalid amount');
 			}else if(self.redPacketCount > 100){
 				self.countWarring = true;
 				self.countWarringMsg = gettextCatalog.getString('Maximum T Code number 100');
