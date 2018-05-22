@@ -141,6 +141,19 @@
 	.submit-disable{
 		background-color: #CCCCCC;
 	}
+	p.p_toast{
+		background: #0095ff;
+		color: #fff;
+		width: 44%;
+		height:35px;
+		line-height:35px;
+		left:28%;
+		position: absolute;
+		bottom: 80px;
+		border-radius: 3px;
+		text-align: center;
+		margin:0;
+	}
 </style>
 
 <!--top顶部-->
@@ -156,6 +169,7 @@
 		</h1>
 	</section>
 </nav>
+
 <div ng-controller="airDrop as airD" class="airDropBox">
 	<!--可用余额-->
 	<div class="assetBox">
@@ -246,6 +260,8 @@
 			<p translate>Records of sending T code are not available</p>
 		</div>
 	</div>
+
+	<!--发送 T 口令 模态框-->
 	<div ng-show="airD.showSeedList" class="tokenListModal">
 		<div class="top-bar">
 			<span class="top-left" ng-click="airD.showSeedList = false;airD.showSeedFlag = '';" translate>Close</span>
@@ -261,7 +277,7 @@
 				<p class="seed" ng-repeat="token in airD.curentHistorySeed">{{token}}</p>
 			</div>
 		</div>
-
+		<p translate class="p_toast" ng-if="airD.showCopied == 1">Copied</p>
 	</div>
 </div>
 
