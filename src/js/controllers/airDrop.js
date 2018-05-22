@@ -8,7 +8,7 @@ var constants = require('trustnote-common/constants.js');
 // var chatStorage = require('trustnote-common/chat_storage.js');
 var eventBus = require('trustnote-common/event_bus.js');
 
-angular.module('copayApp.controllers').controller('airDrop', function ($scope, $rootScope, go, profileService,$timeout,gettext, gettextCatalog,isCordova,configService,storageService,nodeWebkit) {
+angular.module('copayApp.controllers').controller('airDrop', function ($scope, $rootScope, go, profileService,$timeout,gettext, gettextCatalog,isCordova,configService,storageService,nodeWebkit,uxLanguage) {
 	var self = this;
 	var indexScope = $scope.index;
 	var config = configService.getSync();
@@ -40,7 +40,15 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 	self.amountWarringMsg = '';
 	self.countWarringMsg = '';
 	self.submitAble = true;
+	self.submitAction = false;
 	self.submitText = gettextCatalog.getString('Generate');
+	self.language = 'zh_CN';
+
+	if(uxLanguage.getCurrentLanguage() == 'en'){
+		self.language = 'en';
+	}else {
+		self.language = 'zh_CN';
+	}
 
 	self.getCandyTokens = function (num) {
 		for(var i = 0 ; i < num ; i++){
@@ -70,14 +78,31 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 		}
 		if (isCordova) {
 			window.cordova.plugins.clipboard.copy(self.seeds);
+			$timeout(function() {
+				self.showCopied = 1;
+				$scope.$apply()
+			}, 10);
+			$timeout(function () {
+				self.showCopied = 0;
+			}, 3000)
 		}else if (nodeWebkit.isDefined()) {
 			nodeWebkit.writeToClipboard(self.seeds);
+			$timeout(function() {
+				self.showCopied = 1;
+				$scope.$apply()
+			}, 10);
+			$timeout(function () {
+				self.showCopied = 0;
+			}, 1500)
 		}
 	}
 
 	self.checkNumber = function (msg) {
 		if(msg == 'amount'){
 			if(self.candyAmount <= 0){
+				self.amountWarring = true;
+				self.amountWarringMsg = gettextCatalog.getString('Invalid amount');
+			}else if(typeof(self.candyAmount) != 'number'){
 				self.amountWarring = true;
 				self.amountWarringMsg = gettextCatalog.getString('Invalid amount');
 			}else if(self.candyAmount > 200){
@@ -91,6 +116,9 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 			if(self.redPacketCount < 1){
 				self.countWarring = true;
 				self.countWarringMsg = gettextCatalog.getString('You are naughty. Please send 1 at least ');
+			}else if(typeof(self.candyAmount) != 'number'){
+				self.amountWarring = true;
+				self.amountWarringMsg = gettextCatalog.getString('Invalid amount');
 			}else if(self.redPacketCount > 100){
 				self.countWarring = true;
 				self.countWarringMsg = gettextCatalog.getString('Maximum T Code number 100');
@@ -108,6 +136,7 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 			},2000);
 			return false;
 		}
+		self.submitAction = true;
 		self.candyOutputArr = [];
 		self.showSeedFlag = 'new';
 		var xPrivKey = '';
@@ -126,16 +155,8 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 		var unitValue = self.unitValue;
 		var bbUnitValue = self.bbUnitValue;
 
-		// if (isCordova && self.isWindowsPhoneApp) {
-		// 	this.hideAddress = false;
-		// 	this.hideAmount = false;
-		// }
-
-		//var form = $scope.sendCandyForm;
 		if (!form)
 			return console.log('form is gone');
-		// if (self.bSendAll)
-		// 	form.amount.$setValidity('validAmount', true);
 		if (form.$invalid) {
 			this.error = gettext('Unable to send transaction proposal');
 			return;
@@ -151,19 +172,6 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 			return;
 		}
 
-		// ***** 判断 当前设备 是否是--观察钱包 *****
-		// if(self.observed == 1){
-		// 	$scope.index.showTitle = 0;
-		// 	self.showTitle = 1;
-		// }
-		// ToDo: use a credential's (or fc's) function for this
-		//var comment = form.comment.$modelValue;
-		// if (comment) {
-		// 	var msg = 'Could not add message to imported wallet without shared encrypting key';
-		// 	$log.warn(msg);
-		// 	return self.setSendError(gettext(msg));
-		// }
-
 		var asset = $scope.index.arrBalances[$scope.index.assetIndex].asset;
 		var address;
 		if(redPacketCount==1){
@@ -171,7 +179,6 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 			xPrivKey = self.mnemonic.toHDPrivateKey(self.candyTokenArr[0]);
 			wallet_xPubKey = self.walletPubKey(xPrivKey, 0);
 			address = self.walletAddress(wallet_xPubKey, 0, 0);
-			console.log('**********', xPrivKey,wallet_xPubKey,address);
 		}
 		var assocDeviceAddressesByPaymentAddress = {};
 		var recipient_device_address = assocDeviceAddressesByPaymentAddress[address];
@@ -251,62 +258,6 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 					self.sendtoaddress = opts.to_address;
 					//self.sendamount = opts.amount/1000000 + "MN";
 
-					var eventListeners = eventBus.listenerCount('apiTowalletHome');
-
-					self.reCallApiToWalletHome = function (account, is_change, address_index, text_to_sign, cb) {
-						var coin = (profileService.focusedClient.credentials.network == 'livenet' ? "0" : "1");
-						var path = "m/44'/" + coin + "'/" + account + "'/" + is_change + "/" + address_index;
-
-						var xPrivKey = new Bitcore.HDPrivateKey.fromString(profileService.focusedClient.credentials.xPrivKey);
-						var privateKey = xPrivKey.derive(path).privateKey;
-						var privKeyBuf = privateKey.bn.toBuffer({size: 32});
-						var signature = ecdsaSig.sign(text_to_sign, privKeyBuf);
-						cb(signature);
-						eventBus.once('apiTowalletHome', self.reCallApiToWalletHome);
-					}
-
-					self.callApiToWalletHome = function (account, is_change, address_index, text_to_sign, cb) {
-						var coin = (profileService.focusedClient.credentials.network == 'livenet' ? "0" : "1");
-						var path = "m/44'/" + coin + "'/" + account + "'/" + is_change + "/" + address_index;
-
-						var obj = {
-							"type": "h2",
-							"sign": text_to_sign.toString("base64"),
-							"path": path,
-							"addr": opts.to_address,
-							"amount": opts.amount,
-							"v": Math.floor(Math.random()*9000+1000)
-						};
-						self.text_to_sign_qr = 'TTT:' + JSON.stringify(obj);
-						$timeout(function() {
-							profileService.tempNum2 = obj.v;
-							$scope.$apply();
-						}, 10);
-						eventBus.once('apiTowalletHome', self.callApiToWalletHome);
-
-						var finishListener = eventBus.listenerCount('finishScaned');
-						if(finishListener > 0) {
-							eventBus.removeAllListeners('finishScaned');
-						}
-						eventBus.once('finishScaned', function (signature) {
-							cb(signature);
-						});
-					};
-
-					if(eventListeners > 0) {
-						eventBus.removeAllListeners('apiTowalletHome');
-						if(fc.observed)
-							eventBus.once('apiTowalletHome', self.callApiToWalletHome);
-						else
-							eventBus.once('apiTowalletHome', self.reCallApiToWalletHome);
-					}
-					else {
-						if(fc.observed)
-							eventBus.once('apiTowalletHome', self.callApiToWalletHome);
-						else
-							eventBus.once('apiTowalletHome', self.reCallApiToWalletHome);
-					}
-
 					fc.sendMultiPayment(opts, function (err) {
 						indexScope.setOngoingProcess(gettext('sending'), false);  // if multisig, it might take very long before the callback is called
 						breadcrumbs.add('done payment in ' + asset + ', err=' + err);
@@ -333,20 +284,18 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 							else if(err == "close") {
 								err = "suspend transaction.";
 							}
-							// 如果是 观察钱包
-							if(self.observed == 1){
-								$scope.index.showTitle = 1;
-								self.showTitle = 0;
-							}
 							return self.setSendError(err);
 						}else {
 							self.showSeedList = true;
-							self.candyHistoryList.push({
+							self.candyHistoryList.unshift({
 								amount:(amount * redPacketCount/1000000),
 								time: CurentTime(),
 								seeds:self.candyTokenArr
 							})
 							storageService.setCandySendHistory(JSON.stringify({data:self.candyHistoryList}),function () {})
+							$timeout(function () {
+								self.submitAction = false;
+							},2000);
 							$rootScope.$emit("NewOutgoingTx");
 						}
 

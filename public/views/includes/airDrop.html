@@ -118,6 +118,9 @@
 		margin-bottom: 7px;
 		text-align: right;
 	}
+	input.lang-en{
+		padding-right: 75px !important;
+	}
 	form .input .placeholder{
 		position: absolute;
 		top: 10px;
@@ -138,6 +141,19 @@
 	.submit-disable{
 		background-color: #CCCCCC;
 	}
+	p.p_toast{
+		background: #0095ff;
+		color: #fff;
+		width: 44%;
+		height:35px;
+		line-height:35px;
+		left:28%;
+		position: absolute;
+		bottom: 80px;
+		border-radius: 3px;
+		text-align: center;
+		margin:0;
+	}
 </style>
 
 <!--top顶部-->
@@ -153,6 +169,7 @@
 		</h1>
 	</section>
 </nav>
+
 <div ng-controller="airDrop as airD" class="airDropBox">
 	<!--可用余额-->
 	<div class="assetBox">
@@ -198,6 +215,7 @@
 			<div class="input">
 				<input type="number" name="redPacketCount"
 					   style="padding-right: 30px;"
+					   ng-class="{'lang-en':airD.language == 'en'}"
 					   ng-model="airD.redPacketCount"
 					   autocomplete="off"
 					   placeholder="{{airD.T_count_placeholder}}"
@@ -213,7 +231,7 @@
 				<span class="amount-pop" ng-if="!airD.submitAble" translate>Youe balance is not enough</span>
 			</p>
 		</div>
-		<input type="submit" class="submitBtn" ng-disabled="airD.countWarring || airD.amountWarring" ng-class="{'submit-disable': airD.countWarring || airD.amountWarring}" value="{{airD.submitText}}">
+		<input type="submit" class="submitBtn" ng-disabled="airD.countWarring || airD.amountWarring || airD.submitAction" ng-class="{'submit-disable': airD.countWarring || airD.amountWarring || airD.submitAction}" value="{{airD.submitText}}">
 
 		<div class="row" ng-show="index.bHasMerkle">
 			<div class="large-12 columns">
@@ -233,7 +251,7 @@
 	<div class="line"></div>
 	<div class="historyList" ng-if="!airD.showSeedList">
 		<h4 translate>T Code Log</h4>
-		<p class="historyItem" ng-repeat="data in airD.candyHistoryList track by $index" ng-click="airD.showHistory($index)">
+		<p class="historyItem" ng-repeat="data in airD.candyHistoryList|limitTo:10 track by $index" ng-click="airD.showHistory($index)">
 			<span class="item-amount">{{data.amount}} MN</span>
 			<span class="item-time">{{data.time}}</span>
 		</p>
@@ -242,6 +260,8 @@
 			<p translate>Records of sending T code are not available</p>
 		</div>
 	</div>
+
+	<!--发送 T 口令 模态框-->
 	<div ng-show="airD.showSeedList" class="tokenListModal">
 		<div class="top-bar">
 			<span class="top-left" ng-click="airD.showSeedList = false;airD.showSeedFlag = '';" translate>Close</span>
@@ -257,7 +277,7 @@
 				<p class="seed" ng-repeat="token in airD.curentHistorySeed">{{token}}</p>
 			</div>
 		</div>
-
+		<p translate class="p_toast" ng-if="airD.showCopied == 1">Copied</p>
 	</div>
 </div>
 
