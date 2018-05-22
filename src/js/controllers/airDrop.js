@@ -258,34 +258,6 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 					self.sendtoaddress = opts.to_address;
 					//self.sendamount = opts.amount/1000000 + "MN";
 
-					var eventListeners = eventBus.listenerCount('apiTowalletHome');
-
-					self.reCallApiToWalletHome = function (account, is_change, address_index, text_to_sign, cb) {
-						var coin = (profileService.focusedClient.credentials.network == 'livenet' ? "0" : "1");
-						var path = "m/44'/" + coin + "'/" + account + "'/" + is_change + "/" + address_index;
-
-						var xPrivKey = new Bitcore.HDPrivateKey.fromString(profileService.focusedClient.credentials.xPrivKey);
-						var privateKey = xPrivKey.derive(path).privateKey;
-						var privKeyBuf = privateKey.bn.toBuffer({size: 32});
-						var signature = ecdsaSig.sign(text_to_sign, privKeyBuf);
-						cb(signature);
-						eventBus.once('apiTowalletHome', self.reCallApiToWalletHome);
-					}
-
-					if(eventListeners > 0) {
-						eventBus.removeAllListeners('apiTowalletHome');
-						if(fc.observed)
-							eventBus.once('apiTowalletHome', self.callApiToWalletHome);
-						else
-							eventBus.once('apiTowalletHome', self.reCallApiToWalletHome);
-					}
-					else {
-						if(fc.observed)
-							eventBus.once('apiTowalletHome', self.callApiToWalletHome);
-						else
-							eventBus.once('apiTowalletHome', self.reCallApiToWalletHome);
-					}
-
 					fc.sendMultiPayment(opts, function (err) {
 						indexScope.setOngoingProcess(gettext('sending'), false);  // if multisig, it might take very long before the callback is called
 						breadcrumbs.add('done payment in ' + asset + ', err=' + err);
