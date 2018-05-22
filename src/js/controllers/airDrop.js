@@ -272,34 +272,6 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 						eventBus.once('apiTowalletHome', self.reCallApiToWalletHome);
 					}
 
-					self.callApiToWalletHome = function (account, is_change, address_index, text_to_sign, cb) {
-						var coin = (profileService.focusedClient.credentials.network == 'livenet' ? "0" : "1");
-						var path = "m/44'/" + coin + "'/" + account + "'/" + is_change + "/" + address_index;
-
-						var obj = {
-							"type": "h2",
-							"sign": text_to_sign.toString("base64"),
-							"path": path,
-							"addr": opts.to_address,
-							"amount": opts.amount,
-							"v": Math.floor(Math.random()*9000+1000)
-						};
-						self.text_to_sign_qr = 'TTT:' + JSON.stringify(obj);
-						$timeout(function() {
-							profileService.tempNum2 = obj.v;
-							$scope.$apply();
-						}, 10);
-						eventBus.once('apiTowalletHome', self.callApiToWalletHome);
-
-						var finishListener = eventBus.listenerCount('finishScaned');
-						if(finishListener > 0) {
-							eventBus.removeAllListeners('finishScaned');
-						}
-						eventBus.once('finishScaned', function (signature) {
-							cb(signature);
-						});
-					};
-
 					if(eventListeners > 0) {
 						eventBus.removeAllListeners('apiTowalletHome');
 						if(fc.observed)
