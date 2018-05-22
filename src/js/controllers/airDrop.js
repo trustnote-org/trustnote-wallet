@@ -78,8 +78,22 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 		}
 		if (isCordova) {
 			window.cordova.plugins.clipboard.copy(self.seeds);
+			$timeout(function() {
+				self.showCopied = 1;
+				$scope.$apply()
+			}, 10);
+			$timeout(function () {
+				self.showCopied = 0;
+			}, 3000)
 		}else if (nodeWebkit.isDefined()) {
 			nodeWebkit.writeToClipboard(self.seeds);
+			$timeout(function() {
+				self.showCopied = 1;
+				$scope.$apply()
+			}, 10);
+			$timeout(function () {
+				self.showCopied = 0;
+			}, 1500)
 		}
 	}
 
