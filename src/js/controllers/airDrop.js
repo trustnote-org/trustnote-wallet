@@ -60,6 +60,9 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 	storageService.getCandySendHistory(function (err,val) {
 		if(val){
 			self.candyHistoryList = (JSON.parse(val)).data;
+			$timeout(function() {
+				$scope.$apply()
+			}, 10);
 		}
 	})
 
