@@ -987,7 +987,7 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 		var device = require('trustnote-common/device.js');
 		//console.log('-----fc.credentials.walletId:'+ fc.credentials.walletId);
 		//console.log(JSON.stringify(fc.credentials));
-		device.uPMyColdDeviceAddress(fc.credentials.walletId);
+		//device.uPMyColdDeviceAddress(fc.credentials.walletId);
 
 		$timeout(function () {
 			//$rootScope.$apply();
@@ -997,8 +997,8 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 			storageService.gethaschoosen(function (err, val) {
 				self.haschoosen = val;
 			});
-			// self.haschoosen = localStorage.getItem("haschoosen");
-			// alert(self.haschoosen)
+			if(fc.observed)
+				device.uPMyColdDeviceAddress(fc.credentials.walletId);
 
 			self.noFocusedWallet = false;
 			self.onGoingProcess = {};
