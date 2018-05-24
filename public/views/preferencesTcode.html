@@ -1,0 +1,55 @@
+<!--T 口令页面-->
+<style type="text/css">
+	.sendCandy{
+		margin: 20px 0;
+		text-align: center;
+	}
+	.sendCandy .send{
+		cursor: pointer;
+		/*padding: 10px 30px;*/
+		height:45px;
+		width:86%;
+		margin:0 auto;
+		background: #0095ff;
+		border-radius: 22.5px;
+		color: #fff;
+		line-height:45px;
+		margin-top:25px;
+	}
+	p.txt{
+		color: #999;
+		font-size: 12px;
+		margin:0;
+		padding:10px 25px 0;
+	}
+	.recordsF{
+		position: relative;
+	}
+	.records{
+		position: absolute;
+		cursor: pointer;
+		right: 5px;
+		color: #fff;
+		top: -33px;
+		z-index: 99;
+	}
+</style>
+
+
+<!--<div class="content preferences" ng-controller="walletHomeController as homeC" style="top: 0;">-->
+<div ng-controller="walletHomeController as homeC">
+	<!--top 部分-->
+	<div class="topbar-container" ng-include="'views/includes/topbar.html'"  ng-init="titleSection='T Code'; goBackToState = true"></div>
+	<div class="recordsF">
+		<p class="records" translate ng-click="$root.go('preferences.preferencesTcode.preferencesRecords')">Records</p>
+	</div>
+
+
+	<p class="txt" translate>Send or reedem T code is a transcation which will incure a small fee</p>
+	<p class="txt" translate>View your T code claims from the first page of your default wallet</p>
+	<!--发糖果-->
+	<div class="sendCandy" ng-if="homeC.observed != 1">
+		<p class="send" ng-click="$root.go('preferences.preferencesTcode.send')" translate>Send T Code</p>
+		<p class="send" ng-click="$root.go('preferences.preferencesTcode.receive')" translate>Redeem T Code</p>
+	</div>
+</div>
