@@ -1,0 +1,142 @@
+<!--T 口令历史-->
+
+<style type="text/css">
+	.newList p{
+		margin-bottom: 10px;
+	}
+	p.p_toast{
+		background: #0095ff;
+		color: #fff;
+		width: 44%;
+		height:35px;
+		line-height:35px;
+		left:28%;
+		position: absolute;
+		bottom: 80px;
+		border-radius: 3px;
+		text-align: center;
+		margin:0;
+	}
+	div.codeDetil{
+		position: absolute;
+		left: 0;
+		top:0;
+		width:100%;
+		height:100%;
+		background: #fff;
+		z-index: 999;
+	}
+	div.topNav{
+		height:45px;
+		background: #12172e;
+		color: #fff;
+		position: relative;
+	}
+	div.topNav .span1{
+		float: left;
+		line-height:45px;
+		padding:0 10px 0;
+		cursor: pointer;
+	}
+	div.topNav .span2{
+		float: right;
+		line-height:45px;
+		padding:0 10px 0;
+		cursor: pointer;
+	}
+	div.topNav h1{
+		width:50%;
+		margin:0 auto;
+		line-height:45px;
+		text-align: center;
+		color: #fff;
+		font-size:17px;
+	}
+	p.p_list{
+		margin: 0;
+		border-bottom: 1px solid #E9E9EC;
+		padding: 10px;
+	}
+	span.stime{
+		float: right;
+		padding-right: 5px;
+		color: #999;
+	}
+	i.icon-arrow-right3{
+		margin-top: 5px;
+	}
+	div.ulWrap{
+		height:500px;
+		overflow: auto;
+	}
+	p.p_propm{
+		padding: 10px;
+		font-size: 14px;
+	}
+	div.tcodeD{
+		height:45px;
+		line-height: 45px;
+		padding: 0 10px;
+	}
+	div.tcodeD .span3{
+		float: left;
+		color: #333;
+	}
+	div.tcodeD .span4{
+		float: right;
+		color: #999;
+	}
+	ul.noStyle,ul.noStyle li{
+		list-style: none;
+		margin:0;
+	}
+	li.noStyleLi{
+		height:45px;
+	}
+
+</style>
+
+
+<div ng-controller="airDrop as airRecords">
+	<!--口令详细信息-->
+	<div class="codeDetil" ng-if="airRecords.showCodeDetil == 1">
+		<div class="topNav">
+			<span class="span1" translate ng-click="airRecords.showCodeDetil = 0">Close</span>
+			<span class="span2" translate ng-click="airRecords.copyall()">Copy all</span>
+			<h1 translate>T Code</h1>
+		</div>
+
+		<div>
+			<p class="p_propm" translate>Enter T code to redeem your asset at 'TrustNote Wallet/Wallet/Wallet-setting/Redeem T Code'</p>
+		</div>
+
+		<div>
+			<ul class="noStyle">
+				<li class="noStyleLi" ng-repeat="tcode in airRecords.detileList">
+					<div class="tcodeD" translate>
+						<span class="span3 enable_text_select">{{tcode.code}}</span>
+						<span class="span4 enable_text_select">{{tcode.amount/1000000}}MN</span>
+					</div>
+				</li>
+			</ul>
+		</div>
+
+		<p translate class="p_toast" ng-if="airRecords.showCopied == 1">Copied</p>
+	</div>
+
+
+	<!--top 部分-->
+	<div class="topbar-container" ng-include="'views/includes/topbar.html'"  ng-init="titleSection='Records'; goBackToState = true"></div>
+	<!--整体列表-->
+	<div class="content preferences" ng-controller="preferencesController as preferences" ng-init="preferences.init()">
+		<p class="p_list" translate>Records</p>
+		<div class="ulWrap">
+			<ul class="no-bullet m0">
+				<li ng-repeat="token in airRecords.recordsList" ng-click="airRecords.showCodeDetil = 1; airRecords.clicked($index)">
+					<i class="icon-arrow-right3 size-14 right text-gray"></i>
+					<div translate>{{token.amount/1000000}}MN <span class="stime">{{token.creation_date}}</span></div>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>

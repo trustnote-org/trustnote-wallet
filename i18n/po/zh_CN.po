@@ -2089,8 +2089,8 @@ msgstr "可用余额不足"
 msgid "Generate"
 msgstr "生成"
 
-msgid "Enter T code to redeem your asset at 'TrustNote Wallet/Transacrtion/Redeem T Code'"
-msgstr "在“TrustNote钱包-交易-兑换T口令”界面，输入单个T口令立即兑换资产："
+msgid "Enter T code to redeem your asset at 'TrustNote Wallet/Wallet/Wallet-setting/Redeem T Code'"
+msgstr "在“TrustNote钱包-钱包-钱包设置-兑换T口令”界面，输入单个T口令立即兑换资产："
 
 msgid "Copy all"
 msgstr "复制全部"
@@ -2113,20 +2113,20 @@ msgstr "该T口令已被其他人领取。"
 msgid "Incorrect T code, please re-enter"
 msgstr "T口令有误，请检查后重试"
 
-  msgid "Error: my wallet address is not found"
+msgid "Error: my wallet address is not found"
 msgstr "错误：我的钱包地址没找到"
 
 msgid "Reminder: View your T code claims from the first page of your default wallet"
 msgstr "温馨提示：请在默认钱包的首页查看T口令领取结果"
 
-  msgid "Reedem T code is a transcation which will incure a small fee"
+msgid "Reedem T code is a transcation which will incure a small fee"
 msgstr "兑换T口令是一次转账操作，所以会产生一点费用"
 
 msgid "Redeem Success"
 msgstr "兑换成功"
 
 msgid "Redeeming..."
-msgstr "正在兑换..."  
+msgstr "正在兑换..."
 
 msgid "Redeem now"
 msgstr "立即兑换"
@@ -2137,5 +2137,18 @@ msgstr "T口令未稳定，请稍后重试"
 msgid "Total amount"
 msgstr "塞币总额"
 
+msgid "T Code"
+msgstr "T 口令"
 
+msgid "Send or reedem T code is a transcation which will incure a small fee"
+msgstr "发送或兑换T口令是一次转账操作，所以会产生一点费用"
+
+msgid "View your T code claims from the first page of your default wallet"
+msgstr "请在默认钱包的首页查看T口令领取结果"
+
+msgid "Records"
+msgstr "历史记录"
+
+msgid "Already generated"
+msgstr "已经生成"
 
