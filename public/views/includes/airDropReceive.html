@@ -107,6 +107,7 @@
 
 
 <div ng-controller="airDropReceive as airDR">
+	<!--弹出层-->
 	<div class="maskWrap" ng-if="airDR.showMask == 1"></div>
 	<div class="mask" ng-if="airDR.showMask == 1">
 		<p class="pErr" ng-repeat="errText in airDR.errTextList">{{errText}}</p>
@@ -114,22 +115,7 @@
 	</div>
 
 	<!--top顶部-->
-	<nav ng-controller="topbarController as topbar" class="tab-bar oh">
-		<section class="left-small">
-			<a ng-click="topbar.openSendScreen();">
-				<i class="icon-arrow-left3  icon-back"></i>
-				<span class="text-back">{{'Back'|translate}}</span>
-			</a>
-		</section>
-		<section class="middle tab-bar-section">
-			<h1 class="ellipsis" ng-style="{ 'max-width': '100%'}">
-				<span translate class="size-17 colorfff">Redeem T Code</span>
-			</h1>
-		</section>
-	</nav>
-
-
-
+	<div class="topbar-container" ng-include="'views/includes/topbar.html'"  ng-init="titleSection='Redeem T Code'; goBackToState = true"></div>
 
 
 	<div class="inputWrap">
@@ -158,14 +144,3 @@
 	<p class="p_toast" translate ng-if="airDR.successful == 1">Redeem Success</p>
 
 </div>
-
-
-
-
-
-
-
-
-
-
-

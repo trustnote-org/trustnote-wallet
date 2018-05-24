@@ -80,22 +80,6 @@
 	.spinnerEx > div{
 		background: #0095ff;
 	}
-	.sendCandy{
-		margin: 20px 0;
-		text-align: center;
-	}
-	.sendCandy .receive{
-		cursor: pointer;
-		background:url("img/get-T-red-package.png") left center no-repeat ;
-		padding: 10px 30px;
-		background-size: 18px;
-	}
-	.sendCandy .send{
-		cursor: pointer;
-		background:url("img/send-T-token.png") left center no-repeat;
-		padding: 10px 30px;
-		background-size: 20px;
-	}
 </style>
 
 <!-- 第一部分 顶部topbar-->
@@ -953,11 +937,6 @@
 					<div ng-if="home.observed == 1">
 						<p style="margin: 10px 0 0 0; color: #333; text-align: center; font-size: 14px;" translate>This is a Watching Only Wallet which requires a offline wallet holding the Mnemonic phrase to sign the transactions.</p>
 						<!--<p style="margin: 0; color: #0095ff; text-align: center; font-size: 14px;" translate>See How does offline signing work?</p>-->
-					</div>
-					<!--发糖果-->
-					<div class="sendCandy" ng-if="home.observed != 1">
-						<span class="send" ng-click="$root.go('airDrop')" translate>Send T Code</span>
-						<span class="receive" ng-click="$root.go('airDropReceive')" translate>Redeem T Code</span>
 					</div>
 				</div>
 			</div>
