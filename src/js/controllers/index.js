@@ -1026,14 +1026,14 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 
 			//console.log('fc.credentials-------------'+JSON.stringify(fc.credentials));
 
-			console.log("reading cosigners");
-			var walletDefinedByKeys = require('trustnote-common/wallet_defined_by_keys.js');
-			walletDefinedByKeys.readCosigners(self.walletId, function (arrCosignerInfos) {
-				self.copayers = arrCosignerInfos;
-				$timeout(function () {
-					$rootScope.$digest();
-				});
-			});
+			// console.log("reading cosigners");
+			// var walletDefinedByKeys = require('trustnote-common/wallet_defined_by_keys.js');
+			// walletDefinedByKeys.readCosigners(self.walletId, function (arrCosignerInfos) {
+			// 	self.copayers = arrCosignerInfos;
+			// 	$timeout(function () {
+			// 		$rootScope.$digest();
+			// 	});
+			// });
 
 			self.needsBackup = false;
 			self.openWallet();
