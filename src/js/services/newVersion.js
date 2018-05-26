@@ -10,10 +10,10 @@ angular.module('copayApp.services').factory('newVersion', function(storageServic
 		root.hasChoosen = 0;
 		storageService.gethaschoosen(function (err, val) {
 			root.hasChoosen  = val;
+			if (root.hasChoosen != 2) {
+				return;
+			}
 		});
-		if (root.hasChoosen != 2) {
-			return;
-		}
 
 		if (data.msg){
 			if(typeof (data.msg) == 'string'){
