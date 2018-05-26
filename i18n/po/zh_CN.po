@@ -2155,3 +2155,5 @@ msgstr "历史记录"
 msgid "Already generated"
 msgstr "已经生成"
 
+msgid "New version"
+msgstr "新的版本"
