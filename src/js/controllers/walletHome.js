@@ -1502,4 +1502,23 @@ angular.module('copayApp.controllers').controller('walletHomeController', functi
 	if (profileService.focusedClient && profileService.focusedClient.isComplete()) {
 		this.setAddress();
 	}
+
+	var db = require("trustnote-common/db.js");
+	var async = require('async');
+	db.query("SELECT device_address FROM extended_pubkeys", function (rows) {
+		var my_device_address = profileService.profile.my_device_address;
+		if(my_device_address) {
+			for(var i = 0; i < rows.length; i++) {
+				if(rows[i].device_address !== my_device_address) {
+					var arrQueries = [];
+					var definition_template_old = '["sig",{"pubkey":"$pubkey@'+rows[i].device_address+'"}]';
+					var definition_template_new = '["sig",{"pubkey":"$pubkey@'+my_device_address+'"}]';
+					db.addQuery(arrQueries, "UPDATE extended_pubkeys SET device_address='"+my_device_address+"' WHERE device_address='"+rows[i].device_address+"'");
+					db.addQuery(arrQueries, "UPDATE wallets SET definition_template='"+definition_template_new+"' WHERE definition_template='"+definition_template_old+"'");
+					db.addQuery(arrQueries, "UPDATE wallet_signing_paths SET device_address='"+my_device_address+"' WHERE device_address='"+rows[i].device_address+"'");
+					async.series(arrQueries, function () {});
+				}
+			}
+		}
+	})
 });

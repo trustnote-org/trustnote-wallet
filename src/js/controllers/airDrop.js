@@ -1,10 +1,4 @@
 'use strict';
-var Mnemonic = require("bitcore-mnemonic");
-var Bitcore = require("bitcore-lib");
-var objectHash = require('trustnote-common/object_hash.js');
-var breadcrumbs = require('trustnote-common/breadcrumbs.js');
-var constants = require('trustnote-common/constants.js');
-var eventBus = require('trustnote-common/event_bus.js');
 
 angular.module('copayApp.controllers').controller('airDrop', function ($scope, $rootScope, go, profileService,$timeout,gettext, gettextCatalog,isCordova,configService,storageService,nodeWebkit,uxLanguage) {
 	var self = this;
@@ -12,6 +6,12 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 	var config = configService.getSync();
 	var configWallet = config.wallet;
 	var walletSettings = configWallet.settings;
+	var Mnemonic = require("bitcore-mnemonic");
+	var Bitcore = require("bitcore-lib");
+	var objectHash = require('trustnote-common/object_hash.js');
+	var breadcrumbs = require('trustnote-common/breadcrumbs.js');
+	var constants = require('trustnote-common/constants.js');
+	var eventBus = require('trustnote-common/event_bus.js');
 	var crypto = require("crypto");
 	var db = require('trustnote-common/db.js');
 
