@@ -536,18 +536,6 @@ angular
 				}
 			})
 
-			// 添加 新版本升级
-			.state('preferencesGlobal.newVersion', {
-				url: '/newVersion',
-				templateUrl: 'views/includes/newVersion.html',
-				walletShouldBeComplete: true,
-				needProfile: true,
-				views: {
-					'main@': {
-						templateUrl: 'views/includes/newVersion.html'
-					}
-				}
-			})
 			.state('preferencesGlobal.export', {
 				url: '/export',
 				templateUrl: 'views/export.html',
