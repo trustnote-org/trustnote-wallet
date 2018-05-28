@@ -81,21 +81,41 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 	};
 	// 判断 要发送 几个 红包
 	self.checkNumX = function () {
-		if (typeof(self.redPacketCount) != 'number') {
-			self.countWarring = true;
-			self.countWarringMsg = gettextCatalog.getString('Invalid count');
-			return false;
-		} else if (self.redPacketCount < 1) {
-			self.countWarring = true;
-			self.countWarringMsg = gettextCatalog.getString('You are naughty. Please send 1 at least ');
-			return false;
-		} else if (self.redPacketCount > 100) {
-			self.countWarring = true;
-			self.countWarringMsg = gettextCatalog.getString('Maximum T Code number 100');
-			return false;
-		} else {
-			self.countWarring = false;
+		if(isCordova){ // nodeWebkit.isDefined()
+			if (typeof(self.redPacketCount) != 'number') {
+				self.countWarring = true;
+				self.countWarringMsg = gettextCatalog.getString('Invalid count');
+				return false;
+			} else if (self.redPacketCount < 1) {
+				self.countWarring = true;
+				self.countWarringMsg = gettextCatalog.getString('You are naughty. Please send 1 at least ');
+				return false;
+			} else if (self.redPacketCount > 10) {
+				self.countWarring = true;
+				self.countWarringMsg = gettextCatalog.getString('Maximum T Code number 10');
+				return false;
+			} else {
+				self.countWarring = false;
+			}
+		}else {
+			if (typeof(self.redPacketCount) != 'number') {
+				self.countWarring = true;
+				self.countWarringMsg = gettextCatalog.getString('Invalid count');
+				return false;
+			} else if (self.redPacketCount < 1) {
+				self.countWarring = true;
+				self.countWarringMsg = gettextCatalog.getString('You are naughty. Please send 1 at least ');
+				return false;
+			} else if (self.redPacketCount > 100) {
+				self.countWarring = true;
+				self.countWarringMsg = gettextCatalog.getString('Maximum T Code number 100');
+				return false;
+			} else {
+				self.countWarring = false;
+			}
 		}
+
+
 	};
 	// 生成 按钮是否可以 点击
 	self.isAbleToClick = function () {
@@ -104,6 +124,29 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 
 
 	self.submitForm = function () {
+		var fc = profileService.focusedClient;
+		// ***** 判断 当前设备 是否有密码加密 *****
+		if (fc.isPrivKeyEncrypted()) {
+			profileService.unlockFC(null, function (err) {
+				if (err){
+					self.hasClicked = 0;
+					$timeout(function () {
+						$scope.$apply()
+					},10);
+					return self.setSendError(gettextCatalog.getString(err.message));
+				}
+				return self.submitForm();
+			});
+			return;
+		}
+		if (self.hasClicked == 1) {
+			return false;
+		}
+		self.hasClicked = 1;
+		self.geneding = 1;
+		$timeout(function () {
+			$scope.$apply()
+		}, 10);
 		if((self.redPacketCount * (self.candyAmount*1000000+40)+548) > $scope.index.arrMainWalletBalances[$scope.index.assetIndex].stable){
 			self.submitAble = false;
 			$timeout(function () {
@@ -125,7 +168,6 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 		if ($scope.index.arrBalances.length === 0)
 			return console.log('send payment: no balances yet');
 
-		var fc = profileService.focusedClient;
 		var unitValue = self.unitValue;
 		var bbUnitValue = self.bbUnitValue;
 
@@ -135,28 +177,7 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 			this.error = gettext('Unable to send transaction proposal');
 			return;
 		}
-		// ***** 判断 当前设备 是否有密码加密 *****
-		if (fc.isPrivKeyEncrypted()) {
-			profileService.unlockFC(null, function (err) {
-				if (err){
-					self.hasClicked = 0;
-					$timeout(function () {
-						$scope.$apply()
-					},10);
-					return self.setSendError(gettextCatalog.getString(err.message));
-				}
-				return self.submitForm();
-			});
-			return;
-		}
 
-		if (self.hasClicked == 1) {
-			return false;
-		}
-		self.hasClicked = 1;
-		$timeout(function () {
-			$scope.$apply()
-		}, 10);
 
 		var asset = $scope.index.arrBalances[$scope.index.assetIndex].asset;
 		var address;
@@ -308,10 +329,10 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 
 						if (err) {
 							self.hasClicked = 0;
+							self.geneding = 0;
 							$timeout(function () {
 								$scope.$apply()
 							},10);
-							alert(self.hasClicked)
 							if (typeof err === 'object') {
 								err = JSON.stringify(err);
 								eventBus.emit('nonfatal_error', "error object from sendMultiPayment: " + err, new Error());
@@ -355,6 +376,7 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 									self.redPacketCount = '';
 									self.candyAmount = '';
 									self.hasClicked = 0;
+									self.geneding = 0;
 								},10);
 								$timeout(function () {
 									self.gened = 0;
