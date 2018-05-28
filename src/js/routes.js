@@ -535,6 +535,7 @@ angular
 					}
 				}
 			})
+
 			.state('preferencesGlobal.export', {
 				url: '/export',
 				templateUrl: 'views/export.html',

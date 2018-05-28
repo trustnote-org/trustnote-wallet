@@ -2068,6 +2068,9 @@ msgstr "塞币总额"
 msgid "Invalid amount"
 msgstr "无效的金额"
 
+msgid "Invalid count"
+msgstr "无效的数目"
+
 msgid "Single T Code should less than 200"
 msgstr "单个T口令的金额不超过200"
 
