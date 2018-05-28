@@ -42,6 +42,7 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 	self.submitAble = true;
 	self.submitText = gettextCatalog.getString('Generate');
 	self.language = 'zh_CN';
+	self.isEnough = 1;
 
 	if(uxLanguage.getCurrentLanguage() == 'en'){
 		self.language = 'en';
@@ -115,11 +116,24 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 			}
 		}
 
+		self.checkAbleisEnough();
+
 
 	};
 	// 生成 按钮是否可以 点击
 	self.isAbleToClick = function () {
-		return self.redPacketCount && self.candyAmount && (self.hasClicked == 0) && !self.countWarring && !self.amountWarring
+		return self.redPacketCount && self.candyAmount && (self.hasClicked == 0) && !self.countWarring && !self.amountWarring && self.isEnough == 1;
+	};
+	self.checkAbleisEnough = function () {
+		if((self.redPacketCount * (self.candyAmount*1000000+40)+548) > $scope.index.arrMainWalletBalances[$scope.index.assetIndex].stable){
+			self.submitAble = false;
+			self.isEnough = 0;
+			$timeout(function () {
+				self.submitAble = true;
+			},2000);
+		}else{
+			self.isEnough = 1;
+		}
 	};
 
 
@@ -146,13 +160,13 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 		$timeout(function () {
 			$scope.$apply()
 		}, 10);
-		if((self.redPacketCount * (self.candyAmount*1000000+40)+548) > $scope.index.arrMainWalletBalances[$scope.index.assetIndex].stable){
-			self.submitAble = false;
-			$timeout(function () {
-				self.submitAble = true;
-			},2000);
-			return false;
-		}
+		// if((self.redPacketCount * (self.candyAmount*1000000+40)+548) > $scope.index.arrMainWalletBalances[$scope.index.assetIndex].stable){
+		// 	self.submitAble = false;
+		// 	$timeout(function () {
+		// 		self.submitAble = true;
+		// 	},2000);
+		// 	return false;
+		// }
 		self.geneding = 1;
 		self.candyOutputArr = [];
 		self.showSeedFlag = 'new';
