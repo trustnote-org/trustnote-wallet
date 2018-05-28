@@ -74,9 +74,20 @@
       		<div translate>Hardware wallet</div>
     	</li>
 
+		<!--T 口令-->
+		<h4></h4>
+		<li ng-click="$root.go('preferences.preferencesTcode')"  ng-if="index.isObserved() == 0">
+			<div class="right text-gray">
+				<i class="icon-arrow-right3 size-14"></i>
+			</div>
+			<div translate>T Code</div>
+		</li>
+
     	<h4></h4>
 		<li ng-click="$root.go('preferences.preferencesAdvanced')">
-      		<i class="icon-arrow-right3 size-14 right text-gray"></i>
+			<div class="right text-gray">
+				<i class="icon-arrow-right3 size-14"></i>
+			</div>
       		<div translate>Advanced</div>
     	</li>
   	</ul>

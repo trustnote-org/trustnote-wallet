@@ -1,0 +1,146 @@
+<style>
+	div.maskWrap{
+		position: absolute;
+		width:100%;
+		height:100%;
+		background: #000;
+		opacity:0.4;
+		z-index: 1111;
+	}
+	div.mask{
+		position: absolute;
+		width: 80%;
+		left:10%;
+		top:35%;
+		background: #fff;
+		z-index:1112;
+		border-radius: 5px;
+		padding-top:25px;
+	}
+	div.inputWrap{
+		width:90%;
+		margin-left:5%;
+		position: relative;
+	}
+	div.inputWrap input {
+		width: 100%;
+		height: 45px;
+		margin: 20px auto 10px;
+		padding: 0;
+		padding-left:35px;
+		font-size: 14px;
+	}
+	p.btn {
+		width: 90%;
+		text-align: center;
+		height: 45px;
+		line-height: 45px;
+		cursor: pointer;
+		border-radius: 22.5px;
+		color: #fff;
+		font-size: 16px;
+		margin: 20px 5% 10px;
+		background: #cccccc;
+	}
+	p.btnActive{
+		background: #0095ff;
+	}
+	p.txt{
+		color: #999;
+		font-size: 12px;
+	}
+	p.txt1{
+		text-align: center;
+	}
+	i.icon{
+		width:18px;
+		height:18px;
+		position: absolute;
+		left:10px;
+		top:10px;
+	}
+	p.pOK{
+		width:64px;
+		text-align: center;
+		height:30px;
+		line-height:30px;
+		margin:20px auto 20px;
+		border:1px solid #0095ff;
+		cursor: pointer;
+		color: #0095ff;
+	}
+	p.pErr{
+		text-align: center;
+		margin:0;
+	}
+	div.toastWrap{
+		background: #0095ff;
+		color: #fff;
+		width: 44%;
+		height:35px;
+		line-height:35px;
+		left:28%;
+		position: absolute;
+		bottom: 80px;
+		border-radius: 3px;
+	}
+	div.toastinWrap{
+		float: left;
+		margin-left: 15px;
+		margin-right:10px;
+	}
+	p.p_toast{
+		background: #0095ff;
+		color: #fff;
+		width: 44%;
+		height:35px;
+		line-height:35px;
+		left:28%;
+		position: absolute;
+		bottom: 80px;
+		border-radius: 3px;
+		text-align: center;
+		margin:0;
+	}
+
+</style>
+
+
+<div ng-controller="airDropReceive as airDR">
+	<!--弹出层-->
+	<div class="maskWrap" ng-if="airDR.showMask == 1"></div>
+	<div class="mask" ng-if="airDR.showMask == 1">
+		<p class="pErr" ng-repeat="errText in airDR.errTextList">{{errText}}</p>
+		<p class="pOK" ng-click="airDR.clickOK()">OK</p>
+	</div>
+
+	<!--top顶部-->
+	<div class="topbar-container" ng-include="'views/includes/topbar.html'"  ng-init="titleSection='Redeem T Code'; goBackToState = true"></div>
+
+
+	<div class="inputWrap">
+		<i class="icon" style="background: url('img/T-black.png'); background-size: 100% 100%; margin-top: 3px;"></i>
+		<input type="text" ng-model="airDR.mnemonicStr" placeholder="{{airDR.placeholderText}}" ng-change="airDR.checkTword()">
+		<p class="txt" translate>Reedem T code is a transcation which will incure a small fee</p>
+	</div>
+
+	<p class="btn" ng-class="{'btnActive':airDR.isAvailable == 1}" ng-click="airDR.receiveCandy()" translate>Redeem now</p>
+
+	<p class="txt txt1" translate>Reminder: View your T code claims from the first page of your default wallet</p>
+
+
+	<div class="toastWrap" ng-if="airDR.Redeeming == 1">
+		<div class="toastinWrap">
+			<div class="spinner">
+				<div class="rect1"></div>
+				<div class="rect2"></div>
+				<div class="rect3"></div>
+				<div class="rect4"></div>
+				<div class="rect5"></div>
+			</div>
+		</div>
+		<div translate>Redeeming...</div>
+	</div>
+	<p class="p_toast" translate ng-if="airDR.successful == 1">Redeem Success</p>
+
+</div>

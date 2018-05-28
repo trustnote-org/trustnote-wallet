@@ -30,6 +30,7 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 	self.assetIndex = 0;
 	self.$state = $state;
 	self.usePushNotifications = isCordova && !isMobile.Windows() && isMobile.Android();
+	self.lightToHubTimeoutCount = 0;
 
 	self.showneikuang = false;
 	self.showneikuangsync = false;
@@ -476,6 +477,19 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 		console.log('refresh_light_done');
 		self.setOngoingProcess('Syncing', false);
 		scanForAddressesLignt(addAddresses);
+	});
+
+	eventBus.on('refresh_light_timeout', function () {
+		self.lightToHubTimeoutCount++;
+		console.log('refresh_light_timeout');
+		self.setOngoingProcess('Syncing', false);
+		var lightWallet = require('trustnote-common/light_wallet.js');
+		if(self.lightToHubTimeoutCount > 3) {
+			self.lightToHubTimeoutCount = 0;
+			console.log('refresh_light_timeout ' + configService.stableHub);
+			lightWallet.setLightVendorHost(configService.stableHub);
+		}
+		lightWallet.refreshLightClientHistory();
 	});
 
 	eventBus.on("confirm_on_other_devices", function () {
@@ -974,7 +988,7 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 		var device = require('trustnote-common/device.js');
 		//console.log('-----fc.credentials.walletId:'+ fc.credentials.walletId);
 		//console.log(JSON.stringify(fc.credentials));
-		device.uPMyColdDeviceAddress(fc.credentials.walletId);
+		//device.uPMyColdDeviceAddress(fc.credentials.walletId);
 
 		$timeout(function () {
 			//$rootScope.$apply();
@@ -984,8 +998,8 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 			storageService.gethaschoosen(function (err, val) {
 				self.haschoosen = val;
 			});
-			// self.haschoosen = localStorage.getItem("haschoosen");
-			// alert(self.haschoosen)
+			if(fc.observed)
+				device.uPMyColdDeviceAddress(fc.credentials.walletId);
 
 			self.noFocusedWallet = false;
 			self.onGoingProcess = {};
@@ -1013,14 +1027,14 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 
 			//console.log('fc.credentials-------------'+JSON.stringify(fc.credentials));
 
-			console.log("reading cosigners");
-			var walletDefinedByKeys = require('trustnote-common/wallet_defined_by_keys.js');
-			walletDefinedByKeys.readCosigners(self.walletId, function (arrCosignerInfos) {
-				self.copayers = arrCosignerInfos;
-				$timeout(function () {
-					$rootScope.$digest();
-				});
-			});
+			// console.log("reading cosigners");
+			// var walletDefinedByKeys = require('trustnote-common/wallet_defined_by_keys.js');
+			// walletDefinedByKeys.readCosigners(self.walletId, function (arrCosignerInfos) {
+			// 	self.copayers = arrCosignerInfos;
+			// 	$timeout(function () {
+			// 		$rootScope.$digest();
+			// 	});
+			// });
 
 			self.needsBackup = false;
 			self.openWallet();
@@ -1557,7 +1571,7 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 		});
 	};
 
-	self.updateTxHistory = lodash.debounce(function () {  // 创建一个 debounced（防抖动）函数，该函数会从上一次被调用后，延迟 wait 毫秒后调用 func 方法。
+	self.updateTxHistory = lodash.debounce(function () {  // 创建一个 debounced（// 防抖动）函数，该函数会从上一次被调用后，延迟 wait 毫秒后调用 func 方法。
 		self.updateHistory();
 	}, 1000);
 

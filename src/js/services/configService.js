@@ -59,8 +59,9 @@ angular.module('copayApp.services').factory('configService', function (storageSe
 
 	root.hub = [
 		'shawtest.trustnote.org',
-		'raytest.trustnote.org',
+		'raytest.trustnote.org'
 	]
+	root.stableHub = 'raytest.trustnote.org/tn';
 	// 钱包默认配置
 	var defaultConfig = {
 		// wallet limits
@@ -183,7 +184,12 @@ angular.module('copayApp.services').factory('configService', function (storageSe
 		if (localConfig) {
 
 			// JSON.parse() 将 JSON 字符串转换为 对象
-			var _config = JSON.parse(localConfig);
+			try{
+				var _config = JSON.parse(localConfig);
+			}
+			catch(err){
+				var _config = {};
+			}
 
 			//these ifs are to avoid migration problems
 			if (!_config.wallet) {

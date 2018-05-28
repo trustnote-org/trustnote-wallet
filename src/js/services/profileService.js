@@ -128,7 +128,7 @@ angular.module('copayApp.services').factory('profileService', function profileSe
 
                 if (!root.focusedClient.credentials.xPrivKey)
                     throw Error("xPrivKey still not set after unlock");
-                console.log('unlocked: '+root.focusedClient.credentials.xPrivKey);
+                // console.log('unlocked: '+root.focusedClient.credentials.xPrivKey);
 
                 var config = configService.getSync();
                 root.focusedClient.initDeviceProperties( root.focusedClient.credentials.xPrivKey, root.profile.my_device_address, config.hub, config.deviceName );
@@ -143,8 +143,6 @@ angular.module('copayApp.services').factory('profileService', function profileSe
     root.bindProfile = function(profile, cb) {
 		breadcrumbs.add('bindProfile');
 		root.profile = profile;
-
-		//console.log('**********************************'+JSON.stringify(root.profile));
 
         configService.get(function(err) {
             $log.debug('Preferences read');
@@ -287,11 +285,11 @@ angular.module('copayApp.services').factory('profileService', function profileSe
     };
 
 
-	// 第一个钱包 the first wallet is created in _createNewProfile()
+	// the first wallet is created in _createNewProfile()
     root._createNewProfile = function(opts, cb) {
         console.log("_createNewProfile");
         if (opts.noWallet)
-            return cb(null, Profile.create());	// Profile.create() profile.js中的create函数
+            return cb(null, Profile.create());
 
         root._seedWallet({}, function(err, walletClient) {
             if (err)
@@ -636,7 +634,7 @@ angular.module('copayApp.services').factory('profileService', function profileSe
       	});
     };
 
-    
+
     root.create = function(opts, cb) {
       	$log.info('Creating profile', opts);
       	var defaults = configService.getDefaults();

@@ -221,5 +221,14 @@ angular.module('copayApp.services')
 		root.getAsset = function (cb) {
 			storage.get('asset',cb);
 		};
+
+		//发送红包记录
+		root.setCandySendHistory = function (value, cb) {
+			storage.set('candySendHistory', value, cb);
+		};
+		root.getCandySendHistory = function (cb) {
+			storage.get('candySendHistory',cb);
+		};
+
 		return root;
 	});
