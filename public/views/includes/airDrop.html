@@ -19,9 +19,9 @@
 		color: white;
 		border-radius: 50px !important;
 	}
-	.submitBtn:hover{
-		opacity: 0.9;
-	}
+	/*.submitBtn:hover{*/
+		/*opacity: 0.9;*/
+	/*}*/
 	.historyList h4{
 		margin: 0;
 		padding-bottom: 10px;
@@ -126,12 +126,14 @@
 					<span class="size-12 color999" translate>Fixed Amount Each</span>
 				</label>
 				<div class="input">
+
+					<!--**********************8 ***********8 ***********8 ***********8 ***********8 ***********8 红包中 单个金额X MN  ***********8 ***********8 ***********8 ***********8 ***********8 -->
 					<input type="number" name="candyAmount" id="candyAmount" step="0.000001"
 						   valid-amount="{{index.arrBalances[index.assetIndex].asset}}"
 						   ng-model="airD.candyAmount"
 						   autocomplete="off"
 						   placeholder="0.0000"
-						   ng-change="airD.checkNumber('amount')"
+						   ng-change="airD.checkNumMN()"
 					>
 					<span class="placeholder" translate>Amount each</span>
 					<a style="line-height: 45px;height: 45px;padding-right: 12px;" class="postfix" ng-if="index.arrBalances.length > 0 && index.arrBalances[index.assetIndex].asset === 'base'">
@@ -143,13 +145,14 @@
 					<div class="warring" ><span ng-show="airD.amountWarring">{{airD.amountWarringMsg}}</span></div>
 				</div>
 				<div class="input">
+					<!--**********************8 ***********8 ***********8 ***********8 ***********8 ***********8 红包中 发送多少个 红包  ***********8 ***********8 ***********8 ***********8 ***********8 -->
 					<input type="number" name="redPacketCount"
 						   style="padding-right: 30px;"
 						   ng-class="{'lang-en':airD.language == 'en'}"
 						   ng-model="airD.redPacketCount"
 						   autocomplete="off"
 						   placeholder="{{airD.T_count_placeholder}}"
-						   ng-change="airD.checkNumber('count')"
+						   ng-change="airD.checkNumX()"
 					>
 					<span class="placeholder" translate>Quantity</span>
 					<a style="line-height: 45px;height: 45px;padding-right: 12px;" class="postfix" translate>Number</a>
@@ -161,7 +164,7 @@
 					<span class="amount-pop" ng-if="!airD.submitAble" translate>Youe balance is not enough</span>
 				</p>
 			</div>
-			<input type="submit" class="submitBtn" ng-disabled="airD.countWarring || airD.amountWarring || airD.submitAction" ng-class="{'submit-disable': airD.countWarring || airD.amountWarring || airD.submitAction}" value="{{airD.submitText}}">
+			<input type="submit" class="submitBtn" ng-disabled="!airD.isAbleToClick()" ng-class="{'submit-disable': !airD.isAbleToClick()}" value="{{airD.submitText}}">
 
 			<!--发送成功 显示-->
 			<p translate class="p_toast" ng-if="airD.gened == 1">Already generated</p>

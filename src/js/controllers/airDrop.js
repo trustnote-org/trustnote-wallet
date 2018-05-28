@@ -34,12 +34,12 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 
 	self.T_count_placeholder = gettextCatalog.getString('Enter number');
 
+	self.hasClicked = 0;
 	self.amountWarring = false;
 	self.countWarring = false;
 	self.amountWarringMsg = '';
 	self.countWarringMsg = '';
 	self.submitAble = true;
-	self.submitAction = false;
 	self.submitText = gettextCatalog.getString('Generate');
 	self.language = 'zh_CN';
 
@@ -56,65 +56,55 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 		}
 	};
 
-	self.seedCopy = function (){
-		if(self.showSeedFlag == 'new'){
-			self.seeds = (self.candyTokenArr).join('  ');
-		}else if(self.showSeedFlag == 'old'){
-			self.seeds = (self.curentHistorySeed).join('  ');
-		}
-		if (isCordova) {
-			window.cordova.plugins.clipboard.copy(self.seeds);
-			$timeout(function() {
-				self.showCopied = 1;
-				$scope.$apply()
-			}, 10);
-			$timeout(function () {
-				self.showCopied = 0;
-			}, 3000)
-		}else if (nodeWebkit.isDefined()) {
-			nodeWebkit.writeToClipboard(self.seeds);
-			$timeout(function() {
-				self.showCopied = 1;
-				$scope.$apply()
-			}, 10);
-			$timeout(function () {
-				self.showCopied = 0;
-			}, 1500)
-		}
-	}
 
-	self.checkNumber = function (msg) {
-		if(msg == 'amount'){
-			if(self.candyAmount <= 0){
-				self.amountWarring = true;
-				self.amountWarringMsg = gettextCatalog.getString('Invalid amount');
-			}else if(typeof(self.candyAmount) != 'number'){
-				self.amountWarring = true;
-				self.amountWarringMsg = gettextCatalog.getString('Invalid amount');
-			}else if(self.candyAmount > 200){
-				self.amountWarring = true;
-				self.amountWarringMsg = gettextCatalog.getString('Single T Code should less than 200');
-			}else{
-				self.amountWarring = false;
-			}
-
-		}else if(msg == 'count'){
-			if(self.redPacketCount < 1){
-				self.countWarring = true;
-				self.countWarringMsg = gettextCatalog.getString('You are naughty. Please send 1 at least ');
-			}else if(typeof(self.candyAmount) != 'number'){
-				self.amountWarring = true;
-				self.amountWarringMsg = gettextCatalog.getString('Invalid amount');
-			}else if(self.redPacketCount > 100){
-				self.countWarring = true;
-				self.countWarringMsg = gettextCatalog.getString('Maximum T Code number 100');
-			}else {
-				self.countWarring = false;
-			}
+	// 判断 每个红包发送的 MN 个数
+	self.checkNumMN = function () {
+		if (typeof(self.candyAmount) != 'number') {
+			self.amountWarring = true;
+			self.amountWarringMsg = gettextCatalog.getString('Invalid amount');
+			return false;
+		} else if (self.candyAmount <= 0) {
+			self.amountWarring = true;
+			self.amountWarringMsg = gettextCatalog.getString('Invalid amount');
+			return false;
+		} else if (self.candyAmount > 200) {
+			self.amountWarring = true;
+			self.amountWarringMsg = gettextCatalog.getString('Single T Code should less than 200');
+			return false;
+		} else {
+			self.amountWarring = false;
 		}
-	}
+	};
+	// 判断 要发送 几个 红包
+	self.checkNumX = function () {
+		if (typeof(self.redPacketCount) != 'number') {
+			self.countWarring = true;
+			self.countWarringMsg = gettextCatalog.getString('Invalid count');
+			return false;
+		} else if (self.redPacketCount < 1) {
+			self.countWarring = true;
+			self.countWarringMsg = gettextCatalog.getString('You are naughty. Please send 1 at least ');
+			return false;
+		} else if (self.redPacketCount > 100) {
+			self.countWarring = true;
+			self.countWarringMsg = gettextCatalog.getString('Maximum T Code number 100');
+			return false;
+		} else {
+			self.countWarring = false;
+		}
+	};
+	// 生成 按钮是否可以 点击
+	self.isAbleToClick = function () {
+		return self.redPacketCount && self.candyAmount && (self.hasClicked == 0)
+	};
+
 
 	self.submitForm = function () {
+		if(self.hasClicked == 1){
+			return false;
+		}
+		self.hasClicked = 1;
+		// 发送的总钱数 大于 现有的 报错
 		if((self.redPacketCount * (self.candyAmount*1000000+40)+548) > $scope.index.arrMainWalletBalances[$scope.index.assetIndex].stable){
 			self.submitAble = false;
 			$timeout(function () {
@@ -122,7 +112,6 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 			},2000);
 			return false;
 		}
-		self.submitAction = true;
 		self.candyOutputArr = [];
 		self.showSeedFlag = 'new';
 		var xPrivKey = '';
@@ -347,9 +336,11 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 							db.query("INSERT INTO tcode (wallet,num,code,amount,is_spent,creation_date) values" + strValues, function () {
 								$timeout(function () {
 									self.gened = 1;
+									self.redPacketCount = '';
+									self.candyAmount = '';
+									self.hasClicked = 0;
 								},10);
 								$timeout(function () {
-									self.submitAction = false;
 									self.gened = 0;
 								},3000);
 

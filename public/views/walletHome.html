@@ -704,7 +704,7 @@
 				<h4 class="title m0">
 
 					<!--选择全部发送-->
-					<a class="right lh" ng-if="index.availableBalanceBytes > 0 && !home.blockUx && !home.lockAmount" ng-click="home.sendAll(index.availableMaxBalance, 0)" translate> Send All</a>
+					<a class="right lh" ng-if="index.availableBalanceBytes > 0 && !home.blockUx && !home.lockAmount && home.observed != 1" ng-click="home.sendAll(index.availableMaxBalance, 0)" translate> Send All</a>
 
 					<!--可用余额-->
 					<!--available-balance></available-balance-->
