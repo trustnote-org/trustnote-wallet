@@ -2080,8 +2080,8 @@ msgstr "调皮，至少发一个"
 msgid "Maximum T Code number 100"
 msgstr "最大T口令个数100个"
 
-msgid "Maximum T Code number 10"
-msgstr "最大T口令个数10个"
+msgid "Maximum T Code number 20"
+msgstr "最大T口令个数20个"
 
 msgid "T Code Log"
 msgstr "最近记录"

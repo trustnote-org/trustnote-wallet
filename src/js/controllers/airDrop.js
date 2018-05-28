@@ -90,9 +90,9 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 				self.countWarring = true;
 				self.countWarringMsg = gettextCatalog.getString('You are naughty. Please send 1 at least ');
 				return false;
-			} else if (self.redPacketCount > 10) {
+			} else if (self.redPacketCount > 20) {
 				self.countWarring = true;
-				self.countWarringMsg = gettextCatalog.getString('Maximum T Code number 10');
+				self.countWarringMsg = gettextCatalog.getString('Maximum T Code number 20');
 				return false;
 			} else {
 				self.countWarring = false;
