@@ -108,6 +108,9 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 			return false;
 		}
 		self.hasClicked = 1;
+		$timeout(function () {
+			$scope.$apply()
+		},10);
 		// 发送的总钱数 大于 现有的 报错
 		if((self.redPacketCount * (self.candyAmount*1000000+40)+548) > $scope.index.arrMainWalletBalances[$scope.index.assetIndex].stable){
 			self.submitAble = false;
@@ -144,6 +147,10 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 		if (fc.isPrivKeyEncrypted()) {
 			profileService.unlockFC(null, function (err) {
 				if (err){
+					self.hasClicked = 0;
+					$timeout(function () {
+						$scope.$apply()
+					},10);
 					return self.setSendError(gettextCatalog.getString(err.message));
 				}
 				return self.submitForm();
@@ -300,6 +307,11 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 						profileService.bKeepUnlocked = false;
 
 						if (err) {
+							self.hasClicked = 0;
+							$timeout(function () {
+								$scope.$apply()
+							},10);
+							alert(self.hasClicked)
 							if (typeof err === 'object') {
 								err = JSON.stringify(err);
 								eventBus.emit('nonfatal_error', "error object from sendMultiPayment: " + err, new Error());
