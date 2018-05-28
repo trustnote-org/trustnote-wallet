@@ -63,7 +63,11 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 			self.amountWarring = true;
 			self.amountWarringMsg = gettextCatalog.getString('Invalid amount');
 			return false;
-		} else if (self.candyAmount <= 0) {
+		} else if (self.candyAmount < 0.1) {
+			self.amountWarring = true;
+			self.amountWarringMsg = gettextCatalog.getString('Invalid amount');
+			return false;
+		} else if ((self.candyAmount*1000000) % 1 != 0) {
 			self.amountWarring = true;
 			self.amountWarringMsg = gettextCatalog.getString('Invalid amount');
 			return false;
@@ -95,7 +99,7 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 	};
 	// 生成 按钮是否可以 点击
 	self.isAbleToClick = function () {
-		return self.redPacketCount && self.candyAmount && (self.hasClicked == 0)
+		return self.redPacketCount && self.candyAmount && (self.hasClicked == 0) && !self.countWarring && !self.amountWarring
 	};
 
 
