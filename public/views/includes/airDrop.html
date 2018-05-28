@@ -46,11 +46,11 @@
 		font-size: 12px;
 		color: #FF293C;
 	}
-	form .input{
+	form .divinput{
 		margin-bottom: 7px;
 		position: relative;
 	}
-	form .input input{
+	form .divinput input{
 		height: 45px;
 		font-size: 14px;
 		padding-right:45px;
@@ -125,7 +125,7 @@
 				<label for="candyAmount">
 					<span class="size-12 color999" translate>Fixed Amount Each</span>
 				</label>
-				<div class="input">
+				<div class="divinput">
 
 					<!--**********************8 ***********8 ***********8 ***********8 ***********8 ***********8 红包中 单个金额X MN  ***********8 ***********8 ***********8 ***********8 ***********8 -->
 					<input type="number" name="candyAmount" id="candyAmount" step="0.000001"
@@ -144,7 +144,7 @@
 					</a>
 					<div class="warring" ><span ng-show="airD.amountWarring">{{airD.amountWarringMsg}}</span></div>
 				</div>
-				<div class="input">
+				<div class="divinput">
 					<!--**********************8 ***********8 ***********8 ***********8 ***********8 ***********8 红包中 发送多少个 红包  ***********8 ***********8 ***********8 ***********8 ***********8 -->
 					<input type="number" name="redPacketCount"
 						   style="padding-right: 30px;"
@@ -178,7 +178,7 @@
 							too long!
 						</small>
 					</label>
-					<div class="input">
+					<div class="divinput">
 						<textarea id="merkle_proof" name="merkle_proof" maxlength="4096" ng-model="_merkle_proof"></textarea>
 					</div>
 				</div>
