@@ -104,14 +104,6 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 
 
 	self.submitForm = function () {
-		if(self.hasClicked == 1){
-			return false;
-		}
-		self.hasClicked = 1;
-		$timeout(function () {
-			$scope.$apply()
-		},10);
-		// 发送的总钱数 大于 现有的 报错
 		if((self.redPacketCount * (self.candyAmount*1000000+40)+548) > $scope.index.arrMainWalletBalances[$scope.index.assetIndex].stable){
 			self.submitAble = false;
 			$timeout(function () {
@@ -157,6 +149,14 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 			});
 			return;
 		}
+
+		if (self.hasClicked == 1) {
+			return false;
+		}
+		self.hasClicked = 1;
+		$timeout(function () {
+			$scope.$apply()
+		}, 10);
 
 		var asset = $scope.index.arrBalances[$scope.index.assetIndex].asset;
 		var address;
