@@ -2080,6 +2080,9 @@ msgstr "调皮，至少发一个"
 msgid "Maximum T Code number 100"
 msgstr "最大T口令个数100个"
 
+msgid "Maximum T Code number 20"
+msgstr "最大T口令个数20个"
+
 msgid "T Code Log"
 msgstr "最近记录"
 
@@ -2091,6 +2094,9 @@ msgstr "可用余额不足"
 
 msgid "Generate"
 msgstr "生成"
+
+msgid "Generating"
+msgstr "正在生成"
 
 msgid "Enter T code to redeem your asset at 'TrustNote Wallet/Wallet/Wallet-setting/Redeem T Code'"
 msgstr "在“TrustNote钱包-钱包-钱包设置-兑换T口令”界面，输入单个T口令立即兑换资产："
