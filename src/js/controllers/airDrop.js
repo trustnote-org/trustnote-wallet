@@ -156,18 +156,12 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 		if (self.hasClicked == 1) {
 			return false;
 		}
+
+		self.geneding = 1;
 		self.hasClicked = 1;
 		$timeout(function () {
 			$scope.$apply()
 		}, 10);
-		// if((self.redPacketCount * (self.candyAmount*1000000+40)+548) > $scope.index.arrMainWalletBalances[$scope.index.assetIndex].stable){
-		// 	self.submitAble = false;
-		// 	$timeout(function () {
-		// 		self.submitAble = true;
-		// 	},2000);
-		// 	return false;
-		// }
-		self.geneding = 1;
 		self.candyOutputArr = [];
 		self.showSeedFlag = 'new';
 		var xPrivKey = '';
