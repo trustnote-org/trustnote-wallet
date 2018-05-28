@@ -143,7 +143,6 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 			return false;
 		}
 		self.hasClicked = 1;
-		self.geneding = 1;
 		$timeout(function () {
 			$scope.$apply()
 		}, 10);
@@ -154,6 +153,7 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 			},2000);
 			return false;
 		}
+		self.geneding = 1;
 		self.candyOutputArr = [];
 		self.showSeedFlag = 'new';
 		var xPrivKey = '';
