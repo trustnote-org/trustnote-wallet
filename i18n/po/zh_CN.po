@@ -2098,6 +2098,9 @@ msgstr "生成"
 msgid "Generating"
 msgstr "正在生成"
 
+msgid "Generating..."
+msgstr "正在生成..."
+
 msgid "Enter T code to redeem your asset at 'TrustNote Wallet/Wallet/Wallet-setting/Redeem T Code'"
 msgstr "在“TrustNote钱包-钱包-钱包设置-兑换T口令”界面，输入单个T口令立即兑换资产："
 
