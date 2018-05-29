@@ -64,11 +64,11 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 			self.amountWarring = true;
 			self.amountWarringMsg = gettextCatalog.getString('Invalid amount');
 			return false;
-		} else if (self.candyAmount < 0.1) {
+		} else if (self.candyAmount < 0.01) {
 			self.amountWarring = true;
 			self.amountWarringMsg = gettextCatalog.getString('Invalid amount');
 			return false;
-		} else if ((self.candyAmount * 1000000) % 1 != 0) {
+		} else if ((self.candyAmount * 100) % 1 != 0) {
 			self.amountWarring = true;
 			self.amountWarringMsg = gettextCatalog.getString('Invalid amount');
 			return false;
