@@ -80,7 +80,12 @@
 	.submit-disable{
 		background-color: #CCCCCC;
 	}
-	p.p_toast{
+	div.toastinWrap{
+		float: left;
+		margin-left: 15px;
+		margin-right:10px;
+	}
+	p.p_toast,div.p_toast{
 		background: #0095ff;
 		color: #fff;
 		width: 44%;
@@ -166,10 +171,23 @@
 			</div>
 			<input type="submit" class="submitBtn" ng-disabled="!airD.isAbleToClick()" ng-class="{'submit-disable': !airD.isAbleToClick()}" value="{{airD.submitText}}">
 
+			<!--正在发送 显示-->
+			<div class="p_toast" ng-if="airD.geneding == 1">
+				<div class="toastinWrap">
+					<div class="spinner">
+						<div class="rect1"></div>
+						<div class="rect2"></div>
+						<div class="rect3"></div>
+						<div class="rect4"></div>
+						<div class="rect5"></div>
+					</div>
+				</div>
+				<div translate>Generating...</div>
+			</div>
 			<!--发送成功 显示-->
 			<p translate class="p_toast" ng-if="airD.gened == 1">Already generated</p>
-			<!--正在发送 显示-->
-			<p translate class="p_toast" ng-if="airD.geneding == 1">Generating</p>
+			
+			<!-- <p translate class="p_toast" ng-if="airD.geneding == 1">Generating</p> -->
 
 			<div class="row" ng-show="index.bHasMerkle">
 				<div class="large-12 columns">
