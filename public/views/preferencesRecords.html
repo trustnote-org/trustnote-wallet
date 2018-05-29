@@ -44,13 +44,14 @@
 		padding:0 10px 0;
 		cursor: pointer;
 	}
-	div.topNav h1{
+	div.topNav h1.h-title{
 		width:50%;
 		margin:0 auto;
 		line-height:45px;
 		text-align: center;
-		color: #fff;
+		color: #fff!important;
 		font-size:17px;
+		font-weight: bold;
 	}
 	p.p_list{
 		margin: 0;
@@ -103,9 +104,7 @@
 		<div class="topNav">
 			<span class="span1" translate ng-click="airRecords.showCodeDetil = 0">Close</span>
 			<span class="span2" translate ng-click="airRecords.copyall()">Copy all</span>
-			<h1>
-				<span translate class="size-17 colorfff">T Code</span>
-			</h1>
+			<h1 class="h-title" translate>T Code</h1>
 		</div>
 
 		<div>
