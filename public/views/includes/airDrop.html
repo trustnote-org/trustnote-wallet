@@ -82,8 +82,8 @@
 	}
 	div.toastinWrap{
 		float: left;
-		margin-left: 15px;
-		margin-right:10px;
+		margin-left: 5px;
+		margin-right:5px;
 	}
 	p.p_toast,div.p_toast{
 		background: #0095ff;
@@ -97,6 +97,10 @@
 		border-radius: 3px;
 		text-align: center;
 		margin:0;
+	}
+	div.Generating{
+		float: left;
+		padding-left:10px;
 	}
 
 </style>
@@ -182,7 +186,7 @@
 						<div class="rect5"></div>
 					</div>
 				</div>
-				<div translate>Generating...</div>
+				<div class="Generating" translate>Generating...</div>
 			</div>
 			<!--发送成功 显示-->
 			<p translate class="p_toast" ng-if="airD.gened == 1">Already generated</p>
