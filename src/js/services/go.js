@@ -7,33 +7,33 @@ angular.module('copayApp.services').factory('go', function($window, $rootScope, 
 
 	root.toPay = 0;
 
-	var hideSidebars = function() {
-		if (typeof document === 'undefined')
-			return;
+	// var hideSidebars = function() {
+	// 	if (typeof document === 'undefined')
+	// 		return;
+    //
+	// 	var elem = document.getElementById('off-canvas-wrap');
+	// 	elem.className = 'off-canvas-wrap';
+	// };
 
-		var elem = document.getElementById('off-canvas-wrap');
-		elem.className = 'off-canvas-wrap';
-	};
+	// var toggleSidebar = function(invert) {
+	// 	if (typeof document === 'undefined')
+	// 		return;
+    //
+	// 	var elem = document.getElementById('off-canvas-wrap');
+	// 	var leftbarActive = elem.className.indexOf('move-right') >= 0;
+    //
+	// 	if (invert) {
+	// 		if (profileService.profile && !$rootScope.hideNavigation) {
+	// 			elem.className = 'off-canvas-wrap move-right';
+	// 		}
+	// 	} else {
+	// 		if (leftbarActive) {
+	// 			hideSidebars();
+	// 		}
+	// 	}
+	// };
 
-	var toggleSidebar = function(invert) {
-		if (typeof document === 'undefined')
-			return;
-
-		var elem = document.getElementById('off-canvas-wrap');
-		var leftbarActive = elem.className.indexOf('move-right') >= 0;
-
-		if (invert) {
-			if (profileService.profile && !$rootScope.hideNavigation) {
-				elem.className = 'off-canvas-wrap move-right';
-			}
-		} else {
-			if (leftbarActive) {
-				hideSidebars();
-			}
-		}
-	};
-
-	root.openExternalLink = function(url, target) {
+	root.openExternalLink = function (url, target) {
 		if (nodeWebkit.isDefined()) {
 			nodeWebkit.openExternalLink(url);
 		}
@@ -56,9 +56,9 @@ angular.module('copayApp.services').factory('go', function($window, $rootScope, 
 		// hideSidebars();
 	};
 
-	root.swipe = function(invert) {
-		toggleSidebar(invert);
-	};
+	// root.swipe = function(invert) {
+	// 	toggleSidebar(invert);
+	// };
 
 	root.walletHome = function() {
 		var fc = profileService.focusedClient;
