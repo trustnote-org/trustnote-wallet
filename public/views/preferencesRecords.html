@@ -70,6 +70,12 @@
 		height:500px;
 		overflow: auto;
 	}
+	div.ulWrap p{
+		padding-left:15px;
+		color: #999;
+		font-size: 14px;
+		padding-top:15px;
+	}
 	p.p_propm{
 		padding: 10px;
 		font-size: 14px;
@@ -135,8 +141,9 @@
 	<div class="topbar-container" ng-include="'views/includes/topbar.html'"  ng-init="titleSection='Records'; goBackToState = true"></div>
 	<!--整体列表-->
 	<div class="content preferences" ng-controller="preferencesController as preferences" ng-init="preferences.init()">
-		<p class="p_list" translate>Records</p>
+		<p class="p_list" translate>Recent transaction records</p>
 		<div class="ulWrap">
+			<p translate ng-if="airRecords.recordsList.length == 0">Records of sending T code are not available</p>
 			<ul class="no-bullet m0">
 				<li ng-repeat="token in airRecords.recordsList" ng-click="airRecords.showCodeDetil = 1; airRecords.clicked($index)">
 					<i class="icon-arrow-right3 size-14 right text-gray"></i>

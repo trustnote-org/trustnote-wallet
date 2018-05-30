@@ -2152,15 +2152,109 @@ msgstr "塞币总额"
 msgid "T Code"
 msgstr "T 口令"
 
+msgid "Records of sending T code are not available"
+msgstr "暂无发送T口令记录"
+
+msgid "Records"
+msgstr "记录"
+
 msgid "Send or reedem T code is a transcation which will incure a small fee"
 msgstr "发送或兑换T口令是一次转账操作，所以会产生一点费用"
 
 msgid "View your T code claims from the first page of your default wallet"
 msgstr "请在默认钱包的首页查看T口令领取结果"
 
-msgid "Records"
-msgstr "历史记录"
+msgid "Recent transaction records"
+msgstr "最近记录"
 
 msgid "Already generated"
 msgstr "已经生成"
+
+msgid "How does offline signing work?"
+msgstr "如何进行离线签名"
+
+msgid "Ready for work:"
+msgstr "准备工作"
+
+msgid "Two phones without root or you think it’s safe."
+msgstr "两部没有Root刷机过，你认为非常安全的手机；"
+
+msgid "Installed the newest version 1.1.5 and download from trustnote.org"
+msgstr "两部手机都要从trustnote.org下载最新版 1.1.5版本TrustNote；"
+
+msgid "One of phone open airplane mode as cold wallet,keep it offline always because it's saved your privacy key."
+msgstr "将其中一部手机关闭 Wifi并开启飞行模式, 作为冷钱包。这部手机一定要断网, 因为是存有你 ** 私钥 ** 的设备。"
+
+msgid "Watch wallet"
+msgstr "观察钱包"
+
+msgid "If you want to use cold wallet in Trustnote version 1.1.5,you should watch the wallet at first."
+msgstr "如果你想使用TrustNote1.1.5的冷钱包功能, 首先要观察该钱包。"
+
+msgid "note:one of phone connected network as <b>hot wallet</b> to watch <b>cold wallet</b>,the other one keep offline for Authorized signature."
+msgstr "注: 你的联网手机是热钱包, 用来作为<b>观察钱包</b>, 未联网手机作为<b>冷钱包用</b>作离线签名授权"
+
+msgid "Step1"
+msgstr "第一步"
+
+msgid "Hot wallet:"
+msgstr "热钱包"
+
+msgid "Click “create wallet” - choose watch wallet - click “scan button” next to the title of the Offline wallet QR code ,scan Offline wallet QR code from step2"
+msgstr "点击“创建钱包” -> 选择“观察钱包” -> 点击冷钱包认证码标题旁边的扫描按钮, 扫描第 2 步钱包认证码的二维码"
+
+msgid "Step2"
+msgstr "第二步"
+
+msgid "Step3"
+msgstr "第三步"
+
+msgid "Step4"
+msgstr "第四步"
+
+msgid "Step5"
+msgstr "第五步"
+
+msgid "Cold wallet:"
+msgstr "冷钱包"
+
+msgid "Scan step2’s cold wallet - click“import wallet” - generate QR code for “Authorized signature”"
+msgstr "接着第 1 部步操作, 扫描未联网手机的冷钱包认证二维码 -> 点击“开始导入” -> 生成“授权签名”的二维码"
+
+msgid "Choose the wallet you want to be watched, click "wallet Settings" - input password - shows the Offline wallet QR code"
+msgstr "选择你想观察的钱包，点击“钱包设置” -> 输入钱包密码 -> 显示冷钱包认证码"
+
+msgid "Scan step3’s QR wallet - generate “Signature detail” QR code"
+msgstr "点击“冷钱包认证码”页面右上角扫描按钮，扫描第 3 步中热钱包生成的二维码 -> 页面跳转并显示“授权签名详情” 的二维码"
+
+msgid "Click “next”button - click “scan ”button - scan signature detail QR code from cold wallet generated in step4"
+msgstr "接着第 1 部步操作, 扫描未联网手机的冷钱包认证二维码 -> 点击“开始导入” -> 生成“授权签名”的二维码"
+
+msgid "Cold wallet transaction signature"
+msgstr "冷钱包交易签名"
+
+msgid "Let’s use offline signature function to transfer TTT:"
+msgstr "我们以使用离线签名功能转账 TTT 为例:"
+
+msgid "Choose one watch wallet that is the same with cold wallet - go to TTT transaction page,input all the transfer information - click “Confirm” button - generate QR code"
+msgstr "进入观察钱包的交易界面, 输入转账信息 -> 点击“确定” -> 生成“交易预览”二维码"
+
+msgid "Scan step1’s QR code from hot wallet - click”sign” - input password - generate “Authorized” QR code"
+msgstr "使用TrustNote内的扫码功能扫描第 1 步生成的 “交易预览”二维码 -> 点击 “授权签名” -> 输入密码 -> 生成”完成授权” 的二维码"
+
+msgid "Click”next”button - click”scan”button,then scan “Authorized” QR code from cold wallet generate in step2 - sending transaction"
+msgstr "点击第 1 步中 “交易预览” 页面的 “下一步” 按钮 -> 点击“交易预览”页面上扫描图标 -> 扫描第 2 步中 “完成授权”的二维码 ->发送交易"
+
+msgid "tips:"
+msgstr "小知识"
+
+msgid "There is saved privacy key in cold wallet phone, so keep it safe and complete backup carefully"
+msgstr "未联网的手机成为冷钱包, 里边包含私钥信息, 所以一定要细心保管, 做好冷钱包的钱包备份；"
+
+msgid "Keep cold wallet offline"
+msgstr "冷钱包一定不要联网；"
+
+msgid "Watch wallet can’t finish transaction without “offline signature” from cold wallet"
+msgstr "观察钱包在没有冷钱包的离线签名情况下, 是无法进行转账交易的。"
+
 
