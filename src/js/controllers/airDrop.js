@@ -498,7 +498,7 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 		for (var i = 0; i < self.detileList.length; i++) {
 			temArr.push(self.detileList[i].code);
 		}
-		self.copyedToBoard = temArr.join('   ');
+		self.copyedToBoard = gettextCatalog.getString("Enter T code to redeem your asset at 'TrustNote Wallet/Wallet/Wallet-setting/Redeem T Code'") + '\n' + temArr.join('   ');
 		if (isCordova) {
 			window.cordova.plugins.clipboard.copy(self.copyedToBoard);
 			$timeout(function () {
