@@ -820,7 +820,7 @@
 								<div>
 									<label for="amount">
 										<span class="size-12 color333" translate>Amount</span>
-										<a ng-click="home.setSendAll()" ng-show="!home.bSendAll && !home.lockAmount" style="text-transform: none; margin-left: 10px;color:#0095ff;font-size: 12px;" translate>Send all</a>
+										<a ng-click="home.setSendAll()" ng-show="!home.bSendAll && !home.lockAmount && home.observed != 1" style="text-transform: none; margin-left: 10px;color:#0095ff;font-size: 12px;" translate>Send all</a>
 									</label>
 
 									<div class="input">
