@@ -494,11 +494,13 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 	};
 	// 点击复制 T 口令
 	self.copyall = function () {
-		var temArr = [];
+		self.temStr = '';
 		for (var i = 0; i < self.detileList.length; i++) {
-			temArr.push(self.detileList[i].code);
+			if(self.detileList[i]){
+				self.temStr = self.temStr + '\n' + self.detileList[i].code;
+			}
 		}
-		self.copyedToBoard = gettextCatalog.getString("Enter T code to redeem your asset at 'TrustNote Wallet/Wallet/Wallet-setting/Redeem T Code'") + '\n' + temArr.join('   ');
+		self.copyedToBoard = gettextCatalog.getString("Enter T code to redeem your asset at 'TrustNote Wallet/Wallet/Wallet-setting/Redeem T Code'") + self.temStr;
 		if (isCordova) {
 			window.cordova.plugins.clipboard.copy(self.copyedToBoard);
 			$timeout(function () {
