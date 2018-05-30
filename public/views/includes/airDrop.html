@@ -137,11 +137,11 @@
 				<div class="divinput">
 
 					<!--**********************8 ***********8 ***********8 ***********8 ***********8 ***********8 红包中 单个金额X MN  ***********8 ***********8 ***********8 ***********8 ***********8 -->
-					<input type="number" name="candyAmount" id="candyAmount" step="0.000001"
+					<input type="number" name="candyAmount" id="candyAmount" step="0.01"
 						   valid-amount="{{index.arrBalances[index.assetIndex].asset}}"
 						   ng-model="airD.candyAmount"
 						   autocomplete="off"
-						   placeholder="0.0"
+						   placeholder="0.00"
 						   ng-change="airD.checkNumMN()"
 					>
 					<span class="placeholder" translate>Amount each</span>
