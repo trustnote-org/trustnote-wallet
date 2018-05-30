@@ -34,10 +34,10 @@ input {
 }
 
 .enable_text_select {
-  -webkit-user-select: text;
-  -khtml-user-select: text;
-  -ms-user-select: text;
-  user-select: text;
+  -webkit-user-select: text !important;
+  -khtml-user-select: text !important;
+  -ms-user-select: text !important;
+  user-select: text !important;
 }
 /* END disabling text selection */
 
