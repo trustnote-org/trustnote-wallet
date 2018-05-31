@@ -116,12 +116,14 @@
 			<span class="size-12 color333" translate>Available Balance</span>:
 		</span>
 			<select
+				disabled="disabled"
 				style="height: 45px; font-size: 14px;background-color: #FFFFFF;"
 				class="m10t"
-				ng-model="index.assetIndex"
+				ng-model="index.assetIndexxx"
 				ng-options="index.arrBalances.indexOf(balance) as ( (balance.asset === 'base' || balance.asset == index.BLACKBYTES_ASSET ? balance.stableStr : balance.stable.toLocaleString() + ' of ' + balance.asset) + (balance.pending ? ' (confirmed)' : '') ) for balance in index.arrBalances"
 			>
 			</select>
+			<!--ng-options="index.arrBalances.indexOf(item.asset == 'base') as item.stableStr for item in index.arrBalances"-->
 		</div>
 		<!--无法发送交易-->
 		<div class="box-notification" ng-show="airD.error" ng-click="airD.resetError()">
@@ -138,14 +140,14 @@
 
 					<!--**********************8 ***********8 ***********8 ***********8 ***********8 ***********8 红包中 单个金额X MN  ***********8 ***********8 ***********8 ***********8 ***********8 -->
 					<input type="number" name="candyAmount" id="candyAmount" step="0.01"
-						   valid-amount="{{index.arrBalances[index.assetIndex].asset}}"
+						   valid-amount="{{index.arrBalances[0].asset}}"
 						   ng-model="airD.candyAmount"
 						   autocomplete="off"
 						   placeholder="0.00"
 						   ng-change="airD.checkNumMN()"
 					>
 					<span class="placeholder" translate>Amount each</span>
-					<a style="line-height: 45px;height: 45px;padding-right: 12px;" class="postfix" ng-if="index.arrBalances.length > 0 && index.arrBalances[index.assetIndex].asset === 'base'">
+					<a style="line-height: 45px;height: 45px;padding-right: 12px;" class="postfix" ng-if="index.arrBalances.length > 0 && index.arrBalances[0].asset === 'base'">
 						MN
 					</a>
 					<a class="postfix" ng-if="index.arrBalances.length > 0 && index.arrBalances[index.assetIndex].asset !== 'base' && index.arrBalances[index.assetIndex].asset !== index.BLACKBYTES_ASSET">

@@ -125,7 +125,7 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 		return self.redPacketCount && self.candyAmount && (self.hasClicked == 0) && !self.countWarring && !self.amountWarring && self.isEnough == 1;
 	};
 	self.checkAbleisEnough = function () {
-		if ((self.redPacketCount * (self.candyAmount * 1000000 + 40) + 548) > $scope.index.arrMainWalletBalances[$scope.index.assetIndex].stable) {
+		if ((self.redPacketCount * (self.candyAmount * 1000000 + 40) + 548) > $scope.index.arrMainWalletBalances[0].stable) {
 			self.submitAble = false;
 			self.isEnough = 0;
 			$timeout(function () {
@@ -189,7 +189,7 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 		indexScope.setOngoingProcess(gettext('sending'), true);
 
 		$timeout(function () {
-			var asset = $scope.index.arrBalances[$scope.index.assetIndex].asset;
+			var asset = $scope.index.arrBalances[0].asset;
 			var address;
 			if (redPacketCount == 1) {
 				// xPrivKey = self.xPrivKey(self.candySeedArr[0]);
