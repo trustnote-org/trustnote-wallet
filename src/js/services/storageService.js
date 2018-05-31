@@ -203,8 +203,6 @@ angular.module('copayApp.services')
 			storage.remove('pushToken', cb);
 		};
 
-
-
 		// 存储 是否选择  回复钱包 创建新的钱包
 		root.hashaschoosen = function (value, cb) {
 			storage.set('haschoosen', value, cb);
@@ -214,6 +212,14 @@ angular.module('copayApp.services')
 		// 获取 是否选择 回复钱包 创建新的钱包
 		root.gethaschoosen = function (cb) {
 			storage.get('haschoosen',cb);
+		};
+
+		root.setAsset = function (value, cb) {
+			storage.set('asset', value, cb);
+		};
+		
+		root.getAsset = function (cb) {
+			storage.get('asset',cb);
 		};
 
 		//发送红包记录
