@@ -8,7 +8,7 @@ var objectHash = require('trustnote-common/object_hash.js');
 var ecdsaSig = require('trustnote-common/signature.js');
 var breadcrumbs = require('trustnote-common/breadcrumbs.js');
 var Bitcore = require('bitcore-lib');
-var http = require('http');
+var https = require('https');
 var EventEmitter = require('events').EventEmitter;
 
 
@@ -1269,6 +1269,12 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 			self.setBalance(assocBalancesTemp, assocSharedBalances);
 		}
 		else {
+			for(var i = 0; i < thirdAsset.length; i++) {
+				assocBalancesTemp[thirdAsset[i]]["issuserName"] = "TTT user";
+				assocBalancesTemp[thirdAsset[i]]["symbol"] = thirdAsset[i];
+				self.setBalance(assocBalancesTemp, assocSharedBalances);
+			}
+
 			(function getAsset(len) {
 				// if(self.setPreBalanceStatus) {
 				// 	assocBalancesTemp[thirdAsset[len]]["assetName"] = thirdAsset[len];
@@ -1279,7 +1285,7 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 
 				var options = {
 					hostname: 'itoken.top',
-					port: 80,
+					port: 443,
 					path: '/token/query-token-detal.htm?assetId=' + encodeURIComponent(thirdAsset[len]),
 					method: 'GET',
 					timeout: 6000,
@@ -1287,7 +1293,7 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 						'referer': 'trustnote.org'
 					}
 				};
-				var req = http.request(options, function (res) {
+				var req = https.request(options, function (res) {
 					res.setEncoding('utf8');
 					res.on('data', function (data) {
 						console.log("data:"+data);
@@ -1314,6 +1320,7 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 							assocBalancesTemp[thirdAsset[len]]["issuserName"] = "TTT user";
 							assocBalancesTemp[thirdAsset[len]]["symbol"] = thirdAsset[len];
 							self.setBalance(assocBalancesTemp, assocSharedBalances);
+							self.updatingTxHistory[walletId] = false;
 							if (len < thirdAsset.length - 1)
 								getAsset(len + 1);
 						}
@@ -1380,6 +1387,7 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 			self.arrBalances.push(balanceInfo);
 			// self.arrBalances.length = 1;
 		}
+		self.arrBalances.pop();
 
 		self.assetIndex = self.assetIndex || 0;
 		if (!self.arrBalances[self.assetIndex]) // if no such index in the subwallet, reset to bytes
