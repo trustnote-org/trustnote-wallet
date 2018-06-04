@@ -79,6 +79,8 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 		} else {
 			self.amountWarring = false;
 		}
+
+		self.checkAbleisEnough();
 	};
 	// 判断 要发送 几个 红包
 	self.checkNumX = function () {
@@ -126,13 +128,17 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 	};
 	self.checkAbleisEnough = function () {
 		if ((self.redPacketCount * (self.candyAmount * 1000000 + 40) + 548) > $scope.index.arrMainWalletBalances[0].stable) {
-			self.submitAble = false;
-			self.isEnough = 0;
+			$timeout(function () {
+				self.submitAble = false;
+				self.isEnough = 0;
+			}, 10);
 			$timeout(function () {
 				self.submitAble = true;
 			}, 2000);
 		} else {
-			self.isEnough = 1;
+			$timeout(function () {
+				self.isEnough = 1;
+			}, 10);
 		}
 	};
 
