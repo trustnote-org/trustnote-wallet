@@ -998,6 +998,7 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 // 更改代码
 			storageService.gethaschoosen(function (err, val) {
 				self.haschoosen = val;
+				go.haschoosen = val;
 			});
 			if(fc.observed)
 				device.uPMyColdDeviceAddress(fc.credentials.walletId);

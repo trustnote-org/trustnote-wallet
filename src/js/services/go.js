@@ -6,6 +6,7 @@ angular.module('copayApp.services').factory('go', function($window, $rootScope, 
 	var root = {};
 
 	root.toPay = 0;
+	root.haschoosen = 0;
 
 	var hideSidebars = function() {
 		if (typeof document === 'undefined')
@@ -149,7 +150,9 @@ angular.module('copayApp.services').factory('go', function($window, $rootScope, 
 
 			ifOk: function(objRequest){
 				// console.log("request: "+JSON.stringify(objRequest));
-
+				if(root.haschoosen != 2) {
+					return;
+				}
 				if (objRequest.type === 'address'){
 					root.send(function () {
 						$rootScope.$emit('paymentRequest', objRequest.address, objRequest.amount, objRequest.asset);
