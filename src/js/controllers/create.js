@@ -254,7 +254,8 @@ angular.module('copayApp.controllers').controller('createController', function (
 							network: 'livenet',
 							cosigners: []
 						};
-						var coldDeviceAddr = obj_from_coldWallet.addr;
+						// var coldDeviceAddr = obj_from_coldWallet.addr;
+						var coldDeviceAddr = profileService.profile.my_device_address;
 						$timeout(function () {
 							profileService.createColdWallet(opts, coldDeviceAddr, function (err, walletId) {
 								if (err) {
