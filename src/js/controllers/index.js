@@ -1320,7 +1320,7 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 							assocBalancesTemp[thirdAsset[len]]["issuserName"] = "TTT user";
 							assocBalancesTemp[thirdAsset[len]]["symbol"] = thirdAsset[len];
 							self.setBalance(assocBalancesTemp, assocSharedBalances);
-							self.updatingTxHistory[walletId] = false;
+							self.updatingTxHistory[self.walletId] = false;
 							if (len < thirdAsset.length - 1)
 								getAsset(len + 1);
 						}
@@ -1333,8 +1333,7 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 					self.setBalance(assocBalancesTemp, assocSharedBalances);
 					self.setPreBalanceStatus = true;
 					var fc = profileService.focusedClient;
-					var walletId = fc.credentials.walletId;
-					self.updatingTxHistory[walletId] = false;
+					self.updatingTxHistory[self.walletId] = false;
 					if (len < thirdAsset.length - 1)
 						getAsset(len + 1);
 				});
