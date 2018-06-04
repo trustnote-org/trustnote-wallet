@@ -964,6 +964,8 @@ angular.module('copayApp.controllers').controller('walletHomeController', functi
 							else if(err == "close") {
 								err = "suspend transaction.";
 							}
+							else if(err.match(/notes to pay fees/))
+								err = gettextCatalog.getString('No notes to pay fees') ;
 							// 如果是 观察钱包
 							if(self.observed == 1){
 								$scope.index.showTitle = 1;

@@ -1930,6 +1930,9 @@ msgstr "没有足够的可用资金"
 msgid "not enough spendable funds "
 msgstr "中没有足够的可用资金"
 
+msgid "No notes to pay fees"
+msgstr "需要有足够的notes"
+
 msgid ". It needs atleast "
 msgstr "。这需要至少"
 
