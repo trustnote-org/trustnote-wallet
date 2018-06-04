@@ -699,6 +699,7 @@ angular.module('copayApp.controllers').controller('walletHomeController', functi
 		if(self.observed == 1){
 			$scope.index.showTitle = 0;
 			self.showTitle = 1;
+			$scope.index.assetIndex = 0;
 		}
 
 
