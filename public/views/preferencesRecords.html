@@ -141,7 +141,7 @@
 	<div class="topbar-container" ng-include="'views/includes/topbar.html'"  ng-init="titleSection='Records'; goBackToState = true"></div>
 	<!--整体列表-->
 	<div class="content preferences" ng-controller="preferencesController as preferences" ng-init="preferences.init()">
-		<p class="p_list" translate>Recent transaction records</p>
+		<p class="p_list" translate>T Code Log</p>
 		<div class="ulWrap">
 			<p translate ng-if="airRecords.recordsList.length == 0">Records of sending T code are not available</p>
 			<ul class="no-bullet m0">

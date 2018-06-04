@@ -2084,7 +2084,7 @@ msgid "Maximum T Code number 20"
 msgstr "最大T口令个数20个"
 
 msgid "T Code Log"
-msgstr "最近记录"
+msgstr "发送记录"
 
 msgid "Records of sending T code are not available"
 msgstr "暂无发送T口令记录"
@@ -2163,9 +2163,6 @@ msgstr "发送或兑换T口令是一次转账操作，所以会产生一点费�
 
 msgid "View your T code claims from the first page of your default wallet"
 msgstr "请在默认钱包的首页查看T口令领取结果"
-
-msgid "Recent transaction records"
-msgstr "最近记录"
 
 msgid "Already generated"
 msgstr "已经生成"
