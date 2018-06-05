@@ -27,6 +27,7 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 	self.updatingTxHistory = {};
 	self.bSwipeSuspended = false;
 	self.arrBalances = [];
+	self.arrAssetStore = [];
 	self.assetIndex = 0;
 	self.assetIndexxx = 0;
 	self.$state = $state;
@@ -1271,8 +1272,14 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 		}
 		else {
 			for(var i = 0; i < thirdAsset.length; i++) {
-				assocBalancesTemp[thirdAsset[i]]["issuserName"] = "TTT user";
-				assocBalancesTemp[thirdAsset[i]]["symbol"] = thirdAsset[i];
+				if(self.arrAssetStore[thirdAsset[i]]) {
+					assocBalancesTemp[thirdAsset[i]]["issuserName"] = self.arrAssetStore[thirdAsset[i]]["issuserName"];
+					assocBalancesTemp[thirdAsset[i]]["symbol"] = self.arrAssetStore[thirdAsset[i]]["symbol"];
+				}
+				else {
+					assocBalancesTemp[thirdAsset[i]]["issuserName"] = "TTT user";
+					assocBalancesTemp[thirdAsset[i]]["symbol"] = thirdAsset[i];
+				}
 				self.setBalance(assocBalancesTemp, assocSharedBalances);
 			}
 
@@ -1310,6 +1317,7 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 								assetStr = assetStr.slice(0, -1);
 								assetStr += '}';
 								storageService.setAsset(assetStr, function (err) {
+									self.arrAssetStore = lodash.clone(assocBalancesTemp);
 									self.setBalance(assocBalancesTemp, assocSharedBalances);
 									self.setPreBalanceStatus = false;
 								});
