@@ -247,7 +247,7 @@
 					</div>
 
             		<ul rn-carousel rn-carousel-transition="hexagon" rn-carousel-index="index.assetIndex" rn-carousel-controls>
-                		<li ng-click='index.onClick()' ng-show="!index.updateError && index.walletScanStatus != 'error'" ng-repeat="balance in index.arrBalances track by $index"">
+                		<li ng-click='index.onClick()' ng-show="!index.updateError && index.walletScanStatus != 'error'" ng-repeat="balance in index.arrBalances track by $index">
                       		<div ng-click='index.updateHistoryFromNetwork()'>
 
 								<!--余额显示-->
