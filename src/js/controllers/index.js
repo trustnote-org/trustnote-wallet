@@ -1321,17 +1321,17 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 									self.setBalance(assocBalancesTemp, assocSharedBalances);
 									self.setPreBalanceStatus = false;
 								});
-								if (len < thirdAsset.length - 1)
-								getAsset(len + 1);
 							};
 						}
 						else {
 							assocBalancesTemp[thirdAsset[len]]["issuserName"] = "TTT user";
 							assocBalancesTemp[thirdAsset[len]]["symbol"] = thirdAsset[len];
-							self.setBalance(assocBalancesTemp, assocSharedBalances);
-							self.updatingTxHistory[self.walletId] = false;
 							if (len < thirdAsset.length - 1)
 								getAsset(len + 1);
+							else {
+								self.setBalance(assocBalancesTemp, assocSharedBalances);
+								self.updatingTxHistory[self.walletId] = false;
+							}
 						}
 					});
 				});
