@@ -1473,7 +1473,7 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 		self.setOngoingProcess('generatingCSV', true);
 
 		$timeout(function () {
-			fc.getTxHistory(self.arrBalances[self.assetIndex].asset, function (txs) {
+			fc.getTxHistory(self.arrBalances[self.assetIndex].asset, self.shared_address, function (txs) {
 				self.setOngoingProcess('generatingCSV', false);
 				$log.debug('Wallet Transaction History:', txs);
 
