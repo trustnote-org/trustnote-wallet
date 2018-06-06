@@ -526,6 +526,29 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 				self.showCopied = 0;
 			}, 1500)
 		}
+	};
+
+	self.copySingle = function (code) {
+		self.singleTcode = code.code;
+		if (isCordova) {
+			window.cordova.plugins.clipboard.copy(self.singleTcode);
+			$timeout(function () {
+				self.showCopied = 1;
+				$scope.$apply()
+			}, 10);
+			$timeout(function () {
+				self.showCopied = 0;
+			}, 1500)
+		} else if (nodeWebkit.isDefined()) {
+			nodeWebkit.writeToClipboard(self.singleTcode);
+			$timeout(function () {
+				self.showCopied = 1;
+				$scope.$apply()
+			}, 10);
+			$timeout(function () {
+				self.showCopied = 0;
+			}, 1500)
+		}
 	}
 
 });

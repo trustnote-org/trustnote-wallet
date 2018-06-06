@@ -2029,7 +2029,7 @@ msgstr "导入签名"
 msgid "Update"
 msgstr "前往下载"
 
-msgid "Upgrade prompt"
+msgid "Upgrade Prompt"
 msgstr "升级提示"
 
 msgid "The wallet already exists"
