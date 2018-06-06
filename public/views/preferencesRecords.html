@@ -125,7 +125,7 @@
 				<li class="noStyleLi enable_text_select" ng-repeat="tcode in airRecords.detileList">
 					<div class="tcodeD enable_text_select" translate>
 						<span class="span3 enable_text_select">
-							<span class="enable_text_select">{{tcode.code}}</span>
+							<span class="enable_text_select" ng-click="airRecords.copySingle(tcode)">{{tcode.code}}</span>
 						</span>
 						<span class="span4">{{tcode.amount/1000000}}MN</span>
 					</div>
