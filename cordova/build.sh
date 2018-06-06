@@ -60,7 +60,7 @@ echo "Project directory is $PROJECT"
 if [ ! -d $PROJECT ]; then
 	cd $BUILDDIR
 	echo "${OpenColor}${Green}* Creating project... ${CloseColor}"
-	cordova create ../../trustnotebuilds/project-$1 org.trustnote.smartwallet TrustNote
+	cordova create ../../trustnotebuilds/project-$1 org.trustnote.testwallet TrustNote-test
 	checkOK
 
 	cd $PROJECT

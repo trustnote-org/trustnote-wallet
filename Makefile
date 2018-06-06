@@ -28,12 +28,12 @@ ios-debug:
 ios:
 	cordova/build.sh IOS --dbgjs
 	cd ../trustnotebuilds/project-IOS && cordova build ios
-	open ../trustnotebuilds/project-IOS/platforms/ios/TrustNote.xcodeproj
+	open ../trustnotebuilds/project-IOS/platforms/ios/TrustNote-test.xcodeproj
 	
 android:
 	cordova/build.sh ANDROID
 	cd ../trustnotebuilds/project-ANDROID && cordova build android 2>&1 >/dev/null
-	mv ../trustnotebuilds/project-ANDROID/platforms/android/app/build/outputs/apk/debug/app-debug.apk ../trustnotebuilds/trustnote.apk
+	mv ../trustnotebuilds/project-ANDROID/platforms/android/app/build/outputs/apk/debug/app-debug.apk ../trustnotebuilds/trustnote-test.apk
 
 	#mv ../trustnotebuilds/project-ANDROID/platforms/android/build/outputs/apk/android-debug.apk ../trustnotebuilds/trustnote.apk
 

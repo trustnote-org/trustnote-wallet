@@ -1349,7 +1349,7 @@ angular.module('copayApp.controllers').controller('walletHomeController', functi
 				var testnet = home.isTestnet ? 'testnet' : '';
 				// var url = 'https://'+testnet+'explorer.trustnote.org/#'+btx.unit;
 				// var url = 'http://'+testnet+'211.159.160.220:88/#'+btx.unit;
-				var url = 'https://' + testnet + 'explorer.trustnote.org/#' + btx.unit;
+				var url = 'https://' + testnet + 'testexplorer.trustnote.org/#' + btx.unit;
 				if (typeof nw !== 'undefined')
 					nw.Shell.openExternal(url);
 				else if (isCordova)
