@@ -169,7 +169,7 @@ angular.module('copayApp.services').factory('profileService', function profileSe
                         unlockWalletAndInitDevice();
                         device.setDeviceAddress(root.profile.my_device_address);
                         device.setDeviceName(config.deviceName);
-                        device.setDeviceHub(config.hub);
+                        device.setDeviceHub(config.stableHub);
                     }
                     else if (root.profile.xPrivKey)
                         root.focusedClient.initDeviceProperties(profile.xPrivKey, root.profile.my_device_address, config.hub, config.deviceName);

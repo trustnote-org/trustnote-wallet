@@ -640,8 +640,10 @@ API.prototype.initDeviceProperties = function (xPrivKey, device_address, hub, de
 	if (device_address)
 		device.setDeviceAddress(device_address);
 	device.setDeviceName(deviceName);
-	device.setDeviceHub(hub);
-	lightWallet.setLightVendorHost(hub);
+	setTimeout(function(){
+		device.setDeviceHub(hub);
+		lightWallet.setLightVendorHost(hub);
+	}, 500)
 	//device.setDevicePrivateKey(Bitcore.HDPrivateKey.fromString(xPrivKey).derive("m/1'").privateKey.toBuffer());
 
 	// since this is executed at app launch, give in to allow other startup tasks to complete
