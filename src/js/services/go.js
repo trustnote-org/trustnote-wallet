@@ -2,11 +2,19 @@
 
 var eventBus = require('trustnote-common/event_bus.js');
 
-angular.module('copayApp.services').factory('go', function($window, $rootScope,  $location, $state, profileService, fileSystemService, nodeWebkit, notification, gettextCatalog, authService, $deepStateRedirect, $stickyState) {
+angular.module('copayApp.services').factory('go', function($window, $rootScope,  $location, $state, profileService, fileSystemService, nodeWebkit, notification, gettextCatalog, authService, $deepStateRedirect, $stickyState, $timeout) {
 	var root = {};
-
 	root.toPay = 0;
 	root.haschoosen = 0;
+	root.showCodeDetil = 0;
+	root.isToRecordsDir = 0;
+
+	// 生成 T-code 后  自动跳转到 T-code详情页面
+	root.toShowTcode = function () {
+		$state.go('preferences.preferencesTcode.preferencesRecords');
+		root.showCodeDetil = 1;
+		root.isToRecordsDir = 1;
+	};
 
 	var hideSidebars = function() {
 		if (typeof document === 'undefined')
