@@ -43,6 +43,12 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 	self.submitText = gettextCatalog.getString('Generate');
 	self.language = 'zh_CN';
 	self.isEnough = 1;
+	self.showCodeDetil = go.showCodeDetil;
+	self.isToRecordsDir = go.isToRecordsDir;
+	self.letisToRecordsDir = function () {
+		self.isToRecordsDir = go.isToRecordsDir = 0;
+		self.showCodeDetil = go.showCodeDetil = 0;
+	};
 
 	if (uxLanguage.getCurrentLanguage() == 'en') {
 		self.language = 'en';
@@ -68,7 +74,7 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 			self.amountWarring = true;
 			self.amountWarringMsg = gettextCatalog.getString('Invalid amount');
 			return false;
-		} else if ((self.candyAmount * 100) % 1 != 0) {
+		} else if ((self.candyAmount * 1000) % 10 != 0) {
 			self.amountWarring = true;
 			self.amountWarringMsg = gettextCatalog.getString('Invalid amount');
 			return false;
@@ -220,7 +226,7 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 					xPrivKey = self.mnemonic.toHDPrivateKey(self.candyTokenArr[i]);
 					wallet_xPubKey = self.walletPubKey(xPrivKey, 0);
 					candyAddress = self.walletAddress(wallet_xPubKey, 0, 0);
-					console.log(candyAddress);
+					//console.log(candyAddress);
 					self.candyOutputArr.push({
 						"address": candyAddress,
 						"amount": amount
@@ -361,15 +367,22 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 							time: CurentTime(),
 							seeds: self.candyTokenArr
 						});
-
 						var arrValues = [];
+						profileService.temArrValues = [];
 						var walletId = profileService.focusedClient.credentials.walletId;
 						var creation_date = CurentTime();
 						for (var i = 0; i < self.candyTokenArr.length; i++) {
+
+							var tobj = {
+								'code':self.candyTokenArr[i],
+								'amount':amount
+							};
+							profileService.temArrValues.push(tobj);
+
 							arrValues.push("('" + walletId + "','" + self.candyTokenArr[0] + "','" + self.candyTokenArr[i] + "'," + amount + "," + 0 + ",'" + creation_date + "')");
 						}
 						var strValues = arrValues.join(",");
-						//console.log(strValues);
+
 
 						db.query("INSERT INTO tcode (wallet,num,code,amount,is_spent,creation_date) values" + strValues, function () {
 							$timeout(function () {
@@ -379,15 +392,17 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 								self.hasClicked = 0;
 								self.geneding = 0;
 							}, 10);
+
+							go.toShowTcode();
+							self.getTemArr();
+
 							$timeout(function () {
 								self.gened = 0;
 							}, 3000);
 
-
 							$rootScope.$emit("NewOutgoingTx");
+
 						});
-
-
 					}
 
 				});
@@ -488,6 +503,10 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 	};
 	self.getHistoryList();
 
+	self.getTemArr = function () {
+		return profileService.temArrValues;
+	};
+
 	// 点击进入相应 T 口令的详细信息
 	self.clicked = function (num) {
 		var txId = self.recordsList[num].num;
@@ -500,32 +519,87 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 	};
 	// 点击复制 T 口令
 	self.copyall = function () {
-		self.temStr = '';
-		for (var i = 0; i < self.detileList.length; i++) {
-			if(self.detileList[i]){
-				self.temStr = self.temStr + '\n' + self.detileList[i].code;
+		if(self.isToRecordsDir == 1){
+			self.temStr = '';
+			for (var i = 0; i < profileService.temArrValues.length; i++) {
+				if(profileService.temArrValues[i]){
+					self.temStr = self.temStr + '\n' + profileService.temArrValues[i].code;
+				}
+			}
+			self.copyedToBoard = gettextCatalog.getString("Enter T code to redeem your asset at 'TrustNote Wallet/Wallet/Wallet-setting/Redeem T Code'") + self.temStr;
+			if (isCordova) {
+				window.cordova.plugins.clipboard.copy(self.copyedToBoard);
+				$timeout(function () {
+					self.showCopied = 1;
+					$scope.$apply()
+				}, 10);
+				$timeout(function () {
+					self.showCopied = 0;
+				}, 1500)
+			} else if (nodeWebkit.isDefined()) {
+				nodeWebkit.writeToClipboard(self.copyedToBoard);
+				$timeout(function () {
+					self.showCopied = 1;
+					$scope.$apply()
+				}, 10);
+				$timeout(function () {
+					self.showCopied = 0;
+				}, 1500)
+			}
+		}else{
+			self.temStr = '';
+			for (var i = 0; i < self.detileList.length; i++) {
+				if(self.detileList[i]){
+					self.temStr = self.temStr + '\n' + self.detileList[i].code;
+				}
+			}
+			self.copyedToBoard = gettextCatalog.getString("Enter T code to redeem your asset at 'TrustNote Wallet/Wallet/Wallet-setting/Redeem T Code'") + self.temStr;
+			if (isCordova) {
+				window.cordova.plugins.clipboard.copy(self.copyedToBoard);
+				$timeout(function () {
+					self.showCopied = 1;
+					$scope.$apply()
+				}, 10);
+				$timeout(function () {
+					self.showCopied = 0;
+				}, 1500)
+			} else if (nodeWebkit.isDefined()) {
+				nodeWebkit.writeToClipboard(self.copyedToBoard);
+				$timeout(function () {
+					self.showCopied = 1;
+					$scope.$apply()
+				}, 10);
+				$timeout(function () {
+					self.showCopied = 0;
+				}, 1500)
 			}
 		}
-		self.copyedToBoard = gettextCatalog.getString("Enter T code to redeem your asset at 'TrustNote Wallet/Wallet/Wallet-setting/Redeem T Code'") + self.temStr;
-		if (isCordova) {
-			window.cordova.plugins.clipboard.copy(self.copyedToBoard);
-			$timeout(function () {
-				self.showCopied = 1;
-				$scope.$apply()
-			}, 10);
-			$timeout(function () {
-				self.showCopied = 0;
-			}, 1500)
-		} else if (nodeWebkit.isDefined()) {
-			nodeWebkit.writeToClipboard(self.copyedToBoard);
-			$timeout(function () {
-				self.showCopied = 1;
-				$scope.$apply()
-			}, 10);
-			$timeout(function () {
-				self.showCopied = 0;
-			}, 1500)
-		}
+		// self.temStr = '';
+		// for (var i = 0; i < self.detileList.length; i++) {
+		// 	if(self.detileList[i]){
+		// 		self.temStr = self.temStr + '\n' + self.detileList[i].code;
+		// 	}
+		// }
+		// self.copyedToBoard = gettextCatalog.getString("Enter T code to redeem your asset at 'TrustNote Wallet/Wallet/Wallet-setting/Redeem T Code'") + self.temStr;
+		// if (isCordova) {
+		// 	window.cordova.plugins.clipboard.copy(self.copyedToBoard);
+		// 	$timeout(function () {
+		// 		self.showCopied = 1;
+		// 		$scope.$apply()
+		// 	}, 10);
+		// 	$timeout(function () {
+		// 		self.showCopied = 0;
+		// 	}, 1500)
+		// } else if (nodeWebkit.isDefined()) {
+		// 	nodeWebkit.writeToClipboard(self.copyedToBoard);
+		// 	$timeout(function () {
+		// 		self.showCopied = 1;
+		// 		$scope.$apply()
+		// 	}, 10);
+		// 	$timeout(function () {
+		// 		self.showCopied = 0;
+		// 	}, 1500)
+		// }
 	};
 
 	self.copySingle = function (code) {
