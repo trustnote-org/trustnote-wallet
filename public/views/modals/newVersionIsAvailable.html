@@ -48,9 +48,10 @@
 		border-left:1px solid #d8d8d8;
 		color: #0095ff;
 	}
-	h1.title{
+	p.titleupdate{
 		font-size:18px;
-		color: #333 !important;
+		color: #333;
+		text-align: center;
 	}
 
 
@@ -59,7 +60,7 @@
 <div class="newVwrap"></div>
 
 <div class="newV">
-	<h1 class="text-center title" translate>Upgrade Prompt</h1>
+	<p class="titleupdate" translate>Upgrade Prompt</p>
 	<ul class="newUl">
 		<li class="newLi" ng-repeat="item in index.textToUpdate()">{{$index + 1}}. {{item}}</li>
 	</ul>
