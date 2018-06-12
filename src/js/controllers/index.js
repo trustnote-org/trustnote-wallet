@@ -1292,7 +1292,7 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 				// self.setPreBalanceStatus = true;
 
 				var options = {
-					hostname: 'test.itoken.top',
+					hostname: 'beta.itoken.top',
 					port: 443,
 					path: '/token/query-token-detal.htm?assetId=' + encodeURIComponent(thirdAsset[len]),
 					method: 'GET',
