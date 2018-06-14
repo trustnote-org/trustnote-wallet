@@ -2,7 +2,7 @@
 <widget id="org.trustnote.smartwallet"
 		version="1.1.7.1"
 		android-versionCode="10000"
-		ios-CFBundleVersion="1.1.7.1">
+		ios-CFBundleVersion="1.1.7.2">
 	<name>TrustNote</name>
 	<description>
 		TrustNote wallet.
