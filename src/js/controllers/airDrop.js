@@ -20,6 +20,7 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 
 	self.candyTokenArr = [];
 	self.candyOutputArr = [];
+	self.candyOutputArr1 = [];
 	self.candyHistoryList = [];
 	self.candyAmount = '';
 	self.redPacketCount = '';
@@ -70,20 +71,36 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 			self.amountWarring = true;
 			self.amountWarringMsg = gettextCatalog.getString('Invalid amount');
 			return false;
-		} else if (self.candyAmount < 0.01) {
-			self.amountWarring = true;
-			self.amountWarringMsg = gettextCatalog.getString('Invalid amount');
-			return false;
-		} else if ((self.candyAmount * 1000) % 10 != 0) {
-			self.amountWarring = true;
-			self.amountWarringMsg = gettextCatalog.getString('Invalid amount');
-			return false;
-		} else if (self.candyAmount > 200) {
-			self.amountWarring = true;
-			self.amountWarringMsg = gettextCatalog.getString('Single T Code should less than 200');
-			return false;
-		} else {
-			self.amountWarring = false;
+		}
+		if ($scope.index.arrBalances[indexScope.assetIndex].asset !== "base") {
+			if (self.candyAmount % 1 !== 0) {
+				self.amountWarring = true;
+				self.amountWarringMsg = gettextCatalog.getString('Invalid amount');
+				return false;
+			}
+			if (self.candyAmount > 200) {
+				self.amountWarring = true;
+				self.amountWarringMsg = gettextCatalog.getString('Single T Code should less than 200');
+				return false;
+			} else {
+				self.amountWarring = false;
+			}
+		}else{
+			if (self.candyAmount < 0.01) {
+				self.amountWarring = true;
+				self.amountWarringMsg = gettextCatalog.getString('Invalid amount');
+				return false;
+			} else if ((self.candyAmount * 1000) % 10 != 0) {
+				self.amountWarring = true;
+				self.amountWarringMsg = gettextCatalog.getString('Invalid amount');
+				return false;
+			} else if (self.candyAmount > 200) {
+				self.amountWarring = true;
+				self.amountWarringMsg = gettextCatalog.getString('Single T Code should less than 200');
+				return false;
+			} else {
+				self.amountWarring = false;
+			}
 		}
 
 		self.checkAbleisEnough();
@@ -103,6 +120,10 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 				self.countWarring = true;
 				self.countWarringMsg = gettextCatalog.getString('Maximum T Code number 20');
 				return false;
+			} else if( self.redPacketCount%1 !== 0){
+				self.countWarring = true;
+				self.countWarringMsg = gettextCatalog.getString('Invalid count');
+				return false;
 			} else {
 				self.countWarring = false;
 			}
@@ -119,6 +140,10 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 				self.countWarring = true;
 				self.countWarringMsg = gettextCatalog.getString('Maximum T Code number 100');
 				return false;
+			} else if( self.redPacketCount%1 !== 0){
+				self.countWarring = true;
+				self.countWarringMsg = gettextCatalog.getString('Invalid count');
+				return false;
 			} else {
 				self.countWarring = false;
 			}
@@ -132,19 +157,37 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 	self.isAbleToClick = function () {
 		return self.redPacketCount && self.candyAmount && (self.hasClicked == 0) && !self.countWarring && !self.amountWarring && self.isEnough == 1;
 	};
+
+	//$scope.index.arrMainWalletBalances[0].stable --> $scope.index.arrMainWalletBalances[indexScope.assetIndex].stable
 	self.checkAbleisEnough = function () {
-		if ((self.redPacketCount * (self.candyAmount * 1000000 + 40) + 548) > $scope.index.arrMainWalletBalances[0].stable) {
-			$timeout(function () {
-				self.submitAble = false;
-				self.isEnough = 0;
-			}, 10);
-			$timeout(function () {
-				self.submitAble = true;
-			}, 2000);
-		} else {
-			$timeout(function () {
-				self.isEnough = 1;
-			}, 10);
+		if($scope.index.arrBalances[indexScope.assetIndex].asset === "base"){
+			if ((self.redPacketCount * (self.candyAmount * 1000000 + 40) + 548) > $scope.index.arrMainWalletBalances[indexScope.assetIndex].stable) {
+				$timeout(function () {
+					self.submitAble = false;
+					self.isEnough = 0;
+				}, 10);
+				$timeout(function () {
+					self.submitAble = true;
+				}, 2000);
+			} else {
+				$timeout(function () {
+					self.isEnough = 1;
+				}, 10);
+			}
+		}else{
+			if ( (self.redPacketCount * self.candyAmount) > $scope.index.arrMainWalletBalances[indexScope.assetIndex].stable){
+				$timeout(function () {
+					self.submitAble = false;
+					self.isEnough = 0;
+				}, 10);
+				$timeout(function () {
+					self.submitAble = true;
+				}, 2000);
+			}else{
+				$timeout(function () {
+					self.isEnough = 1;
+				}, 10);
+			}
 		}
 	};
 
@@ -175,12 +218,14 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 			$scope.$apply()
 		}, 10);
 		self.candyOutputArr = [];
+		self.candyOutputArr1 = [];
 		self.showSeedFlag = 'new';
 		var xPrivKey = '';
 		var wallet_xPubKey = '';
 		var candyAddress = '';
 		var form = $scope.sendCandyForm;
 		var amount = form.candyAmount.$modelValue;  // MN 个数
+		var amount1 = form.candyAmount.$modelValue;
 		var redPacketCount = form.redPacketCount.$modelValue;
 
 		self.getCandyTokens(redPacketCount);
@@ -201,28 +246,46 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 		indexScope.setOngoingProcess(gettext('sending'), true);
 
 		$timeout(function () {
-			var asset = $scope.index.arrBalances[0].asset;
+			//$scope.index.arrMainWalletBalances[0].asset --> $scope.index.arrMainWalletBalances[indexScope.assetIndex].asset
+			var asset = $scope.index.arrBalances[indexScope.assetIndex].asset;
 			var address;
+
 			if (redPacketCount == 1) {
-				// xPrivKey = self.xPrivKey(self.candySeedArr[0]);
 				xPrivKey = self.mnemonic.toHDPrivateKey(self.candyTokenArr[0]);
 				wallet_xPubKey = self.walletPubKey(xPrivKey, 0);
 				address = self.walletAddress(wallet_xPubKey, 0, 0);
 			}
+
 			var assocDeviceAddressesByPaymentAddress = {};
 			var recipient_device_address = assocDeviceAddressesByPaymentAddress[address];
 
 			var merkle_proof = '';
 			if (form.merkle_proof && form.merkle_proof.$modelValue)
 				merkle_proof = form.merkle_proof.$modelValue.trim();
-			if (asset === "base")
+
+			if (asset === "base"){
 				amount *= unitValue;
-			if (asset === constants.BLACKBYTES_ASSET)
-				amount *= bbUnitValue;
-			amount = Math.round(amount);
+				amount = Math.round(amount);
+			}
+			else {
+				amount = 750;
+				if (redPacketCount == 1){
+					xPrivKey = self.mnemonic.toHDPrivateKey(self.candyTokenArr[0]);
+					wallet_xPubKey = self.walletPubKey(xPrivKey, 0);
+					candyAddress = self.walletAddress(wallet_xPubKey, 0, 0);
+					self.candyOutputArr.push({
+						"address": candyAddress,
+						"amount": amount
+					});
+					self.candyOutputArr1.push({
+						"address": candyAddress,
+						"amount": amount1
+					});
+				}
+			}
+
 			if (redPacketCount > 1) {
 				for (var i = 0; i < self.candyTokenArr.length; i++) {
-					// xPrivKey = self.xPrivKey(self.candySeedArr[i]);
 					xPrivKey = self.mnemonic.toHDPrivateKey(self.candyTokenArr[i]);
 					wallet_xPubKey = self.walletPubKey(xPrivKey, 0);
 					candyAddress = self.walletAddress(wallet_xPubKey, 0, 0);
@@ -230,6 +293,11 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 					self.candyOutputArr.push({
 						"address": candyAddress,
 						"amount": amount
+					})
+
+					self.candyOutputArr1.push({
+						"address": candyAddress,
+						"amount": amount1
 					})
 				}
 			}
@@ -241,8 +309,18 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 
 			composeAndSend(address);
 
+
 			// compose and send
 			function composeAndSend(to_address) {
+
+				if ($scope.index.arrBalances[indexScope.assetIndex].asset !== "base"){
+					to_address = null;
+					amount = 0;
+				}
+				if ($scope.index.arrBalances[indexScope.assetIndex].asset === "base"){
+					self.candyOutputArr1 = null;
+				}
+
 				var arrSigningDeviceAddresses = []; // empty list means that all signatures are required (such as 2-of-2)
 
 				if (fc.credentials.m < fc.credentials.n)
@@ -267,9 +345,10 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 					send_all: self.bSendAll,
 					arrSigningDeviceAddresses: arrSigningDeviceAddresses,
 					recipient_device_address: recipient_device_address,
-					candyOutput: self.candyOutputArr
+					candyOutput: self.candyOutputArr,
+					asset_outputs:self.candyOutputArr1
 				};
-				self.sendtoaddress = opts.to_address;
+				//self.sendtoaddress = opts.to_address;
 				//self.sendamount = opts.amount/1000000 + "MN";
 
 				var eventListeners = eventBus.listenerCount('apiTowalletHome');
@@ -574,34 +653,8 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 				}, 1500)
 			}
 		}
-		// self.temStr = '';
-		// for (var i = 0; i < self.detileList.length; i++) {
-		// 	if(self.detileList[i]){
-		// 		self.temStr = self.temStr + '\n' + self.detileList[i].code;
-		// 	}
-		// }
-		// self.copyedToBoard = gettextCatalog.getString("Enter T code to redeem your asset at 'TrustNote Wallet/Wallet/Wallet-setting/Redeem T Code'") + self.temStr;
-		// if (isCordova) {
-		// 	window.cordova.plugins.clipboard.copy(self.copyedToBoard);
-		// 	$timeout(function () {
-		// 		self.showCopied = 1;
-		// 		$scope.$apply()
-		// 	}, 10);
-		// 	$timeout(function () {
-		// 		self.showCopied = 0;
-		// 	}, 1500)
-		// } else if (nodeWebkit.isDefined()) {
-		// 	nodeWebkit.writeToClipboard(self.copyedToBoard);
-		// 	$timeout(function () {
-		// 		self.showCopied = 1;
-		// 		$scope.$apply()
-		// 	}, 10);
-		// 	$timeout(function () {
-		// 		self.showCopied = 0;
-		// 	}, 1500)
-		// }
 	};
-
+	// 点击复制 T 口令 ( 单个口令 )
 	self.copySingle = function (code) {
 		self.singleTcode = code.code;
 		if (isCordova) {
