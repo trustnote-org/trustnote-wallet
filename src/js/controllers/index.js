@@ -1294,7 +1294,7 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 				var options = {
 					hostname: 'beta.itoken.top',
 					port: 443,
-					path: '/token/query-token-detal.htm?assetId=' + encodeURIComponent(thirdAsset[len]),
+					path: '/v1/token/query-token-detal?assetId=' + encodeURIComponent(thirdAsset[len]),
 					method: 'GET',
 					timeout: 6000,
 					headers: {
@@ -1307,10 +1307,10 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 						console.log("data:"+data);
 						if (data.indexOf('symbol') >= 0) {
 							data = JSON.parse(data);
-							assocBalancesTemp[thirdAsset[len]]["issuserName"] = data.entity.issuserName || "TTT user";
-							assocBalancesTemp[thirdAsset[len]]["symbol"] = data.entity.symbol || thirdAsset[len];
-							// newAssocBalances = newAssocBalances.replace(thirdAsset[len], data.entity.assetName);
-							assetStr += '"'+data.entity.symbol+'":"'+thirdAsset[len]+'",';
+							assocBalancesTemp[thirdAsset[len]]["issuserName"] = data.data.issuserName || "TTT user";
+							assocBalancesTemp[thirdAsset[len]]["symbol"] = data.data.symbol || thirdAsset[len];
+							// newAssocBalances = newAssocBalances.replace(thirdAsset[len], data.data.assetName);
+							assetStr += '"'+data.data.symbol+'":"'+thirdAsset[len]+'",';
 							if (len < thirdAsset.length - 1)
 								getAsset(len + 1);
 							else {
