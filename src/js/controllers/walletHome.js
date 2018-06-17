@@ -1508,6 +1508,7 @@ angular.module('copayApp.controllers').controller('walletHomeController', functi
 
 	var db = require("trustnote-common/db.js");
 	var async = require('async');
+
 	db.query("SELECT device_address FROM extended_pubkeys", function (rows) {
 		var my_device_address = profileService.profile.my_device_address;
 		if(my_device_address) {
@@ -1523,6 +1524,50 @@ angular.module('copayApp.controllers').controller('walletHomeController', functi
 				}
 			}
 		}
-		db.query("CREATE TABLE IF NOT EXISTS tcode (wallet CHAR(44) NOT NULL,num CHAR(16) NOT NULL,code CHAR(16) NOT NUll,amount BIGINT NOT NULL,is_spent TINYINT NOT NULL DEFAULT 0,creation_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,UNIQUE(wallet, num, code),FOREIGN KEY(wallet) REFERENCES wallets(wallet));", function(rows){});
-	})
+	});
+	setTimeout(function() {
+		storageService.getDatabaseFlag(function (err, val) {
+			if (val != 1) {
+				db.query("select * from sqlite_master where type = 'table' and name = 'tcode';",function (rows) {
+					if(rows.length == 0) {
+						db.query("CREATE TABLE IF NOT EXISTS tcode (\n\
+									wallet CHAR(44) NOT NULL,\n\
+									asset CHAR(44) NOT NULL DEFAULT base,\n\
+									asset_name CHAR(44) NOT NULL DEFAULT MN,\n\
+									num CHAR(16) NOT NULL,\n\
+									code CHAR(16) NOT NULL,\n\
+									address CHAR(32),\n\
+									amount BIGINT NOT NULL,\n\
+									is_spent TINYINT NOT NULL DEFAULT 0,\n\
+									creation_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP\n\
+									);", function (rows) {});
+					}
+					else {
+						var arrQueries = [];
+						db.addQuery(arrQueries, "ALTER TABLE tcode RENAME TO _tcode_old_;");
+						db.addQuery(arrQueries, "CREATE TABLE tcode (\n\
+									wallet CHAR(44) NOT NULL,\n\
+									asset CHAR(44) NOT NULL DEFAULT base,\n\
+									asset_name CHAR(44) NOT NULL DEFAULT MN,\n\
+									num CHAR(16) NOT NULL,\n\
+									code CHAR(16) NOT NULL,\n\
+									address CHAR(32),\n\
+									amount BIGINT NOT NULL,\n\
+									is_spent TINYINT NOT NULL DEFAULT 0,\n\
+									creation_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP\n\
+									);");
+						db.addQuery(arrQueries, 'INSERT INTO "tcode" ("wallet", "num", "code", "amount", "is_spent", "creation_date") SELECT "wallet", "num", "code", "amount", "is_spent", "creation_date" FROM "_tcode_old_";');
+						db.addQuery(arrQueries, "DROP TABLE _tcode_old_;");
+						async.series(arrQueries, function () {
+							storageService.setDatabaseFlag(1, function (err) {
+								if(err)
+									return;
+							})
+						});
+					}
+				});
+			}
+		});
+	},20000);
+
 });
