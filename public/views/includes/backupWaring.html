@@ -676,6 +676,9 @@
 			<!--点击 上一步-->
 			<p class="pbutton" onclick="$('.ngcalculator_area').removeClass('keyboardShow');$('.ngcalculator_area').addClass('keyboardHidden');$('.inptMnemonic').removeClass('active');" ng-if="wordsC.dis()" translate ng-click="wordsC.gono()" style="text-transform: uppercase;"> Last step </p>
 
+			<!--点击 跳过 直接进入主页 -->
+			<!--<p class="pbutton" ng-if="wordsC.dis()" translate ng-click="wordsC.haschoosen(); index.splashClick = false" style="text-transform: uppercase;"> 跳跳跳 </p>-->
+
 			<p class="size-14 text-center" style="width: 90%; margin: 20px auto 10px;color:#ff5665; font-weight: bold" ng-if="!wordsC.dis()" translate>Your mnemonic words are correct. To make your wallet safe, we highly recommend you delete mnemonic words from app.</p>
 
 			<!--点击删除钱包-->

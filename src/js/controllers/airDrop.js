@@ -223,6 +223,7 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 		var xPrivKey = '';
 		var wallet_xPubKey = '';
 		var candyAddress = '';
+		//var arrCandyAddress = [];
 		var form = $scope.sendCandyForm;
 		var amount = form.candyAmount.$modelValue;  // MN 个数
 		var amount1 = form.candyAmount.$modelValue;
@@ -248,6 +249,7 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 		$timeout(function () {
 			//$scope.index.arrMainWalletBalances[0].asset --> $scope.index.arrMainWalletBalances[indexScope.assetIndex].asset
 			var asset = $scope.index.arrBalances[indexScope.assetIndex].asset;
+
 			var address;
 
 			if (redPacketCount == 1) {
@@ -264,11 +266,13 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 				merkle_proof = form.merkle_proof.$modelValue.trim();
 
 			if (asset === "base"){
+				var asset_name = "MN";
 				amount *= unitValue;
 				amount = Math.round(amount);
 			}
 			else {
 				amount = 750;
+				var asset_name =  $scope.index.arrBalances[indexScope.assetIndex].symbol;
 				if (redPacketCount == 1){
 					xPrivKey = self.mnemonic.toHDPrivateKey(self.candyTokenArr[0]);
 					wallet_xPubKey = self.walletPubKey(xPrivKey, 0);
@@ -307,19 +311,32 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 				return $rootScope.$emit('Local/ShowErrorAlert', "This payment is already under way");
 			self.current_payment_key = current_payment_key;
 
+
+
+
 			composeAndSend(address);
-
-
 			// compose and send
 			function composeAndSend(to_address) {
 
-				if ($scope.index.arrBalances[indexScope.assetIndex].asset !== "base"){
+				var tempAmount = amount;
+				self.tempArrAddress = self.candyOutputArr;
+
+				if (asset !== "base"){
 					to_address = null;
 					amount = 0;
+					tempAmount = amount1;
 				}
-				if ($scope.index.arrBalances[indexScope.assetIndex].asset === "base"){
+				if (asset === "base"){
 					self.candyOutputArr1 = null;
+					tempAmount = tempAmount/1000000;
+					if(redPacketCount == 1){
+						self.tempArrAddress = [{
+							"address": to_address
+						}]
+					}
 				}
+
+
 
 				var arrSigningDeviceAddresses = []; // empty list means that all signatures are required (such as 2-of-2)
 
@@ -450,20 +467,21 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 						profileService.temArrValues = [];
 						var walletId = profileService.focusedClient.credentials.walletId;
 						var creation_date = CurentTime();
-						for (var i = 0; i < self.candyTokenArr.length; i++) {
+						for (var i = 0; i < self.candyTokenArr.length; i++) {  // candyOutputArr1
 
 							var tobj = {
 								'code':self.candyTokenArr[i],
-								'amount':amount
+								'amount':tempAmount,
+								'asset_name':asset_name
 							};
 							profileService.temArrValues.push(tobj);
 
-							arrValues.push("('" + walletId + "','" + self.candyTokenArr[0] + "','" + self.candyTokenArr[i] + "'," + amount + "," + 0 + ",'" + creation_date + "')");
+							arrValues.push("('" + walletId + "','" + asset +"','"+ asset_name +"','"+ self.candyTokenArr[0] + "','" + self.candyTokenArr[i] + "','" + self.tempArrAddress[i].address + "'," + tempAmount  + "," + 0 + ",'" + creation_date + "')");
 						}
 						var strValues = arrValues.join(",");
 
 
-						db.query("INSERT INTO tcode (wallet,num,code,amount,is_spent,creation_date) values" + strValues, function () {
+						db.query("INSERT INTO tcode (wallet,asset,asset_name,num,code,address,amount,is_spent,creation_date) values" + strValues, function () {
 							$timeout(function () {
 								self.gened = 1;
 								self.redPacketCount = '';
@@ -573,7 +591,7 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 	// 历史记录发红包列表 ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### #######
 	self.getHistoryList = function () {
 		var fcWalletId = profileService.focusedClient.credentials.walletId;
-		db.query("SELECT wallet,num,sum(amount) as amount,creation_date from tcode where wallet='" + fcWalletId + "' GROUP BY num ORDER BY creation_date DESC;", function (rows) {
+		db.query("SELECT wallet,asset_name,num,sum(amount) as amount,creation_date from tcode where wallet='" + fcWalletId + "' GROUP BY num ORDER BY creation_date DESC;", function (rows) {
 			self.recordsList = rows;
 			$timeout(function () {
 				$scope.$apply();
@@ -589,7 +607,7 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 	// 点击进入相应 T 口令的详细信息
 	self.clicked = function (num) {
 		var txId = self.recordsList[num].num;
-		db.query("SELECT wallet,num,amount,code,creation_date from tcode where num='" + txId + "' ORDER BY creation_date DESC;", function (rows) {
+		db.query("SELECT wallet,asset_name,num,amount,code,creation_date from tcode where num='" + txId + "' ORDER BY creation_date DESC;", function (rows) {
 			self.detileList = rows;
 			$timeout(function () {
 				$scope.$apply();
