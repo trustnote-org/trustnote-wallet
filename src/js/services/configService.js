@@ -27,7 +27,7 @@ angular.module('copayApp.services').factory('configService', function (storageSe
 
 	// 配置时间戳地址
 	//root.TIMESTAMPER_ADDRESS = isTestnet ? 'OPNUXBRSSQQGHKQNEPD2GLWQYEUY5XLD' : 'I2ADHGP4HL6J37NQAD73J7E5SKFIXJOT';
-	root.TIMESTAMPER_ADDRESS = "Q24ZGPFDUG7OCJJF7LA4PUIKSHQ4D4QG";
+	root.TIMESTAMPER_ADDRESS = "2SATGZDFDXNNJRVZ52O4J6VYTTMO2EZR";
 
 	root.oracles = {
 		"FOPUBEUPBC6YLIQDLKL6EW775BMV7YOH": {
@@ -50,7 +50,7 @@ angular.module('copayApp.services').factory('configService', function (storageSe
 			feednames_filter: ["^[\\w\\d]+_[\\w\\d]+_\\d{4}-\\d{2}-\\d{2}$"],
 			feedvalues_filter: ["^[\\w\\d]+$"]
 		},
-		"I2ADHGP4HL6J37NQAD73J7E5SKFIXJOT": {
+		"2SATGZDFDXNNJRVZ52O4J6VYTTMO2EZR": {
 			name: "Timestamp",
 			feednames_filter: ["^timestamp$"],
 			feedvalues_filter: ["^\\d{13,}$"]
