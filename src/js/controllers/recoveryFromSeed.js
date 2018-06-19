@@ -94,7 +94,14 @@ angular.module('copayApp.controllers').controller('recoveryFromSeed', function (
 				cb(true);
 			else {
 				db.query("SELECT 1 FROM unit_authors WHERE address = ? LIMIT 1", [address], function (unitAuthorsRows) {
-					cb(unitAuthorsRows.length === 1);
+					//cb(unitAuthorsRows.length === 1);  // Victor ShareAddress add third sql
+					if (unitAuthorsRows.length === 1)
+						cb(true);
+					else {
+						db.query("SELECT 1 FROM shared_address_signing_paths WHERE address = ? LIMIT 1", [address], function (sharedAddressRows) {
+							cb(sharedAddressRows.length === 1);
+						});
+					}
 				});
 			}
 		});
@@ -163,9 +170,9 @@ angular.module('copayApp.controllers').controller('recoveryFromSeed', function (
 	function removeAddressesAndWallets(cb) {
 		var arrQueries = [];
 		db.addQuery(arrQueries, "DELETE FROM pending_shared_address_signing_paths");
-		db.addQuery(arrQueries, "DELETE FROM shared_address_signing_paths");
+		//db.addQuery(arrQueries, "DELETE FROM shared_address_signing_paths");
 		db.addQuery(arrQueries, "DELETE FROM pending_shared_addresses");
-		db.addQuery(arrQueries, "DELETE FROM shared_addresses");
+		//db.addQuery(arrQueries, "DELETE FROM shared_addresses");
 		db.addQuery(arrQueries, "DELETE FROM my_addresses");
 		db.addQuery(arrQueries, "DELETE FROM wallet_signing_paths");
 		db.addQuery(arrQueries, "DELETE FROM extended_pubkeys");

@@ -113,10 +113,32 @@ angular.module('copayApp.controllers').controller('airDropReceive', function ($s
 					}
 				}
 
+				// 判断是不是第三方资产的 红包
+				if(response.joints[0].unit.messages.length > 1){
+					if(response.joints[0].unit.messages[1].payload.outputs == undefined){
+						self.errTextList[0] = gettextCatalog.getString('You are too late,');
+						self.errTextList[1] = gettextCatalog.getString('the T code has been claimed by other people');
+						self.Redeeming = 0;
+						self.showMask = 1;
+						$timeout(function() {
+							$scope.$apply()
+						}, 10);
+						return false;
+					}
+					var tempArr1 = response.joints[0].unit.messages[1].payload.outputs;
+					var tempAsset = response.joints[0].unit.messages[1].payload.asset;
+					for (var i = 0; i < tempArr1.length; i++) {
+						if (tempAddress[0] == tempArr1[i].address) {  // tempAddress[0] 就是红包的 地址
+							self.tmpAmount1 = tempArr1[i].amount;
+							break;
+						}
+					}
+					var output_index1 = i;
+
+				}
+
 				var inputUnit = response.joints[0].unit.unit;
 				var tempArr = response.joints[0].unit.messages[0].payload.outputs;
-				//alert(JSON.stringify(tempAddress[0]))
-				//alert(JSON.stringify(tempArr))
 				if (tempArr) {
 					for (var i = 0; i < tempArr.length; i++) {
 						if (tempAddress[0] == tempArr[i].address) {
@@ -174,10 +196,51 @@ angular.module('copayApp.controllers').controller('airDropReceive', function ($s
 							if (addr)
 								self.to_address = addr;
 
+							var msg = [
+								{
+									"app": "payment",
+									"payload_location": "inline",
+									"payload_hash": "-------------------------------------------=",
+									"payload": {
+										"outputs": [
+											{
+												"address": self.to_address,
+												"amount": 0
+											}
+										],
+										"inputs": [
+											{
+												"unit": inputUnit,
+												"message_index": 0,
+												"output_index": output_index
+											}
+										]
+									}
+								}
+							];
+
 							var objUnit = {
 								"version": "1.0",
 								"alt": "1",
-								"messages": [
+								"messages": msg,
+								"authors": [
+									{
+										"address": self.tmpAddr,
+										"authentifiers": {"r": "----------------------------------------------------------------------------------------"},
+										"definition": ["sig", {"pubkey": "--------------------------------------------"}]
+									}
+								],
+								"parent_units": self.parent_units,
+								"last_ball": self.last_ball,
+								"last_ball_unit": self.last_ball_unit,
+								"witness_list_unit": witness_list_unit,
+								"headers_commission": 0,
+								"payload_commission": 0
+							};
+
+
+							if(tempArr1){
+								var msg1 = [
 									{
 										"app": "payment",
 										"payload_location": "inline",
@@ -197,28 +260,60 @@ angular.module('copayApp.controllers').controller('airDropReceive', function ($s
 												}
 											]
 										}
-									}
-								],
-								"authors": [
+									},
+
 									{
-										"address": self.tmpAddr,
-										"authentifiers": {"r": "----------------------------------------------------------------------------------------"},
-										"definition": ["sig", {"pubkey": "--------------------------------------------"}]
+										"app": "payment",
+										"payload_location": "inline",
+										"payload_hash": "-------------------------------------------=",
+										"payload": {
+											"asset": tempAsset,
+											"outputs": [
+												{
+													"address": self.to_address,
+													"amount": 0
+												}
+											],
+											"inputs": [
+												{
+													"unit": inputUnit,
+													"message_index": 1,
+													"output_index": output_index1
+												}
+											]
+										}
 									}
-								],
-								"parent_units": self.parent_units,
-								"last_ball": self.last_ball,
-								"last_ball_unit": self.last_ball_unit,
-								"witness_list_unit": witness_list_unit,
-								"headers_commission": 0,
-								"payload_commission": 0
-							};
-							var objectLength = require('trustnote-common/object_length');
-							var numHeadersCommission = objectLength.getHeadersSize(objUnit); // header佣金
-							objUnit.headers_commission = numHeadersCommission;
-							var numPayloadCommission = objectLength.getTotalPayloadSize(objUnit); // payload佣金
-							objUnit.payload_commission = numPayloadCommission;
-							objUnit.messages[0].payload.outputs[0].amount = self.tmpAmount - numPayloadCommission - numHeadersCommission; // 一共可以发送多少钱
+								];
+
+								objUnit.messages = msg1;
+								var objectLength = require('trustnote-common/object_length');
+								var numHeadersCommission = objectLength.getHeadersSize(objUnit); // header佣金
+								objUnit.headers_commission = numHeadersCommission;
+								var numPayloadCommission = objectLength.getTotalPayloadSize(objUnit); // payload佣金
+								objUnit.payload_commission = numPayloadCommission;
+
+								objUnit.messages[0].payload.outputs[0].amount = self.tmpAmount - numPayloadCommission - numHeadersCommission; // 一共可以发送多少钱
+								objUnit.messages[1].payload.outputs[0].amount = self.tmpAmount1;
+
+								var payload_hash = objectHash.getBase64Hash(objUnit.messages[0].payload);
+								objUnit.messages[0].payload_hash = payload_hash;
+
+								var payload_hash1 = objectHash.getBase64Hash(objUnit.messages[1].payload);
+								objUnit.messages[1].payload_hash = payload_hash1;
+							}
+							else{
+								var objectLength = require('trustnote-common/object_length');
+								var numHeadersCommission = objectLength.getHeadersSize(objUnit); // header佣金
+								objUnit.headers_commission = numHeadersCommission;
+								var numPayloadCommission = objectLength.getTotalPayloadSize(objUnit); // payload佣金
+								objUnit.payload_commission = numPayloadCommission;
+								objUnit.messages[0].payload.outputs[0].amount = self.tmpAmount - numPayloadCommission - numHeadersCommission; // 一共可以发送多少钱
+
+								var payload_hash = objectHash.getBase64Hash(objUnit.messages[0].payload);
+								objUnit.messages[0].payload_hash = payload_hash;
+							}
+
+
 
 							if(objUnit.messages[0].payload.outputs[0].amount <= 0){
 								self.errTextList[0] = gettextCatalog.getString('You are too late,');
@@ -230,9 +325,6 @@ angular.module('copayApp.controllers').controller('airDropReceive', function ($s
 								}, 10);
 								return false;
 							}
-
-							var payload_hash = objectHash.getBase64Hash(objUnit.messages[0].payload);
-							objUnit.messages[0].payload_hash = payload_hash;
 
 							var walletxPubKey = Bitcore.HDPublicKey(xPrivKey.derive("m/44'/0'/0'"));
 							var pubkey = walletxPubKey.derive("m/0/0").publicKey.toBuffer().toString("base64");

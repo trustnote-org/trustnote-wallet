@@ -230,5 +230,12 @@ angular.module('copayApp.services')
 			storage.get('candySendHistory',cb);
 		};
 
+		root.setDatabaseFlag = function (value, cb) {
+			storage.set('databaseFlag', value, cb);
+		};
+		root.getDatabaseFlag = function (cb) {
+			storage.get('databaseFlag',cb);
+		}
+
 		return root;
 	});

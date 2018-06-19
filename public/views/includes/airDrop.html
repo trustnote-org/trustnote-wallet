@@ -116,11 +116,10 @@
 			<span class="size-12 color333" translate>Available Balance</span>:
 		</span>
 			<select
-				disabled="disabled"
 				style="height: 45px; font-size: 14px;background-color: #FFFFFF;"
 				class="m10t"
-				ng-model="index.assetIndexxx"
-				ng-options="index.arrBalances.indexOf(balance) as ( (balance.asset === 'base' || balance.asset == index.BLACKBYTES_ASSET ? balance.stableStr : balance.stable.toLocaleString() + ' of ' + balance.asset) + (balance.pending ? ' (confirmed)' : '') ) for balance in index.arrBalances"
+				ng-model="index.assetIndex"
+				ng-options="index.arrBalances.indexOf(balance) as ( (balance.asset === 'base' || balance.asset == index.BLACKBYTES_ASSET ? balance.stableStr : balance.stable.toLocaleString() + ' of ' + balance.symbol) + (balance.pending ? ' (confirmed)' : '') ) for balance in index.arrBalances"
 			>
 			</select>
 			<!--ng-options="index.arrBalances.indexOf(item.asset == 'base') as item.stableStr for item in index.arrBalances"-->
@@ -147,12 +146,13 @@
 						   ng-change="airD.checkNumMN()"
 					>
 					<span class="placeholder" translate>Amount each</span>
-					<a style="line-height: 45px;height: 45px;padding-right: 12px;" class="postfix" ng-if="index.arrBalances.length > 0 && index.arrBalances[0].asset === 'base'">
+					<a style="line-height: 45px;height: 45px;padding-right: 12px;" class="postfix" ng-if="index.arrBalances.length > 0 && index.arrBalances[index.assetIndex].asset === 'base'">
 						MN
 					</a>
-					<!--<a class="postfix" ng-if="index.arrBalances.length > 0 && index.arrBalances[index.assetIndex].asset !== 'base' && index.arrBalances[index.assetIndex].asset !== index.BLACKBYTES_ASSET">-->
-						<!--of {{index.arrBalances[index.assetIndex].asset.substr(0,4)}}-->
-					<!--</a>-->
+					<a style="line-height: 45px;height: 45px;padding-right: 12px;" class="postfix" ng-if="index.arrBalances.length > 0 && index.arrBalances[index.assetIndex].asset !== 'base' && index.arrBalances[index.assetIndex].asset !== index.BLACKBYTES_ASSET">
+						{{index.arrBalances[index.assetIndex].symbol}}
+					</a>
+
 					<div class="warring" ><span ng-show="airD.amountWarring">{{airD.amountWarringMsg}}</span></div>
 				</div>
 				<div class="divinput">
@@ -171,7 +171,9 @@
 				</div>
 				<p style="text-align: center;position: relative" >
 					<span translate>Total amount</span>
-					<span ng-model="airD.candyTotalCount" style="font-size: 21px">{{(airD.redPacketCount * airD.candyAmount).toFixed(4)}}</span> MN
+					<span ng-model="airD.candyTotalCount" style="font-size: 21px">{{(airD.redPacketCount * airD.candyAmount).toFixed(4)}}</span>
+					<span ng-if="index.arrBalances.length > 0 && index.arrBalances[index.assetIndex].asset !== 'base' ">{{index.arrBalances[index.assetIndex].symbol}}</span>
+					<span ng-if="index.arrBalances.length > 0 && index.arrBalances[index.assetIndex].asset === 'base' "> MN </span>
 					<span class="amount-pop" ng-if="!airD.submitAble" translate>Youe balance is not enough</span>
 				</p>
 			</div>

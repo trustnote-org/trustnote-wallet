@@ -759,7 +759,8 @@ angular.module('copayApp.controllers').controller('walletHomeController', functi
 					var walletDefinedByKeys = require('trustnote-common/wallet_defined_by_keys.js');
 					var my_address;
 
-					walletDefinedByKeys.issueNextAddress(fc.credentials.walletId, 0, function (addressInfo) {  // never reuse addresses as the required output could be already present
+					// walletDefinedByKeys.issueNextAddress(fc.credentials.walletId, 0, function (addressInfo) {  // never reuse addresses as the required output could be already present
+					walletDefinedByKeys.issueOrSelectNextAddress(fc.credentials.walletId, 0, function (addressInfo) {	
 						my_address = addressInfo.address;
 						if (self.binding.type === 'reverse_payment') {
 							var arrSeenCondition = ['seen', {
@@ -844,7 +845,7 @@ angular.module('copayApp.controllers').controller('walletHomeController', functi
 								self.setSendError(err);
 							},
 							ifOk: function (shared_address) {
-								composeAndSend(shared_address);
+								composeAndSend(shared_address, arrDefinition, assocSignersByPath);
 							}
 						});
 					});
@@ -853,7 +854,8 @@ angular.module('copayApp.controllers').controller('walletHomeController', functi
 					composeAndSend(address);
 
 				// compose and send
-				function composeAndSend(to_address) {
+				// function composeAndSend(to_address) {
+				function composeAndSend(to_address, arrDefinition, assocSignersByPath) {
 					var arrSigningDeviceAddresses = []; // empty list means that all signatures are required (such as 2-of-2)
 
 					if (fc.credentials.m < fc.credentials.n)
@@ -879,6 +881,12 @@ angular.module('copayApp.controllers').controller('walletHomeController', functi
 						arrSigningDeviceAddresses: arrSigningDeviceAddresses,
 						recipient_device_address: recipient_device_address
 					};
+
+					if (arrDefinition && assocSignersByPath) {
+						opts.arrDefinition = arrDefinition;
+						opts.assocSignersByPath = assocSignersByPath;
+					}
+
 					self.sendtoaddress = opts.to_address;
 					self.sendamount = opts.amount/1000000 + "MN";
 
@@ -1508,6 +1516,7 @@ angular.module('copayApp.controllers').controller('walletHomeController', functi
 
 	var db = require("trustnote-common/db.js");
 	var async = require('async');
+
 	db.query("SELECT device_address FROM extended_pubkeys", function (rows) {
 		var my_device_address = profileService.profile.my_device_address;
 		if(my_device_address) {
@@ -1523,6 +1532,50 @@ angular.module('copayApp.controllers').controller('walletHomeController', functi
 				}
 			}
 		}
-		db.query("CREATE TABLE IF NOT EXISTS tcode (wallet CHAR(44) NOT NULL,num CHAR(16) NOT NULL,code CHAR(16) NOT NUll,amount BIGINT NOT NULL,is_spent TINYINT NOT NULL DEFAULT 0,creation_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,UNIQUE(wallet, num, code),FOREIGN KEY(wallet) REFERENCES wallets(wallet));", function(rows){});
-	})
+	});
+	setTimeout(function() {
+		storageService.getDatabaseFlag(function (err, val) {
+			if (val != 1) {
+				db.query("select * from sqlite_master where type = 'table' and name = 'tcode';",function (rows) {
+					if(rows.length == 0) {
+						db.query("CREATE TABLE IF NOT EXISTS tcode (\n\
+									wallet CHAR(44) NOT NULL,\n\
+									asset CHAR(44) NOT NULL DEFAULT base,\n\
+									asset_name CHAR(44) NOT NULL DEFAULT MN,\n\
+									num CHAR(16) NOT NULL,\n\
+									code CHAR(16) NOT NULL,\n\
+									address CHAR(32),\n\
+									amount BIGINT NOT NULL,\n\
+									is_spent TINYINT NOT NULL DEFAULT 0,\n\
+									creation_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP\n\
+									);", function (rows) {});
+					}
+					else {
+						var arrQueries = [];
+						db.addQuery(arrQueries, "ALTER TABLE tcode RENAME TO _tcode_old_;");
+						db.addQuery(arrQueries, "CREATE TABLE tcode (\n\
+									wallet CHAR(44) NOT NULL,\n\
+									asset CHAR(44) NOT NULL DEFAULT base,\n\
+									asset_name CHAR(44) NOT NULL DEFAULT MN,\n\
+									num CHAR(16) NOT NULL,\n\
+									code CHAR(16) NOT NULL,\n\
+									address CHAR(32),\n\
+									amount BIGINT NOT NULL,\n\
+									is_spent TINYINT NOT NULL DEFAULT 0,\n\
+									creation_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP\n\
+									);");
+						db.addQuery(arrQueries, 'INSERT INTO "tcode" ("wallet", "num", "code", "amount", "is_spent", "creation_date") SELECT "wallet", "num", "code", "amount", "is_spent", "creation_date" FROM "_tcode_old_";');
+						db.addQuery(arrQueries, "DROP TABLE _tcode_old_;");
+						async.series(arrQueries, function () {
+							storageService.setDatabaseFlag(1, function (err) {
+								if(err)
+									return;
+							})
+						});
+					}
+				});
+			}
+		});
+	},20000);
+
 });
