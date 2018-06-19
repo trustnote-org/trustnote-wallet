@@ -28,7 +28,14 @@ angular.module('copayApp.controllers').controller('synchronization', function ($
 				cb(true);
 			else {
 				db.query("SELECT 1 FROM unit_authors WHERE address = ? LIMIT 1", [address], function (unitAuthorsRows) {
-					cb(unitAuthorsRows.length === 1);
+					//cb(unitAuthorsRows.length === 1);  // Victor ShareAddress add third sql
+					if (unitAuthorsRows.length === 1)
+						cb(true);
+					else {
+						db.query("SELECT 1 FROM shared_address_signing_paths WHERE address = ? LIMIT 1", [address], function (sharedAddressRows) {
+							cb(sharedAddressRows.length === 1);
+						});
+					}
 				});
 			}
 		});

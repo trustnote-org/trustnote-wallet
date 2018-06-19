@@ -5,10 +5,16 @@ var eventBus = require('trustnote-common/event_bus.js');
 var ValidationUtils = require('trustnote-common/validation_utils.js');
 var objectHash = require('trustnote-common/object_hash.js');
 
-angular.module('copayApp.services').factory('correspondentListService', function($state, $rootScope, $sce, $compile, configService, storageService, profileService, go, lodash, $stickyState, $deepStateRedirect, $timeout, gettext) {
+angular.module('copayApp.services').factory('correspondentListService', function($state, $rootScope, $sce, $compile, configService, storageService, profileService, addressService, go, lodash, $stickyState, $deepStateRedirect, $timeout, gettext) {
 	var root = {};
 	var device = require('trustnote-common/device.js');
 	var wallet = require('trustnote-common/wallet.js');
+	var walletId = profileService.profile.credentials[0].walletId;
+	var lockupAddress;
+	addressService.getAddress(walletId, null, function(err, addr) {
+		if (addr)
+			lockupAddress = addr;
+	});
 
 	var chatStorage = require('trustnote-common/chat_storage.js');
 	$rootScope.newMessagesCount = {};
@@ -128,6 +134,8 @@ angular.module('copayApp.services').factory('correspondentListService', function
 			if (!objPaymentRequest)
 				return str;
 			return '<a ng-click="sendPayment(\''+address+'\', '+objPaymentRequest.amount+', \''+objPaymentRequest.asset+'\', \''+objPaymentRequest.device_address+'\')">'+objPaymentRequest.amountStr+'</a>';
+		}).replace(/\[(.+?)\]\(command:(.+?)\)#/g, function(str, description, command){
+			return '<a ng-click="sendCommand(\''+lockupAddress+escapeQuotes(command)+'\', \''+escapeQuotes(description)+'\')" class="command">'+lockupAddress+description+'</a>';
 		}).replace(/\[(.+?)\]\(command:(.+?)\)/g, function(str, description, command){
 			return '<a ng-click="sendCommand(\''+escapeQuotes(command)+'\', \''+escapeQuotes(description)+'\')" class="command">'+description+'</a>';
 		}).replace(/\[(.+?)\]\(payment:(.+?)\)/g, function(str, description, paymentJsonBase64){

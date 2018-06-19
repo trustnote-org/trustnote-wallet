@@ -759,7 +759,8 @@ angular.module('copayApp.controllers').controller('walletHomeController', functi
 					var walletDefinedByKeys = require('trustnote-common/wallet_defined_by_keys.js');
 					var my_address;
 
-					walletDefinedByKeys.issueNextAddress(fc.credentials.walletId, 0, function (addressInfo) {  // never reuse addresses as the required output could be already present
+					// walletDefinedByKeys.issueNextAddress(fc.credentials.walletId, 0, function (addressInfo) {  // never reuse addresses as the required output could be already present
+					walletDefinedByKeys.issueOrSelectNextAddress(fc.credentials.walletId, 0, function (addressInfo) {	
 						my_address = addressInfo.address;
 						if (self.binding.type === 'reverse_payment') {
 							var arrSeenCondition = ['seen', {
@@ -844,7 +845,7 @@ angular.module('copayApp.controllers').controller('walletHomeController', functi
 								self.setSendError(err);
 							},
 							ifOk: function (shared_address) {
-								composeAndSend(shared_address);
+								composeAndSend(shared_address, arrDefinition, assocSignersByPath);
 							}
 						});
 					});
@@ -853,7 +854,8 @@ angular.module('copayApp.controllers').controller('walletHomeController', functi
 					composeAndSend(address);
 
 				// compose and send
-				function composeAndSend(to_address) {
+				// function composeAndSend(to_address) {
+				function composeAndSend(to_address, arrDefinition, assocSignersByPath) {
 					var arrSigningDeviceAddresses = []; // empty list means that all signatures are required (such as 2-of-2)
 
 					if (fc.credentials.m < fc.credentials.n)
@@ -879,6 +881,12 @@ angular.module('copayApp.controllers').controller('walletHomeController', functi
 						arrSigningDeviceAddresses: arrSigningDeviceAddresses,
 						recipient_device_address: recipient_device_address
 					};
+
+					if (arrDefinition && assocSignersByPath) {
+						opts.arrDefinition = arrDefinition;
+						opts.assocSignersByPath = assocSignersByPath;
+					}
+
 					self.sendtoaddress = opts.to_address;
 					self.sendamount = opts.amount/1000000 + "MN";
 
