@@ -131,7 +131,7 @@
 						<span class="span3 enable_text_select">
 							<span class="enable_text_select colorbule" ng-click="airRecords.copySingle(tcode)">{{tcode.code}}</span>
 						</span>
-						<span class="span4">{{tcode.amount}} {{tcode.asset_name}}</span>
+						<span class="span4">{{tcode.asset == 'base'? tcode.amount/1000000 : tcode.amount}} {{tcode.asset_name}}</span>
 					</div>
 				</li>
 			</ul>
@@ -142,7 +142,7 @@
 						<span class="span3 enable_text_select">
 							<span class="enable_text_select colorbule" ng-click="airRecords.copySingle(temcode)">{{temcode.code}}</span>
 						</span>
-						<span class="span4">{{temcode.amount}} {{temcode.asset_name}}</span>
+						<span class="span4">{{index.assetIndex == 0? temcode.amount/1000000 : temcode.amount}} {{temcode.asset_name}}</span>
 					</div>
 				</li>
 			</ul>
@@ -162,7 +162,7 @@
 			<ul class="no-bullet m0">
 				<li ng-repeat="token in airRecords.recordsList" ng-click="airRecords.showCodeDetil = 1; airRecords.clicked($index)">
 					<i class="icon-arrow-right3 size-14 right text-gray"></i>
-					<div translate>{{token.amount}} {{token.asset_name}} <span class="stime">{{token.creation_date}}</span></div>
+					<div translate>{{token.asset == 'base'? token.amount/1000000 : token.amount}} {{token.asset_name}} <span class="stime">{{token.creation_date}}</span></div>
 				</li>
 			</ul>
 		</div>
