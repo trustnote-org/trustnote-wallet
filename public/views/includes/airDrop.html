@@ -119,7 +119,7 @@
 				style="height: 45px; font-size: 14px;background-color: #FFFFFF;"
 				class="m10t"
 				ng-model="index.assetIndex"
-				ng-options="index.arrBalances.indexOf(balance) as ( (balance.asset === 'base' || balance.asset == index.BLACKBYTES_ASSET ? balance.stableStr : balance.stable.toLocaleString() + ' of ' + balance.asset) + (balance.pending ? ' (confirmed)' : '') ) for balance in index.arrBalances"
+				ng-options="index.arrBalances.indexOf(balance) as ( (balance.asset === 'base' || balance.asset == index.BLACKBYTES_ASSET ? balance.stableStr : balance.stable.toLocaleString() + ' of ' + balance.symbol) + (balance.pending ? ' (confirmed)' : '') ) for balance in index.arrBalances"
 			>
 			</select>
 			<!--ng-options="index.arrBalances.indexOf(item.asset == 'base') as item.stableStr for item in index.arrBalances"-->
