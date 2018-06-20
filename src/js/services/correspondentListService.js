@@ -5,7 +5,7 @@ var eventBus = require('trustnote-common/event_bus.js');
 var ValidationUtils = require('trustnote-common/validation_utils.js');
 var objectHash = require('trustnote-common/object_hash.js');
 
-angular.module('copayApp.services').factory('correspondentListService', function($state, $rootScope, $sce, $compile, configService, storageService, profileService, addressService, go, lodash, $stickyState, $deepStateRedirect, $timeout, gettext) {
+angular.module('copayApp.services').factory('correspondentListService', function($state, $rootScope, $sce, $compile, configService, storageService, profileService, addressService, go, lodash, $stickyState, $deepStateRedirect, $timeout, gettextCatalog, gettext) {
 	var root = {};
 	var device = require('trustnote-common/device.js');
 	var wallet = require('trustnote-common/wallet.js');
@@ -130,7 +130,7 @@ angular.module('copayApp.services').factory('correspondentListService', function
 				return str;
 		//	if (arrMyAddresses.indexOf(address) >= 0)
 		//		return str;
-			var objPaymentRequest = parsePaymentRequestQueryString(query_string);
+			var objPaymentRequest = parsePaymentRequestQueryString(query_string, address);
 			if (!objPaymentRequest)
 				return str;
 			return '<a ng-click="sendPayment(\''+address+'\', '+objPaymentRequest.amount+', \''+objPaymentRequest.asset+'\', \''+objPaymentRequest.device_address+'\')">'+objPaymentRequest.amountStr+'</a>';
@@ -220,7 +220,7 @@ angular.module('copayApp.services').factory('correspondentListService', function
 		return escapeHtmlAndInsertBr(text).replace(payment_request_regexp, function(str, address, query_string){
 			if (!ValidationUtils.isValidAddress(address))
 				return str;
-			var objPaymentRequest = parsePaymentRequestQueryString(query_string);
+			var objPaymentRequest = parsePaymentRequestQueryString(query_string, address);
 			if (!objPaymentRequest)
 				return str;
 			return '<i>'+objPaymentRequest.amountStr+' to '+address+'</i>';
@@ -239,7 +239,7 @@ angular.module('copayApp.services').factory('correspondentListService', function
 		});
 	}
 	
-	function parsePaymentRequestQueryString(query_string){
+	function parsePaymentRequestQueryString(query_string, address){
 		var URI = require('trustnote-common/uri.js');
 		var assocParams = URI.parseQueryString(query_string, '&amp;');
 		var strAmount = assocParams['amount'];
@@ -257,7 +257,7 @@ angular.module('copayApp.services').factory('correspondentListService', function
 		var device_address = assocParams['device_address'] || '';
 		if (device_address && !ValidationUtils.isValidDeviceAddress(device_address))
 			return null;
-		var amountStr = 'Payment request: ' + getAmountText(amount, asset);
+		var amountStr = gettextCatalog.getString('Payment to ')+ address + "  " + getAmountText(amount, asset);
 		return {
 			amount: amount,
 			asset: asset,

@@ -328,7 +328,6 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 				}
 				if (asset === "base"){
 					self.candyOutputArr1 = null;
-					tempAmount = tempAmount/1000000;
 					if(redPacketCount == 1){
 						self.tempArrAddress = [{
 							"address": to_address
@@ -591,7 +590,7 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 	// 历史记录发红包列表 ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### #######
 	self.getHistoryList = function () {
 		var fcWalletId = profileService.focusedClient.credentials.walletId;
-		db.query("SELECT wallet,asset_name,num,sum(amount) as amount,creation_date from tcode where wallet='" + fcWalletId + "' GROUP BY num ORDER BY creation_date DESC;", function (rows) {
+		db.query("SELECT wallet,asset,asset_name,num,sum(amount) as amount,creation_date from tcode where wallet='" + fcWalletId + "' GROUP BY num ORDER BY creation_date DESC;", function (rows) {
 			self.recordsList = rows;
 			$timeout(function () {
 				$scope.$apply();

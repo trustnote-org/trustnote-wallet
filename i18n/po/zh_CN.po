@@ -208,8 +208,8 @@ msgstr "比特币URI无效！"
 
 #: public/views/bot.html:23
 #: public/views/correspondentDevices.html:29
-msgid "Bot Store"
-msgstr "机器人商店"
+msgid "Services"
+msgstr "服务号"
 
 #: public/views/correspondentDevice.html:288
 msgid "Both you and {{correspondent.name}} enabled local chat history recording."
@@ -2257,4 +2257,5 @@ msgstr "冷钱包一定不要联网；"
 msgid "Watch wallet can’t finish transaction without “offline signature” from cold wallet"
 msgstr "观察钱包在没有冷钱包的离线签名情况下, 是无法进行转账交易的。"
 
-
+msgid "Payment to "
+msgstr "付款给 "
