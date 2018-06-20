@@ -1249,26 +1249,6 @@ input.ng-invalid-match, input.ng-invalid-match:focus {
   vertical-align: top;
 }
 
-.mtab-title {
-	color: #A5B7C7;
-	border: 1px solid #A5B7C7;
-	border-bottom-color: #8C9EB0;
-  	border-width: 1px;
-  	flex: 1 1 0;
-  	background: #f7f7f7;
-  	cursor: pointer;
-  	border-radius: 3px 3px 0 0;
-	font-size: 14px;
-	font-weight: 500;
-	font-family: "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif
-}
-.mtab-title.active {
-	color: #8C9EB0;
-	border-color: #8C9EB0;
-	background-color: #FFF;
-	border-bottom-width: 0px;
-}
-
 .mtab {
 	display: none;
 }
