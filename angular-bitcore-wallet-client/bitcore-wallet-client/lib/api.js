@@ -518,7 +518,6 @@ API.prototype.sendMultiPayment = function (opts, cb) {
 	var self = this;
 	var coin = (this.credentials.network == 'livenet' ? "0" : "1");
 	var Wallet = require('trustnote-common/wallet.js');
-	var sigtemp;
 	opts.signWithLocalPrivateKey = function (wallet_id, account, is_change, address_index, text_to_sign, handleSig) {
 		var path = "m/44'/" + coin + "'/" + account + "'/" + is_change + "/" + address_index;
 		var xPrivKey = new Bitcore.HDPrivateKey.fromString(self.credentials.xPrivKey);
@@ -529,10 +528,6 @@ API.prototype.sendMultiPayment = function (opts, cb) {
 				handleSig("[refused]");
 				return;
 			}
-			if(sigtemp != sig)
-				sigtemp= sig;
-			else
-				return;
 			if(sig && typeof(handleSig) == "function" ){
 				handleSig(sig);
 			}
