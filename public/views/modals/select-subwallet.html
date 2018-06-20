@@ -1,5 +1,53 @@
-
-<!--选择分支钱包-->
+<style type="text/css">
+	p.selectP{
+		font-size:14px;
+		color: #333;
+		margin-bottom:8px;
+	}
+	p.marginL{
+		/*margin-left:10px;*/
+		/*text-indent: 2em;*/
+	}
+	p.nomarignB{
+		margin-bottom:0;
+	}
+	i.selectI{
+		position: absolute;
+		right:15px;
+		top:40%;
+		color: #a2a2a2;
+	}
+	div.Seavatar{
+		background: #0095ff;
+		color: #fff;
+		border-radius: 50%;
+		width: 45px;
+		height: 45px;
+		line-height: 45px;
+		text-align: center;
+		font-size: 20px;
+		font-weight: bold;
+		float: left;
+	}
+	div.SeName{
+		float: left;
+		height: 45px;
+		line-height: 45px;
+		margin-left: 10px;
+		font-size: 16px;
+		font-weight: bold;
+		color: #333;
+	}
+	div.SeNameMN{
+		float: right;
+		margin-right: 10px;
+		height: 45px;
+		line-height: 45px;
+		font-size: 16px;
+		font-weight: bold;
+		color: #333;
+	}
+</style>
 
 <nav class="tab-bar">
 	<section class="left-small">
@@ -15,39 +63,39 @@
 	</section>
 </nav>
 
-<div class="modal-content fix-modals-touch">
 
-
+<div class="modal-content fix-modals-touch" style="background: #f5f5f5;">
 	<ul class="no-bullet subwallets">
-		<li class="line-b" ng-class="{'selected': !indexCtl.shared_address}">
+
+		<li class="line-b" ng-class="{'selected': !indexCtl.shared_address}" style="background: #fff;position: relative;">
 			<a ng-click="selectSubwallet()" class="db oh">
-				<div class="avatar-wallet" style="margin-top:5px">{{(indexCtl.alias || indexCtl.walletName) | limitTo: 1}}</div>
-				<div class="ellipsis name-wallet text-bold">{{(indexCtl.alias || indexCtl.walletName)}}</div>
-				<div class="size-12">
+				<div class="Seavatar">{{(indexCtl.alias || indexCtl.walletName) | limitTo: 1}}</div>
+				<div class="SeName">{{(indexCtl.alias || indexCtl.walletName)}}</div>
+				<div class="SeNameMN">
 					<span ng-if="asset == 'base' || asset == indexCtl.BLACKBYTES_ASSET">{{mainWalletBalanceInfo.totalStr}}</span>
 					<span ng-if="asset != 'base' && asset != indexCtl.BLACKBYTES_ASSET">{{mainWalletBalanceInfo.total.toLocaleString()}}</span>
 				</div>
 			</a>
 		</li>
-		<li class="line-b" ng-repeat="sw in arrSharedWallets" ng-class="{'selected': sw.shared_address == indexCtl.shared_address}" style="margin-left: 20px">
+
+		<li class="" ng-repeat="sw in arrSharedWallets" ng-class="{'selected': sw.shared_address == indexCtl.shared_address}" style="margin-top: 10px; background: #fff;position: relative;">
 			<a ng-click="selectSubwallet(sw.shared_address)" class="db oh">
-				<div class="avatar-wallet" style="margin-top:5px">{{sw.shared_address | limitTo: 1}}</div>
-				<div style="display: inline-block; width: calc(100% - 50px)">
-					<div class="ellipsis name-wallet text-bold">{{sw.shared_address}}</div>
-					<div class="size-12">
-						<span ng-if="asset == 'base' || asset == indexCtl.BLACKBYTES_ASSET">{{sw.totalStr}}</span>
-						<span ng-if="asset != 'base' && asset != indexCtl.BLACKBYTES_ASSET">{{sw.total.toLocaleString()}}</span>
-					</div>
-					<div class="size-12 ellipsis"><span translate>with</span> {{sw.shared_address_cosigners}}</div>
-					<div class="size-12 ellipsis">
-						<span translate>created</span> 
-						<time>{{ sw.creation_ts * 1000 | amDateFormat:'MM/DD/YYYY HH:mm a'}}</time>
-						<time>({{ sw.creation_ts * 1000 | amTimeAgo}})</time>
-					</div>
-				</div>
+				<p class="selectP" translate> Shared_address: </p>
+				<p class="selectP marginL">{{sw.shared_address}}</p>
+				<p class="selectP">
+					<span translate> Amount </span>:
+					<span ng-if="asset == 'base' || asset == indexCtl.BLACKBYTES_ASSET">{{sw.totalStr}}</span>
+					<span ng-if="asset != 'base' && asset != indexCtl.BLACKBYTES_ASSET">{{sw.total.toLocaleString()}}</span>
+				</p>
+				<p class="selectP nomarignB">
+					<span translate> Created:  </span>
+					<time>{{ sw.creation_ts * 1000 | amDateFormat:'YYYY/MM/DD HH:mm'}}</time>
+				</p>
 			</a>
+			<i class="icon-arrow-right3 size-24 selectI"></i>
 		</li>
 	</ul>
-
-
 </div>
+
+		<!--<time>{{ sw.creation_ts * 1000 | amDateFormat:'MM/DD/YYYY HH:mm a'}}</time>-->
+		<!--<time>({{ sw.creation_ts * 1000 | amTimeAgo}})</time>-->
