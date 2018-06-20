@@ -2263,3 +2263,9 @@ msgstr "付款给 "
 msgid "Shared_address:"
 msgstr "智能合约地址："
 
+msgid "Locked"
+msgstr "未解锁"
+
+msgid "Unlocked"
+msgstr "已解锁"
+
