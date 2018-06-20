@@ -208,8 +208,8 @@ msgstr "比特币URI无效！"
 
 #: public/views/bot.html:23
 #: public/views/correspondentDevices.html:29
-msgid "Bot Store"
-msgstr "机器人商店"
+msgid "Services"
+msgstr "服务号"
 
 #: public/views/correspondentDevice.html:288
 msgid "Both you and {{correspondent.name}} enabled local chat history recording."

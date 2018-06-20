@@ -44,6 +44,12 @@
 		/*background-color: #FFF;*/
 		/*border-bottom-width: 0px;*/
 	}
+	span.Cline{
+		width: 1px;
+		height: 20px;
+		background: #888888;
+		margin-top:12px;
+	}
 </style>
 
 <div class="botWrap" ng-controller="correspondentDevicesController">
@@ -79,7 +85,8 @@
 			<section class="middle tab-bar-section">
 				<div class="mtabset">
 					<div class="mtab-title" ng-click="$parent.mtab = 1" ng-class="{'active': mtab == 1}" translate> Contacts </div>
-					<div class="mtab-title" ng-click="$parent.mtab = 2" ng-class="{'active': mtab == 2}" translate> Bot Store </div>
+					<span class="Cline"></span>
+					<div class="mtab-title" ng-click="$parent.mtab = 2" ng-class="{'active': mtab == 2}" translate> Services </div>
 				</div>
 			</section>
 			<!--中间 联系人+机器人商店 结束-->
