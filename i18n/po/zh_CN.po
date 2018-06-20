@@ -2257,4 +2257,5 @@ msgstr "冷钱包一定不要联网；"
 msgid "Watch wallet can’t finish transaction without “offline signature” from cold wallet"
 msgstr "观察钱包在没有冷钱包的离线签名情况下, 是无法进行转账交易的。"
 
-
+msgid "Payment to "
+msgstr "付款给 "
