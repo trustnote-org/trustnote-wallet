@@ -1,4 +1,3 @@
-<!--消息首页-->
 
 <style type="text/css">
 	.bot_name {
@@ -8,55 +7,80 @@
 		white-space: nowrap;
 		overflow: hidden;
 	}
+	div.botWrap{
+		width: 100%;
+		height: 100%;
+		overflow:auto;
+	}
+	.mtab-title {
+		/*color: #8C9EB0;*/
+		color: #12172e;
+		border: 1px solid #12172e;
+		border-bottom-color: #12172e;
+		border-width: 1px;
+		flex: 1 1 0;
+		background: #f7f7f7;
+		cursor: pointer;
+		border-radius: 3px 3px 0 0;
+		font-size: 16px;
+	}
+	.mtab-title.active {
+		color: #0095ff;
+		border-color: #8C9EB0;
+		background-color: #FFF;
+		border-bottom-width: 0px;
+	}
+	div.addDevice{
+		width: 40px;
+		text-align: center;
+		height: 40px;
+		line-height:40px;
+		border-radius: 50%;
+		overflow: hidden;
+		position: fixed;
+		right: 20px;
+		bottom: 100px;
+		background: #0095ff;
+		cursor: pointer;
+	}
 </style>
 
-
-<div style="width: 100%;height: 100%;overflow:auto;" ng-controller="correspondentDevicesController">
-
-
+<div class="botWrap" ng-controller="correspondentDevicesController">
 	<div>
-
-
 		<!--top顶部-->
 		<nav ng-controller="topbarController as topbar" class="tab-bar" ng-show="state.is('correspondentDevices')">
-
 			<!--左边-->
 			<section class="left-small">
-				<!--点击返回-->
 				<a ng-show="goBackToState" ng-click="$root.go('^', true); goBackToState = null;">
 					<i class="icon-arrow-left3 icon-back"></i>
 					<span class="text-back">{{'Back'|translate}}</span>
 				</a>
-
-				<!--点击关闭-->
 				<a ng-show="closeToHome" class="p10 " ng-click="topbar.goHome(); closeToHome = null">
 					<span class="text-close">{{'Close'|translate}}</span>
 				</a>
 			</section>
 			<!--左边结束-->
 
-
 			<!--右边点击二维码-->
 			<section class="right-small">
-				<qr-scanner ng-show="index.isComplete" on-scan="topbar.onQrCodeScanned(data)"
-							before-scan="topbar.onBeforeScan()"></qr-scanner>
+				<qr-scanner ng-show="index.isComplete" on-scan="topbar.onQrCodeScanned(data)" before-scan="topbar.onBeforeScan()"></qr-scanner>
 			</section>
 
 
 			<!--中间 联系人+机器人商店-->
-			<section class="middle tab-bar-section">
-				<h1 class="title ellipsis" ng-style="{ 'max-width': '100%'}">
-					<span translate class="size-17 colorfff">Contacts</span>
-				</h1>
-			</section>
-
-
 			<!--<section class="middle tab-bar-section">-->
-			<!--<div class="mtabset">-->
-			<!--<div class="mtab-title" ng-click="$parent.mtab = 1" ng-class="{'active': mtab == 1}" ng-style="{'color': noColor ? '#20498b' : index.backgroundColor}"  translate>  Contacts </div>-->
-			<!--<div class="mtab-title" ng-click="$parent.mtab = 2" ng-class="{'active': mtab == 2}" ng-style="{'color': noColor ? '#20498b' : index.backgroundColor}" translate> Bot Store	</div>-->
-			<!--</div>-->
+				<!--<h1 class="title ellipsis" ng-style="{ 'max-width': '100%'}">-->
+					<!--<span translate class="size-17 colorfff">Contacts</span>-->
+				<!--</h1>-->
 			<!--</section>-->
+
+
+			<section class="middle tab-bar-section">
+				<div class="mtabset">
+					<div class="mtab-title" ng-click="$parent.mtab = 1" ng-class="{'active': mtab == 1}" translate> Contacts </div>
+					<div class="mtab-title" ng-click="$parent.mtab = 2" ng-class="{'active': mtab == 2}" translate> Bot Store </div>
+				</div>
+			</section>
 			<!--中间 联系人+机器人商店 结束-->
 		</nav>
 		<!--top顶部  结束-->
@@ -185,14 +209,10 @@
 	</div>
 
 
-	<!--点击添加设备  固定定位-->
-	<div
-		ng-show="state.is('correspondentDevices')"
-		ng-click="beginAddCorrespondent()"
-		style="width: 40px;text-align: center;height: 40px;line-height:40px;border-radius: 50%;overflow: hidden;position: fixed;right: 20px;bottom: 100px;background: #0095ff;">
+	<!-- 添加设备 -->
+	<div class="addDevice" ng-if="state.is('correspondentDevices')" ng-click="beginAddCorrespondent()">
 		<i class="fi-plus size-20 icon colorfff"></i>
 	</div>
 </div>
-
 
 <div ng-include="'views/includes/menu.html'" ng-show="!index.noFocusedWallet"></div>
