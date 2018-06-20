@@ -91,6 +91,7 @@
 					<span translate> Created:  </span>
 					<time>{{ sw.creation_ts * 1000 | amDateFormat:'YYYY/MM/DD HH:mm'}}</time>
 				</p>
+				<p ng-if="sw.is_unlock"></p>
 			</a>
 			<i class="icon-arrow-right3 size-24 selectI"></i>
 		</li>
