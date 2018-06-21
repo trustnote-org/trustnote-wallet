@@ -267,7 +267,7 @@ angular.module('copayApp.services').factory('correspondentListService', function
 		var device_address = assocParams['device_address'] || '';
 		if (device_address && !ValidationUtils.isValidDeviceAddress(device_address))
 			return null;
-		var amountStr = gettextCatalog.getString('Payment to ')+ address + "  " + getAmountText(amount, asset);
+		var amountStr = gettextCatalog.getString('Payment to ')+ address + ", " + getAmountText(amount, asset);
 		return {
 			amount: amount,
 			asset: asset,
