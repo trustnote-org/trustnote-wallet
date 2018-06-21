@@ -2259,3 +2259,13 @@ msgstr "观察钱包在没有冷钱包的离线签名情况下, 是无法进行�
 
 msgid "Payment to "
 msgstr "付款给 "
+
+msgid "Shared_address:"
+msgstr "智能合约地址："
+
+msgid "Locked"
+msgstr "未解锁"
+
+msgid "Unlocked"
+msgstr "已解锁"
+
