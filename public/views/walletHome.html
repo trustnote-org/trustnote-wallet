@@ -778,14 +778,24 @@
 
 							<div class="input">
 								<input
-									maxlength="32"
+									class="m0"
+									type="text"
+									id="address"
 									style="height: 45px; font-size: 14px;padding-right:30px;"
-									ng-show="sendForm.address.$invalid" class="m0" type="text" id="address"
+									ng-show="sendForm.address.$invalid"
 									name="address"
 									ng-disabled="home.blockUx || home.lockAddress || !home.canSendExternalPayment()"
 									ng-attr-placeholder="{{(home.canSendExternalPayment() ? 'TrustNote address' : 'TrustNote address of your other wallet &#8594;')|translate}}"
-									ng-model="_address" valid-address required ng-focus="home.formFocus('address')"
-									ng-blur="home.formFocus(false)">
+									ng-model="_address"
+									valid-address
+									ng-focus="home.formFocus('address')"
+									ng-blur="home.formFocus(false)"
+									required >
+								<!--maxlength="32"-->
+								<!--onkeyup="this.value = this.value.replace(/[\u4e00-\u9fa5]{0,}/g,'');"-->
+
+
+
 
 								<div class="addressbook-input" ng-show="!sendForm.address.$invalid && _address">
 									{{index.addressbook[_address] || _address}}

@@ -105,63 +105,60 @@ angular.module('copayApp.services').factory('correspondentListService', function
 		messages.push(msg_obj);
 	}
 
+
 	var payment_request_regexp = /\[.*?\]\(TTT:([0-9A-Z]{32})\?([\w=&;+%]+)\)/g; // payment description within [] is ignored
-	
+
+
 	function highlightActions(text, arrMyAddresses){
-		return text.replace(/\b[2-7A-Z]{32}\b(?!(\?(amount|asset|device_address)|"))/g, function(address){
-			if (!ValidationUtils.isValidAddress(address))
-				return address;
-		//	if (arrMyAddresses.indexOf(address) >= 0)
-		//		return address;
-			//return '<a send-payment address="'+address+'">'+address+'</a>';
+		return text.replace(/\b[2-7A-Z]{32}\b(?!(\?(amount|asset|device_address)|"))/g, function (address) {
+			if (!ValidationUtils.isValidAddress(address)) {return address;}
+			return '<a dropdown-toggle="#pop' + address + '">' + address + '</a><ul id="pop' + address + '" class="f-dropdown" style="left:0px" data-dropdown-content><li><a ng-click="sendPayment(\'' + address + '\')" translate>' + 'Pay to this address' + '</a></li></ul>';
+		})
+			.replace(payment_request_regexp, function (str, address, query_string) {
+				if (!ValidationUtils.isValidAddress(address))
+					return str;
+				var objPaymentRequest = parsePaymentRequestQueryString(query_string, address);
+				if (!objPaymentRequest)
+					return str;
+				return '<a ng-click="sendPayment(\'' + address + '\', ' + objPaymentRequest.amount + ', \'' + objPaymentRequest.asset + '\', \'' + objPaymentRequest.device_address + '\')">' + objPaymentRequest.amountStr + '</a>';
+			})
 
-			// return '<a dropdown-toggle="#pop'+address+'">'+address+'</a><ul id="pop'+address+'" class="f-dropdown" style="left:0px" data-dropdown-content><li><a ng-click="sendPayment(\''+address+'\')">'+gettext('Pay to this address')+'</a></li></ul>';
+			.replace(/\[(.+?)\]\(command:(.+?)\)#/g, function (str, description, command) {
+				return '<a ng-click="sendCommand(\'' + lockupAddress + escapeQuotes(command) + '\', \'' + escapeQuotes(description) + '\')" class="command">' + lockupAddress + description + '</a>';
+			})
 
+			.replace(/\[(.+?)\]\(command:(.+?)\)/g, function (str, description, command) {
+				return '<a ng-click="sendCommand(\'' + escapeQuotes(command) + '\', \'' + escapeQuotes(description) + '\')" class="command">' + description + '</a>';
+			})
 
-// 更改代码  付款到这个地址
-			return '<a dropdown-toggle="#pop'+address+'">' + address + '</a><ul id="pop'+address+'" class="f-dropdown" style="left:0px" data-dropdown-content><li><a ng-click="sendPayment(\''+address+'\')" translate>' + 'Pay to this address' + '</a></li></ul>';
+			.replace(/\[(.+?)\]\(payment:(.+?)\)/g, function (str, description, paymentJsonBase64) {
+				var arrMovements = getMovementsFromJsonBase64PaymentRequest(paymentJsonBase64, true);
+				if (!arrMovements) {return '[invalid payment request]';}
+				description = 'Payment request: ' + arrMovements.join(', ');
+				return '<a ng-click="sendMultiPayment(\'' + paymentJsonBase64 + '\')">' + description + '</a>';
+			})
 
-			//	return '<a ng-click="sendPayment(\''+address+'\')">'+address+'</a>';
-			//return '<a send-payment ng-click="sendPayment(\''+address+'\')">'+address+'</a>';
-			//return '<a send-payment ng-click="console.log(\''+address+'\')">'+address+'</a>';
-			//return '<a onclick="console.log(\''+address+'\')">'+address+'</a>';
-		}).replace(payment_request_regexp, function(str, address, query_string){
-			if (!ValidationUtils.isValidAddress(address))
-				return str;
-		//	if (arrMyAddresses.indexOf(address) >= 0)
-		//		return str;
-			var objPaymentRequest = parsePaymentRequestQueryString(query_string, address);
-			if (!objPaymentRequest)
-				return str;
-			return '<a ng-click="sendPayment(\''+address+'\', '+objPaymentRequest.amount+', \''+objPaymentRequest.asset+'\', \''+objPaymentRequest.device_address+'\')">'+objPaymentRequest.amountStr+'</a>';
+			.replace(/\[(.+?)\]\(vote:(.+?)\)/g, function (str, description, voteJsonBase64) {
+				var objVote = getVoteFromJsonBase64(voteJsonBase64);
+				if (!objVote){return '[invalid vote request]';}
+				return '<a ng-click="sendVote(\'' + voteJsonBase64 + '\')">' + objVote.choice + '</a>';
+			})
 
-		}).replace(/\[(.+?)\]\(command:(.+?)\)#/g, function(str, description, command){
-			return '<a ng-click="sendCommand(\''+lockupAddress+escapeQuotes(command)+'\', \''+escapeQuotes(description)+'\')" class="command">'+lockupAddress+description+'</a>';
+			.replace(/\bhttps?:\/\/\S+/g, function (str) {
+				return '<a ng-click="openExternalLink(\'' + escapeQuotes(str) + '\')" class="external-link">' + str + '</a>';
+			})
 
-		}).replace(/\[(.+?)\]\(command:(.+?)\)/g, function(str, description, command){
-			return '<a ng-click="sendCommand(\''+escapeQuotes(command)+'\', \''+escapeQuotes(description)+'\')" class="command">'+description+'</a>';
+			.replace(/_\S+_/g, function (str) {
+				return '<a class="exeStyleBD">' + str.replace(/_/g, "") + '</a>';
+			})
 
-		}).replace(/\[(.+?)\]\(payment:(.+?)\)/g, function(str, description, paymentJsonBase64){
-			var arrMovements = getMovementsFromJsonBase64PaymentRequest(paymentJsonBase64, true);
-			if (!arrMovements)
-				return '[invalid payment request]';
-			description = 'Payment request: '+arrMovements.join(', ');
-			return '<a ng-click="sendMultiPayment(\''+paymentJsonBase64+'\')">'+description+'</a>';
-		}).replace(/\[(.+?)\]\(vote:(.+?)\)/g, function(str, description, voteJsonBase64){
-			var objVote = getVoteFromJsonBase64(voteJsonBase64);
-			if (!objVote)
-				return '[invalid vote request]';
-			return '<a ng-click="sendVote(\''+voteJsonBase64+'\')">'+objVote.choice+'</a>';
+			.replace(/-\S+-/g, function (str) {
+				return '<a class="exeStyleB">' + str.replace(/-/g, "") + '</a>';
+			})
 
-		}).replace(/\bhttps?:\/\/\S+/g, function(str){
-			return '<a ng-click="openExternalLink(\''+escapeQuotes(str)+'\')" class="external-link">'+str+'</a>';
-		}).replace(/_\S+_/g, function(str){
-			return '<a class="exeStyleBD">'+str.replace(/_/g,"")+'</a>';
-		}).replace(/-\S+-/g, function(str){
-			return '<a class="exeStyleB">'+str.replace(/-/g,"")+'</a>';
-		}).replace(/\+\S+\+/g, function(str){
-			return '<a class="exeStyle">'+str.replace(/\+/g,"")+'</a>';
-		});
+			.replace(/\+\S+\+/g, function (str) {
+				return '<a class="exeStyle">' + str.replace(/\+/g, "") + '</a>';
+			});
 	}
 	
 	function getMovementsFromJsonBase64PaymentRequest(paymentJsonBase64, bAggregatedByAsset){
