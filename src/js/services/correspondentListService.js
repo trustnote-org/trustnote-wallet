@@ -134,10 +134,13 @@ angular.module('copayApp.services').factory('correspondentListService', function
 			if (!objPaymentRequest)
 				return str;
 			return '<a ng-click="sendPayment(\''+address+'\', '+objPaymentRequest.amount+', \''+objPaymentRequest.asset+'\', \''+objPaymentRequest.device_address+'\')">'+objPaymentRequest.amountStr+'</a>';
+
 		}).replace(/\[(.+?)\]\(command:(.+?)\)#/g, function(str, description, command){
 			return '<a ng-click="sendCommand(\''+lockupAddress+escapeQuotes(command)+'\', \''+escapeQuotes(description)+'\')" class="command">'+lockupAddress+description+'</a>';
+
 		}).replace(/\[(.+?)\]\(command:(.+?)\)/g, function(str, description, command){
 			return '<a ng-click="sendCommand(\''+escapeQuotes(command)+'\', \''+escapeQuotes(description)+'\')" class="command">'+description+'</a>';
+
 		}).replace(/\[(.+?)\]\(payment:(.+?)\)/g, function(str, description, paymentJsonBase64){
 			var arrMovements = getMovementsFromJsonBase64PaymentRequest(paymentJsonBase64, true);
 			if (!arrMovements)
@@ -149,8 +152,15 @@ angular.module('copayApp.services').factory('correspondentListService', function
 			if (!objVote)
 				return '[invalid vote request]';
 			return '<a ng-click="sendVote(\''+voteJsonBase64+'\')">'+objVote.choice+'</a>';
+
 		}).replace(/\bhttps?:\/\/\S+/g, function(str){
 			return '<a ng-click="openExternalLink(\''+escapeQuotes(str)+'\')" class="external-link">'+str+'</a>';
+		}).replace(/_\S+_/g, function(str){
+			return '<a class="exeStyleBD">'+str.replace(/_/g,"")+'</a>';
+		}).replace(/-\S+-/g, function(str){
+			return '<a class="exeStyleB">'+str.replace(/-/g,"")+'</a>';
+		}).replace(/\+\S+\+/g, function(str){
+			return '<a class="exeStyle">'+str.replace(/\+/g,"")+'</a>';
 		});
 	}
 	
