@@ -1573,7 +1573,7 @@ msgstr "在默克尔哈希树里"
 
 #: public/views/walletHome.html:131
 msgid "in smart wallets"
-msgstr "在智能钱包"
+msgstr "在合约钱包"
 
 #: public/views/includes/available-balance.html:12
 msgid "locked by pending payments"
