@@ -848,6 +848,14 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 				arrSharedWallets,
 				function (objSharedWallet, cb) {
 					walletDefinedByAddresses.readSharedAddressCosigners(objSharedWallet.shared_address, function (cosigners) {
+						walletDefinedByAddresses.readSharedAddressDefinition(objSharedWallet.shared_address, function (arrDefinition) {
+							var endTime = JSON.stringify(arrDefinition).match(/timestamp.+\>.+[0-9]{10,}/)[0].match(/[0-9]{10,}/);
+							var nowTime = new Date().getTime();
+							objSharedWallet.is_unlock = (nowTime - endTime) > 0;
+							$timeout(function () {
+								$scope.$apply();
+							});
+						});
 						objSharedWallet.shared_address_cosigners = cosigners.map(function (cosigner) {
 							return cosigner.name;
 						}).join(", ");
@@ -864,6 +872,7 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 					});
 				}
 			);
+
 
 			$scope.cancel = function () {
 				breadcrumbs.add('openSubwalletModal cancel');
