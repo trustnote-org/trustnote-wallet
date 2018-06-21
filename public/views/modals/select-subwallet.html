@@ -53,6 +53,17 @@
 	span.colorgreen{
 		color: #0095ff;
 	}
+	li.backfff{
+		background: #fff;
+	}
+	li.backfffPlus{
+		margin-top: 10px;
+		background: #fff;
+		position: relative;
+	}
+	li.isChoosen{
+		background: #ececec;
+	}
 </style>
 
 <nav class="tab-bar">
@@ -72,8 +83,7 @@
 
 <div class="modal-content fix-modals-touch" style="background: #f5f5f5;">
 	<ul class="no-bullet subwallets">
-
-		<li class="line-b" ng-class="{'selected': !indexCtl.shared_address}" style="background: #fff;position: relative;">
+		<li class="backfff" ng-class='{"isChoosen":!indexCtl.shared_address}'>
 			<a ng-click="selectSubwallet()" class="db oh">
 				<div class="Seavatar">{{(indexCtl.alias || indexCtl.walletName) | limitTo: 1}}</div>
 				<div class="SeName">{{(indexCtl.alias || indexCtl.walletName)}}</div>
@@ -84,7 +94,7 @@
 			</a>
 		</li>
 
-		<li class="" ng-repeat="sw in arrSharedWallets" ng-class="{'selected': sw.shared_address == indexCtl.shared_address}" style="margin-top: 10px; background: #fff;position: relative;">
+		<li class="backfffPlus" ng-repeat="sw in arrSharedWallets" ng-class="{'isChoosen': sw.shared_address == indexCtl.shared_address}">
 			<a ng-click="selectSubwallet(sw.shared_address)" class="db oh">
 				<p class="selectP" translate> Shared_address: </p>
 				<p class="selectP marginL">{{sw.shared_address}}</p>
