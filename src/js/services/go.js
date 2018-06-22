@@ -167,6 +167,11 @@ angular.module('copayApp.services').factory('go', function($window, $rootScope, 
 					});
 				}
 
+				else if (objRequest.type === 'tcode'){
+					root.tempTcode = objRequest.to_address;
+					root.isToRecDir = 1;
+					$rootScope.go('preferences.preferencesTcode.receive');
+				}
 				// ***************** 冷钱包扫描结果在这儿处理 ********************************************
 				else if (objRequest.type === 'ob_walletToPay'){
 					root.toPay = 1;

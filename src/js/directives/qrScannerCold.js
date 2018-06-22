@@ -29,7 +29,7 @@ angular.module('copayApp.directives').directive('qrScannerCold', ['$rootScope', 
 							window.ignoreMobilePause = false;
 							window.plugins.spinnerDialog.hide();
 						}, 100);
-						alert('Open camera permissions');
+						alert(gettextCatalog.getString('Please allow TrustNote to access your camera'));
 					}
 				);
 				if ($scope.beforeScan) {

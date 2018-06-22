@@ -115,7 +115,21 @@
 	</div>
 
 	<!--top顶部-->
-	<div class="topbar-container" ng-include="'views/includes/topbar.html'"  ng-init="titleSection='Redeem T Code'; goBackToState = true"></div>
+	<div ng-if="airDR.isToRecDir != 1" class="topbar-container" ng-include="'views/includes/topbar.html'"  ng-init="titleSection='Redeem T Code'; goBackToState = true"></div>
+
+	<!--top顶部 --- 直接在 go 中路由过来-->
+	<nav ng-if="airDR.isToRecDir == 1" ng-controller="topbarController as topbar" class="tab-bar oh">
+		<section class="left-small">
+			<a class="p10 " ng-click="$root.go('walletHome'); airDR.setisToRecDir()">
+				<span class="text-close">{{'Close'|translate}}</span>
+			</a>
+		</section>
+		<section class="middle tab-bar-section">
+			<h1 class="ellipsis" ng-style="{ 'max-width': '100%'}">
+				<span class="size-17 colorfff" translate>Redeem T Code</span>
+			</h1>
+		</section>
+	</nav>
 
 
 	<div class="inputWrap">
