@@ -2269,3 +2269,5 @@ msgstr "未解锁"
 msgid "Unlocked"
 msgstr "已解锁"
 
+msgid "Please allow TrustNote to access your camera"
+msgstr "请允许TrustNote使用相机权限"
