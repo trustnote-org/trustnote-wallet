@@ -107,6 +107,9 @@
 		color: #0095ff;
 		cursor: pointer;
 	}
+	p.pCenter{
+		text-align: center;
+	}
 
 </style>
 
@@ -158,7 +161,7 @@
 	<div class="content preferences" ng-controller="preferencesController as preferences" ng-init="preferences.init()">
 		<p class="p_list" translate>T Code Log</p>
 		<div class="ulWrap">
-			<p translate ng-if="airRecords.recordsList.length == 0">Records of sending T code are not available</p>
+			<p translate ng-if="airRecords.recordsList.length == 0" class="pCenter">Records of sending T code are not available</p>
 			<ul class="no-bullet m0">
 				<li ng-repeat="token in airRecords.recordsList" ng-click="airRecords.showCodeDetil = 1; airRecords.clicked($index)">
 					<i class="icon-arrow-right3 size-14 right text-gray"></i>
