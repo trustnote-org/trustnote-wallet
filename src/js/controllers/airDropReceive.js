@@ -18,6 +18,16 @@ angular.module('copayApp.controllers').controller('airDropReceive', function ($s
 	self.placeholderText = gettextCatalog.getString('Please enter T Code');
 	self.isAvailable = 0;
 
+	self.isToRecDir = go.isToRecDir;
+	self.setisToRecDir = function () {
+		go.isToRecDir = 0;
+	};
+
+	self.mnemonicStr = go.tempTcode;
+	if(self.mnemonicStr){
+		self.isAvailable = 1;
+	}
+
 	self.checkTword = function () {
 		if (self.mnemonicStr.length < 1) {
 			return self.isAvailable = 0;
@@ -37,6 +47,7 @@ angular.module('copayApp.controllers').controller('airDropReceive', function ($s
 
 // 轻钱包获取地址
 	self.receiveCandy = function (cb) {
+		go.tempTcode = '';
 		if (self.isAvailable == 0) {
 			return false;
 		}
