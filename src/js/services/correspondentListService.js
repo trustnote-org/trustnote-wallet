@@ -148,15 +148,15 @@ angular.module('copayApp.services').factory('correspondentListService', function
 				return '<a ng-click="openExternalLink(\'' + escapeQuotes(str) + '\')" class="external-link">' + str + '</a>';
 			})
 
-			.replace(/_\S+_/g, function (str) {
+			.replace(/__\S+__/g, function (str) {
 				return '<a class="exeStyleBD">' + str.replace(/_/g, "") + '</a>';
 			})
 
-			.replace(/-\S+-/g, function (str) {
+			.replace(/--\S+--/g, function (str) {
 				return '<a class="exeStyleB">' + str.replace(/-/g, "") + '</a>';
 			})
 
-			.replace(/\+\S+\+/g, function (str) {
+			.replace(/\+\+\S+\+\+/g, function (str) {
 				return '<a class="exeStyle">' + str.replace(/\+/g, "") + '</a>';
 			});
 	}
