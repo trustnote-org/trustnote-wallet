@@ -975,6 +975,8 @@ angular.module('copayApp.controllers').controller('walletHomeController', functi
 							}
 							else if(err.match(/notes to pay fees/))
 								err = gettextCatalog.getString('No notes to pay fees') ;
+							else if(err.match(/authentifier verification failed/))
+								err = gettextCatalog.getString('authentifier verification failed');
 							// 如果是 观察钱包
 							if(self.observed == 1){
 								$scope.index.showTitle = 1;

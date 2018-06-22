@@ -1933,6 +1933,9 @@ msgstr "中没有足够的可用资金"
 msgid "No notes to pay fees"
 msgstr "需要有足够的notes"
 
+msgid "authentifier verification failed"
+msgstr "未认证成功"
+
 msgid ". It needs atleast "
 msgstr "。这需要至少"
 

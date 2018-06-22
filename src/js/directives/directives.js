@@ -38,6 +38,11 @@ angular.module('copayApp.directives')
 							return value;
 						}
 
+						// 检测地址中 有没有汉字字符
+						if(/[\u4e00-\u9fa5]/.test(value)){
+							return;
+						}
+
 						// trustnote uri
 						var conf = require('trustnote-common/conf.js');
 						var re = new RegExp('^' + conf.program + ':([A-Z2-7]{32})\b', 'i');
