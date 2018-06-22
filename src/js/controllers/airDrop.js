@@ -606,7 +606,7 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 	// 点击进入相应 T 口令的详细信息
 	self.clicked = function (num) {
 		var txId = self.recordsList[num].num;
-		db.query("SELECT wallet,asset_name,num,amount,code,creation_date from tcode where num='" + txId + "' ORDER BY creation_date DESC;", function (rows) {
+		db.query("SELECT wallet,asset,asset_name,num,amount,code,creation_date from tcode where num='" + txId + "' ORDER BY creation_date DESC;", function (rows) {
 			self.detileList = rows;
 			$timeout(function () {
 				$scope.$apply();
