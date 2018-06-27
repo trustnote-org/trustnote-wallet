@@ -1,0 +1,73 @@
+<style>
+	span.spanClose{
+		margin-left: 10px;
+		color: #0095ff;
+		line-height:45px;
+		cursor: pointer;
+	}
+	p.pButton{
+		width: 150px;
+		height: 35px;
+		text-align: center;
+		line-height: 35px;
+		background: #0095ff;
+		color: #fff;
+		margin: 0 auto;
+		border-radius: 5px;
+		cursor: pointer;
+		margin-top:20px;
+	}
+	p.tosend{
+		padding-left: 10px;
+		margin: 15px 0 0 0;
+		font-size: 16px;
+		color: #333;
+	}
+	div.sendwrap{
+		height: 350px;
+		overflow: auto;
+		margin-top: 20px;
+	}
+	ul.sendul{
+		list-style: none;
+		padding-left: 10px;
+		margin: 0;
+		font-size: 16px;
+	}
+	ul.sendul li{
+		line-height: 35px;
+	}
+	ul.sendul li .fspan{
+		float: left;
+	}
+	ul.sendul li .sspan{
+		float: right;
+		margin-right: 25px;
+	}
+</style>
+
+
+<div ng-controller="sendAssets as sendA">
+	<span class="spanClose" ng-click="$root.go('walletHome')" translate>Close</span>
+
+	<p class="tosend">
+		<span translate>Type of Assets:</span>
+		<span>{{sendA.assetsType}}</span>
+	</p>
+
+	<div class="sendwrap">
+		<ul class="sendul">
+			<li ng-repeat="item in sendA.outputs">
+				<span class="fspan">{{item.address}}</span>
+				<span class="sspan">{{item.amount}}</span>
+			</li>
+		</ul>
+	</div>
+	<div class="cb"></div>
+
+
+	<p class="pButton" ng-click="sendA.sendAssets()" translate>Send</p>
+
+</div>
+
+
