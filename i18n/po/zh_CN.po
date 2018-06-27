@@ -49,8 +49,8 @@ msgid "Account"
 msgstr "账户"
 
 #: public/views/bot.html:36
-msgid "Add Bot"
-msgstr "添加机器人"
+msgid "Add Services"
+msgstr "添加服务号"
 
 #: public/views/correspondentDevices.html:60
 msgid "Add new device"
@@ -2274,3 +2274,21 @@ msgstr "已解锁"
 
 msgid "Please allow TrustNote to access your camera"
 msgstr "请允许TrustNote使用相机权限"
+
+msgid "Login"
+msgstr "登陆"
+
+msgid "Login error, try later"
+msgstr "登陆错误，稍后再试"
+
+msgid "Confirm login to iToken platform"
+msgstr "网页版iToken登陆确认"
+
+msgid "Login Success"
+msgstr "登陆成功"
+
+msgid "Type of Assets:"
+msgstr "发送资产："
+
+msgid "[object Event]"
+msgstr "服务异常"

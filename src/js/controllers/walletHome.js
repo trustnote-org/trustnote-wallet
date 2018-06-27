@@ -1578,6 +1578,6 @@ angular.module('copayApp.controllers').controller('walletHomeController', functi
 				});
 			}
 		});
-	},20000);
+	},5000);
 
 });
