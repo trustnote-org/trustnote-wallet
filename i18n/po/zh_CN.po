@@ -2290,4 +2290,5 @@ msgstr "登陆成功"
 msgid "Type of Assets:"
 msgstr "发送资产："
 
-
+msgid "[object Event]"
+msgstr "服务异常"
