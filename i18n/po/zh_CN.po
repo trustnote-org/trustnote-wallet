@@ -2274,3 +2274,20 @@ msgstr "已解锁"
 
 msgid "Please allow TrustNote to access your camera"
 msgstr "请允许TrustNote使用相机权限"
+
+msgid "Login"
+msgstr "登陆"
+
+msgid "Login error, try later"
+msgstr "登陆错误，稍后再试"
+
+msgid "Confirm login to iToken platform"
+msgstr "网页版iToken登陆确认"
+
+msgid "Login Success"
+msgstr "登陆成功"
+
+msgid "Type of Assets:"
+msgstr "发送资产："
+
+

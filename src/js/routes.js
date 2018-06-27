@@ -130,6 +130,33 @@ angular
 					}
 				}
 			})
+
+
+			// 扫码后 --> 登陆页面
+			.state('login', {
+				url: '/login',
+				templateUrl: 'views/includes/login.html',
+				needProfile: true,
+				modal: true,
+				views: {
+					'main': {
+						templateUrl: 'views/includes/login.html'
+					}
+				}
+			})
+			// 扫码后 --> send页面
+			.state('payment', {
+				url: '/sendassets',
+				templateUrl: 'views/includes/sendassets.html',
+				needProfile: true,
+				modal: true,
+				views: {
+					'main': {
+						templateUrl: 'views/includes/sendassets.html'
+					}
+				}
+			})
+
 			.state('copayers', {
 				url: '/copayers',
 				needProfile: true,

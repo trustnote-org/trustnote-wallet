@@ -1,0 +1,58 @@
+<style>
+	span.spanClose{
+		margin-left: 10px;
+		color: #0095ff;
+		line-height:45px;
+		cursor: pointer;
+	}
+	div.imgDiv{
+		height: 110px;
+		text-align: center;
+		margin-top: 60px;
+	}
+	div.imgDiv img{
+		height:100%;
+	}
+	p.pButton{
+		width: 150px;
+		height: 30px;
+		text-align: center;
+		line-height: 30px;
+		background: #fff;
+		color: #0095ff;
+		margin: 0 auto;
+		border: 1px solid #0095ff;
+		border-radius: 5px;
+		cursor: pointer;
+		margin-top: 220px;
+	}
+	p.err,p.suc{
+		font-size: 14px;
+		text-align: center;
+		margin-top: 10px;
+		margin-bottom: 0;
+	}
+	p.conF{
+		font-size:14px;
+		text-align: center;
+		color: #333;
+		margin-top: 5px;
+	}
+</style>
+
+
+<div ng-controller="loginControl as loginC">
+	<span class="spanClose" ng-click="$root.go('walletHome')" translate>Close</span>
+
+	<div class="imgDiv">
+		<img src="img/itoken.png" alt="">
+	</div>
+	<p class="conF" translate>Confirm login to iToken platform</p>
+
+	<p class="pButton" ng-click="loginC.loginWebwallet()" translate>Login</p>
+
+	<p class="err" translate ng-if="loginC.loginErr == 1">Login error, try later</p>
+	<p class="suc" translate ng-if="loginC.loginSuccess == 1">Login Success</p>
+</div>
+
+
