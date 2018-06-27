@@ -10,10 +10,24 @@ angular.module('copayApp.controllers').controller('loginControl', function ($sco
 
 	self.objToWeb = go.objToWeb;
 	self.loginWebwallet = function () {
+		var fc = profileService.focusedClient;
+		if (fc.isPrivKeyEncrypted()) {
+			profileService.unlockFC(null, function (err) {
+				if (err) {
+					$timeout(function () {
+						$scope.$apply()
+					}, 10);
+					return;
+				}
+				return self.loginWebwallet();
+			});
+			return;
+		}
+
+
 		var DataObj = {};
 		DataObj.extendedpubkey = profileService.focusedClient.credentials.xPubKey;  // 根公钥
 		DataObj.data = self.objToWeb.loginMsg;  // 登陆吗
-		// DataObj.data = "q9puj70GXklZZZdqUE+ywfBpXrtKkKQoH/fQHVjEc8c=";  // 登陆吗// *************************** 待修改
 
 		var account = profileService.focusedClient.credentials.account;
 		var path = "m/44'/0'/"+account+"'/1/1024";
@@ -44,9 +58,7 @@ angular.module('copayApp.controllers').controller('loginControl', function ($sco
 			var req = https.request(options, function (res) {
 				res.setEncoding('utf8');
 				res.on('data', function (data) {
-					// console.log(JSON.stringify(res));
-					//console.log(JSON.stringify(data));
-					var data = JSON.parse(data);
+					data = JSON.parse(data);
 					if (res.statusCode == 200 && data.errCode == 0) {
 						self.loginSuccess = 1;
 						$timeout(function () {
