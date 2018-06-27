@@ -24,7 +24,7 @@
 
 
 						<div class="text-center" ng-click="qrcode.copyAddress(qrcode.addr[index.walletId])" ng-show="qrcode.addr[index.walletId] || qrcode.generatingAddress">
-							<qrcode size="150" data="{{qrcode.protocol}}:{{qrcode.addr[index.walletId]}}"></qrcode>
+							<qrcode size="150" data="{{qrcode.protocol}}:{{index.shared_address || (qrcode.generatingAddress ? '...' : qrcode.addr[index.walletId])}}"></qrcode>
 
 							<div  ng-show="qrcode.generatingAddress" style="position:relative; top:-226px; height:0px">
 								<!--<div style="height:180px; width:180px; margin:auto; background: url(img/qr.png) white">-->

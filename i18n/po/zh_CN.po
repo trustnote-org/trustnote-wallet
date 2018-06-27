@@ -49,8 +49,8 @@ msgid "Account"
 msgstr "账户"
 
 #: public/views/bot.html:36
-msgid "Add Bot"
-msgstr "添加机器人"
+msgid "Add Services"
+msgstr "添加服务号"
 
 #: public/views/correspondentDevices.html:60
 msgid "Add new device"
@@ -2293,4 +2293,5 @@ msgstr "发送资产："
 msgid "AssetsID:"
 msgstr "资产ID："
 
-
+msgid "[object Event]"
+msgstr "服务异常"
