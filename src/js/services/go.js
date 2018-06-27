@@ -2,7 +2,7 @@
 
 var eventBus = require('trustnote-common/event_bus.js');
 
-angular.module('copayApp.services').factory('go', function($window, $rootScope,  $location, $state, profileService, fileSystemService, nodeWebkit, notification, gettextCatalog, authService, $deepStateRedirect, $stickyState, $timeout) {
+angular.module('copayApp.services').factory('go', function($http, $window, $rootScope,  $location, $state, profileService, fileSystemService, nodeWebkit, notification, gettextCatalog, authService, $deepStateRedirect, $stickyState, $timeout) {
 	var root = {};
 	root.toPay = 0;
 	root.haschoosen = 0;
@@ -166,13 +166,29 @@ angular.module('copayApp.services').factory('go', function($window, $rootScope, 
 						$rootScope.$emit('paymentRequest', objRequest.address, objRequest.amount, objRequest.asset);
 					});
 				}
-
+				// ***************** tcode - 接收资产
 				else if (objRequest.type === 'tcode'){
 					root.tempTcode = objRequest.to_address;
 					root.isToRecDir = 1;
 					$rootScope.go('preferences.preferencesTcode.receive');
 				}
-				// ***************** 冷钱包扫描结果在这儿处理 ********************************************
+
+				// ***************** 扫码登陆
+				else if (objRequest.type === 'login'){
+
+					// 判断 是否添加了密码*****************
+
+					root.objToWeb = objRequest;
+					root.path('login');
+				}
+
+				// ***************** 扫码 发送资产
+				else if (objRequest.type === 'payment'){
+					root.objSendAsset = objRequest.sendAssetMsg;
+					root.path('payment');
+				}
+
+				// ***************** 冷钱包扫描
 				else if (objRequest.type === 'ob_walletToPay'){
 					root.toPay = 1;
 					root.objDetail = {
@@ -183,8 +199,6 @@ angular.module('copayApp.services').factory('go', function($window, $rootScope, 
 					root.paths = objRequest.path;
 					root.text_to_sign = new Buffer(objRequest.text_to_sign, "base64");
 				}
-				// ***************** 冷钱包扫描结果在这儿处理 *** 结束 *****************************************
-
 				else if (objRequest.type === 'pairing'){
 					$rootScope.$emit('Local/CorrespondentInvitation', objRequest.pubkey, objRequest.hub, objRequest.pairing_secret);
 				}
