@@ -5,14 +5,14 @@ angular.module('copayApp.controllers').controller('sendAssets', function ($scope
 	var indexScope = $scope.index;
 	var https = require('http');// *************************** 待修改
 
-	self.objSendAsset = go.objSendAsset;
 
-	/*self.sendMsgDir = function () {
-		// var content = self.objSendAsset.sendAssetMsg;      // *************************** 待修改
-		var content = '4050407046ef33a0149c8b6fe15d616feeac420145e97ebce4588398c5cf6e1b';
-
+	self.ableClick = 0; // 默认按钮不可点击
+	self.onloading = 1; // 初始化 显示
+	self.txid = go.objSendAsset; // go 中传递过来的 txid
+	self.sendMsgDir = function () {
+		var content = self.txid;
 		var options = {
-			hostname: '10.10.10.169',   // *************************** 待修改
+			hostname: '10.10.10.192',   // *************************** 待修改
 			port: 3003,
 			path: '/webwallet/getoutputs?txid='+content,
 			method: 'GET',
@@ -22,69 +22,37 @@ angular.module('copayApp.controllers').controller('sendAssets', function ($scope
 				'referer': 'trustnote.org'
 			}
 		};
-
 		var req = https.request(options, function (res) {
 			res.setEncoding('utf8');
 			res.on('data', function (data) {
+				data = JSON.parse(data);
 				if(res.statusCode == 200 && data.errCode == 0){
-					self.assetsType = data.data.assetName; // 发送资产类型
+					self.assetsType = data.data.assetName; // 发送资产类型 symbol
 					self.outputs = data.data.outputs; // 发送outputs 数组
-
-
-
+					self.asset = data.data.asset;  // 资产 例如：base
+					self.onloading = 0;
+					self.ableClick = 1;
+				}else{
+					self.onloading = 0;
+					self.httpGetErr(data.errMsg); // 报出  返回的错误
 				}
 			});
 		});
-
 		req.on('error', function (e) {
 			console.log("http error");
+			self.httpGetErr('http error');
 		});
 		req.end();
-
 	};
-	self.sendMsgDir();*/
-
-
-
-
-// 示例
-	self.dataEx = {
-		"errCode": 0,
-		"errMsg": "success",
-		"data": {
-			"assetName": "MN",
-			"asset": "base",
-			"message": "hello",
-			"outputs": [
-				{
-					"address": "QCCB6ECZBXNREX5H6QGBAKKTOTMXDAMS",
-					"amount": 1
-				},
-				{
-					"address": "OHD5P3MEUU3FYODZXH6KUP6IH2UGDKM3",
-					"amount": 1
-				}
-			]
-		}
-	};
-
-	self.assetsType = self.dataEx.data.assetName;
-	self.outputs = self.dataEx.data.outputs;
-
-	self.asset = self.dataEx.data.asset;
-	//self.asset = 'kPI5sZc1e7vG/nik67qDP4N8sjAnnhYRsUTUB/YvsTY=';
-
-
-
-
-
-
+	self.sendMsgDir();
 
 
 // 点击发送
 	self.sendAssets = function () {
+		if(self.ableClick == 0){
+			return;
+		}
 		var fc = profileService.focusedClient;
-
 		if (fc.isPrivKeyEncrypted()) {
 			profileService.unlockFC(null, function (err) {
 				if (err) {
@@ -98,17 +66,15 @@ angular.module('copayApp.controllers').controller('sendAssets', function ($scope
 			return;
 		}
 
-
+		self.ableClick = 0;
 		self.thirdOutputs = [];
 		$timeout(function () {
 			var address;
 			var amount;
 			var asset = self.asset;
-
 			if(self.outputs.length == 1){          // 只有一个地址
 				address = self.outputs[0].address;
 				amount = self.outputs[0].amount;
-
 				if(self.asset != 'base'){
 					var temamount = amount;
 					var temaddr = address;
@@ -219,17 +185,9 @@ angular.module('copayApp.controllers').controller('sendAssets', function ($scope
 				}
 
 
-				fc.sendMultiPayment(opts, function (err) {
-					//indexScope.setOngoingProcess(gettext('sending'), false);  // if multisig, it might take very long before the callback is called
-					//breadcrumbs.add('done payment in ' + asset + ', err=' + err);
-					//delete self.current_payment_key;
+				fc.sendMultiPayment(opts, function (err, unit) {  // 添加 unit 返回数据 当前交易单元
 					profileService.bKeepUnlocked = false;
 					if (err) {
-						// self.hasClicked = 0;
-						// self.geneding = 0;
-						$timeout(function () {
-							$scope.$apply()
-						}, 10);
 						if (typeof err === 'object') {
 							err = JSON.stringify(err);
 							eventBus.emit('nonfatal_error', "error object from sendMultiPayment: " + err, new Error());
@@ -249,53 +207,49 @@ angular.module('copayApp.controllers').controller('sendAssets', function ($scope
 						else if (err == "close") {
 							err = "suspend transaction.";
 						}
+						self.httpGetErr(err);
 						return self.setSendError(err);
 					} else {
+						//alert(unit);
+						var objDataToWeb = {
+							'txid':self.txid,
+							'unit':unit
+						};
+						//alert(JSON.stringify(objDataToWeb));
+						var options = {
+							hostname: '10.10.10.192', // *************************** 待修改
+							port: 3003,
+							path: '/webwallet/updateoutputs',
+							method: 'POST',
+							timeout: 6000,
+							headers: {
+								'Content-Type': 'application/json',
+								'referer': 'trustnote.org'
+							}
+						};
+						var req = https.request(options, function (res) {
+							res.setEncoding('utf8');
+							res.on('data', function (data) {
+								data = JSON.parse(data);
+								if (res.statusCode == 200 && data.errCode == 0) {
+									$timeout(function () {
+										go.path('walletHome');
+									}, 1000)
+								}else{
+									self.httpGetErr(data.errMsg);
 
-						alert(11111)
-						//self.showSeedList = true;
-						// self.candyHistoryList.unshift({
-						// 	amount: (amount * redPacketCount / 1000000),
-						// 	time: CurentTime(),
-						// 	seeds: self.candyTokenArr
-						// });
-						//var arrValues = [];
-						//profileService.temArrValues = [];
-						//var walletId = profileService.focusedClient.credentials.walletId;
-						//var creation_date = CurentTime();
-						// for (var i = 0; i < self.candyTokenArr.length; i++) {  // candyOutputArr1
-                        //
-						// 	var tobj = {
-						// 		'code':self.candyTokenArr[i],
-						// 		'amount':tempAmount,
-						// 		'asset_name':asset_name
-						// 	};
-						// 	profileService.temArrValues.push(tobj);
-                        //
-						// 	arrValues.push("('" + walletId + "','" + asset +"','"+ asset_name +"','"+ self.candyTokenArr[0] + "','" + self.candyTokenArr[i] + "','" + self.tempArrAddress[i].address + "'," + tempAmount  + "," + 0 + ",'" + creation_date + "')");
-						// }
-						//var strValues = arrValues.join(",");
+								}
+							});
+						});
 
 
-						// db.query("INSERT INTO tcode (wallet,asset,asset_name,num,code,address,amount,is_spent,creation_date) values" + strValues, function () {
-						// 	$timeout(function () {
-						// 		self.gened = 1;
-						// 		self.redPacketCount = '';
-						// 		self.candyAmount = '';
-						// 		self.hasClicked = 0;
-						// 		self.geneding = 0;
-						// 	}, 10);
-                        //
-						// 	go.toShowTcode();
-						// 	self.getTemArr();
-                        //
-						// 	$timeout(function () {
-						// 		self.gened = 0;
-						// 	}, 3000);
-                        //
-						// 	$rootScope.$emit("NewOutgoingTx");
-                        //
-						// });
+
+						req.on('error', function (e) {
+							console.log("http error");
+							self.httpGetErr('http err');
+						});
+						req.write(JSON.stringify(objDataToWeb));
+						req.end();
 					}
 
 				});
@@ -317,6 +271,12 @@ angular.module('copayApp.controllers').controller('sendAssets', function ($scope
 	};
 	self.resetError = function () {
 		self.error = null;
+	};
+
+	// http请求 返回数据错误
+	self.httpGetErr = function (txt) {
+		self.httpgeterr = 1;
+		self.getErr = txt;
 	};
 });
 
