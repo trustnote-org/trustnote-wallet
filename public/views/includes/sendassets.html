@@ -76,6 +76,10 @@
 	<span class="spanClose" ng-click="$root.go('walletHome')" translate>Close</span>
 
 	<div ng-if="!sendA.onloading && !sendA.error">
+		<p class="tosend" ng-if="sendA.message">
+			<span translate>Message:</span>
+			<span>{{sendA.message}}</span>
+		</p>
 		<p class="tosend">
 			<span translate>Type of Assets:</span>
 			<span>{{sendA.assetsType}}</span>
