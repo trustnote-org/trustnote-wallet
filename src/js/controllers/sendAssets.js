@@ -18,7 +18,6 @@ angular.module('copayApp.controllers').controller('sendAssets', function ($scope
 			method: 'GET',
 			timeout: 6000,
 			headers: {
-				'Content-Type':'application/json',
 				'referer': 'trustnote.org'
 			}
 		};
@@ -28,10 +27,14 @@ angular.module('copayApp.controllers').controller('sendAssets', function ($scope
 				data = JSON.parse(data);
 				if(res.statusCode == 200 && data.errCode == 0){
 					self.assetsType = data.data.assetName; // 发送资产类型 symbol
+					self.message = data.data.message;
 					self.outputs = data.data.outputs; // 发送outputs 数组
 					self.asset = data.data.asset;  // 资产 例如：base
 					self.onloading = false;
 					self.ableClick = 1;
+					$timeout(function () {
+						$scope.$apply()
+					}, 10);
 				}else{
 					self.onloading = false;
 					self.setError(data.errMsg); // 报出  返回的错误

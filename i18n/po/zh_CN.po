@@ -2287,6 +2287,9 @@ msgstr "网页版iToken登陆确认"
 msgid "Login Success"
 msgstr "登陆成功"
 
+msgid "Message:"
+msgstr "附加消息："
+
 msgid "Type of Assets:"
 msgstr "发送资产："
 
