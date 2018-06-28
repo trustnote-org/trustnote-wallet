@@ -47,7 +47,7 @@
     "bip38": "^1.4.0",
     "bitcore-lib": "^0.13.14",
     "bitcore-mnemonic": "~1.0.0",
-    "trustnote-common": "git+https://github.com/trustnote/trustnote-common.git",
+    "trustnote-common": "git+https://github.com/trustnote/trustnote-common.git#wallet",
     "grunt": "^1.0.1",
     "grunt-angular-gettext": "^2.2.3",
     "grunt-browserify": "^5.0.0",
