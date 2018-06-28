@@ -5,9 +5,9 @@ angular.module('copayApp.controllers').controller('sendAssets', function ($scope
 	var indexScope = $scope.index;
 	var https = require('http');// *************************** 待修改
 
-
+	self.error = false;
 	self.ableClick = 0; // 默认按钮不可点击
-	self.onloading = 1; // 初始化 显示
+	self.onloading = true; // 初始化 显示
 	self.txid = go.objSendAsset; // go 中传递过来的 txid
 	self.sendMsgDir = function () {
 		var content = self.txid;
@@ -30,17 +30,17 @@ angular.module('copayApp.controllers').controller('sendAssets', function ($scope
 					self.assetsType = data.data.assetName; // 发送资产类型 symbol
 					self.outputs = data.data.outputs; // 发送outputs 数组
 					self.asset = data.data.asset;  // 资产 例如：base
-					self.onloading = 0;
+					self.onloading = false;
 					self.ableClick = 1;
 				}else{
-					self.onloading = 0;
-					self.httpGetErr(data.errMsg); // 报出  返回的错误
+					self.onloading = false;
+					self.setError(data.errMsg); // 报出  返回的错误
 				}
 			});
 		});
 		req.on('error', function (e) {
 			console.log("http error");
-			self.httpGetErr('http error');
+			self.setError('http error');
 		});
 		req.end();
 	};
@@ -59,7 +59,7 @@ angular.module('copayApp.controllers').controller('sendAssets', function ($scope
 					$timeout(function () {
 						$scope.$apply()
 					}, 10);
-					return self.setSendError(gettextCatalog.getString(err.message));
+					return self.setError(gettextCatalog.getString(err));
 				}
 				return self.sendAssets();
 			});
@@ -207,15 +207,13 @@ angular.module('copayApp.controllers').controller('sendAssets', function ($scope
 						else if (err == "close") {
 							err = "suspend transaction.";
 						}
-						self.httpGetErr(err);
-						return self.setSendError(err);
+						return self.setError(err);
 					} else {
-						//alert(unit);
 						var objDataToWeb = {
 							'txid':self.txid,
 							'unit':unit
 						};
-						//alert(JSON.stringify(objDataToWeb));
+
 						var options = {
 							hostname: '10.10.10.192', // *************************** 待修改
 							port: 3003,
@@ -236,17 +234,15 @@ angular.module('copayApp.controllers').controller('sendAssets', function ($scope
 										go.path('walletHome');
 									}, 1000)
 								}else{
-									self.httpGetErr(data.errMsg);
+									self.setError(data.errMsg);
 
 								}
 							});
 						});
 
-
-
 						req.on('error', function (e) {
 							console.log("http error");
-							self.httpGetErr('http err');
+							self.setError('http err');
 						});
 						req.write(JSON.stringify(objDataToWeb));
 						req.end();
@@ -257,26 +253,9 @@ angular.module('copayApp.controllers').controller('sendAssets', function ($scope
 		}, 100);
 	};
 
-	// 发送交易 失败
-	self.setSendError = function (err) {
-		var fc = profileService.focusedClient;
-		var prefix = fc.credentials.m > 1 ? gettextCatalog.getString('Could not create payment proposal') : gettextCatalog.getString('Could not send payment');
-
-		self.error = prefix + ": " + err;
-		console.log(this.error);
-
-		$timeout(function () {
-			$scope.$digest();
-		}, 1);
-	};
-	self.resetError = function () {
-		self.error = null;
-	};
-
-	// http请求 返回数据错误
-	self.httpGetErr = function (txt) {
-		self.httpgeterr = 1;
-		self.getErr = txt;
+	// 返回数据错误
+	self.setError = function (err) {
+		self.error = err;
 	};
 });
 
