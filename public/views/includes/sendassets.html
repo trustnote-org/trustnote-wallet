@@ -11,13 +11,11 @@
 		line-height: 35px;
 		background: #0095ff;
 		color: #fff;
-		margin: 0 auto;
 		border-radius: 5px;
 		cursor: pointer;
-		margin-top: 20px;
 		width: 40%;
 		position: fixed;
-		bottom: 80px;
+		bottom: 45px;
 		left: 30%;
 	}
 	p.ngpButton{
@@ -36,7 +34,8 @@
 		color: #333;
 	}
 	p.tosends .tosendsspan{
-		font-size:12px;
+		font-size:14px;
+		display: block;
 	}
 	div.sendwrap{
 		height: 350px;
@@ -80,7 +79,7 @@
 			<span translate>Message:</span>
 			<span>{{sendA.message}}</span>
 		</p>
-		<p class="tosend">
+		<p class="tosends">
 			<span translate>Type of Assets:</span>
 			<span>{{sendA.assetsType}}</span>
 		</p>
@@ -93,7 +92,7 @@
 			<ul class="sendul">
 				<li ng-repeat="item in sendA.outputs">
 					<p class="fspan">{{item.address}}</p>
-					<p class="sspan">{{item.amount}} {{sendA.assetsType}}</p>
+					<p class="sspan">{{sendA.asset == 'base'? item.amount/1000000:item.amount}} {{sendA.assetsType}}</p>
 				</li>
 			</ul>
 		</div>
@@ -105,7 +104,9 @@
 
 
 
-	<p class="pButton" ng-class="{'ngpButton':sendA.ableClick == 0}" ng-click="sendA.sendAssets()" translate>Send</p>
+	<p class="pButton" ng-class="{'ngpButton':sendA.ableClick == 0}" ng-click="sendA.sendAssets()" translate ng-if="!sendA.showSending">Send</p>
+
+	<p class="pButton" translate ng-if="sendA.showSending">Sending...</p>
 
 </div>
 

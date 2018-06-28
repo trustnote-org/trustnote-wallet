@@ -7,6 +7,7 @@ angular.module('copayApp.controllers').controller('sendAssets', function ($scope
 
 	self.error = false;
 	self.ableClick = 0; // 默认按钮不可点击
+	self.showSending = 0; // 默认不显示 sending
 	self.onloading = true; // 初始化 显示
 	self.txid = go.objSendAsset; // go 中传递过来的 txid
 	self.sendMsgDir = function () {
@@ -55,6 +56,7 @@ angular.module('copayApp.controllers').controller('sendAssets', function ($scope
 		if(self.ableClick == 0){
 			return;
 		}
+		self.showSending = 1;
 		var fc = profileService.focusedClient;
 		if (fc.isPrivKeyEncrypted()) {
 			profileService.unlockFC(null, function (err) {
@@ -78,7 +80,10 @@ angular.module('copayApp.controllers').controller('sendAssets', function ($scope
 			if(self.outputs.length == 1){          // 只有一个地址
 				address = self.outputs[0].address;
 				amount = self.outputs[0].amount;
+				self.thirdOutputs = null;
+				self.baseOutputs = null;
 				if(self.asset != 'base'){
+					self.thirdOutputs = [];
 					var temamount = amount;
 					var temaddr = address;
 					amount = 0;
@@ -210,6 +215,7 @@ angular.module('copayApp.controllers').controller('sendAssets', function ($scope
 						else if (err == "close") {
 							err = "suspend transaction.";
 						}
+						self.showSending = 0;
 						return self.setError(err);
 					} else {
 						var objDataToWeb = {
