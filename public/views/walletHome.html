@@ -274,7 +274,7 @@
 
 							<!--显示普通钱包时：  存有XXX钱在智能钱包-->
 							<!--<div class="size-14" ng-if="balance.shared !== undefined">-->
-							<div class="size-14" ng-if="!index.shared_address && balance.shared !== undefined">
+							<div class="size-14" ng-if="!index.shared_address && balance.shared !== undefined && balance.asset == 'base'">
 								<a ng-click="index.openSubwalletModal()">
 									<span translate>Also</span>
 									<span ng-if="balance.asset == 'base' || balance.asset == index.BLACKBYTES_ASSET">{{balance.sharedStr}}</span>
