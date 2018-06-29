@@ -14,17 +14,18 @@
 		height:100%;
 	}
 	p.pButton{
-		width: 150px;
-		height: 30px;
+		height: 35px;
 		text-align: center;
-		line-height: 30px;
+		line-height: 35px;
 		background: #fff;
 		color: #0095ff;
-		margin: 0 auto;
 		border: 1px solid #0095ff;
 		border-radius: 5px;
 		cursor: pointer;
-		margin-top: 220px;
+		width: 40%;
+		position: fixed;
+		bottom: 45px;
+		left: 30%;
 	}
 	p.err,p.suc{
 		font-size: 14px;
@@ -49,7 +50,8 @@
 	</div>
 	<p class="conF" translate>Confirm login to iToken platform</p>
 
-	<p class="pButton" ng-click="loginC.loginWebwallet()" translate>Login</p>
+	<p class="pButton" ng-click="loginC.loginWebwallet()" translate ng-if="!loginC.showLogining">Login</p>
+	<p class="pButton" translate ng-if="loginC.showLogining">Logining</p>
 
 	<p class="err" translate ng-if="loginC.loginErr == 1">Login error, try later</p>
 	<p class="suc" translate ng-if="loginC.loginSuccess == 1">Login Success</p>

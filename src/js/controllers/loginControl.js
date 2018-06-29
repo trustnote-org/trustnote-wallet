@@ -8,22 +8,31 @@ angular.module('copayApp.controllers').controller('loginControl', function ($sco
 	var https = require('http'); // *************************** 待修改
 
 
+	self.showLogining = 0;
 	self.objToWeb = go.objToWeb;
+
 	self.loginWebwallet = function () {
+		if(self.showLogining == 1){
+			return;
+		}
+		self.showLogining = 1;
 		var fc = profileService.focusedClient;
+
 		if (fc.isPrivKeyEncrypted()) {
-			profileService.unlockFC(null, function (err) {
-				if (err) {
-					$timeout(function () {
-						$scope.$apply()
-					}, 10);
+			profileService.checkPassClose = false;
+			profileService.passWrongUnlockFC(null, function (err) {
+				if (err == 'cancel') {  // 点击取消
+					self.showLogining = 0;
+					profileService.checkPassClose = true;
+				} else if (err) {  // 密码输入错误
 					return;
 				}
-				return self.loginWebwallet();
+				else {
+					return self.loginWebwallet();
+				}
 			});
 			return;
 		}
-
 
 		var DataObj = {};
 		DataObj.extendedpubkey = profileService.focusedClient.credentials.xPubKey;  // 根公钥
