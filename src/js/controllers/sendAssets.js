@@ -3,17 +3,18 @@
 angular.module('copayApp.controllers').controller('sendAssets', function ($scope, $rootScope, go, profileService, gettextCatalog, addressService, $timeout) {
 	var self = this;
 	var indexScope = $scope.index;
-	var https = require('https');// *************************** 待修改
+	var https = require('https');
 
 	self.error = false;
 	self.ableClick = 0; // 默认按钮不可点击
 	self.showSending = 0; // 默认不显示 sending
 	self.onloading = true; // 初始化 显示
 	self.txid = go.objSendAsset; // go 中传递过来的 txid
+
 	self.sendMsgDir = function () {
 		var content = self.txid;
 		var options = {
-			hostname: 'beta.itoken.top',   // *************************** 待修改
+			hostname: 'beta.itoken.top',
 			port: 443,
 			path: '/webwallet/getoutputs?txid='+content,
 			method: 'GET',
@@ -31,7 +32,7 @@ angular.module('copayApp.controllers').controller('sendAssets', function ($scope
 					self.message = data.data.message;
 					self.outputs = data.data.outputs; // 发送outputs 数组
 					self.asset = data.data.asset;  // 资产 例如：base
-	 				self.asset = self.asset.length > 10 ? self.asset.substr(0,10) + '...' + self.asset.substr(self.asset.length - 10) : self.asset;
+	 				self.Showasset = self.asset.length > 10 ? self.asset.substr(0,10) + '...' + self.asset.substr(self.asset.length - 10) : self.asset;
 					self.onloading = false;
 					self.ableClick = 1;
 					$timeout(function () {
@@ -85,7 +86,7 @@ angular.module('copayApp.controllers').controller('sendAssets', function ($scope
 	self.message = data.data.message;
 	self.outputs = data.data.outputs; // 发送outputs 数组
 	self.asset = data.data.asset;  // 资产 例如：base
-	self.asset = self.asset.length > 10? self.asset.substr(0,10) + '...' + self.asset.substr(self.asset.length - 10) : self.asset;
+	self.Showasset = self.asset.length > 10? self.asset.substr(0,10) + '...' + self.asset.substr(self.asset.length - 10) : self.asset;
 	self.onloading = false;
 	self.ableClick = 1;*/
 
@@ -94,13 +95,18 @@ angular.module('copayApp.controllers').controller('sendAssets', function ($scope
 
 
 
-
+	self.closeSend = function () {
+		if(self.ableClick == 0){
+			return;
+		}
+		go.path('walletHome');
+	};
 // 点击发送
 	self.sendAssets = function () {
 		if(self.ableClick == 0){
 			return;
 		}
-		self.showSending = 1;
+
 		var fc = profileService.focusedClient;
 		if (fc.isPrivKeyEncrypted()) {
 			profileService.checkPassClose = false;
@@ -117,6 +123,8 @@ angular.module('copayApp.controllers').controller('sendAssets', function ($scope
 			});
 			return;
 		}
+
+		self.showSending = 1;
 
 		self.ableClick = 0;
 		self.thirdOutputs = [];
@@ -271,8 +279,8 @@ angular.module('copayApp.controllers').controller('sendAssets', function ($scope
 						};
 
 						var options = {
-							hostname: '10.10.10.192', // *************************** 待修改
-							port: 3003,
+							hostname: 'beta.itoken.top',
+							port: 443,
 							path: '/webwallet/updateoutputs',
 							method: 'POST',
 							timeout: 6000,
