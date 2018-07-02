@@ -2298,3 +2298,6 @@ msgstr "资产ID："
 
 msgid "[object Event]"
 msgstr "服务异常"
+
+msgid "Logining"
+msgstr "登陆中"

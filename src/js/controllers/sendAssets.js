@@ -3,7 +3,7 @@
 angular.module('copayApp.controllers').controller('sendAssets', function ($scope, $rootScope, go, profileService, gettextCatalog, addressService, $timeout) {
 	var self = this;
 	var indexScope = $scope.index;
-	var https = require('http');// *************************** 待修改
+	var https = require('https');// *************************** 待修改
 
 	self.error = false;
 	self.ableClick = 0; // 默认按钮不可点击
@@ -13,8 +13,8 @@ angular.module('copayApp.controllers').controller('sendAssets', function ($scope
 	self.sendMsgDir = function () {
 		var content = self.txid;
 		var options = {
-			hostname: '10.10.10.192',   // *************************** 待修改
-			port: 3003,
+			hostname: 'beta.itoken.top',   // *************************** 待修改
+			port: 443,
 			path: '/webwallet/getoutputs?txid='+content,
 			method: 'GET',
 			timeout: 6000,
@@ -31,6 +31,7 @@ angular.module('copayApp.controllers').controller('sendAssets', function ($scope
 					self.message = data.data.message;
 					self.outputs = data.data.outputs; // 发送outputs 数组
 					self.asset = data.data.asset;  // 资产 例如：base
+	 				self.asset = self.asset.length > 10 ? self.asset.substr(0,10) + '...' + self.asset.substr(self.asset.length - 10) : self.asset;
 					self.onloading = false;
 					self.ableClick = 1;
 					$timeout(function () {
@@ -51,6 +52,49 @@ angular.module('copayApp.controllers').controller('sendAssets', function ($scope
 	self.sendMsgDir();
 
 
+
+
+	/*var data = {
+		"errCode": 0,
+		"errMsg": "success",
+		//     kPI5sZc1e7vG/nik67qDP4N8sjAnnhYRsUTUB/YvsTY=     CC
+		//      OHD5P3MEUU3FYODZXH6KUP6IH2UGDKM3     QCCB6ECZBXNREX5H6QGBAKKTOTMXDAMS
+		"data": {
+			"assetName": "ASSET",
+			"asset": "kPI5sZc1e7vG/nik67qDP4N8sjAnnhYRsUTUB/YvsTY=",
+			"message": "hello",
+			"outputs": [
+				{
+					"address": "QCCB6ECZBXNREX5H6QGBAKKTOTMXDAMS",
+					"amount": 1
+				}
+				// ,
+				// {
+				// 	"address": "kdkdkdkdkkdkdkkkdkdkkdk",
+				// 	"amount": 10
+				// }
+				// ,
+				// {
+				// 	"address": "kdkdkdkdkkdkdkkkdkdkkdk",
+				// 	"amount": 10
+				// }
+			]
+		}
+	};
+	self.assetsType = data.data.assetName; // 发送资产类型 symbol
+	self.message = data.data.message;
+	self.outputs = data.data.outputs; // 发送outputs 数组
+	self.asset = data.data.asset;  // 资产 例如：base
+	self.asset = self.asset.length > 10? self.asset.substr(0,10) + '...' + self.asset.substr(self.asset.length - 10) : self.asset;
+	self.onloading = false;
+	self.ableClick = 1;*/
+
+
+
+
+
+
+
 // 点击发送
 	self.sendAssets = function () {
 		if(self.ableClick == 0){
@@ -59,14 +103,17 @@ angular.module('copayApp.controllers').controller('sendAssets', function ($scope
 		self.showSending = 1;
 		var fc = profileService.focusedClient;
 		if (fc.isPrivKeyEncrypted()) {
-			profileService.unlockFC(null, function (err) {
-				if (err) {
-					$timeout(function () {
-						$scope.$apply()
-					}, 10);
-					return self.setError(gettextCatalog.getString(err));
+			profileService.checkPassClose = false;
+			profileService.passWrongUnlockFC(null, function (err) {
+				if (err == 'cancel') {  // 点击取消
+					self.showSending = 0;
+					profileService.checkPassClose = true;
+				} else if (err) {  // 密码输入错误
+					return;
 				}
-				return self.sendAssets();
+				else {
+					return self.sendAssets();
+				}
 			});
 			return;
 		}
