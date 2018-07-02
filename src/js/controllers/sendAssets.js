@@ -286,6 +286,7 @@ angular.module('copayApp.controllers').controller('sendAssets', function ($scope
 							res.on('data', function (data) {
 								data = JSON.parse(data);
 								if (res.statusCode == 200 && data.errCode == 0) {
+									$rootScope.$emit("NewOutgoingTx");
 									$timeout(function () {
 										go.path('walletHome');
 									}, 1000)
