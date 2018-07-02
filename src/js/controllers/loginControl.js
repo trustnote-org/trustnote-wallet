@@ -5,7 +5,7 @@ angular.module('copayApp.controllers').controller('loginControl', function ($sco
 	var ecdsaSig = require('trustnote-common/signature.js');
 	var Bitcore = require('bitcore-lib');
 	var db = require('trustnote-common/db.js');
-	var https = require('http'); // *************************** 待修改
+	var https = require('https'); // *************************** 待修改
 
 
 	self.showLogining = 0;
@@ -54,8 +54,8 @@ angular.module('copayApp.controllers').controller('loginControl', function ($sco
 			var content = JSON.stringify(DataObj); // 需要post的 数据
 			//console.log(content);
 			var options = {
-				hostname: '10.10.10.192', // *************************** 待修改
-				port: 3003,
+				hostname: 'beta.itoken.top', // *************************** 待修改
+				port: 443,
 				path: '/webwallet/login',
 				method: 'POST',
 				timeout: 6000,

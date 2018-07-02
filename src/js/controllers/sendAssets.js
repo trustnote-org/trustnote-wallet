@@ -3,7 +3,7 @@
 angular.module('copayApp.controllers').controller('sendAssets', function ($scope, $rootScope, go, profileService, gettextCatalog, addressService, $timeout) {
 	var self = this;
 	var indexScope = $scope.index;
-	var https = require('http');// *************************** 待修改
+	var https = require('https');// *************************** 待修改
 
 	self.error = false;
 	self.ableClick = 0; // 默认按钮不可点击
@@ -13,8 +13,8 @@ angular.module('copayApp.controllers').controller('sendAssets', function ($scope
 	self.sendMsgDir = function () {
 		var content = self.txid;
 		var options = {
-			hostname: '10.10.10.192',   // *************************** 待修改
-			port: 3003,
+			hostname: 'beta.itoken.top',   // *************************** 待修改
+			port: 443,
 			path: '/webwallet/getoutputs?txid='+content,
 			method: 'GET',
 			timeout: 6000,
@@ -172,7 +172,7 @@ angular.module('copayApp.controllers').controller('sendAssets', function ($scope
 
 
 				var opts = {
-					shared_address: indexScope.shared_address,
+					// shared_address: indexScope.shared_address,
 					merkle_proof: merkle_proof,
 					asset: asset,
 					to_address: address,
