@@ -172,7 +172,7 @@ angular.module('copayApp.controllers').controller('sendAssets', function ($scope
 
 
 				var opts = {
-					shared_address: indexScope.shared_address,
+					// shared_address: indexScope.shared_address,
 					merkle_proof: merkle_proof,
 					asset: asset,
 					to_address: address,
