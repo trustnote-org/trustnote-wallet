@@ -60,6 +60,9 @@
 	input.lang-en{
 		padding-right: 75px !important;
 	}
+	input.lang-enp{
+		padding-right: 50px !important;
+	}
 	form .divinput .placeholder{
 		position: absolute;
 		top: 10px;
@@ -139,6 +142,7 @@
 
 					<!--**********************8 ***********8 ***********8 ***********8 ***********8 ***********8 红包中 单个金额X MN  ***********8 ***********8 ***********8 ***********8 ***********8 -->
 					<input type="number" name="candyAmount" id="candyAmount" step="0.01"
+						   ng-class="{'lang-enp':airD.checkSymbolLength()}"
 						   valid-amount="{{index.arrBalances[0].asset}}"
 						   ng-model="airD.candyAmount"
 						   autocomplete="off"
