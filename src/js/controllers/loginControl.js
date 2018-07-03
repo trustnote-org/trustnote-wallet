@@ -14,7 +14,7 @@ angular.module('copayApp.controllers').controller('loginControl', function ($sco
 		if(self.showLogining == 1){
 			return;
 		}
-		self.showLogining = 1;
+
 		var fc = profileService.focusedClient;
 		if(fc.observed) {
 			self.loginErr = 1;
@@ -23,6 +23,8 @@ angular.module('copayApp.controllers').controller('loginControl', function ($sco
 			}, 1500)
 			return;
 		}
+
+		self.showLogining = 1;
 		var DataObj = {};
 		DataObj.data = self.objToWeb.loginMsg;  // 登陆吗
 
@@ -76,7 +78,7 @@ angular.module('copayApp.controllers').controller('loginControl', function ($sco
 				var content = JSON.stringify(DataObj); // 需要post的 数据
 				//console.log(content);
 				var options = {
-					hostname: 'beta.itoken.top',
+					hostname: 'itoken.top',
 					port: 443,
 					path: '/webwallet/login',
 					method: 'POST',

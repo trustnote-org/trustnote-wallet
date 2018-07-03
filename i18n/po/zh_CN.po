@@ -2299,5 +2299,8 @@ msgstr "资产ID："
 msgid "[object Event]"
 msgstr "服务异常"
 
+msgid "httpErr"
+msgstr "网络错误"
+
 msgid "Logining"
 msgstr "登录中"

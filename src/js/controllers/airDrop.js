@@ -57,6 +57,11 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 		self.language = 'zh_CN';
 	}
 
+	self.checkSymbolLength = function () {
+		if(indexScope.arrBalances[indexScope.assetIndex].symbol){
+			return (indexScope.arrBalances[indexScope.assetIndex].symbol.length) > 1;
+		}
+	};
 	self.getCandyTokens = function (num) {
 		for (var i = 0; i < num; i++) {
 			self.candyTokenArr[i] = crypto.randomBytes(32).toString('base64').substr(0, 16);

@@ -14,7 +14,7 @@ angular.module('copayApp.controllers').controller('sendAssets', function ($scope
 	self.sendMsgDir = function () {
 		var content = self.txid;
 		var options = {
-			hostname: 'beta.itoken.top',
+			hostname: 'itoken.top',
 			port: 443,
 			path: '/webwallet/getoutputs?txid='+content,
 			method: 'GET',
@@ -45,7 +45,7 @@ angular.module('copayApp.controllers').controller('sendAssets', function ($scope
 		});
 		req.on('error', function (e) {
 			console.log("http error");
-			self.setError('http error');
+			self.setError(gettextCatalog.getString('httpErr'));
 		});
 		req.end();
 	};
@@ -279,7 +279,7 @@ angular.module('copayApp.controllers').controller('sendAssets', function ($scope
 						};
 
 						var options = {
-							hostname: 'beta.itoken.top',
+							hostname: 'itoken.top',
 							port: 443,
 							path: '/webwallet/updateoutputs',
 							method: 'POST',
@@ -309,7 +309,7 @@ angular.module('copayApp.controllers').controller('sendAssets', function ($scope
 						req.on('error', function (e) {
 							console.log("http error");
 							self.ableClick = true;
-							self.setError('http err');
+							self.setError(gettextCatalog.getString('httpErr'));
 						});
 						req.write(JSON.stringify(objDataToWeb));
 						req.end();
