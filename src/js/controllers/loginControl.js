@@ -78,7 +78,7 @@ angular.module('copayApp.controllers').controller('loginControl', function ($sco
 				var content = JSON.stringify(DataObj); // 需要post的 数据
 				//console.log(content);
 				var options = {
-					hostname: 'itoken.top',
+					hostname: 'beta.itoken.top',
 					port: 443,
 					path: '/webwallet/login',
 					method: 'POST',
