@@ -71,6 +71,7 @@ angular.module('copayApp.services').factory('go', function($http, $window, $root
 
 	root.walletHome = function() {
 		var fc = profileService.focusedClient;
+		root.haschoosen = 2;
 		if (fc && !fc.isComplete())
 			root.path('copayers');
 		else {
