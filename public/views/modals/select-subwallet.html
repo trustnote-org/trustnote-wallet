@@ -17,6 +17,12 @@
 		top:40%;
 		color: #a2a2a2;
 	}
+	i.selectII{
+		position: absolute;
+		right:15px;
+		top:34%;
+		color: #a2a2a2;
+	}
 	div.Seavatar{
 		background: #0095ff;
 		color: #fff;
@@ -40,7 +46,7 @@
 	}
 	div.SeNameMN{
 		float: right;
-		margin-right: 10px;
+		margin-right: 35px;
 		height: 45px;
 		line-height: 45px;
 		font-size: 16px;
@@ -55,6 +61,7 @@
 	}
 	li.backfff{
 		background: #fff;
+		position: relative;
 	}
 	li.backfffPlus{
 		margin-top: 10px;
@@ -92,6 +99,7 @@
 					<span ng-if="asset != 'base' && asset != indexCtl.BLACKBYTES_ASSET">{{mainWalletBalanceInfo.total.toLocaleString()}}</span>
 				</div>
 			</a>
+			<i class="icon-arrow-right3 size-24 selectII"></i>
 		</li>
 
 		<li class="backfffPlus" ng-repeat="sw in arrSharedWallets" ng-class="{'isChoosen': sw.shared_address == indexCtl.shared_address}">

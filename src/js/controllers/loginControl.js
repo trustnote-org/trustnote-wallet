@@ -16,6 +16,13 @@ angular.module('copayApp.controllers').controller('loginControl', function ($sco
 		}
 		self.showLogining = 1;
 		var fc = profileService.focusedClient;
+		if(fc.observed) {
+			self.loginErr = 1;
+			$timeout(function () {
+				self.loginErr = 0;
+			}, 1500)
+			return;
+		}
 		var DataObj = {};
 		DataObj.data = self.objToWeb.loginMsg;  // 登陆吗
 
