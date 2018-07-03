@@ -299,6 +299,7 @@ angular.module('copayApp.controllers').controller('sendAssets', function ($scope
 										go.path('walletHome');
 									}, 1000)
 								}else{
+									self.ableClick = true;
 									self.setError(data.errMsg);
 
 								}
@@ -307,6 +308,7 @@ angular.module('copayApp.controllers').controller('sendAssets', function ($scope
 
 						req.on('error', function (e) {
 							console.log("http error");
+							self.ableClick = true;
 							self.setError('http err');
 						});
 						req.write(JSON.stringify(objDataToWeb));
