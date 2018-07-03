@@ -6,7 +6,7 @@ angular.module('copayApp.controllers').controller('sendAssets', function ($scope
 	var https = require('https');
 
 	self.error = false;
-	self.ableClick = 0; // 默认按钮不可点击
+	self.ableClick = true; // 默认按钮可点击
 	self.showSending = 0; // 默认不显示 sending
 	self.onloading = true; // 初始化 显示
 	self.txid = go.objSendAsset; // go 中传递过来的 txid
@@ -34,7 +34,6 @@ angular.module('copayApp.controllers').controller('sendAssets', function ($scope
 					self.asset = data.data.asset;  // 资产 例如：base
 	 				self.Showasset = self.asset.length > 10 ? self.asset.substr(0,10) + '...' + self.asset.substr(self.asset.length - 10) : self.asset;
 					self.onloading = false;
-					self.ableClick = 1;
 					$timeout(function () {
 						$scope.$apply()
 					}, 10);
@@ -96,14 +95,14 @@ angular.module('copayApp.controllers').controller('sendAssets', function ($scope
 
 
 	self.closeSend = function () {
-		if(self.ableClick == 0){
+		if(self.ableClick == false){
 			return;
 		}
 		go.path('walletHome');
 	};
 // 点击发送
 	self.sendAssets = function () {
-		if(self.ableClick == 0){
+		if(self.ableClick == false){
 			return;
 		}
 
@@ -126,7 +125,7 @@ angular.module('copayApp.controllers').controller('sendAssets', function ($scope
 
 		self.showSending = 1;
 
-		self.ableClick = 0;
+		self.ableClick = false;
 		self.thirdOutputs = [];
 		$timeout(function () {
 			var address;
@@ -271,6 +270,7 @@ angular.module('copayApp.controllers').controller('sendAssets', function ($scope
 							err = "suspend transaction.";
 						}
 						self.showSending = 0;
+						self.ableClick = true;
 						return self.setError(err);
 					} else {
 						var objDataToWeb = {
