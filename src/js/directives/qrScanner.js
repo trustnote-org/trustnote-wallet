@@ -1,12 +1,9 @@
 'use strict';
-
 var breadcrumbs = require('trustnote-common/breadcrumbs.js');
 
 angular.module('copayApp.directives').directive('qrScanner', ['$rootScope', '$timeout', '$modal', 'isCordova', 'gettextCatalog', function ($rootScope, $timeout, $modal, isCordova, gettextCatalog) {
 
 	var controller = function ($scope) {
-
-		// 移动端的 相机
 		$scope.cordovaOpenScanner = function () {
 			window.ignoreMobilePause = true;
 			window.plugins.spinnerDialog.show(null, gettextCatalog.getString('Preparing camera...'), true);
