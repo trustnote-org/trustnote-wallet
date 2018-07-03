@@ -14,7 +14,7 @@ angular.module('copayApp.controllers').controller('sendAssets', function ($scope
 	self.sendMsgDir = function () {
 		var content = self.txid;
 		var options = {
-			hostname: 'beta.itoken.top',
+			hostname: 'itoken.top',
 			port: 443,
 			path: '/webwallet/getoutputs?txid='+content,
 			method: 'GET',
@@ -279,7 +279,7 @@ angular.module('copayApp.controllers').controller('sendAssets', function ($scope
 						};
 
 						var options = {
-							hostname: 'beta.itoken.top',
+							hostname: 'itoken.top',
 							port: 443,
 							path: '/webwallet/updateoutputs',
 							method: 'POST',
