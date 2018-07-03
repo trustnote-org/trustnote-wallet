@@ -45,7 +45,7 @@ angular.module('copayApp.controllers').controller('sendAssets', function ($scope
 		});
 		req.on('error', function (e) {
 			console.log("http error");
-			self.setError('http error');
+			self.setError(gettextCatalog.getString('httpErr'));
 		});
 		req.end();
 	};
@@ -309,7 +309,7 @@ angular.module('copayApp.controllers').controller('sendAssets', function ($scope
 						req.on('error', function (e) {
 							console.log("http error");
 							self.ableClick = true;
-							self.setError('http err');
+							self.setError(gettextCatalog.getString('httpErr'));
 						});
 						req.write(JSON.stringify(objDataToWeb));
 						req.end();
