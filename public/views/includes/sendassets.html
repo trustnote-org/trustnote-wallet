@@ -71,7 +71,7 @@
 
 
 <div ng-controller="sendAssets as sendA">
-	<span class="spanClose" ng-class="{'NgspanClose':sendA.ableClick == 0}" ng-click="sendA.closeSend()" translate>Close</span>
+	<span class="spanClose" ng-class="{'NgspanClose': !sendA.ableClick}" ng-click="sendA.closeSend()" translate>Close</span>
 
 	<div ng-if="!sendA.onloading && !sendA.error">
 		<p class="tosend" ng-if="sendA.message">
