@@ -6,7 +6,7 @@ var completeClientLoaded = false;
 
 window.onerror = function (message) {
 	console.error(new Error('Error partialClient: ' + message));
-	getFromId('splash').style.display = 'block';
+	// getFromId('splash').style.display = 'block';
 	wallet.loadCompleteClient(true);
 };
 
