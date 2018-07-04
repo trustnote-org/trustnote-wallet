@@ -88,8 +88,8 @@
 </style>
 
 <!-- 第一部分 顶部topbar-->
-<div class="topbar-container"  ng-include="'views/includes/topbar.html'"  ng-init="showCamera = true" ng-if="index.showTitle == 1"> </div>
-
+<div class="topbar-container"  ng-include="'views/includes/topbar.html'"  ng-init="showCamera = true" ng-if="index.showTitle == 1 && !index.shared_address"> </div>
+<div class="topbar-container"  ng-include="'views/includes/topbarEx.html'" ng-if="index.shared_address"> </div>
 
 <!-- 第二部分 wallethome 所有tab标签-->
 <div ng-controller="walletHomeController as home">
