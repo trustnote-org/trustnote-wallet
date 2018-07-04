@@ -279,6 +279,10 @@ angular.module('copayApp.controllers').controller('sendAssets', function ($scope
 						else if (err == "close") {
 							err = "suspend transaction.";
 						}
+						else if(err.match(/notes to pay fees/))
+							err = gettextCatalog.getString('No notes to pay fees') ;
+						else if(err.match(/authentifier verification failed/))
+							err = gettextCatalog.getString('authentifier verification failed');
 						self.showSending = 0;
 						self.ableClick = true;
 						return self.setError(err);
