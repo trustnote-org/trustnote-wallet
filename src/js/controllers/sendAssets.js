@@ -105,6 +105,16 @@ angular.module('copayApp.controllers').controller('sendAssets', function ($scope
 		if(self.ableClick == false){
 			return;
 		}
+		self.isAssetExist = false;
+		for(var index in $scope.index.arrBalances) {
+			if($scope.index.arrBalances[index].asset === self.asset) {
+				self.isAssetExist = true;
+				break;
+			}
+		}
+		if(!self.isAssetExist) {
+			return self.setError(gettextCatalog.getString('asset does not exist'));
+		}
 
 		var fc = profileService.focusedClient;
 		if (fc.isPrivKeyEncrypted()) {
