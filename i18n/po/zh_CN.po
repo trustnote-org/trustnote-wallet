@@ -2304,3 +2304,6 @@ msgstr "网络错误"
 
 msgid "Logining"
 msgstr "登录中"
+
+msgid "asset does not exist"
+msgstr "请检查是否拥有该资产"
