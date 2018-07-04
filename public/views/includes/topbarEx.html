@@ -1,15 +1,14 @@
 <nav ng-controller="topbarController as topbar" class="tab-bar oh">
-	<section class="right-small" ng-show="showCamera">
+	<section class="right-small">
 		<qr-scanner ng-show="index.isComplete" on-scan="topbar.onQrCodeScanned(data)" before-scan="topbar.onBeforeScan()"></qr-scanner>
 	</section>
 
-  	<section class="middle tab-bar-section">
+	<section class="middle tab-bar-section">
 		<h1 class="ellipsis" ng-style="{ 'max-width': '100%'}">
 			<span
 				class="size-17 colorfff"
 				ng-if="index.arrBalances[index.assetIndex].shared === undefined && !index.shared_address || titleSection">{{(titleSection|translate) || (index.shared_address || index.alias || index.walletName)}}
 			</span>
-
 			<span ng-if="(index.arrBalances[index.assetIndex].shared !== undefined || index.shared_address) && !titleSection">
 				<a ng-click="index.openSubwalletModal()">
 					<span class="ellipsis size-17 colorfff" style="max-width: calc(100% - 14px);float: left;">{{(index.shared_address || index.alias || index.walletName)}}	</span>
@@ -17,5 +16,5 @@
 				</a>
 			</span>
 		</h1>
-  	</section>
+	</section>
 </nav>
