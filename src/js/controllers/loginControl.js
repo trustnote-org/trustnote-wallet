@@ -15,11 +15,22 @@ angular.module('copayApp.controllers').controller('loginControl', function ($sco
 			return;
 		}
 
-		var fc = profileService.focusedClient;
-		if(fc.observed) {
-			self.loginErr = 1;
+		// check contract wallet to login
+		if($scope.index.shared_address) {
+			self.loginErr = gettextCatalog.getString('Contract wallet cannot be logged in');
 			$timeout(function () {
-				self.loginErr = 0;
+				self.loginErr = null;
+			}, 1500)
+			return;
+		}
+
+		var fc = profileService.focusedClient;
+
+		// check watching wallet to login
+		if(fc.observed) {
+			self.loginErr = gettextCatalog.getString("Watching wallet cannot be logged in");
+			$timeout(function () {
+				self.loginErr = null;
 			}, 1500)
 			return;
 		}
@@ -93,24 +104,24 @@ angular.module('copayApp.controllers').controller('loginControl', function ($sco
 					res.on('data', function (data) {
 						data = JSON.parse(data);
 						if (res.statusCode == 200 && data.errCode == 0) {
-							self.loginSuccess = 1;
+							self.loginSuccess = true;
 							$timeout(function () {
-								self.loginSuccess = 0;
+								self.loginSuccess = false;
 								go.path('walletHome');
 							}, 1000)
 						}else{
-							self.loginErr = 1;
+							self.loginErr = gettextCatalog.getString('Login error, try later');
 							$timeout(function () {
-								self.loginErr = 0;
+								self.loginErr = null;
 							}, 1500)
 						}
 					});
 				});
 				req.on('error', function (e) {
 					//console.log("http error");
-					self.loginErr = 1;
+					self.loginErr = gettextCatalog.getString('httpErr');
 					$timeout(function () {
-						self.loginErr = 0;
+						self.loginErr = null;
 					}, 1500)
 				});
 				req.write(content);
