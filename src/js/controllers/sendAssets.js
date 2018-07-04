@@ -105,6 +105,13 @@ angular.module('copayApp.controllers').controller('sendAssets', function ($scope
 		if(self.ableClick == false){
 			return;
 		}
+
+		// check contract wallet to pay
+		if($scope.index.shared_address) {
+			return self.setError(gettextCatalog.getString('Contract wallet cannot be paid'));
+		}
+
+		// check asset to be exist
 		self.isAssetExist = false;
 		for(var index in $scope.index.arrBalances) {
 			if($scope.index.arrBalances[index].asset === self.asset) {
@@ -113,7 +120,7 @@ angular.module('copayApp.controllers').controller('sendAssets', function ($scope
 			}
 		}
 		if(!self.isAssetExist) {
-			return self.setError(gettextCatalog.getString('asset does not exist'));
+			return self.setError(gettextCatalog.getString('Asset does not exist'));
 		}
 
 		var fc = profileService.focusedClient;

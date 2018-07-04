@@ -53,8 +53,8 @@
 	<p class="pButton" ng-click="loginC.loginWebwallet()" translate ng-if="!loginC.showLogining">Login</p>
 	<p class="pButton" translate ng-if="loginC.showLogining">Logining</p>
 
-	<p class="err" translate ng-if="loginC.loginErr == 1">Login error, try later</p>
-	<p class="suc" translate ng-if="loginC.loginSuccess == 1">Login Success</p>
+	<p class="err" translate ng-if="loginC.loginErr">{{loginC.loginErr}}</p>
+	<p class="suc" translate ng-if="loginC.loginSuccess">Login Success</p>
 </div>
 
 

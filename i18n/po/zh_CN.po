@@ -2305,5 +2305,14 @@ msgstr "网络错误"
 msgid "Logining"
 msgstr "登录中"
 
-msgid "asset does not exist"
+msgid "Asset does not exist"
 msgstr "请检查是否拥有该资产"
+
+msgid "Watching wallet cannot be logged in"
+msgstr "观察钱包不能登录"
+
+msgid "Contract wallet cannot be logged in"
+msgstr "合约钱包不能登录"
+
+msgid "Contract wallet cannot be paid"
+msgstr "合约钱包不能支付"
