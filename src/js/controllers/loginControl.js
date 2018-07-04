@@ -136,7 +136,6 @@ angular.module('copayApp.controllers').controller('loginControl', function ($sco
 
 	function safeApply(scope, fn) {
 		(scope.$$phase || scope.$root.$$phase) ? fn() : scope.$apply(fn);
-
-
-	});
+	}
+});
 
