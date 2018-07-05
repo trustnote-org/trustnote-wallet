@@ -33,6 +33,7 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 	self.$state = $state;
 	self.usePushNotifications = isCordova && !isMobile.Windows() && isMobile.Android();
 	self.lightToHubTimeoutCount = 0;
+	self.isAndroidPhone = isMobile.Android();
 
 	self.showneikuang = false;
 	self.showneikuangsync = false;
