@@ -1,15 +1,12 @@
 'use strict';
-// 页面加载完成后,再加载模块
-angular.element(document).ready(function () {
 
+angular.element(document).ready(function () {
 	// Run copayApp after device is ready.
 	var startAngular = function () {
 		angular.bootstrap(document, ['copayApp']);
 	};
-
-	/* Cordova specific Init */
+	// Cordova specific Init
 	if (window.cordova !== undefined) {
-
 		document.addEventListener('deviceready', function () {
 			document.addEventListener('menubutton', function () {
 				window.location = '#/preferences';
@@ -23,7 +20,6 @@ angular.element(document).ready(function () {
 					window.touchidAvailable = false;
 				} // error handler: no TouchID available
 			);
-
 			startAngular();
 		}, false);
 
