@@ -7,24 +7,31 @@ angular.module('copayApp.controllers').controller('loginControl', function ($sco
 	var db = require('trustnote-common/db.js');
 	var https = require('https');
 
-	self.showLogining = 0;
+	self.showLogining = false;
 	self.objToWeb = go.objToWeb;
 
 	self.loginWebwallet = function () {
-		if(self.showLogining == 1){
+		if(self.showLogining){
+			return;
+		}
+
+		// check contract wallet to login
+		if($scope.index.shared_address) {
+			var err  = gettextCatalog.getString('Contract wallet cannot be logged in');
+			self.setError(err);
 			return;
 		}
 
 		var fc = profileService.focusedClient;
+
+		// check watching wallet to login
 		if(fc.observed) {
-			self.loginErr = 1;
-			$timeout(function () {
-				self.loginErr = 0;
-			}, 1500)
+			var err = gettextCatalog.getString('Watching wallet cannot be logged in');
+			self.setError(err);
 			return;
 		}
 
-		self.showLogining = 1;
+		self.showLogining = true;
 		var DataObj = {};
 		DataObj.data = self.objToWeb.loginMsg;  // 登陆吗
 
@@ -32,7 +39,7 @@ angular.module('copayApp.controllers').controller('loginControl', function ($sco
 			profileService.checkPassClose = false;
 			profileService.passWrongUnlockFC(null, function (err) {
 				if (err == 'cancel') {  // 点击取消
-					self.showLogining = 0;
+					self.showLogining = false;
 					profileService.checkPassClose = true;
 				} else if (err) {  // 密码输入错误
 					return;
@@ -93,25 +100,22 @@ angular.module('copayApp.controllers').controller('loginControl', function ($sco
 					res.on('data', function (data) {
 						data = JSON.parse(data);
 						if (res.statusCode == 200 && data.errCode == 0) {
-							self.loginSuccess = 1;
+							self.loginSuccess = true;
 							$timeout(function () {
-								self.loginSuccess = 0;
+								self.loginSuccess = false;
 								go.path('walletHome');
 							}, 1000)
 						}else{
-							self.loginErr = 1;
-							$timeout(function () {
-								self.loginErr = 0;
-							}, 1500)
+							var err = gettextCatalog.getString('Login error, try later');
+							self.setError(err);
 						}
 					});
 				});
 				req.on('error', function (e) {
 					//console.log("http error");
-					self.loginErr = 1;
-					$timeout(function () {
-						self.loginErr = 0;
-					}, 1500)
+					self.showLogining = false;
+					var err = gettextCatalog.getString('httpErr');
+					self.setError(err);
 				});
 				req.write(content);
 				req.end();
@@ -119,5 +123,19 @@ angular.module('copayApp.controllers').controller('loginControl', function ($sco
 		}
 	};
 
+	self.setError = function (err) {
+		self.error = err;
+
+		safeApply($scope, function (){});
+
+		$timeout(function () {
+			self.error = null;
+		}, 1500)
+	};
+
+
+	function safeApply(scope, fn) {
+		(scope.$$phase || scope.$root.$$phase) ? fn() : scope.$apply(fn);
+	}
 });
 
