@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('copayApp.controllers').controller('copayersController',
-	function ($scope, $rootScope, $timeout, $log, $modal, profileService, go, notification, isCordova, gettext, gettextCatalog, animationService) {
+	function ($scope, $rootScope, $timeout, $log, $modal, profileService, go, notification, isCordova, gettext, gettextCatalog, animationService, safeApplyService) {
 		var self = this;
 
 		var delete_msg = gettextCatalog.getString('Are you sure you want to delete this wallet?');
@@ -68,9 +68,10 @@ angular.module('copayApp.controllers').controller('copayersController',
 					if (err) {
 						this.error = err.message || err;
 						console.log(err);
-						$timeout(function () {
-							$scope.$digest();
-						});
+						safeApplyService.safeApply($scope);
+						// $timeout(function () {
+						// 	$scope.$digest();
+						// });
 					} else {
 						go.walletHome();
 						$timeout(function () {

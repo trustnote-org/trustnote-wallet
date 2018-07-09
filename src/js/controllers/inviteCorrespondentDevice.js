@@ -2,7 +2,7 @@
 
 var eventBus = require('trustnote-common/event_bus.js');
 
-angular.module('copayApp.controllers').controller('inviteCorrespondentDeviceController', function ($scope, $timeout, profileService, go, isCordova, correspondentListService, gettextCatalog) {
+angular.module('copayApp.controllers').controller('inviteCorrespondentDeviceController', function ($scope, $timeout, profileService, go, isCordova, correspondentListService, gettextCatalog, safeApplyService) {
 
 	var self = this;
 
@@ -62,7 +62,8 @@ angular.module('copayApp.controllers').controller('inviteCorrespondentDeviceCont
 		var qrstring = $scope.protocol + ":" + $scope.code;  //as passed to the qr generator in inviteCorrespondentDevice.html
 		$scope.qr_version = determineQRcodeVersionFromString(qrstring);
 
-		$scope.$digest();
+		safeApplyService.safeApply($scope);
+		// $scope.$digest();
 		//$timeout(function(){$scope.$digest();}, 100);
 		var eventName = 'paired_by_secret-' + pairingInfo.pairing_secret;
 		eventBus.once(eventName, onPaired);

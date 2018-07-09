@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('copayApp.controllers').controller('botController',
-  function($stateParams, $scope, $rootScope, $timeout, configService, profileService, isCordova, go, correspondentListService) {
+  function($stateParams, $scope, $rootScope, $timeout, configService, profileService, isCordova, go, correspondentListService, safeApplyService) {
 	
 	var self = this;
 	var bots = require('trustnote-common/bots.js');
@@ -14,10 +14,11 @@ angular.module('copayApp.controllers').controller('botController',
 	bots.getBotByID(id, function(bot){
 		bot.description = correspondentListService.escapeHtmlAndInsertBr(bot.description);
 		$scope.bot = bot;
-		$timeout(function(){
-			$scope.$digest();
-		});
-	})
+		safeApplyService.safeApply($scope);
+		// $timeout(function(){
+		// 	$scope.$digest();
+		// });
+	});
 
 	$scope.pair = function(bot) {
 		var matches = bot.pairing_code.match(/^([\w\/+]+)@([\w.:\/-]+)#([\w\/+-]+)$/);

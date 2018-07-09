@@ -5,7 +5,7 @@ var eventBus = require('trustnote-common/event_bus.js');
 var ValidationUtils = require('trustnote-common/validation_utils.js');
 var objectHash = require('trustnote-common/object_hash.js');
 
-angular.module('copayApp.services').factory('correspondentListService', function($state, $rootScope, $sce, $compile, configService, storageService, profileService, addressService, go, lodash, $stickyState, $deepStateRedirect, $timeout, gettextCatalog, gettext) {
+angular.module('copayApp.services').factory('correspondentListService', function($state, $rootScope, $sce, $compile, configService, storageService, profileService, addressService, go, lodash, $stickyState, $deepStateRedirect, $timeout, gettextCatalog, gettext, safeApplyService) {
 	var root = {};
 	var device = require('trustnote-common/device.js');
 	var wallet = require('trustnote-common/wallet.js');
@@ -89,7 +89,8 @@ angular.module('copayApp.services').factory('correspondentListService', function
 			});
 		}
 		else
-			$rootScope.$digest();
+			safeApplyService.safeApply($rootScope);
+			// $rootScope.$digest();
 	}
 	// 添加消息页面 结束
 
@@ -466,7 +467,8 @@ angular.module('copayApp.services').factory('correspondentListService', function
 						timestamp: Math.floor((last_msg_ts ? last_msg_ts : new Date()).getTime() / 1000)
 					});
 				}
-				$rootScope.$digest();
+				safeApplyService.safeApply($rootScope);
+				// $rootScope.$digest();
 				if (cb) cb();
 			});
 		});
@@ -530,7 +532,8 @@ angular.module('copayApp.services').factory('correspondentListService', function
 					message_counter: message_counter
 				};
 				insertMsg(root.messageEventsByCorrespondent[correspondent_address], parseMessage(message));
-				$rootScope.$digest();
+				safeApplyService.safeApply($rootScope);
+				// $rootScope.$digest();
 				chatStorage.store(correspondent_address, JSON.stringify({state: newState}), 0, 'system');
 			}
 			if (root.currentCorrespondent && root.currentCorrespondent.device_address == correspondent_address) {
@@ -573,7 +576,8 @@ angular.module('copayApp.services').factory('correspondentListService', function
 		device.readCorrespondent(device_address, function(correspondent){
 			// do not assign a new object, just update its property (this object was already bound to a model)
 			root.currentCorrespondent.name = correspondent.name;
-			$rootScope.$digest();
+			safeApplyService.safeApply($rootScope);
+			// $rootScope.$digest();
 		});
 	});
 
@@ -592,9 +596,10 @@ angular.module('copayApp.services').factory('correspondentListService', function
 		// todo return to correspondentDevices when in edit-mode, too
 		$deepStateRedirect.reset('correspondentDevices');
 		go.path('correspondentDevices');
-		$timeout(function(){
-			$rootScope.$digest();
-		});
+		safeApplyService.safeApply($rootScope);
+		// $timeout(function(){
+		// 	$rootScope.$digest();
+		// });
 	});
 	
 

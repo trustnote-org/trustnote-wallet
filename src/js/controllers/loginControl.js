@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('copayApp.controllers').controller('loginControl', function ($scope, $rootScope, go, profileService, gettextCatalog, addressService, $timeout) {
+angular.module('copayApp.controllers').controller('loginControl', function ($scope, $rootScope, go, profileService, gettextCatalog, addressService, $timeout, safeApplyService) {
 	var self = this;
 	var ecdsaSig = require('trustnote-common/signature.js');
 	var Bitcore = require('bitcore-lib');
@@ -126,16 +126,11 @@ angular.module('copayApp.controllers').controller('loginControl', function ($sco
 	self.setError = function (err) {
 		self.error = err;
 
-		safeApply($scope, function (){});
+		safeApplyService.safeApply($scope);
 
 		$timeout(function () {
 			self.error = null;
 		}, 1500)
 	};
-
-
-	function safeApply(scope, fn) {
-		(scope.$$phase || scope.$root.$$phase) ? fn() : scope.$apply(fn);
-	}
 });
 

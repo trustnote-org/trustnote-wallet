@@ -9,7 +9,7 @@ var Bitcore = require('bitcore-lib');
 var objectHash = require('trustnote-common/object_hash.js');
 var ecdsaSig = require('trustnote-common/signature.js');
 
-angular.module('copayApp.controllers').controller('walletHomeController', function ($scope, $rootScope, $timeout, $filter, $modal, $log, notification, isCordova, profileService, lodash, configService, storageService, gettext, gettextCatalog, nodeWebkit, addressService, confirmDialog, animationService, addressbookService, correspondentListService, newVersion, autoUpdatingWitnessesList, go) {
+angular.module('copayApp.controllers').controller('walletHomeController', function ($scope, $rootScope, $timeout, $filter, $modal, $log, notification, isCordova, profileService, lodash, configService, storageService, gettext, gettextCatalog, nodeWebkit, addressService, confirmDialog, animationService, addressbookService, correspondentListService, newVersion, autoUpdatingWitnessesList, go, safeApplyService) {
 
 	var self = this;
 	var home = this;
@@ -186,7 +186,8 @@ angular.module('copayApp.controllers').controller('walletHomeController', functi
 						form.address.$isValid = true;
 						form.address.$render();
 					}
-					$scope.$digest();
+					safeApplyService.safeApply($scope);
+					// $scope.$digest();
 				}, 100);
 			};
 
@@ -239,7 +240,8 @@ angular.module('copayApp.controllers').controller('walletHomeController', functi
 						$scope.list = ab;
 						$scope.editAddressbook = true;
 						$scope.toggleEditAddressbook();
-						$scope.$digest();
+						safeApplyService.safeApply($scope);
+						// $scope.$digest();
 					});
 				}, 100);
 			};
@@ -254,7 +256,8 @@ angular.module('copayApp.controllers').controller('walletHomeController', functi
 						}
 						$rootScope.$emit('Local/AddressbookUpdated', ab);
 						$scope.list = ab;
-						$scope.$digest();
+						safeApplyService.safeApply($scope);
+						// $scope.$digest();
 					});
 				}, 100);
 			};
@@ -405,9 +408,10 @@ angular.module('copayApp.controllers').controller('walletHomeController', functi
 						self.addr[fc.credentials.walletId] = addr;
 				}
 
-				$timeout(function () {
-					$scope.$digest();
-				});
+				safeApplyService.safeApply($scope);
+				// $timeout(function () {
+				// 	$scope.$digest();
+				// });
 			});
 		});
 	};
@@ -558,7 +562,8 @@ angular.module('copayApp.controllers').controller('walletHomeController', functi
 		} else {
 			$rootScope.hideMenuBar = false;
 		}
-		$rootScope.$digest();
+		safeApplyService.safeApply($rootScope);
+		// $rootScope.$digest();
 	}, 100);
 
 
@@ -580,9 +585,10 @@ angular.module('copayApp.controllers').controller('walletHomeController', functi
 				this.hideAmount = true;
 			}
 		}
-		$timeout(function () {
-			$rootScope.$digest();
-		}, 1);
+		safeApplyService.safeApply($rootScope);
+		// $timeout(function () {
+		// 	$rootScope.$digest();
+		// }, 1);
 	};
 
 	this.setSendFormInputs = function () {
@@ -633,9 +639,10 @@ angular.module('copayApp.controllers').controller('walletHomeController', functi
 		this.error = prefix + ": " + err;
 		console.log(this.error);
 
-		$timeout(function () {
-			$scope.$digest();
-		}, 1);
+		safeApplyService.safeApply($scope);
+		// $timeout(function () {
+		// 	$scope.$digest();
+		// }, 1);
 	};
 
 
@@ -744,7 +751,8 @@ angular.module('copayApp.controllers').controller('walletHomeController', functi
 					self.error = err;
 					$timeout(function () {
 						delete self.current_payment_key;
-						$scope.$digest();
+						safeApplyService.safeApply($scope);
+						// $scope.$digest();
 					}, 1);
 					return;
 				}
@@ -1260,9 +1268,10 @@ angular.module('copayApp.controllers').controller('walletHomeController', functi
 				form.address.$render();
 			}
 		}
-		$timeout(function () {
-			$rootScope.$digest();
-		}, 1);
+		safeApplyService.safeApply($rootScope);
+		// $timeout(function () {
+		// 	$rootScope.$digest();
+		// }, 1);
 	};
 
 	this.setSendAll = function () {
@@ -1444,7 +1453,8 @@ angular.module('copayApp.controllers').controller('walletHomeController', functi
 						return;
 					}
 					$scope.list = ab;
-					$scope.$digest();
+					safeApplyService.safeApply($scope);
+					// $scope.$digest();
 				});
 			};
 
