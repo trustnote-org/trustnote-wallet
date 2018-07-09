@@ -1,7 +1,6 @@
 <style>
 	span.posiSpan{
-		position: absolute;
-		right:0;
+		float: left;
 	}
 </style>
 
@@ -32,7 +31,6 @@
 
 	<!-- 右边 打开相机 -->
 	<section class="right-small" ng-show="showCamera">
-
 		<!--angular 自定义指令-->
 		<qr-scanner ng-show="index.isComplete" on-scan="topbar.onQrCodeScanned(data)" before-scan="topbar.onBeforeScan()">
 			<!--此处是有内容的，qrScanner中定义 -->
@@ -53,7 +51,7 @@
 
 			<span ng-if="(index.arrBalances[index.assetIndex].shared !== undefined || index.shared_address) && !titleSection">
 				<a ng-click="index.openSubwalletModal()">
-					<span class="ellipsis size-17 colorfff" style="float: left; width: calc(100% - 0px)">
+					<span class="ellipsis size-17 colorfff" style="float: left">
 						{{(index.shared_address || index.alias || index.walletName)}}
 					</span>
 					<span class="arrow-down posiSpan"></span>
