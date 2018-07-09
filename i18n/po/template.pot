@@ -14,7 +14,7 @@ msgstr "(olası çifte harcama)"
 
 #: public/views/create.html:82
 msgid "-- Select co-signer --"
-msgstr "Yedek-kullanıcıyı seçin"
+msgstr "Onaylayıcıyı seçin"
 
 #: public/views/preferencesGlobal.html:135
 msgid "About Trustnote"
@@ -33,7 +33,7 @@ msgstr "Daveti kabul et"
 
 #: public/views/addCorrespondentDevice.html:22
 msgid "Accept invitation from the other device"
-msgstr "Bir başka cihazdan gelen daveti kabul et"
+msgstr "Başka bir cihazdan gelen daveti kabul et"
 
 #: public/views/preferencesInformation.html:65
 msgid "Account"
@@ -118,11 +118,11 @@ msgstr "Miktar"
 
 #: public/views/modals/vote.html:22
 msgid "Answer:"
-msgstr "Cevap"
+msgstr "Cevap:"
 
 #: public/views/copayers.html:19
 msgid "Approve wallet creation on other devices"
-msgstr "Cüzdan yaratımını diğer cihazlardan onayların"
+msgstr "Cüzdan yaratımını diğer cihazlardan onaylayın"
 
 #: src/js/controllers/backup.js:6
 msgid "Are you sure you want to delete the backup words?"
@@ -184,7 +184,7 @@ msgstr "Bir ödeme almadan önce cüzdan anahtarlarınızı yedeklemeniz öneril
 
 #: public/views/backup.html:26
 msgid "Better yet, use multisig wallets with redundancy,"
-msgstr "Daha da iyisi için çoklu imza cüzdanlarını sıkça kullanın"
+msgstr "Daha da iyisi için çoklu imza cüzdanlarını sıkça kullanın,"
 
 #: public/views/modals/bind.html:8
 #: public/views/modals/bind.html:84
@@ -194,7 +194,7 @@ msgstr "Ödeme bağla"
 #: public/views/walletHome.html:346
 #: public/views/walletHome.html:353
 msgid "Bind the payment to a condition"
-msgstr "Şartlı ödeme"
+msgstr "Ödemeyi bir koşula bağlayın"
 
 #: public/views/paymentUri.html:10
 msgid "Bitcoin URI is NOT valid!"
