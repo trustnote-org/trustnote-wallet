@@ -1,9 +1,3 @@
-<style>
-	span.posiSpan{
-		float: left;
-	}
-</style>
-
 
 <nav ng-controller="topbarController as topbar" class="tab-bar oh">
 	<!-- 左边 -->
@@ -49,15 +43,15 @@
 				{{(titleSection|translate) || (index.shared_address || index.alias || index.walletName)}}
 			</span>
 
-			<span ng-if="(index.arrBalances[index.assetIndex].shared !== undefined || index.shared_address) && !titleSection">
-				<a ng-click="index.openSubwalletModal()">
-					<span class="ellipsis size-17 colorfff" style="float: left">
-						{{(index.shared_address || index.alias || index.walletName)}}
-					</span>
-					<span class="arrow-down posiSpan"></span>
-				</a>
+			<!--存在智能合约地址-->
+			<span ng-if="(index.arrBalances[index.assetIndex].shared !== undefined || index.shared_address) && !titleSection" class="ellipsis size-17 colorfff">
+				{{(index.shared_address || index.alias || index.walletName)}}
 			</span>
 		</h1>
   	</section>
 	<!-- 中间部分结束 -->
 </nav>
+
+<!--<a ng-click="index.openSubwalletModal()">-->
+<!--<span class="arrow-down"></span>-->
+<!--</a>-->

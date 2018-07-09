@@ -16,14 +16,13 @@
 				{{(titleSection|translate) || (index.shared_address || index.alias || index.walletName)}}
 			</span>
 
-			<span ng-if="(index.arrBalances[index.assetIndex].shared !== undefined || index.shared_address) && !titleSection">
-				<a ng-click="index.openSubwalletModal()">
-					<span class="ellipsis size-17 colorfff" style="float: left; width: calc(100% - 0px)">
-						{{(index.shared_address || index.alias || index.walletName)}}
-					</span>
-					<span class="arrow-down posiSpan"></span>
-				</a>
+			<span ng-if="(index.arrBalances[index.assetIndex].shared !== undefined || index.shared_address) && !titleSection" class="ellipsis size-17 colorfff">
+				{{(index.shared_address || index.alias || index.walletName)}}
 			</span>
 		</h1>
 	</section>
 </nav>
+
+<!--<a ng-click="index.openSubwalletModal()">-->
+	<!--<span class="arrow-down"></span>-->
+<!--</a>-->
