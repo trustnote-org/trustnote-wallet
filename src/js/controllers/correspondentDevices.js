@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('copayApp.controllers').controller('correspondentDevicesController',
-  function($scope, $timeout, configService, profileService, go, correspondentListService, $state, $rootScope) {
+  function($scope, $timeout, configService, profileService, go, correspondentListService, $state, $rootScope, safeApplyService) {
 	
 	var self = this;
 	
@@ -85,9 +85,11 @@ angular.module('copayApp.controllers').controller('correspondentDevicesControlle
 			$scope.list = ab;
 
 			bots.load(function(err, rows){
-				if (err) $scope.botsError = err.toString();
+				// if (err)
+				// 	$scope.botsError = err.toString();
 				$scope.bots = rows;
-				$scope.$digest();
+				safeApplyService.safeApply($scope);
+				// $scope.$digest();
 			});
 		});
 	};

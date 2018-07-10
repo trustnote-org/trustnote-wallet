@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('copayApp.controllers').controller('createController', function ($scope, $rootScope, $location, $timeout, $log, lodash, go, profileService, configService, isCordova, gettext, isMobile, derivationPathHelper, correspondentListService) {
+angular.module('copayApp.controllers').controller('createController', function ($scope, $rootScope, $location, $timeout, $log, lodash, go, profileService, configService, isCordova, gettext, isMobile, derivationPathHelper, correspondentListService, safeApplyService) {
 
 	var self = this;
 
@@ -42,7 +42,8 @@ angular.module('copayApp.controllers').controller('createController', function (
 		this.cosigners.push({});
 	correspondentListService.list(function (err, ab) {
 		self.candidate_cosigners = ab;
-		$scope.$digest();
+		safeApplyService.safeApply($scope);
+		// $scope.$digest();
 	});
 
 	/*
@@ -195,9 +196,10 @@ angular.module('copayApp.controllers').controller('createController', function (
 			this.hideWalletName = false;
 			this.hideTabs = false;
 		}
-		$timeout(function () {
-			$rootScope.$digest();
-		}, 1);
+		safeApplyService.safeApply($rootScope);
+		// $timeout(function () {
+		// 	$rootScope.$digest();
+		// }, 1);
 	};
 
 	$scope.$on("$destroy", function () {

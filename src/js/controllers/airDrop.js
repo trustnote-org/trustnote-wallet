@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('copayApp.controllers').controller('airDrop', function ($scope, $rootScope, go, profileService, $timeout, gettext, gettextCatalog, isCordova, configService, storageService, nodeWebkit, uxLanguage) {
+angular.module('copayApp.controllers').controller('airDrop', function ($scope, $rootScope, go, profileService, $timeout, gettext, gettextCatalog, isCordova, configService, storageService, nodeWebkit, uxLanguage, safeApplyService) {
 	var self = this;
 	var indexScope = $scope.index;
 	var config = configService.getSync();
@@ -204,9 +204,7 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 			profileService.unlockFC(null, function (err) {
 				if (err) {
 					self.hasClicked = 0;
-					$timeout(function () {
-						$scope.$apply()
-					}, 10);
+					safeApplyService.safeApply($scope);
 					return self.setSendError(gettextCatalog.getString(err.message));
 				}
 				return self.submitForm();
@@ -219,9 +217,7 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 
 		self.geneding = 1;
 		self.hasClicked = 1;
-		$timeout(function () {
-			$scope.$apply()
-		}, 10);
+		safeApplyService.safeApply($scope);
 		self.candyOutputArr = [];
 		self.candyOutputArr1 = [];
 		self.showSeedFlag = 'new';
@@ -399,10 +395,9 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 						"v": Math.floor(Math.random() * 9000 + 1000)
 					};
 					self.text_to_sign_qr = 'TTT:' + JSON.stringify(obj);
-					$timeout(function () {
+					safeApplyService.safeApply($scope, function () {
 						profileService.tempNum2 = obj.v;
-						$scope.$apply();
-					}, 10);
+					});
 					eventBus.once('apiTowalletHome', self.callApiToWalletHome);
 
 					var finishListener = eventBus.listenerCount('finishScaned');
@@ -437,9 +432,8 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 					if (err) {
 						self.hasClicked = 0;
 						self.geneding = 0;
-						$timeout(function () {
-							$scope.$apply()
-						}, 10);
+						safeApplyService.safeApply($scope);
+
 						if (typeof err === 'object') {
 							err = JSON.stringify(err);
 							eventBus.emit('nonfatal_error', "error object from sendMultiPayment: " + err, new Error());
@@ -550,9 +544,7 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 		self.error = prefix + ": " + err;
 		console.log(this.error);
 
-		$timeout(function () {
-			$scope.$digest();
-		}, 1);
+		safeApplyService.safeApply($scope);
 	};
 	self.resetError = function () {
 		self.error = null;
@@ -597,9 +589,7 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 		var fcWalletId = profileService.focusedClient.credentials.walletId;
 		db.query("SELECT wallet,asset,asset_name,num,sum(amount) as amount,creation_date from tcode where wallet='" + fcWalletId + "' GROUP BY num ORDER BY creation_date DESC;", function (rows) {
 			self.recordsList = rows;
-			$timeout(function () {
-				$scope.$apply();
-			}, 100);
+			safeApplyService.safeApply($scope);
 		});
 	};
 	self.getHistoryList();
@@ -613,9 +603,7 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 		var txId = self.recordsList[num].num;
 		db.query("SELECT wallet,asset,asset_name,num,amount,code,creation_date from tcode where num='" + txId + "' ORDER BY creation_date DESC;", function (rows) {
 			self.detileList = rows;
-			$timeout(function () {
-				$scope.$apply();
-			}, 100);
+			safeApplyService.safeApply($scope);
 		});
 	};
 	// 点击复制 T 口令
@@ -630,19 +618,17 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 			self.copyedToBoard = gettextCatalog.getString("Enter T code to redeem your asset at 'TrustNote Wallet/Wallet/Wallet-setting/Redeem T Code'") + self.temStr;
 			if (isCordova) {
 				window.cordova.plugins.clipboard.copy(self.copyedToBoard);
-				$timeout(function () {
+				safeApplyService.safeApply($scope, function () {
 					self.showCopied = 1;
-					$scope.$apply()
-				}, 10);
+				});
 				$timeout(function () {
 					self.showCopied = 0;
 				}, 1500)
 			} else if (nodeWebkit.isDefined()) {
 				nodeWebkit.writeToClipboard(self.copyedToBoard);
-				$timeout(function () {
+				safeApplyService.safeApply($scope, function () {
 					self.showCopied = 1;
-					$scope.$apply()
-				}, 10);
+				});
 				$timeout(function () {
 					self.showCopied = 0;
 				}, 1500)
@@ -657,19 +643,17 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 			self.copyedToBoard = gettextCatalog.getString("Enter T code to redeem your asset at 'TrustNote Wallet/Wallet/Wallet-setting/Redeem T Code'") + self.temStr;
 			if (isCordova) {
 				window.cordova.plugins.clipboard.copy(self.copyedToBoard);
-				$timeout(function () {
+				safeApplyService.safeApply($scope, function () {
 					self.showCopied = 1;
-					$scope.$apply()
-				}, 10);
+				});
 				$timeout(function () {
 					self.showCopied = 0;
 				}, 1500)
 			} else if (nodeWebkit.isDefined()) {
 				nodeWebkit.writeToClipboard(self.copyedToBoard);
-				$timeout(function () {
+				safeApplyService.safeApply($scope, function () {
 					self.showCopied = 1;
-					$scope.$apply()
-				}, 10);
+				});
 				$timeout(function () {
 					self.showCopied = 0;
 				}, 1500)
@@ -681,19 +665,19 @@ angular.module('copayApp.controllers').controller('airDrop', function ($scope, $
 		self.singleTcode = code.code;
 		if (isCordova) {
 			window.cordova.plugins.clipboard.copy(self.singleTcode);
-			$timeout(function () {
+			safeApplyService.safeApply($scope, function () {
 				self.showCopied = 1;
-				$scope.$apply()
-			}, 10);
+			});
+
 			$timeout(function () {
 				self.showCopied = 0;
 			}, 1500)
 		} else if (nodeWebkit.isDefined()) {
 			nodeWebkit.writeToClipboard(self.singleTcode);
-			$timeout(function () {
+			safeApplyService.safeApply($scope, function () {
 				self.showCopied = 1;
-				$scope.$apply()
-			}, 10);
+			});
+
 			$timeout(function () {
 				self.showCopied = 0;
 			}, 1500)

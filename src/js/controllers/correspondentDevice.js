@@ -5,7 +5,7 @@ var constants = require('trustnote-common/constants.js');
 
 
 angular.module('copayApp.controllers').controller('correspondentDeviceController',
-	function ($scope, $rootScope, $timeout, $sce, $modal, configService, profileService, animationService, isCordova, go, correspondentListService, addressService, lodash, $deepStateRedirect, $state, backButton) {
+	function ($scope, $rootScope, $timeout, $sce, $modal, configService, profileService, animationService, isCordova, go, correspondentListService, addressService, lodash, $deepStateRedirect, $state, backButton, safeApplyService) {
 
 		var chatStorage = require('trustnote-common/chat_storage.js');
 		var self = this;
@@ -51,9 +51,10 @@ angular.module('copayApp.controllers').controller('correspondentDeviceController
 						};
 						$scope.autoScrollEnabled = true;
 						$scope.messageEvents.push(correspondentListService.parseMessage(message));
-						$timeout(function () {
-							$scope.$digest();
-						});
+						safeApplyService.safeApply($scope);
+						// $timeout(function () {
+						// 	$scope.$digest();
+						// });
 						chatStorage.store(correspondent.device_address, JSON.stringify({state: newState}), 0, 'system');
 					}
 					/*if (!pref) {
@@ -253,9 +254,10 @@ angular.module('copayApp.controllers').controller('correspondentDeviceController
 						if (err) {
 							profileService.lockFC();
 							$scope.error = err;
-							$timeout(function () {
-								$scope.$digest();
-							}, 1);
+							safeApplyService.safeApply($scope);
+							// $timeout(function () {
+							// 	$scope.$digest();
+							// }, 1);
 							return;
 						}
 
@@ -278,9 +280,10 @@ angular.module('copayApp.controllers').controller('correspondentDeviceController
 
 						if (my_amount === peer_amount && contract.myAsset === contract.peerAsset && contract.peer_pays_to === 'contract') {
 							$scope.error = "The amounts are equal, you cannot require the peer to pay to the contract.  Please either change the amounts slightly or fund the entire contract yourself and require the peer to pay his half to you.";
-							$timeout(function () {
-								$scope.$digest();
-							}, 1);
+							safeApplyService.safeApply($scope);
+							// $timeout(function () {
+							// 	$scope.$digest();
+							// }, 1);
 							return;
 						}
 
@@ -295,9 +298,10 @@ angular.module('copayApp.controllers').controller('correspondentDeviceController
 							readLastMainChainIndex(function (err, last_mci) {
 								if (err) {
 									$scope.error = err;
-									$timeout(function () {
-										$scope.$digest();
-									}, 1);
+									safeApplyService.safeApply($scope);
+									// $timeout(function () {
+									// 	$scope.$digest();
+									// }, 1);
 									return;
 								}
 								var arrExplicitEventCondition =
@@ -348,9 +352,10 @@ angular.module('copayApp.controllers').controller('correspondentDeviceController
 									ifError: function (err) {
 										$scope.bWorking = false;
 										$scope.error = err;
-										$timeout(function () {
-											$scope.$digest();
-										});
+										safeApplyService.safeApply($scope);
+										// $timeout(function () {
+										// 	$scope.$digest();
+										// });
 									},
 									ifOk: function (shared_address) {
 										composeAndSend(shared_address, arrDefinition, assocSignersByPath, my_address);
@@ -595,9 +600,10 @@ angular.module('copayApp.controllers').controller('correspondentDeviceController
 						if (err) {
 							profileService.lockFC();
 							$scope.error = err;
-							$timeout(function () {
-								$scope.$digest();
-							}, 1);
+							safeApplyService.safeApply($scope);
+							// $timeout(function () {
+							// 	$scope.$digest();
+							// }, 1);
 							return;
 						}
 
@@ -1013,9 +1019,10 @@ angular.module('copayApp.controllers').controller('correspondentDeviceController
 			if (!document.chatForm || !document.chatForm.message) // already gone
 				return;
 			var msgField = document.chatForm.message;
-			$timeout(function () {
-				$rootScope.$digest()
-			});
+			safeApplyService.safeApply($rootScope);
+			// $timeout(function () {
+			// 	$rootScope.$digest()
+			// });
 			msgField.selectionStart = msgField.selectionEnd = msgField.value.length;
 		}
 
@@ -1229,7 +1236,11 @@ angular.module('copayApp.controllers').controller('correspondentDeviceController
 				scope.loadingHistory = true;
 				chatScrollPosition.prepareFor('up');
 				scope[attr.whenScrolled](function () {
-					scope.$digest();
+					var phase = scope.$$phase || scope.$root.$$phase;
+					if(phase != '$apply' && phase !='$digest') {
+						scope.$digest();
+					}
+					// scope.$digest();
 					chatScrollPosition.restore();
 					scope.loadingHistory = false;
 				});

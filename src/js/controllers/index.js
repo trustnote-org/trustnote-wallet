@@ -12,7 +12,7 @@ var https = require('https');
 var EventEmitter = require('events').EventEmitter;
 
 
-angular.module('copayApp.controllers').controller('indexController', function ($rootScope, $scope, $log, $filter, $timeout, lodash, go, profileService, configService, isCordova, storageService, addressService, gettext, gettextCatalog, amMoment, nodeWebkit, addonManager, txFormatService, uxLanguage, $state, isMobile, addressbookService, notification, animationService, $modal, bwcService, backButton, pushNotificationsService, newVersion) {
+angular.module('copayApp.controllers').controller('indexController', function ($rootScope, $scope, $log, $filter, $timeout, lodash, go, profileService, configService, isCordova, storageService, addressService, gettext, gettextCatalog, amMoment, nodeWebkit, addonManager, txFormatService, uxLanguage, $state, isMobile, addressbookService, notification, animationService, $modal, bwcService, backButton, pushNotificationsService, newVersion, safeApplyService) {
 	breadcrumbs.add('index.js');
 	var self = this;
 
@@ -33,6 +33,7 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 	self.$state = $state;
 	self.usePushNotifications = isCordova && !isMobile.Windows() && isMobile.Android();
 	self.lightToHubTimeoutCount = 0;
+	self.isAndroidPhone = isMobile.Android();
 
 	self.showneikuang = false;
 	self.showneikuangsync = false;
@@ -1050,9 +1051,10 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 			var walletDefinedByKeys = require('trustnote-common/wallet_defined_by_keys.js');
 			walletDefinedByKeys.readCosigners(self.walletId, function (arrCosignerInfos) {
 				self.copayers = arrCosignerInfos;
-				$timeout(function () {
-					$rootScope.$digest();
-				});
+				safeApplyService.safeApply($rootScope);
+				// $timeout(function () {
+				// 	$rootScope.$digest();
+				// });
 			});
 
 			self.needsBackup = false;

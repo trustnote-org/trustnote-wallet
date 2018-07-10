@@ -2,7 +2,7 @@
 
 var constants = require('trustnote-common/constants.js');
 
-angular.module('copayApp.controllers').controller('qrcodeController', function($scope, $rootScope, $timeout, $filter, $modal, $log, notification, isCordova, profileService, lodash, configService, storageService, gettext, gettextCatalog, nodeWebkit, addressService, confirmDialog, animationService, backButton) {
+angular.module('copayApp.controllers').controller('qrcodeController', function($scope, $rootScope, $timeout, $filter, $modal, $log, notification, isCordova, profileService, lodash, configService, storageService, gettext, gettextCatalog, nodeWebkit, addressService, confirmDialog, animationService, backButton, safeApplyService) {
 
 	var self = this;
 	var conf = require('trustnote-common/conf.js');
@@ -59,10 +59,10 @@ angular.module('copayApp.controllers').controller('qrcodeController', function($
 					if (addr)
 						self.addr[fc.credentials.walletId] = addr;
 				}
-
-				$timeout(function(){
-					$scope.$digest();
-				});
+				safeApplyService.safeApply($scope);
+				// $timeout(function(){
+				// 	$scope.$digest();
+				// });
 			});
 		});
 	};
