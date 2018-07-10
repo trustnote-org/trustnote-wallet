@@ -106,6 +106,7 @@ angular.module('copayApp.controllers').controller('loginControl', function ($sco
 								go.path('walletHome');
 							}, 1000)
 						}else{
+							self.showLogining = false;
 							var err = gettextCatalog.getString('Login error, try later');
 							self.setError(err);
 						}
