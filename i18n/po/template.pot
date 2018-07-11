@@ -1328,7 +1328,7 @@ msgstr "Toplam Kilitli Bakiye"
 
 #: public/views/create.html:56
 msgid "Total number of co-signers"
-msgstr "Toplam Ortak İmza Sahipleri"
+msgstr "Toplam ortak imza sahipleri"
 
 #: public/views/modals/tx-details.html:9
 msgid "Transaction"
