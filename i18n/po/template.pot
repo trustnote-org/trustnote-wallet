@@ -1299,7 +1299,7 @@ msgstr "Bu işlem geçersiz hale geldi; büyük olasılıkla çift harcama giri�
 #: public/views/import.html:57
 #: public/views/recoveryFromSeed.html:39
 msgid "This will permanently delete all your existing wallets!"
-msgstr "Bu tüm var olan tüm cüzdanlarınızı kalıcı olarak silecektir!"
+msgstr "Bu var olan tüm cüzdanlarınızı kalıcı olarak silecektir!"
 
 #: public/views/includes/output.html:2
 #: public/views/includes/transaction.html:19
