@@ -14,7 +14,7 @@ msgstr "(olası çifte harcama)"
 
 #: public/views/create.html:82
 msgid "-- Select co-signer --"
-msgstr "Onaylayıcıyı seçin"
+msgstr "Yedek-kullanıcıyı seçin"
 
 #: public/views/preferencesGlobal.html:135
 msgid "About Trustnote"
@@ -33,7 +33,7 @@ msgstr "Daveti kabul et"
 
 #: public/views/addCorrespondentDevice.html:22
 msgid "Accept invitation from the other device"
-msgstr "Başka bir cihazdan gelen daveti kabul et"
+msgstr "Bir başka cihazdan gelen daveti kabul et"
 
 #: public/views/preferencesInformation.html:65
 msgid "Account"
@@ -118,11 +118,11 @@ msgstr "Miktar"
 
 #: public/views/modals/vote.html:22
 msgid "Answer:"
-msgstr "Cevap:"
+msgstr "Cevap"
 
 #: public/views/copayers.html:19
 msgid "Approve wallet creation on other devices"
-msgstr "Cüzdan yaratımını diğer cihazlardan onaylayın"
+msgstr "Cüzdan yaratımını diğer cihazlardan onayların"
 
 #: src/js/controllers/backup.js:6
 msgid "Are you sure you want to delete the backup words?"
@@ -184,7 +184,7 @@ msgstr "Bir ödeme almadan önce cüzdan anahtarlarınızı yedeklemeniz öneril
 
 #: public/views/backup.html:26
 msgid "Better yet, use multisig wallets with redundancy,"
-msgstr "Daha da iyisi için çoklu imza cüzdanlarını sıkça kullanın,"
+msgstr "Daha da iyisi için çoklu imza cüzdanlarını sıkça kullanın"
 
 #: public/views/modals/bind.html:8
 #: public/views/modals/bind.html:84
@@ -194,7 +194,7 @@ msgstr "Ödeme bağla"
 #: public/views/walletHome.html:346
 #: public/views/walletHome.html:353
 msgid "Bind the payment to a condition"
-msgstr "Ödemeyi bir koşula bağlayın"
+msgstr "Şartlı ödeme"
 
 #: public/views/paymentUri.html:10
 msgid "Bitcoin URI is NOT valid!"
@@ -330,7 +330,7 @@ msgstr "Panoya kopyalandı"
 
 #: public/views/recoveryFromSeed.html:42
 msgid "Correspondents are not restored."
-msgstr "Muhbirler geri yüklenemez"
+msgstr "Karşı tarafa ilişkin veriler geri yüklenemedi."
 
 #: src/js/controllers/walletHome.js:598
 msgid "Could not create payment proposal"
@@ -342,7 +342,7 @@ msgstr "Belirtilmiş özel anahtar kullanılarak oluşturulamadı"
 
 #: src/js/services/profileService.js:232
 msgid "Could not create using the specified extended public key"
-msgstr "Belirtilmiş özel anahtar kullanılarak oluşturulamadı"
+msgstr "Belirtilmiş genel  anahtar kullanılarak oluşturulamadı"
 
 #: src/js/services/profileService.js:215
 msgid "Could not create: Invalid wallet seed"
@@ -385,7 +385,7 @@ msgstr "Yeni bir cüzdan oluştur"
 #: public/views/add.html:15
 #: public/views/create.html:165
 msgid "Create new wallet"
-msgstr "Yeni bir cüzdan oluştur"
+msgstr "Yeni cüzdan oluştur"
 
 #: src/js/controllers/index.js:272
 msgid "Create new wallet  together with  ?"
@@ -425,7 +425,7 @@ msgstr "Bir kağıt cüzdanın çözümlenmesi bu cihaz için 5 dakikaya kadar s
 
 #: public/views/walletHome.html:157
 msgid "Definition"
-msgstr "Tarih"
+msgstr "Tanımlama"
 
 #: public/views/modals/address-definition.html:8
 msgid "Definition of smart address"
@@ -612,7 +612,7 @@ msgstr "Geçmiş"
 
 #: src/js/controllers/index.js:590
 msgid "Home"
-msgstr "Giriş"
+msgstr "Ana Sayfa"
 
 #: public/views/preferencesTor.html:14
 msgid "Host"
@@ -688,7 +688,7 @@ msgstr "Geçersiz"
 
 #: src/js/controllers/index.js:1501
 msgid "Invalid Touch ID"
-msgstr "Geçersiz Dokunma Kimliği"
+msgstr "Geçersiz Parmak İzi"
 
 #: public/views/addCorrespondentDevice.html:15
 msgid "Invite the other device"
@@ -696,7 +696,7 @@ msgstr "Diğer cihazı davet et"
 
 #: public/views/backup.html:22
 msgid "Just the wallet seed is not enough.  With the seed alone, you won't be able to restore multisig wallets and private assets such as blackbytes."
-msgstr "Sadece cüzdan anahtarı yeterli değil. Yalnız tohumla, çoklu imza cüzdanları ve blackbytes gibi özel varlıkları geri yükleyemezsiniz. ""
+msgstr "Sadece cüzdan anahtarı yeterli değil. Yalnızca anahtar ile, çoklu imza cüzdanları ve blackbytes gibi özel varlıkları geri yükleyemezsiniz. "
 
 #: public/views/splash.html:36
 msgid "Keep only data relevant to you"
@@ -875,11 +875,11 @@ msgstr "Ödeme kabul edildi"
 
 #: public/views/modals/tx-status.html:16
 msgid "Payment Proposal Created"
-msgstr ""
+msgstr "Ödeme Önerisi Oluşturuldu"
 
 #: public/views/walletHome.html:174
 msgid "Payment Proposals"
-msgstr "Ödeme Önerisi Oluşturuldu"
+msgstr "Ödeme Önerileri"
 
 #: public/views/modals/tx-status.html:38
 msgid "Payment Rejected"
@@ -891,7 +891,7 @@ msgstr "Ödeme Gönderildi"
 
 #: public/views/modals/address-definition.html:19
 msgid "Peer:"
-msgstr "Çift"
+msgstr "Çift:"
 
 #: public/views/preferencesDeleteWallet.html:22
 msgid "Permanently delete this wallet. THIS ACTION CANNOT BE REVERSED"
@@ -1178,7 +1178,7 @@ msgstr "Cüzdandan harcanan ödemeyi imzala"
 
 #: src/js/services/profileService.js:275
 msgid "Small Expenses Wallet"
-msgstr Küçük Harcama Cüzdanı""
+msgstr "Küçük Harcama Cüzdanı""
 
 #: src/js/controllers/create.js:32
 msgid "Specify Seed..."
@@ -1286,7 +1286,7 @@ msgstr "Bu özel bir varlıktır, lütfen yalnızca sohbetteki linklere tıklaya
 
 #: public/views/splash.html:28
 msgid "This option is better for privacy but will take  several gigabytes of storage and the initial sync will take several days.  CPU load will be high during sync."
-msgstr ""
+msgstr "Bu seçenek gizlilik yönünden daha iyidir lakin birkaç gigabyte'a kadar veri kullanımı gerçekleşecek ve ilk senkronizasyon birkaç gün sürecektir. Bu süreç içerisinde CPU kullanımı yüksek olacaktır."
 
 #: public/views/walletHome.html:347
 msgid "This payment is bound to a condition"
@@ -1299,7 +1299,7 @@ msgstr "Bu işlem geçersiz hale geldi; büyük olasılıkla çift harcama giri�
 #: public/views/import.html:57
 #: public/views/recoveryFromSeed.html:39
 msgid "This will permanently delete all your existing wallets!"
-msgstr "Bu tüm var olan cüzdanlarınızı kalıcı olarak silecektir!"
+msgstr "Bu tüm var olan tüm cüzdanlarınızı kalıcı olarak silecektir!"
 
 #: public/views/includes/output.html:2
 #: public/views/includes/transaction.html:19
@@ -1324,11 +1324,11 @@ msgstr "Ödemeyi bir şarta bağlamak için lütfen sohbetteki eş adresini tık
 
 #: public/views/walletHome.html:182
 msgid "Total Locked Balance"
-msgstr ""
+msgstr "Toplam Kilitli Bakiye"
 
 #: public/views/create.html:56
 msgid "Total number of co-signers"
-msgstr "Toplam Kilitli Bakiye"
+msgstr "Toplam Ortak İmza Sahipleri"
 
 #: public/views/modals/tx-details.html:9
 msgid "Transaction"
@@ -1389,7 +1389,7 @@ msgstr "UYARI: Yedekleme gerekiyor"
 
 #: public/views/backup.html:77
 msgid "WARNING: This seed was created with a passphrase. To recover this wallet both the mnemonic and passphrase are needed."
-msgstr "UYARI: Bu tohum bir parola ile oluşturuldu. Bu cüzdanı kurtarmak için hem anımsatıcı hem de parola gerekli."
+msgstr "UYARI: Bu kaynak bir parola ile oluşturuldu. Bu cüzdanı kurtarmak için hem anımsatıcı hem de parola gerekli."
 
 #: public/views/import.html:55
 #: public/views/recoveryFromSeed.html:37
@@ -1490,7 +1490,7 @@ msgstr "Bir cüzdana sahip değilsiniz"
 #: public/views/backup.html:55
 #: public/views/recoveryFromSeed.html:31
 msgid "Your Wallet Seed:"
-msgstr "Cüzdan Anahtarınız"
+msgstr "Cüzdan Anahtarınız:"
 
 #: public/views/export.html:33
 msgid "Your export password"
