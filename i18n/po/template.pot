@@ -1316,11 +1316,11 @@ msgstr "Her şeyi yeniden yüklemek için, lütfen tam yedekleme yapınız (bu s
 
 #: public/views/walletHome.html:350
 msgid "To bind the payment to a condition, please click the peer's address in chat"
-msgstr ""
+msgstr "Ödemeyi bir şarta bağlamak için lütfen alıcının chat üzerindeki adresine tıklayınız."
 
 #: public/views/walletHome.html:259
 msgid "To protect your privacy, new addresses are generated automatically once you use them."
-msgstr "Ödemeyi bir şarta bağlamak için lütfen sohbetteki eş adresini tıklayın."
+msgstr "Gizliliğinizi korumak adına, yeni adresler onları kullandığınız anda otomatik olarak oluşturulacaktır."
 
 #: public/views/walletHome.html:182
 msgid "Total Locked Balance"
