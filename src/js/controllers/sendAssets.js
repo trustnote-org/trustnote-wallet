@@ -10,6 +10,8 @@ angular.module('copayApp.controllers').controller('sendAssets', function ($scope
 	self.showSending = 0; // 默认不显示 sending
 	self.onloading = true; // 初始化 显示
 	self.txid = go.objSendAsset; // go 中传递过来的 txid
+	self.tipShow = false;
+	self.sendSuccess = false;
 
 	self.sendMsgDir = function () {
 		var content = self.txid;
@@ -51,10 +53,8 @@ angular.module('copayApp.controllers').controller('sendAssets', function ($scope
 	};
 	self.sendMsgDir();
 
-
-
-
-	/*var data = {
+	/*
+	var data = {
 		"errCode": 0,
 		"errMsg": "success",
 		//     kPI5sZc1e7vG/nik67qDP4N8sjAnnhYRsUTUB/YvsTY=     CC
@@ -68,16 +68,16 @@ angular.module('copayApp.controllers').controller('sendAssets', function ($scope
 					"address": "QCCB6ECZBXNREX5H6QGBAKKTOTMXDAMS",
 					"amount": 1
 				}
-				// ,
-				// {
-				// 	"address": "kdkdkdkdkkdkdkkkdkdkkdk",
-				// 	"amount": 10
-				// }
-				// ,
-				// {
-				// 	"address": "kdkdkdkdkkdkdkkkdkdkkdk",
-				// 	"amount": 10
-				// }
+				,
+				{
+					"address": "QCCB6ECZBXNREX5H6QGBAKKTOTMXDAMS",
+					"amount": 10
+				}
+				,
+				{
+					"address": "QCCB6ECZBXNREX5H6QGBAKKTOTMXDAMS",
+					"amount": 10
+				}
 			]
 		}
 	};
@@ -85,14 +85,10 @@ angular.module('copayApp.controllers').controller('sendAssets', function ($scope
 	self.message = data.data.message;
 	self.outputs = data.data.outputs; // 发送outputs 数组
 	self.asset = data.data.asset;  // 资产 例如：base
-	self.Showasset = self.asset.length > 10? self.asset.substr(0,10) + '...' + self.asset.substr(self.asset.length - 10) : self.asset;
+	//self.Showasset = self.asset.length > 10? self.asset.substr(0,10) + '...' + self.asset.substr(self.asset.length - 10) : self.asset;
 	self.onloading = false;
-	self.ableClick = 1;*/
-
-
-
-
-
+	self.ableClick = 1;
+	*/
 
 	self.closeSend = function () {
 		if(self.ableClick == false){
@@ -100,7 +96,7 @@ angular.module('copayApp.controllers').controller('sendAssets', function ($scope
 		}
 		go.path('walletHome');
 	};
-// 点击发送
+	// 点击发送
 	self.sendAssets = function () {
 		if(self.ableClick == false){
 			return;
@@ -316,7 +312,9 @@ angular.module('copayApp.controllers').controller('sendAssets', function ($scope
 								data = JSON.parse(data);
 								if (res.statusCode == 200 && data.errCode == 0) {
 									$rootScope.$emit("NewOutgoingTx");
+									self.sendSuccess = true;
 									$timeout(function () {
+										self.sendSuccess = false;
 										go.path('walletHome');
 									}, 1000)
 								}else{

@@ -2281,17 +2281,17 @@ msgstr "登录"
 msgid "Login error, try later"
 msgstr "登录错误，稍后再试"
 
-msgid "Confirm login to iToken platform"
-msgstr "网页版iToken登录确认"
+msgid "Confirm login to iToken"
+msgstr "iToken登录确认"
 
-msgid "Login Success"
+msgid "Login successful"
 msgstr "登录成功"
 
-msgid "Message:"
-msgstr "附加消息："
+msgid "Memo:"
+msgstr "备注："
 
 msgid "Type of Assets:"
-msgstr "发送资产："
+msgstr "转账资产："
 
 msgid "AssetsID:"
 msgstr "资产ID："
@@ -2316,3 +2316,9 @@ msgstr "合约钱包不能登录"
 
 msgid "Contract wallet cannot be paid"
 msgstr "合约钱包不能支付"
+
+msgid "Send Success"
+msgstr "转账成功"
+
+msgid "Address&Amount:"
+msgstr "收款地址&金额："
