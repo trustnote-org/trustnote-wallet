@@ -14,18 +14,18 @@
 		height:100%;
 	}
 	p.pButton{
-		height: 35px;
+		height: 45px;
 		text-align: center;
-		line-height: 35px;
-		background: #fff;
-		color: #0095ff;
-		border: 1px solid #0095ff;
-		border-radius: 5px;
+		line-height: 45px;
+		background: #0095ff;
+		color: #ffffff;
+		border-radius: 45px;
 		cursor: pointer;
-		width: 40%;
-		position: fixed;
-		bottom: 45px;
-		left: 30%;
+		width: 90%;
+		position: absolute;
+		bottom: 70px;
+		left: 50%;
+		margin-left: -45%;
 	}
 	p.err,p.suc{
 		font-size: 14px;
@@ -33,11 +33,45 @@
 		margin-top: 10px;
 		margin-bottom: 0;
 	}
+	p.suc{
+		width: 40%;
+		height: 38px;
+		line-height: 38px;
+		color: white;
+		margin: 0 auto;
+		margin-top: 65%;
+		border-radius: 5px;
+		background-color: rgba(0,0,0,0.50);
+	}
+	p.err{
+		color: red;
+	}
+	p.suc img ,p.err img{
+		height: 1.1rem;
+		margin-right: 0.2rem;
+	}
 	p.conF{
 		font-size:14px;
 		text-align: center;
 		color: #333;
-		margin-top: 5px;
+		margin-top: 20px;
+	}
+	.cancel{
+		text-align: center;
+		cursor: pointer;
+		margin-top: 15px;
+		position: absolute;
+		bottom: 30px;
+		left: 0;
+		width: 100%;
+	}
+	.success-cover{
+		position: absolute;
+		left:0;
+		right: 0;
+		top: 0;
+		bottom: 0;
+		background: rgba(0,0,0,0.20);
 	}
 </style>
 
@@ -48,13 +82,24 @@
 	<div class="imgDiv">
 		<img src="img/itoken.png" alt="">
 	</div>
-	<p class="conF" translate>Confirm login to iToken platform</p>
+	<p class="conF" translate>Confirm login to iToken</p>
 
 	<p class="pButton" ng-click="loginC.loginWebwallet()" translate ng-if="!loginC.showLogining">Login</p>
 	<p class="pButton" translate ng-if="loginC.showLogining">Logining</p>
+	<p class="cancel" ng-click="$root.go('walletHome')" translate>Cancel</p>
 
-	<p class="err" translate ng-if="loginC.error">{{loginC.error}}</p>
-	<p class="suc" translate ng-if="loginC.loginSuccess">Login Success</p>
+	<p class="err" ng-if="loginC.error">
+		<img src="img/login_err.png" alt="">
+		<span translate>{{loginC.error}}</span>
+	</p>
+
+	<div class="success-cover" ng-if="loginC.loginSuccess">
+		<p class="suc">
+			<img src="img/login_success.png" alt="">
+			<span translate>Login successful</span>
+		</p>
+	</div>
+
 </div>
 
 
