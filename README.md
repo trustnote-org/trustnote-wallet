@@ -131,6 +131,13 @@ Once the user starts to use TrustNote Wallet, cache files will be generated in t
 * [GitHub Issues](https://github.com/trustnote/trustnote-wallet/issues)
 * [Email Support](mailto:foundation@trustnote.org)
 
+## Translation
+
+- **Turkish** - Caner Sevince, Sait Dogan Etiler，
+- **Indonesian** - IYOES
+
+big thanks !
+
 ## License
 
 MIT
