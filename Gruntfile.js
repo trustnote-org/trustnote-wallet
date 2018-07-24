@@ -229,7 +229,7 @@ module.exports = function (grunt) {
 				platforms: [getPlatform()],
 				appName: 'TrustNote',
 				buildDir: '../trustnotebuilds',
-				version: '0.14.7',
+				version: '0.26.6',
 				zip: false,
 				macIcns: './public/img/icons/icon-white-outline.icns',
 				winIco: './public/img/icons/icon-white-outline.ico',
