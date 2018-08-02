@@ -14,7 +14,7 @@
     "scripts": {
         "win64": "build --tasks win-x64 --mirror https://npm.taobao.org/mirrors/nwjs/ .",
         "osx64": "build --tasks mac-x64 --mirror https://npm.taobao.org/mirrors/nwjs/ .",
-        "linux64": "build --tasks linux-x64--mirror https://npm.taobao.org/mirrors/nwjs/ .",
+        "linux64": "build --tasks linux-x64 --mirror https://npm.taobao.org/mirrors/nwjs/ .",
         "start": "run --x64 --mirror https://npm.taobao.org/mirrors/nwjs/  ."
     },
     "window": {
@@ -112,7 +112,11 @@
             "webkitbuilds/**",
             "i18n/**"
         ],
-        "strippedProperties": ["scripts", "devDependencies", "build"],
+        "strippedProperties": [
+            "scripts",
+            "devDependencies",
+            "build"
+        ],
         "output": "../trustnotebuilds/",
         "outputPattern": "TrustNote-${VERSION}-${PLATFORM}-${ARCH}",
         "win": {
