@@ -1,112 +1,295 @@
 <style>
-	span.spanClose{
-		margin-left: 10px;
-		color: #0095ff;
-		line-height:45px;
-		cursor: pointer;
+	.top-bar {
+		width: 100%;
+		height: 45px;
+		background-color: #12172e;
 	}
-	span.NgspanClose{
-		color: #8E8E8E;
+
+	.top-left {
+		float: left;
+		height: 45px;
 	}
-	p.pButton{
-		height: 35px;
+
+	.top-middle {
+		height: 45px;
+		line-height: 45px;
+		font-weight: 600;
+		color: white;
+		font-size: 1rem;
 		text-align: center;
-		line-height: 35px;
-		background: #0095ff;
-		color: #fff;
-		border-radius: 5px;
-		cursor: pointer;
-		width: 40%;
-		position: fixed;
-		bottom: 45px;
-		left: 30%;
 	}
-	p.ngpButton{
+
+	.top-right {
+		float: right;
+		height: 45px;
+	}
+
+	.tip {
+		height: 1.2rem;
+		margin-right: 0.5rem;
+	}
+
+	.tip-content {
+		position: absolute;
+		z-index: 999;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		background-color: rgba(0, 0, 0, 0.40);
+	}
+
+	.token {
+		width: 24rem;
+		height: 104px;
+		padding-top: 1.5rem;
+		padding-left: 0.5rem;
+		margin: 2.5rem auto;
+		position: relative;
+	}
+
+	.token h3 {
+		font-weight: 600;
+		font-size: 0.9rem;
+		margin: 0.2rem 0;
+	}
+
+	.token p {
+		font-size: 0.8rem;
+		font-weight: 500;
+		margin: 0;
+	}
+
+	.token img {
+		width: 24rem;
+		position: absolute;
+		top: 0;
+		left: 0;
+		z-index: -1;
+	}
+
+	.spanClose {
+		height: 1rem;
+		margin-left: 0.5rem;
+	}
+
+	p.pButton {
+		height: 45px;
+		text-align: center;
+		line-height: 45px;
+		background: #0095ff;
+		color: #ffffff;
+		border-radius: 45px;
+		cursor: pointer;
+		width: 90%;
+		position: absolute;
+		bottom: 80px;
+		left: 50%;
+		margin-left: -45%;
+	}
+
+	p.ngpButton {
 		background: #999;
 	}
-	p.tosend{
+
+	p.tosend {
 		padding-left: 10px;
 		margin: 15px 0 0 0;
 		font-size: 14px;
 		color: #333;
 	}
-	p.tosends{
+
+	p.tosends {
 		padding-left: 10px;
 		margin: 0;
 		font-size: 14px;
 		color: #333;
 	}
-	div.sendwrap{
-		height: 350px;
-		overflow: auto;
-		margin-top: 20px;
+
+	div.sendwrap {
+		max-height: 25rem;
+		overflow-x: hidden;
+		overflow-y: scroll;
+		background-color: white;
 	}
-	ul.sendul{
-		list-style: none;
-		padding-left: 10px;
+
+	::-webkit-scrollbar {
+		display: none;
+	}
+
+	ul.sendul {
 		margin: 0;
+		list-style: none;
 		font-size: 16px;
 	}
-	ul.sendul li{
+
+	ul.sendul li {
 		line-height: 35px;
-	}
-	ul.sendul li .fspan{
-		margin-bottom: 0px;
-		font-size: 14px;
-	}
-	ul.sendul li .sspan{
-		text-align: right;
-		margin-right: 10px;
-		border-bottom: 1px solid #E8E8E8;
+		padding-left: 10px;
 		padding-bottom: 5px;
-		padding-right: 15px;
+		border-top: 1px solid #D8D8D8;
+	}
+
+	ul.sendul li .fspan {
+		margin-bottom: 0.2rem;
 		font-size: 14px;
 	}
-	div.loading{
-		text-align: center;
-		padding-top: 150px;
+
+	ul.sendul li .sspan {
+		font-size: 14px;
+		font-weight: 600;
+		margin-top: 0.7rem;
+		margin-bottom: 0.3rem;
+	}
+
+	div.loading {
 		color: #666;
+		text-align: center;
+		padding-top: 0.5rem;
+		border-top: 1px solid #D8D8D8;
+	}
+
+	.cancel {
+		height: 45px;
+		text-align: center;
+		line-height: 45px;
+		background: #CCCCCC;
+		color: black;
+		border-radius: 45px;
+		cursor: pointer;
+		width: 90%;
+		position: absolute;
+		bottom: 15px;
+		left: 50%;
+		margin-left: -45%;
+	}
+
+	.data-head {
+		margin-top: 1rem;
+		margin-bottom: 0.25rem;
+		padding-bottom: 0.5rem;
+		padding-left: 0.5rem;
+		font-size: 0.8rem;
+		font-weight: 600;
+	}
+
+	.err {
+		width: 100%;
+		height: 2rem;
+		text-align: center;
+		line-height: 2rem;
+		background-color: #FEE2E2;
+	}
+
+	.err img {
+		height: 1rem;
+		margin-right: 0.2rem;
+	}
+
+	.err span {
+		vertical-align: middle;
+		display: inline-block;
+		font-size: 0.8rem;
+		font-weight: 500;
+	}
+
+	.success-cover {
+		position: absolute;
+		left: 0;
+		right: 0;
+		top: 0;
+		bottom: 0;
+		background: rgba(0, 0, 0, 0.20);
+	}
+
+	p.suc {
+		width: 36%;
+		height: 38px;
+		line-height: 38px;
+		color: white;
+		font-size: 14px;
+		text-align: center;
+		margin: 0 auto;
+		margin-top: 65%;
+		border-radius: 5px;
+		background-color: rgba(0, 0, 0, 0.50);
+	}
+
+	p.suc img {
+		height: 1.1rem;
+		margin-right: 0.2rem;
+	}
+
+	#mainSection>section{
+		background-color: #F1F2F7;
 	}
 </style>
 
 
 <div ng-controller="sendAssets as sendA">
-	<span class="spanClose" ng-class="{'NgspanClose': !sendA.ableClick}" ng-click="sendA.closeSend()" translate>Close</span>
-
-	<div ng-if="!sendA.onloading && !sendA.error">
-		<p class="tosend" ng-if="sendA.message">
-			<span translate>Message:</span>
-			<span>{{sendA.message}}</span>
-		</p>
-		<p class="tosends">
+	<!--top顶部-->
+	<nav class="top-bar">
+		<!-- 左边部分 -->
+		<section class="top-left">
+			<img src="img/itoken_close.png" class="spanClose" ng-class="{'NgspanClose': !sendA.ableClick}"
+				 ng-click="sendA.closeSend()">
+		</section>
+		<!-- 右边部分 -->
+		<section class="top-right" ng-click="sendA.tipShow=true">
+			<img class="tip" src="img/tip.png" alt="">
+		</section>
+		<!-- 中间部分 -->
+		<section class="top-middle">
 			<span translate>Type of Assets:</span>
 			<span>{{sendA.assetsType}}</span>
-		</p>
-		<p class="tosends">
-			<span translate>AssetsID:</span>
-			<span>{{sendA.Showasset}}</span>
-		</p>
-
-		<div class="sendwrap">
-			<ul class="sendul">
-				<li ng-repeat="item in sendA.outputs">
-					<p class="fspan">{{item.address}}</p>
-					<p class="sspan">{{sendA.asset == 'base'? item.amount/1000000:item.amount}} {{sendA.assetsType}}</p>
-				</li>
-			</ul>
+		</section>
+	</nav>
+	<!--token ID-->
+	<div class="tip-content" ng-show="sendA.tipShow" ng-click="sendA.tipShow=false">
+		<div class="token" ng-click="$event.stopPropagation();">
+			<h3>
+				<span translate>Memo:</span>
+				<span>{{sendA.message}}</span>
+			</h3>
+			<h3>Token ID：</h3>
+			<p>{{sendA.asset}}</p>
+			<img src="img/tip_bg.png" alt="">
 		</div>
-		<div class="cb"></div>
 	</div>
 
-	<div class="loading" ng-if="sendA.onloading" translate>Loading...</div>
-	<div class="loading" ng-if="sendA.error" translate>{{sendA.error}}</div>
+	<!--错误信息-->
+	<div class="err" ng-if="sendA.error">
+		<img src="img/login_err.png" alt="">
+		<span translate>{{sendA.error}}</span>
+	</div>
+	<!--转账信息-->
+	<div class="sendwrap">
+		<p class="data-head">Address&Amount:</p>
+		<ul class="sendul" ng-if="!sendA.onloading">
+			<li ng-repeat="item in sendA.outputs">
+				<p class="sspan">{{sendA.asset == 'base'? item.amount/1000000:item.amount}}</p>
+				<p class="fspan">{{item.address}}</p>
+			</li>
+		</ul>
+		<div class="loading" ng-if="sendA.onloading" translate>Loading...</div>
+	</div>
+	<div class="cb"></div>
 
-
-
-	<p class="pButton" ng-class="{'ngpButton':sendA.ableClick == 0}" ng-click="sendA.sendAssets()" translate ng-if="!sendA.showSending">Send</p>
+	<!--转账操作-->
+	<p class="pButton" ng-class="{'ngpButton':sendA.ableClick == 0}" ng-click="sendA.sendAssets()"
+	   ng-if="!sendA.showSending" translate>OK</p>
 
 	<p class="pButton" translate ng-if="sendA.showSending">Sending...</p>
 
+	<p class="cancel" ng-click="$root.go('walletHome')" translate>Cancel</p>
+
+	<!--转账成功-->
+	<div class="success-cover" ng-if="sendA.sendSuccess">
+		<p class="suc">
+			<img src="img/login_success.png" alt="">
+			<span translate>Send Success</span>
+		</p>
+	</div>
 </div>
 
 

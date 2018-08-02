@@ -10,6 +10,12 @@ angular.module('copayApp.services').factory('uxLanguage', function languageServi
 		name: '中文',
 		isoCode: 'zh_CN',
 		useIdeograms: true
+	}, {
+		name: 'Bahasa Indonesia',
+		isoCode: 'id_ID',
+	}, {
+		name: 'Türk',
+		isoCode: 'tr_TR',
 	}];
 
 
