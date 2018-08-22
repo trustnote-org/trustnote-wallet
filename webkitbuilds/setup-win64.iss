@@ -29,9 +29,7 @@ UninstallDisplayIcon={app}/icon.ico
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
-; Name: "french"; MessagesFile: "compiler:Languages\French.isl"
-; Name: "japanese"; MessagesFile: "compiler:Languages\Japanese.isl"
-; Name: "spanish"; MessagesFile: "compiler:Languages\Spanish.isl"
+Name: "chinese"; MessagesFile: "compiler:Languages\ChineseSimplified.isl"
 
 [Registry]
 Root: HKLM; Subkey: "Software\Classes\trustnote"; Flags: uninsdeletekey
@@ -47,7 +45,7 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 
 [Files]
 ; Source: "..\trustnotebuilds\trustnote-test\win64\trustnote.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\..\trustnotebuilds\{#MyAppPackageName}\win64\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "..\..\trustnotebuilds\{#MyAppPackageName}\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "../public/img/icons/icon-white-outline.ico"; DestDir: "{app}"; DestName: "icon.ico"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
