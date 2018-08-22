@@ -19,6 +19,10 @@ angular.module('copayApp.services').factory('uxLanguage', function languageServi
 	}, {
         name: 'Deutsch',
         isoCode: 'de_DE',
+    },{
+        name: '日本語',
+        isoCode: 'ja_JP',
+        useIdeograms: true,
     }];
 
 
