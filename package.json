@@ -15,7 +15,7 @@
         "compile": "gulp",
         "start": "run-s compile && run --x64 --mirror https://npm.taobao.org/mirrors/nwjs/ .",
         "win64": "run-s compile && build --tasks win-x64 --mirror https://npm.taobao.org/mirrors/nwjs/ . && gulp win64",
-        "osx64": "run-s compile && build --tasks mac-x64 --mirror https://npm.taobao.org/mirrors/nwjs/ .",
+        "osx64": "run-s compile && build --tasks mac-x64 --mirror https://npm.taobao.org/mirrors/nwjs/ . && gulp osx64",
         "linux64": "run-s compile && build --tasks linux-x64 --mirror https://npm.taobao.org/mirrors/nwjs/ ."
     },
     "window": {

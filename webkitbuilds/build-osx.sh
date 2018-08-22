@@ -6,15 +6,17 @@
 # make sure we are in the correct dir when we double-click a .command file
 dir=${0%/*}
 if [ -d "$dir" ]; then
-  cd "$dir"
+    cd "$dir"
 fi
 
 # set up your app name, architecture, and background image file name
 APP_NAME="trustnote"
-ARCH="$1"
+# ARCH="$1"
+ARCH="osx64"
 DMG_BACKGROUND_IMG="Background.png"
 
-PATH_NAME="${APP_NAME}/$1/"
+# PATH_NAME="${APP_NAME}/$1/"
+PATH_NAME="${APP_NAME}/"
 # you should not need to change these
 APP_EXE="${PATH_NAME}${APP_NAME}.app/Contents/MacOS/nwjs"
 
@@ -28,14 +30,14 @@ _BACKGROUND_IMAGE_DPI_H=`sips -g dpiHeight ${DMG_BACKGROUND_IMG} | grep -Eo '[0-
 _BACKGROUND_IMAGE_DPI_W=`sips -g dpiWidth ${DMG_BACKGROUND_IMG} | grep -Eo '[0-9]+\.[0-9]+'`
 
 if [ $(echo " $_BACKGROUND_IMAGE_DPI_H != 72.0 " | bc) -eq 1 -o $(echo " $_BACKGROUND_IMAGE_DPI_W != 72.0 " | bc) -eq 1 ]; then
-   echo "WARNING: The background image's DPI is not 72.  This will result in distorted backgrounds on Mac OS X 10.7+."
-   echo "         I will convert it to 72 DPI for you."
-   
-   _DMG_BACKGROUND_TMP="${DMG_BACKGROUND_IMG%.*}"_dpifix."${DMG_BACKGROUND_IMG##*.}"
-
-   sips -s dpiWidth 72 -s dpiHeight 72 ${DMG_BACKGROUND_IMG} --out ${_DMG_BACKGROUND_TMP}
-   
-   DMG_BACKGROUND_IMG="${_DMG_BACKGROUND_TMP}"
+    echo "WARNING: The background image's DPI is not 72.  This will result in distorted backgrounds on Mac OS X 10.7+."
+    echo "         I will convert it to 72 DPI for you."
+    
+    _DMG_BACKGROUND_TMP="${DMG_BACKGROUND_IMG%.*}"_dpifix."${DMG_BACKGROUND_IMG##*.}"
+    
+    sips -s dpiWidth 72 -s dpiHeight 72 ${DMG_BACKGROUND_IMG} --out ${_DMG_BACKGROUND_TMP}
+    
+    DMG_BACKGROUND_IMG="${_DMG_BACKGROUND_TMP}"
 fi
 
 echo "Signing the app ..."
@@ -49,7 +51,7 @@ rm -rf "${STAGING_DIR}" "${DMG_TMP}" "${DMG_FINAL}"
 # copy over the stuff we want in the final disk image to our staging dir
 echo "Copying ..."
 mkdir -p "${STAGING_DIR}"
-cp -rpf "${PATH_NAME}${APP_NAME}.app" "${STAGING_DIR}"
+cp -af "${PATH_NAME}${APP_NAME}.app" "${STAGING_DIR}"
 # ... cp anything else you want in the DMG - documentation, etc.
 
 pushd "${STAGING_DIR}"
@@ -57,22 +59,22 @@ pushd "${STAGING_DIR}"
 popd
 
 # Fix size to 150MB
-SIZE=650
+SIZE=350
 
 if [ $? -ne 0 ]; then
-   echo "Error: Cannot compute size of staging dir"
-   exit
+    echo "Error: Cannot compute size of staging dir"
+    exit
 fi
 
 # create the temp DMG file
 hdiutil create -srcfolder "${STAGING_DIR}" -volname "${VOL_NAME}" -fs HFS+ \
-      -fsargs "-c c=64,a=16,e=16" -format UDRW -megabytes ${SIZE} "${DMG_TMP}"
+-fsargs "-c c=64,a=16,e=16" -format UDRW -megabytes ${SIZE} "${DMG_TMP}"
 
 echo "Created DMG: ${DMG_TMP}"
 
 # mount it and save the device
 DEVICE=$(hdiutil attach -readwrite -noverify "${DMG_TMP}" | \
-         egrep '^/dev/' | sed 1q | awk '{print $1}')
+egrep '^/dev/' | sed 1q | awk '{print $1}')
 
 sleep 2
 

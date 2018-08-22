@@ -121,6 +121,13 @@ gulp.task("copy_modules", function() {
         .src(["src/js/fileStorage.js"])
         .pipe(copy("./public/", { prefix: 2 }));
 });
+
+gulp.task("copy_osx", function() {
+    return gulp
+        .src(["webkitbuilds/build-osx.sh", "webkitbuilds/Background.png"])
+        .pipe(copy("../trustnotebuilds", { prefix: 1 }))
+        .pipe(gulp.dest("trustnotebuilds", { mode: "0754" }));
+});
 // copy end
 
 gulp.task("concat", [
@@ -132,6 +139,14 @@ gulp.task("concat", [
 
 gulp.task("copy", ["copy_icon", "copy_modules"]);
 
+gulp.task("dmg", ["copy_osx"], function(cb) {
+    exec("../trustnotebuilds/build-osx.sh", function(err, stdout, stderr) {
+        console.log(stdout);
+        console.log(stderr);
+        cb(err);
+    });
+});
+
 gulp.task("win64", function() {
     return gulp.src("./webkitbuilds/setup-win64.iss").pipe(
         inno({
@@ -139,7 +154,7 @@ gulp.task("win64", function() {
         })
     );
 });
-gulp.task("osx64");
+gulp.task("osx64", ["dmg"]);
 gulp.task("linux64");
 
 gulp.task("default", ["nggettext_compile", "version", "concat", "copy"]);
