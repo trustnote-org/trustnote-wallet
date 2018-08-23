@@ -216,6 +216,8 @@ if [ $CURRENT_OS == "ANDROID" ]; then
     
     mv $PROJECT/platforms/android/app/build/outputs/apk/debug/app-debug.apk $BUILDDIR/../../trustnotebuilds/trustnote.apk
     checkOK
+
+    echo "Done, output in ../trustnotebuilds"
 fi
 
 if [ $CURRENT_OS == "IOS" ]; then
@@ -225,9 +227,11 @@ if [ $CURRENT_OS == "IOS" ]; then
     cp -R ios $PROJECT/../
     checkOK
     
-    # cd $PROJECT && cordova build ios
-    # checkOK
-    
+    cd $PROJECT && cordova build ios 2>&1 >/dev/null
+    checkOK
+
+    echo "Done, open ${PROJECT}/platforms/ios/TrustNote.xcodeproj"    
+
     open $PROJECT/platforms/ios/TrustNote.xcodeproj
     checkOK
     #  mkdir -p $PROJECT/platforms/ios
