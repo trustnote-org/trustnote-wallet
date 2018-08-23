@@ -2,6 +2,8 @@ var gulp = require("gulp");
 var exec = require("child_process").exec;
 var concat = require("gulp-concat");
 var copy = require("gulp-copy");
+var browserify = require("browserify");
+var source = require("vinyl-source-stream");
 var inno = require("gulp-inno");
 var gettext = require("gulp-angular-gettext");
 
@@ -130,6 +132,26 @@ gulp.task("copy_osx", function() {
 });
 // copy end
 
+// browserify start
+gulp.task("browserify_trustnote", function() {
+    return browserify("public/trustnote.js")
+        .exclude(["sqlite3", "nw.gui", "mysql", "ws", "regedit"])
+        .bundle()
+        .pipe(source("trustnote.js"))
+        .pipe(gulp.dest("./public/"));
+});
+
+gulp.task("browserify_partialClient", function() {
+    return browserify("src/js/partialClient.js")
+        .exclude(["sqlite3", "nw.gui", "mysql", "ws", "regedit"])
+        .bundle()
+        .pipe(source("partialClient.js"))
+        .pipe(gulp.dest("./public/"));
+});
+
+gulp.task("browserify", ["browserify_trustnote", "browserify_partialClient"]);
+// browserify end
+
 gulp.task("concat", [
     "concat_angular",
     "concat_js",
@@ -140,10 +162,32 @@ gulp.task("concat", [
 gulp.task("copy", ["copy_icon", "copy_modules"]);
 
 gulp.task("dmg", ["copy_osx"], function(cb) {
-    exec("../trustnotebuilds/build-osx.sh", function(err, stdout, stderr) {
-        console.log(stdout);
-        console.log(stderr);
-        cb(err);
+    var worker = exec("../trustnotebuilds/build-osx.sh", {});
+    worker.stdout.on("data", function(data) {
+        console.log(data);
+    });
+    worker.stderr.on("data", function(data) {
+        console.log(data);
+    });
+});
+
+gulp.task("prebuild_android", function() {
+    var worker = exec("cordova/build.sh ANDROID", {});
+    worker.stdout.on("data", function(data) {
+        console.log(data);
+    });
+    worker.stderr.on("data", function(data) {
+        console.log(data);
+    });
+});
+
+gulp.task("prebuild_ios", function() {
+    var worker = exec("cordova/build.sh IOS --dbgjs", {});
+    worker.stdout.on("data", function(data) {
+        console.log(data);
+    });
+    worker.stderr.on("data", function(data) {
+        console.log(data);
     });
 });
 
@@ -156,5 +200,15 @@ gulp.task("win64", function() {
 });
 gulp.task("osx64", ["dmg"]);
 gulp.task("linux64");
+gulp.task("cordova", ["browserify"]);
+gulp.task("cordova-prod", ["browserify"]);
+gulp.task("android", ["prebuild_android"]);
+gulp.task("ios", ["prebuild_ios"]);
 
-gulp.task("default", ["nggettext_compile", "version", "concat", "copy"]);
+gulp.task(
+    "default",
+    ["nggettext_compile", "version", "concat", "copy"],
+    function(cb) {
+        cb();
+    }
+);
