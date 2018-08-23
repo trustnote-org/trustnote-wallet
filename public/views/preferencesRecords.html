@@ -130,7 +130,7 @@
 		<div>
 			<ul class="noStyle enable_text_select" ng-if="airRecords.isToRecordsDir != 1">
 				<li class="noStyleLi enable_text_select" ng-repeat="tcode in airRecords.detileList">
-					<div class="tcodeD enable_text_select" translate>
+					<div class="tcodeD enable_text_select">
 						<span class="span3 enable_text_select">
 							<span class="enable_text_select colorbule" ng-click="airRecords.copySingle(tcode)">{{tcode.code}}</span>
 						</span>
@@ -141,7 +141,7 @@
 
 			<ul class="noStyle enable_text_select" ng-if="airRecords.isToRecordsDir == 1">
 				<li class="noStyleLi enable_text_select" ng-repeat="temcode in airRecords.getTemArr()">
-					<div class="tcodeD enable_text_select" translate>
+					<div class="tcodeD enable_text_select">
 						<span class="span3 enable_text_select">
 							<span class="enable_text_select colorbule" ng-click="airRecords.copySingle(temcode)">{{temcode.code}}</span>
 						</span>

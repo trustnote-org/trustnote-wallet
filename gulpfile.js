@@ -23,7 +23,7 @@ gulp.task("nggettext_extract", function() {
                 // options to pass to angular-gettext-tools...
             })
         )
-        .pipe(gulp.dest("i18n/po/template.pot"));
+        .pipe(gulp.dest("i18n/po/"));
 });
 
 gulp.task("nggettext_compile", function() {
