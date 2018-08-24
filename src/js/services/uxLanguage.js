@@ -16,7 +16,14 @@ angular.module('copayApp.services').factory('uxLanguage', function languageServi
 	}, {
 		name: 'Türk',
 		isoCode: 'tr_TR',
-	}];
+	}, {
+        name: 'Deutsch',
+        isoCode: 'de_DE',
+    },{
+        name: '日本語',
+        isoCode: 'ja_JP',
+        useIdeograms: true,
+    }];
 
 
 	root.currentLanguage = null;
