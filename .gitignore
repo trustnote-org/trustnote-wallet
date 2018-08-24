@@ -89,3 +89,4 @@ public/languages
 
 .idea
 .project
+package-lock.json
