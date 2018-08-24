@@ -103,16 +103,6 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 	// 首页+交易： 初始状态 =1 显示title
 	self.showTitle = 1;
 
-	/*
-	 console.log("process", process.env);
-	 var os = require('os');
-	 console.log("os", os);
-	 //console.log("os homedir="+os.homedir());
-	 console.log("release="+os.release());
-	 console.log("hostname="+os.hostname());
-	 //console.log(os.userInfo());
-	 */
-
 
 	function updatePublicKeyRing(walletClient, onDone) {
 		var walletDefinedByKeys = require('trustnote-common/wallet_defined_by_keys.js');
@@ -1541,14 +1531,12 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 		self.updateTimeout = true;
 		var walletId = client.credentials.walletId;
 		if (self.arrBalances.length === 0) {
-		// 	$timeout(function (client, cb) {
-		// 		self.updateLocalTxHistory(client, cb);
-		// 	}, 500);
 			return console.log('updateLocalTxHistory: no balances yet');
 		}
 		breadcrumbs.add('index: ' + self.assetIndex + '; balances: ' + JSON.stringify(self.arrBalances));
 		if (!client.isComplete())
 			return console.log('fc incomplete yet');
+
 		$timeout(function () {
 			if (self.updateTimeout) {
 				self.updatingTxHistory[walletId] = false;
@@ -1558,18 +1546,41 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 
 		client.getTxHistory(self.arrBalances[self.assetIndex].asset, self.shared_address, function onGotTxHistory(txs) {
 			self.updateTimeout = false;
-			var newHistory = self.processNewTxs(txs); // self.processNewTxs(txs) 返回交易历史数组
-			$log.debug('Tx History synced. Total Txs: ' + newHistory.length); // Tx History synced. Total Txs: 54
+			var newHistory = self.processNewTxs(txs); // self.processNewTxs(txs) 返回交易历史 数组
+
+			//$log.debug('Tx History synced. Total Txs: ' + newHistory.length); // Tx History synced. Total Txs: 54
 
 			if (walletId == profileService.focusedClient.credentials.walletId) {
 				self.completeHistory = newHistory;
 				self.txHistory = newHistory.slice(0, self.historyShowLimit);
 				self.historyShowShowAll = newHistory.length >= self.historyShowLimit; // true or false
 			}
-
 			return cb();
 		});
-	}
+	};
+
+    self.updateTxHistory = lodash.debounce(function () {
+        self.updateHistory();
+    }, 1000);
+    self.updateHistory = function () {
+        var fc = profileService.focusedClient;
+        var walletId = fc.credentials.walletId;
+        if (!fc.isComplete() || self.updatingTxHistory[walletId]) return;
+        // $log.debug('Updating Transaction History'); // Updating Transaction History
+        self.txHistoryError = false;
+        self.updatingTxHistory[walletId] = true;
+
+        $timeout(function onUpdateHistoryTimeout() {
+            self.updateLocalTxHistory(fc, function (err) {
+                self.updatingTxHistory[walletId] = false;
+                if (err)
+                    self.txHistoryError = true;
+                $timeout(function () {
+                    $rootScope.$apply();
+                });
+            });
+        });
+    };
 
 	self.showAllHistory = function () {
 		self.historyShowShowAll = false;
@@ -1584,31 +1595,6 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 	};
 
 
-	self.updateHistory = function () {
-		var fc = profileService.focusedClient;
-		var walletId = fc.credentials.walletId;
-
-		if (!fc.isComplete() || self.updatingTxHistory[walletId]) return;
-
-		$log.debug('Updating Transaction History'); // Updating Transaction History
-		self.txHistoryError = false;
-		self.updatingTxHistory[walletId] = true;
-
-		$timeout(function onUpdateHistoryTimeout() {
-			self.updateLocalTxHistory(fc, function (err) {
-				self.updatingTxHistory[walletId] = false;
-				if (err)
-					self.txHistoryError = true;
-				$timeout(function () {
-					$rootScope.$apply();
-				});
-			});
-		});
-	};
-
-	self.updateTxHistory = lodash.debounce(function () {  // 创建一个 debounced（// 防抖动）函数，该函数会从上一次被调用后，延迟 wait 毫秒后调用 func 方法。
-		self.updateHistory();
-	}, 1000);
 
 //  self.throttledUpdateHistory = lodash.throttle(function() {
 //    self.updateHistory();
