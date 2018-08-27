@@ -30,8 +30,6 @@ Github release:
 - [NW.js v0.26.6](https://dl.nwjs.io/v0.26.6)
 - bower
     - `npm install -g bower@1.8.2`
-- grunt
-    - `npm install -g grunt-cli`
 - nw-gyp
     - `npm install -g nw-gyp`
 
@@ -41,8 +39,9 @@ Github release:
 **方法一**
 
 - 用管理员权限打开PowerShell，执行 `npm install --global --production windows-build-tools`
-- 配置环境变量 `GYP_MSVS_VERSION = 2017`
-- `npm config set msvs_version 2017`
+- 配置环境变量 `GYP_MSVS_VERSION = 2015`
+- 配置环境变量 在 `PATH` 添加Python安装目录
+- `npm config set msvs_version 2015`
 
 参考 [windows-build-tools](https://github.com/felixrieseberg/windows-build-tools)
 
@@ -71,14 +70,13 @@ cd trustnote-wallet
 bower install
 npm install
 npm rebuild sqlite3 --build-from-source --runtime=node-webkit --target_arch=x64 --target=0.26.6
-grunt
 ```
 
 #### 运行程序:
 
 ```sh
 # ./trustnote-wallet
-./nwjs/nwjs .
+npm run start
 ```
 
 #### 软件打包
@@ -94,27 +92,27 @@ grunt
 ##### Android
 
 - 安装 Android SDK （参考 https://developer.android.google.cn/studio/）
-- 运行 `make android`
+- 运行 `npm run android`
 
 ##### iOS
 
 - 安装 Xcode 9 (或最新版本)
 - 安装 Cordova `npm install -g cordova`
 - 安装 ios-deploy `npm install -g ios-deploy`
-- 执行 `make ios`
+- 执行 `npm run ios`
 
 
 ##### macOS
 
-- `make osx64`
+- `npm run osx64`
 
 ##### Windows
 
-- `make win64`
+- `npm run win64`
 
 ##### Linux
 
-- `make linux64`
+- `npm run linux64`
 
 
 ## TrustNote备份和恢复
