@@ -37,7 +37,7 @@
         "java": false,
         "plugin": false
     },
-    "chromium-args": "--proxy-server=http://127.1.2.7 --password-store=basic --disable-password-generation",
+    "chromium-args": "--proxy-server=http://127.1.2.7 --disable-password-generation",
     "homepage": "https://github.com/trustnote/trustnote-wallet",
     "license": "MIT",
     "repository": {
@@ -100,7 +100,6 @@
     "build": {
         "appId": "org.trustnote.smartwallet",
         "nwVersion": "0.26.6",
-        "nwFlavor": "sdk",
         "packed": false,
         "targets": [
             "zip"
