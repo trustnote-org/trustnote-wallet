@@ -27,7 +27,6 @@ We provide executable programs for multiple platforms. You can either start usin
 
 - git
 - [Node.js v8.9.4](https://nodejs.org/dist/v8.9.4/)
-- [NW.js v0.26.6](https://dl.nwjs.io/v0.26.6)
 - bower
     - `npm install -g bower@1.8.2`
 - nw-gyp
