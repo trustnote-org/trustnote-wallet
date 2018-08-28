@@ -13,95 +13,87 @@ var EventEmitter = require('events').EventEmitter;
 
 
 angular.module('copayApp.controllers').controller('indexController', function ($rootScope, $scope, $log, $filter, $timeout, lodash, go, profileService, configService, isCordova, storageService, addressService, gettext, gettextCatalog, amMoment, nodeWebkit, addonManager, txFormatService, uxLanguage, $state, isMobile, addressbookService, notification, animationService, $modal, bwcService, backButton, pushNotificationsService, newVersion, safeApplyService) {
-	breadcrumbs.add('index.js');
-	var self = this;
+    breadcrumbs.add('index.js');
+    var self = this;
+    self.splashClick = true;
+    self.setPreBalanceStatus = false;
+    self.BLACKBYTES_ASSET = constants.BLACKBYTES_ASSET;
+    self.isCordova = isCordova;
+    self.isSafari = isMobile.Safari();
+    self.onGoingProcess = {};
+    self.historyShowLimit = 10;
+    self.updatingTxHistory = {};
+    self.bSwipeSuspended = false;
+    self.arrBalances = [];
+    self.arrAssetStore = [];
+    self.assetIndex = 0;
+    self.assetIndexxx = 0;
+    self.$state = $state;
+    self.usePushNotifications = isCordova && !isMobile.Windows() && isMobile.Android();
+    self.lightToHubTimeoutCount = 0;
+    self.isAndroidPhone = isMobile.Android();
 
-// 更改代码
-	self.splashClick = true;
-	self.setPreBalanceStatus = false;
-	self.BLACKBYTES_ASSET = constants.BLACKBYTES_ASSET;
-	self.isCordova = isCordova;
-	self.isSafari = isMobile.Safari();
-	self.onGoingProcess = {};
-	self.historyShowLimit = 10;
-	self.updatingTxHistory = {};
-	self.bSwipeSuspended = false;
-	self.arrBalances = [];
-	self.arrAssetStore = [];
-	self.assetIndex = 0;
-	self.assetIndexxx = 0;
-	self.$state = $state;
-	self.usePushNotifications = isCordova && !isMobile.Windows() && isMobile.Android();
-	self.lightToHubTimeoutCount = 0;
-	self.isAndroidPhone = isMobile.Android();
+    self.showneikuang = false;
+    self.showneikuangsync = false;
+    self.isObserved = function () {
+        return go.observed;
+    };
+    // 首页+交易： 初始状态 =1 显示title
+    self.showTitle = 1;
 
-	self.showneikuang = false;
-	self.showneikuangsync = false;
-	self.isObserved = function () {
-		return go.observed;
-	};
+    // 观察钱包发送交易 冷钱包授权 页面
+    self.toPay = function () {
+        return go.toPay;
+    };
+    self.closeToPay = function () {
+        go.toPay = 0;
+    };
+    self.to_address = function () {
+        return go.objDetail.to_address;
+    };
+    self.amount = function () {
+        return go.objDetail.amount;
+    };
+    self.showToPay = function () {
+        profileService.checkPassClose = false;
+        var path = go.paths;
+        var text_to_sign = go.text_to_sign;
+        if (profileService.focusedClient.isPrivKeyEncrypted()) {
+            profileService.passWrongUnlockFC(null, function (err) {
+                if (err == 'cancel') {  // 点击取消
+                    profileService.checkPassClose = true;
+                } else if (err) {  // 密码输入错误
+                    return false;
+                }
+                else {
+                    var xPrivKey = new Bitcore.HDPrivateKey.fromString(profileService.focusedClient.credentials.xPrivKey);
+                    var privateKey = xPrivKey.derive(path).privateKey;
+                    var privKeyBuf = privateKey.bn.toBuffer({size: 32});
+                    self.passModalMaskColdQr1 = 1;
+                    self.signature = ecdsaSig.sign(text_to_sign, privKeyBuf);
+                    self.signatureObj = {
+                        "type": "c3",
+                        "sign": self.signature,
+                        "v": go.objDetail.v
+                    };
+                    self.signatureObj = "TTT:" + JSON.stringify(self.signatureObj);
+                }
+            });
+            return;
+        }
 
-	// 观察钱包发送交易 冷钱包授权 页面
-	self.toPay = function () {
-		return go.toPay;
-	};
-	self.closeToPay = function () {
-		go.toPay = 0;
-	};
-	self.to_address = function () {
-		return go.objDetail.to_address;
-	};
-	self.amount = function () {
-		return go.objDetail.amount;
-	};
-	self.showToPay = function () {
-		profileService.checkPassClose = false;
-		var path = go.paths;
-		var text_to_sign = go.text_to_sign;
-
-		if (profileService.focusedClient.isPrivKeyEncrypted()) {
-			profileService.passWrongUnlockFC(null, function (err) {
-				if (err == 'cancel'){  // 点击取消
-					profileService.checkPassClose = true;
-				}else if(err){  // 密码输入错误
-					return;
-				}
-				else{
-					var xPrivKey = new Bitcore.HDPrivateKey.fromString(profileService.focusedClient.credentials.xPrivKey);
-					var privateKey = xPrivKey.derive(path).privateKey;
-					var privKeyBuf = privateKey.bn.toBuffer({size: 32});
-					self.passModalMaskColdQr1 = 1;
-					self.signature = ecdsaSig.sign(text_to_sign, privKeyBuf);
-					self.signatureObj = {
-						"type": "c3",
-						"sign": self.signature,
-						"v": go.objDetail.v
-					};
-					self.signatureObj = "TTT:" + JSON.stringify(self.signatureObj);
-				}
-			});
-			return;
-		}
-
-		var xPrivKey = new Bitcore.HDPrivateKey.fromString(profileService.focusedClient.credentials.xPrivKey);
-		var privateKey = xPrivKey.derive(path).privateKey;
-		var privKeyBuf = privateKey.bn.toBuffer({size: 32});
-		self.passModalMaskColdQr1 = 1;
-		self.signature = ecdsaSig.sign(text_to_sign, privKeyBuf);
-		self.signatureObj = {
-			"type": "c3",
-			"sign": self.signature,
-			"v": go.objDetail.v
-		};
-		self.signatureObj = "TTT:" + JSON.stringify(self.signatureObj);
-	};
-
-
-
-
-
-	// 首页+交易： 初始状态 =1 显示title
-	self.showTitle = 1;
+        var xPrivKey = new Bitcore.HDPrivateKey.fromString(profileService.focusedClient.credentials.xPrivKey);
+        var privateKey = xPrivKey.derive(path).privateKey;
+        var privKeyBuf = privateKey.bn.toBuffer({size: 32});
+        self.passModalMaskColdQr1 = 1;
+        self.signature = ecdsaSig.sign(text_to_sign, privKeyBuf);
+        self.signatureObj = {
+            "type": "c3",
+            "sign": self.signature,
+            "v": go.objDetail.v
+        };
+        self.signatureObj = "TTT:" + JSON.stringify(self.signatureObj);
+    };
 
 
 	function updatePublicKeyRing(walletClient, onDone) {
@@ -1527,38 +1519,6 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 	};
 
 
-	self.updateLocalTxHistory = function (client, cb) {
-		self.updateTimeout = true;
-		var walletId = client.credentials.walletId;
-		if (self.arrBalances.length === 0) {
-			return console.log('updateLocalTxHistory: no balances yet');
-		}
-		breadcrumbs.add('index: ' + self.assetIndex + '; balances: ' + JSON.stringify(self.arrBalances));
-		if (!client.isComplete())
-			return console.log('fc incomplete yet');
-
-		$timeout(function () {
-			if (self.updateTimeout) {
-				self.updatingTxHistory[walletId] = false;
-				return cb('update timeout');
-			}
-		}, 6000);
-
-		client.getTxHistory(self.arrBalances[self.assetIndex].asset, self.shared_address, function onGotTxHistory(txs) {
-			self.updateTimeout = false;
-			var newHistory = self.processNewTxs(txs); // self.processNewTxs(txs) 返回交易历史 数组
-
-			//$log.debug('Tx History synced. Total Txs: ' + newHistory.length); // Tx History synced. Total Txs: 54
-
-			if (walletId == profileService.focusedClient.credentials.walletId) {
-				self.completeHistory = newHistory;
-				self.txHistory = newHistory.slice(0, self.historyShowLimit);
-				self.historyShowShowAll = newHistory.length >= self.historyShowLimit; // true or false
-			}
-			return cb();
-		});
-	};
-
     self.updateTxHistory = lodash.debounce(function () {
         self.updateHistory();
     }, 1000);
@@ -1579,6 +1539,36 @@ angular.module('copayApp.controllers').controller('indexController', function ($
                     $rootScope.$apply();
                 });
             });
+        });
+    };
+
+    self.updateLocalTxHistory = function (client, cb) {
+        self.updateTimeout = true;
+        var walletId = client.credentials.walletId;
+        if (self.arrBalances.length === 0) {
+            return console.log('updateLocalTxHistory: no balances yet');
+        }
+        breadcrumbs.add('index: ' + self.assetIndex + '; balances: ' + JSON.stringify(self.arrBalances));
+        if (!client.isComplete())
+            return console.log('fc incomplete yet');
+
+        $timeout(function () {
+            if (self.updateTimeout) {
+                self.updatingTxHistory[walletId] = false;
+                return cb('update timeout');
+            }
+        }, 6000);
+
+        client.getTxHistory(self.arrBalances[self.assetIndex].asset, self.shared_address, function onGotTxHistory(txs) {
+            self.updateTimeout = false;
+            var newHistory = self.processNewTxs(txs); // self.processNewTxs(txs) 返回交易历史 数组
+            //$log.debug('Tx History synced. Total Txs: ' + newHistory.length); // Tx History synced. Total Txs: 54
+            if (walletId == profileService.focusedClient.credentials.walletId) {
+                self.completeHistory = newHistory;
+                self.txHistory = newHistory.slice(0, self.historyShowLimit);
+                self.historyShowShowAll = newHistory.length >= self.historyShowLimit; // true or false
+            }
+            return cb();
         });
     };
 

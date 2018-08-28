@@ -1,144 +1,210 @@
-<!--<div class="passModalMask" ng-click="index.askqr = false"> </div>-->
+<style>
+    /*input的外层*/
+    div.inptWrap {
+        width: 23.8%;
+        float: left;
+        margin-right: 1.5%;
+        position: relative;
+    }
 
-<!--蒙版层-->
-<!--<div class="passModalMask" style="opacity: 1; padding: 0;"> </div>-->
+    /*margin-right 设定0*/
+    div.noMarginR {
+        margin-right: 0;
+    }
+
+    /*清除浮动*/
+    div.clearB {
+        clear: both;
+    }
+
+    /*助记词输入框*/
+    input.inptMnemonic {
+        width: 100%;
+        height: 25px;
+        text-align: center;
+        margin-bottom: 3px;
+        font-size: 1rem;
+        padding-left: 0.4rem;
+        padding-right: 0.4rem;
+        background: #EDEDED;
+        color: black !important;
+        border: 1px solid #EDEDED;
+    }
+
+    input.active {
+        border: 1px solid #0095ff;
+    }
+
+    /*下面的提示ul > li列表*/
+    ul.notiUl {
+        width: 100%;
+        position: absolute;
+        margin: 0;
+        z-index: 999 !important;
+        border: 1px #f3f3f3 solid;
+    }
+
+    ul.mobileUl {
+        width: 100%;
+        position: absolute;
+        margin: 0;
+        z-index: 999 !important;
+        border: 1px #f3f3f3 solid;
+        transition: linear 0.1s;
+        height: 0 !important;
+        overflow: hidden;
+        opacity: 0;
+    }
+
+    ul.showList {
+        opacity: 1;
+        height: 8.1rem !important;
+    }
+
+    /*下面的助记词 li表 */
+    li.notiLi {
+        text-align: center;
+        padding: 10px 0 !important;
+        cursor: pointer;
+        color: #999;
+    }
+
+    li.active {
+        background: #f3f3f3;
+    }
+
+    li.notiLi:hover {
+        background: #f3f3f3;
+    }
+
+    li.notiLi span {
+        color: #333;
+    }
+
+    #backupSubmit:active {
+        background-color: #c0c0c0 !important;
+    }
+
+    #backupDelSeedSubmit:active {
+        color: #FFFFFF !important;
+        background: #0095ff !important;
+        border: 1px solid #FFFFFF !important;
+    }
+
+    div.exStyle {
+        height: 100%;
+        width: 100%;
+        background: goldenrod;
+        border-radius: 0;
+        position: absolute;
+        left: 0;
+        top: 0;
+    }
+    div.divBg {
+        background: url('img/beijing-1080_1920.png');
+        background-size: cover ;
+        height: 100%;
+    }
+    div.divLogo {
+        background: url('img/trustnoteback.png') no-repeat center 105px;
+        height: 240px;
+        background-size: 30%;
+    }
+    h1.txtTitle {
+        font-size: 18px;
+        font-weight: bold;
+        color:#fff
+    }
+    p.pbutton {
+        width: 270px;
+        text-align: center;
+        background: #0095ff;
+        border-radius: 5px;
+        color: #fff;
+        margin: 0 auto;
+        padding: 10px;
+        cursor: pointer;
+        font-size: 14px;
+        display: block;
+    }
+    p.exPStyle {
+        margin-top:130px;
+        background: #fff;
+        color: #0095ff;
+        text-transform: uppercase;
+    }
+    p.exPStyleplus {
+        background: none;
+        border: 1px solid #fff;
+        color: #fff;
+        text-transform: uppercase;
+        margin-top: 25px;
+    }
+    div.modelCon {
+        background: #12172e;
+        height: 45px;
+        line-height: 45px;
+        text-align: center;
+        font-size: 17px;
+        color:#fff;
+    }
+    a.resWalletA {
+        color:#fff;
+        position: absolute;
+        left: 0;
+        width: 60px;
+    }
+    i.resWalletAi {
+        font-size: 24px;
+        position: absolute;
+        left: 0;
+        top: 10px;
+    }
+    span.resWalletAispan {
+        font-size: 16px;
+        position: absolute;
+        left:20px;
+    }
+    a.resWalletAex {
+        color:#999;
+    }
+    p.margint20 {
+        margin-top:20px;
+    }
+</style>
 
 
-
-<!--备份钱包口令-->
-<div class="passModal" style="height: 100%; width: 100%; background: goldenrod; border-radius: 0px; position: absolute; left: 0; top: 0;">
-
-	<!--控制器开始-->
-	<div class="content preferences" ng-controller="wordsController as wordsC" style="top:0; background:#fff;">
-
-		<!--本页面样式-->
-		<style>
-			p.pbutton{
-				width: 150px;
-				text-align:center;
-				height: 45px;
-				line-height: 45px;
-				background: #0095ff;
-				border-radius: 40px;
-				color: #fff;
-				margin: 25px auto;
-				cursor:pointer;
-				font-size:14px;
-			}
-			/*input的外层*/
-			div.inptWrap{
-				width: 23.8%;
-				float: left;
-				margin-right:1.5%;
-				position: relative;
-			}
-			/*margin-right 设定0*/
-			div.noMarginR{ margin-right:0; }
-			/*清除浮动*/
-			div.clearB{ clear:both; }
-			/*助记词输入框*/
-			input.inptMnemonic{
-				width: 100%;
-				height: 25px;
-				text-align: center;
-				margin-bottom:3px;
-				font-size: 1rem;
-				padding-left: 0.4rem;
-				padding-right: 0.4rem;
-				background: #EDEDED;
-				color: black !important;
-				border: 1px solid #EDEDED;
-			}
-			input.active{
-				border: 1px solid #0095ff;
-			}
-			/*下面的提示ul > li列表*/
-			ul.notiUl{
-				width: 100%;
-				position: absolute;
-				margin:0;
-				z-index: 999!important;
-				border:1px #f3f3f3 solid;
-			}
-			ul.mobileUl{
-				width: 100%;
-				position: absolute;
-				margin:0;
-				z-index: 999!important;
-				border:1px #f3f3f3 solid;
-				transition: linear 0.1s;
-				height: 0 !important;
-				overflow: hidden;
-				opacity: 0;
-			}
-			ul.showList{
-				opacity: 1;
-				height: 8.1rem !important;
-			}
-			/*下面的助记词 li表 */
-			li.notiLi{
-				text-align: center;
-				padding:10px 0!important;
-				cursor:pointer;
-				color: #999;
-			}
-			li.active{
-				background: #f3f3f3;
-			}
-			li.notiLi:hover{
-				background: #f3f3f3;
-			}
-			li.notiLi span{
-				color: #333;
-			}
-			#backupSubmit:active{
-				background-color: #c0c0c0 !important;
-			}
-			#backupDelSeedSubmit:active{
-				color: #FFFFFF !important;
-				background: #0095ff !important;
-				border: 1px solid #FFFFFF !important;
-			}
-		</style>
-		<!--本页面样式 结束-->
-		<!-- 添加一个色块 -->
-		<!--<div style="background: #12172e; height: 45px; line-height: 45px; text-align: center; font-size: 17px; color:#fff; " translate>Backup</div>-->
-
-		<!--第一步：恢复钱包 or 创建新的钱包 -->
-		<div  ng-if="wordsC.step === 'show_waring'" style=" background: url('img/beijing-1080_1920.png');background-size: cover ; height: 100%;">
-			<div style="background: url('img/trustnoteback.png') no-repeat center 105px;height: 240px;background-size: 30%;"></div>
-			<h1 class="text-center" style="font-size: 18px; font-weight: bold; color:#fff" translate>LIGHT ∙ FAST ∙ SWEET</h1>
-
-			<!--<p class="size-14 text-center" style="width: 90%; margin: 15px auto;" translate>We highly recommend you write the Mnemonic words(Backup Phrase) on Paper and keep it in a safe place, anyone get it can access or spend you assets. Also get start with a small amout of assets.</p>-->
-
-
-			<!--点击 创建新的钱包-->
-			<p class="pbutton" translate ng-click="wordsC.gono00()" style="margin-top:130px;background: #fff; color: #0095ff;text-transform: uppercase;"> Create Wallet </p>
-			<!-- 点击 恢复原来钱包 -->
-			<p class="pbutton" style="background: none; border: 1px solid #fff; color: #fff;text-transform: uppercase;" translate ng-click="wordsC.gorukou2()" translate> Restore Wallet </p>
+<div class="passModal exStyle">
+	<div class="content preferences" style="top:0; background:#fff;" ng-controller="wordsController as wordsC" >
+		<!-- 创建钱包 or 恢复钱包 -->
+		<div  ng-if="wordsC.step === 'show_waring'" class="divBg">
+			<div class="divLogo"></div>
+			<h1 class="text-center txtTitle" translate>LIGHT ∙ FAST ∙ SWEET</h1>
+			<p class="pbutton exPStyle" translate ng-click="wordsC.gono00()"> Create Wallet </p>
+			<p class="pbutton exPStyleplus" ng-click="wordsC.gorukou2()" translate> Restore Wallet </p>
 		</div>
-		<!--第一步  结束-->
-
-
-		<!--入口二：恢复原来的钱包----------------------------------------------------------------------------------------------------------------------------------------------------->
+		<!-- 结束 -->
+		<!-- 入口二 ：恢复钱包 -->
 		<div ng-show="wordsC.step === 'rukou2'">
 			<div class=" preferences" ng-controller="recoveryFromSeeddir as recFromSeeddir" style="height: 580px; background: #fff;">
-				<!--恢复成功 弹出一个页面 -->
+				<!-- 恢复成功 弹出一个页面 -->
 				<div ng-include="'views/includes/recoveryAlert.html'" ng-if="recFromSeeddir.showAlert"></div>
-				<!-- 一个模态框 目的是开始恢复时 禁止其他操作 -->
-				<div class="passModalMask" style="opacity: 0.3; padding: 0; background: #000;" ng-if="recFromSeeddir.show"> </div>
-
-				<div style="background: #12172e; height: 45px; line-height: 45px; text-align: center; font-size: 17px; color:#fff; ">
+				<!-- 模态框 ：开始恢复时 禁止其他操作 -->
+				<div class="passModalMask" style="opacity: 0.3; padding: 0; background: #000;" ng-if="recFromSeeddir.show"></div>
+				<div class="modelCon">
 					<span translate>Restore Wallet</span>
-
-					<a ng-if="!recFromSeeddir.scanning" onclick="$('.ngcalculator_area').removeClass('keyboardShow');$('.ngcalculator_area').addClass('keyboardHidden');$('.inptMnemonic').removeClass('active');" ng-click="wordsC.step = 'show_waring'" style="color:#fff; position: absolute; left: 0;width: 60px;">
-						<i class="icon-arrow-left3  icon-back" style="font-size: 24px; position: absolute; left: 0; top: 10px;"></i>
-						<span class="text-back" style="font-size: 16px;position: absolute; left:20px;" >{{'Back'|translate}}</span>
+					<a
+                        class="resWalletA"
+                        ng-if="!recFromSeeddir.scanning"
+                        onclick="$('.ngcalculator_area').removeClass('keyboardShow');$('.ngcalculator_area').addClass('keyboardHidden');$('.inptMnemonic').removeClass('active');"
+                        ng-click="wordsC.step = 'show_waring'">
+						<i class="icon-arrow-left3  icon-back resWalletAi"></i>
+						<span class="text-back resWalletAispan">{{'Back'|translate}}</span>
 					</a>
 
-					<a ng-if="recFromSeeddir.scanning" style="color:#999; position: absolute; left: 0;width: 60px;">
-						<i class="icon-arrow-left3  icon-back" style="font-size: 24px; position: absolute; left: 0; top: 10px;"></i>
-						<span class="text-back" style="font-size: 16px;position: absolute; left:20px;" >{{'Back'|translate}}</span>
+					<a ng-if="recFromSeeddir.scanning" class="resWalletA resWalletAex">
+						<i class="icon-arrow-left3  icon-back resWalletAi"></i>
+						<span class="text-back resWalletAispan">{{'Back'|translate}}</span>
 					</a>
 				</div>
 
@@ -355,13 +421,6 @@
 							</div>
 						</div>
 						<!--  更改为12个输入框  结束 ----=====================================================================================================================================--->
-						<!--<textarea-->
-							<!--style="height: 100px; font-size: 16px; color: #000; line-height: 26px; resize:none"-->
-							<!--id="inputMnemonic"-->
-							<!--ng-model="recFromSeeddir.inputMnemonic"-->
-							<!--ng-disabled="recFromSeeddir.credentialsEncrypted"-->
-							<!--autocomplete="off">-->
-						<!--</textarea>-->
 
 						<!--按钮 点击恢复钱包-->
 						<input
@@ -374,7 +433,6 @@
 							style="background: #0095ff; width: 85%;display: block; margin: 0 auto;">
 						<!--按钮 点击恢复钱包 结束-->
 					</form>
-		<!--mnemonic  mnemonic  mnemonic  mnemonic  mnemonic  mnemonic  mnemonic  mnemonic  mnemonic  mnemonic  mnemonic  mnemonic  mnemonic  mnemonic  mnemonic  mnemonic  mnemonic  mnemonic  mnemonic  mnemonic -->
 
 					<!--第二个按钮 恢复并删除口令-->
 					<form name="settingsDeviceNameForm" class="columns" ng-submit="recFromSeeddir.recoveryFormdel()" style="position: relative">
@@ -398,31 +456,19 @@
 							style="color: #0095ff;width: 85%;display: block;margin: 5px auto 20px;background: #fff; border: 1px solid #0095ff;">
 						<!--按钮 点击恢复钱包 结束-->
 					</form>
-
-					<!--<div class="text-alert size-12 columns">-->
-						<!--&lt;!&ndash;<span translate>Note:</span>&ndash;&gt;-->
-						<!--<ul class="warnings">-->
-							<!--<li translate style="border: none;">Note: Only one space is allowed between words.</li>-->
-							<!--<li translate>During backup, please be patient, do not quit.</li>-->
-						<!--</ul>-->
-					<!--</div>-->
 					<div class="text-alert size-12 columns">
 						<span translate>Note:</span>
 						<ul class="warnings">
-							<!-- <li translate>Only one space is allowed between words.</li> -->
 							<li translate>During the recovery, please be patient and do not shut down the software.</li>
 						</ul>
 					</div>
 				</div>
-
 			</div>
-			<!--<div class="extra-margin-bottom"></div>-->
-
 		</div>
-		<!--入口二：恢复原来的钱包----------------------------------------------------------------------------------------------------------------------------------------------------------------------->
+		<!-- 入口二 ：恢复钱包 结束 -->
 
 
-		<!--入口一：创建新的钱包----------------------------------------------------------------------------------------------------------------------------------------------------------------------->
+		<!-- 入口一 ：创建钱包 -->
 		<div ng-if="wordsC.step === 'show_jietu00'">
 			<div style="background: #12172e; height: 45px; line-height: 45px; text-align: center; font-size: 17px; color:#fff; ">
 				<span translate>Create Wallet</span>
@@ -463,7 +509,7 @@
 			</div>
 
 			<!--点击 下一步-->
-			<p class="pbutton" translate ng-click="wordsC.showinput()" style="text-transform: uppercase;"> Next </p>
+			<p class="pbutton margint20" translate ng-click="wordsC.showinput()"> Next </p>
 		</div>
 		<!--第三步 结束-->
 
@@ -667,39 +713,40 @@
 				</div>
 			</div>
 			<!--  更改为12个输入框  结束 ----=====================================================================================================================================--->
-
-			<!--<textarea ng-model="wordsC.value"></textarea>-->
-
-
-			<!--建议删除种子文件-->
+			<!-- 建议删除种子文件 -->
 			<p ng-if="wordsC.dis() && wordsC.value" style="text-align: center; color:red;margin-top: 10px;" translate>Invalid mnemonic</p>
-			<!--点击 上一步-->
-			<p class="pbutton" onclick="$('.ngcalculator_area').removeClass('keyboardShow');$('.ngcalculator_area').addClass('keyboardHidden');$('.inptMnemonic').removeClass('active');" ng-if="wordsC.dis()" translate ng-click="wordsC.gono()" style="text-transform: uppercase;"> Last step </p>
-
-			<!--点击 跳过 直接进入主页 -->
-			<!--<p class="pbutton" ng-if="wordsC.dis()" translate ng-click="wordsC.haschoosen(); index.splashClick = false" style="text-transform: uppercase;"> 跳跳跳 </p>-->
-
+			<!-- 上一步 -->
+			<p
+                class="pbutton margint20"
+                onclick="$('.ngcalculator_area').removeClass('keyboardShow');$('.ngcalculator_area').addClass('keyboardHidden');$('.inptMnemonic').removeClass('active');"
+                ng-click="wordsC.gono()"
+                ng-if="wordsC.dis()"
+                translate>
+                Last step
+            </p>
+			<!-- 跳过 直接进入主页 -->
+			<!--<p class="pbutton" ng-click="wordsC.haschoosen(); index.splashClick = false" style="text-transform: uppercase;"> 跳跳跳 </p>-->
 			<p class="size-14 text-center" style="width: 90%; margin: 20px auto 10px;color:#ff5665; font-weight: bold" ng-if="!wordsC.dis()" translate>Your mnemonic words are correct. To make your wallet safe, we highly recommend you delete mnemonic words from app.</p>
 
-			<!--点击删除钱包-->
-			<div style="text-align: center;">
-				<button
-						style="width: 210px; text-align:center; height: 45px; background: #0095ff; border-radius: 40px; color: #fff; margin: 0px auto 0; padding: 0;"
-						ng-click="wordsC.del();"
-						onclick="$('.ngcalculator_area').removeClass('keyboardShow');$('.ngcalculator_area').addClass('keyboardHidden');"
-						ng-if="!wordsC.dis()" translate>DELETE SEED PHRASE</button>
-			</div>
-
-			<!--正确 点击下一步 主页-->
-			<div style="text-align: center;margin: 15px;">
-				<button
-						style="width: 210px; text-align:center; height: 45px; background: #fff; border-radius: 40px; color: #0095ff; padding: 0;margin: 0; border: 1px solid #0095ff;text-transform: uppercase;"
-						onclick="$('.ngcalculator_area').removeClass('keyboardShow');$('.ngcalculator_area').addClass('keyboardHidden');"
-						ng-click="wordsC.haschoosen(); index.splashClick = false"
-						ng-if="!wordsC.dis()" translate>
-					Skip
-				</button>
-			</div>
+            <!--点击删除钱包-->
+            <div style="text-align: center;">
+                <button
+                    style="width: 210px; text-align:center; height: 45px; background: #0095ff; border-radius: 40px; color: #fff; margin: 0px auto 0; padding: 0;"
+                    ng-click="wordsC.del();"
+                    onclick="$('.ngcalculator_area').removeClass('keyboardShow');$('.ngcalculator_area').addClass('keyboardHidden');"
+                    ng-if="!wordsC.dis()" translate>DELETE SEED PHRASE
+                </button>
+            </div>
+            <!--正确 点击下一步 主页-->
+            <div style="text-align: center;margin: 15px;">
+                <button
+                    style="width: 210px; text-align:center; height: 45px; background: #fff; border-radius: 40px; color: #0095ff; padding: 0;margin: 0; border: 1px solid #0095ff;text-transform: uppercase;"
+                    onclick="$('.ngcalculator_area').removeClass('keyboardShow');$('.ngcalculator_area').addClass('keyboardHidden');"
+                    ng-click="wordsC.haschoosen(); index.splashClick = false"
+                    ng-if="!wordsC.dis()" translate>
+                    Skip
+                </button>
+            </div>
 
 			<!--确认要删除么？-->
 			<div style="position: absolute; width: 100%;height: 100%; left:0; top:0;background:#fff; " ng-if="wordsC.delseed">
@@ -717,8 +764,5 @@
 			</div>
 		</div>
 		<!--第四步 结束-->
-
 	</div>
-	<!--控制器 结束	-->
-
 </div>
