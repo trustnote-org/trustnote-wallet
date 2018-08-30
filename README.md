@@ -1,3 +1,5 @@
+[![CircleCI](https://img.shields.io/circleci/project/github/kakegu/trustnote-wallet/master.svg)](https://circleci.com/gh/kakegu/trustnote-wallet/)
+
 ## TrustNote
 
 TrustNote is an open source project that provides reliable and trusted public blockchain network services. The wallet created for the community is also named TrustNote. This project is supported by the TrustNote Foundation.
