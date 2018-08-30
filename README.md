@@ -1,4 +1,4 @@
-[![CircleCI](https://img.shields.io/circleci/project/github/kakegu/trustnote-wallet/master.svg)](https://circleci.com/gh/kakegu/trustnote-wallet/)
+[![CircleCI](https://img.shields.io/circleci/project/github/trustnote/trustnote-wallet/master.svg)](https://circleci.com/gh/kakegu/trustnote-wallet/)
 
 ## TrustNote
 
