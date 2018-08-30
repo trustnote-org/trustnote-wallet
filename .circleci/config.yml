@@ -27,7 +27,6 @@ jobs:
           - v1-dependencies-
 
       - run: npm install
-      - run: npm rebuild sqlite3 --build-from-source --runtime=node-webkit --target_arch=x64 --target=0.26.6
       
       - save_cache:
           paths:
