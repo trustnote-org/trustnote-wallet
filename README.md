@@ -1,3 +1,5 @@
+[![CircleCI](https://img.shields.io/circleci/project/github/trustnote/trustnote-wallet/master.svg)](https://circleci.com/gh/trustnote/trustnote-wallet/)
+
 ## TrustNote
 
 TrustNote is an open source project that provides reliable and trusted public blockchain network services. The wallet created for the community is also named TrustNote. This project is supported by the TrustNote Foundation.
@@ -27,11 +29,8 @@ We provide executable programs for multiple platforms. You can either start usin
 
 - git
 - [Node.js v8.9.4](https://nodejs.org/dist/v8.9.4/)
-- [NW.js v0.26.6](https://dl.nwjs.io/v0.26.6)
 - bower
     - `npm install -g bower@1.8.2`
-- grunt
-    - `npm install -g grunt-cli`
 - nw-gyp
     - `npm install -g nw-gyp`
 
@@ -41,8 +40,9 @@ We provide executable programs for multiple platforms. You can either start usin
 **Option 1:**
 
 - Open PowerShell by using administrator privileges, run `npm install --global --production windows-build-tools`
-- Set environment variable `GYP_MSVS_VERSION = 2017`
-- `npm config set msvs_version 2017`
+- Set environment variable `GYP_MSVS_VERSION = 2015`
+- Set environment variable, add the Python install directory to `PATH`.
+- `npm config set msvs_version 2015`
 
 Please refer to [windows-build-tools](https://github.com/felixrieseberg/windows-build-tools)
 
@@ -51,7 +51,7 @@ Please refer to [windows-build-tools](https://github.com/felixrieseberg/windows-
 
 - Install [Visual Studio 2017](https://visualstudio.microsoft.com/zh-hans/thank-you-downloading-visual-studio/?sku=Community&rel=15)，with VC++ 2015 (v140) tools.
 - Install [Python 2.7.14](https://www.python.org/downloads/release/python-2714/)
-- Set environment variable, add the Python insall directory to `PATH`.
+- Set environment variable, add the Python install directory to `PATH`.
 - Set environment variable `GYP_MSVS_VERSION = 2017`
 - `npm config set msvs_version 2017`
 
@@ -71,14 +71,13 @@ cd trustnote-wallet
 bower install
 npm install
 npm rebuild sqlite3 --build-from-source --runtime=node-webkit --target_arch=x64 --target=0.26.6
-grunt
 ```
 
 #### Execute
 
 ```sh
 # ./trustnote-wallet
-./nwjs/nwjs .
+npm run start
 ```
 
 #### Package
@@ -94,27 +93,27 @@ The release package will be generated under ../trustnotebuilds
 ##### Android
 
 - Install Android SDK （refer to https://developer.android.google.cn/studio/）
-- Run `make android`
+- Run `npm run android`
 
 ##### iOS
 
 - Install Xcode 9 (or higher version)
 - Install Cordova `npm install -g cordova`
 - Install ios-deploy `npm install -g ios-deploy`
-- Run `make ios`
+- Run `npm run ios`
 
 
 ##### macOS
 
-- `make osx64`
+- `npm run osx64`
 
 ##### Windows
 
-- `make win64`
+- `npm run win64`
 
 ##### Linux
 
-- `make linux64`
+- `npm run linux64`
 
 
 ## Wallet Backup and Restore
@@ -135,6 +134,8 @@ Once the user starts to use TrustNote Wallet, cache files will be generated in t
 
 - **Turkish** - Caner Sevince, Sait Dogan Etiler，
 - **Indonesian** - IYOES
+- **German** - Adrian Jetzer
+- **Japanese** - Masaru Suzuki
 
 big thanks !
 
