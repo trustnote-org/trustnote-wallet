@@ -310,9 +310,9 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 	}
 
 	function scanForAddressesLignt(cb) {
-		if(isScanLightAddress)
+		if(self.isScanLightAddress)
 			return;
-		isScanLightAddress = true;
+		self.isScanLightAddress = true;
 		var myWitnesses = require('trustnote-common/my_witnesses');
 		var wallet_defined_by_keys = require('trustnote-common/wallet_defined_by_keys.js');
 		var network = require('trustnote-common/network');
@@ -370,7 +370,7 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 						if (response && response.error) {
 							var breadcrumbs = require('trustnote-common/breadcrumbs.js');
 							breadcrumbs.add('Error scanForAddressesAndWalletsInLightClient: ' + response.error);
-							isScanLightAddress = false;
+							self.isScanLightAddress = false;
 							return;
 						}
 						if (Object.keys(response).length) {
@@ -386,7 +386,7 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 								if (assocMaxAddressIndexes[walletId].change === 0 && assocMaxAddressIndexes[walletId].main === 0)
 									delete assocMaxAddressIndexes[walletId];
 								else {
-									isScanLightAddress = true;
+									self.isScanLightAddress = true;
 									cb(assocMaxAddressIndexes, walletId);
 								}
 							} else {
