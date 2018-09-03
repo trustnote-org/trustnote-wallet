@@ -1,18 +1,6 @@
 'use strict';
 
-var unsupported, isaosp;
 var breadcrumbs = require('trustnote-common/breadcrumbs.js');
-
-if (window && window.navigator) {
-	var rxaosp = window.navigator.userAgent.match(/Android.*AppleWebKit\/([\d.]+)/);
-	isaosp = (rxaosp && rxaosp[1] < 537);
-	if (!window.cordova && isaosp)
-		unsupported = true;
-	if (unsupported) {
-		window.location = '#/unsupported';
-	}
-}
-
 
 //Setting up route
 angular
@@ -109,16 +97,7 @@ angular
 					}
 				}
 			})
-			.state('unsupported', {
-				url: '/unsupported',
-				needProfile: false,
-				views: {
-					'main': {
-						templateUrl: 'views/unsupported.html'
-					}
-				}
-			})
-
+			
 			.state('create', {
 				url: '/create',
 				templateUrl: 'views/create.html',

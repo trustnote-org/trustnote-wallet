@@ -70,9 +70,6 @@ angular.module('copayApp.services').factory('animationService', function(isCordo
 
   root.transitionAnimated = function(fromState, toState, event) {
 
-    if (isaosp)
-      return true;
-
     // Animation in progress?
     var x = document.getElementById('mainSectionDup');
     if (x && !cachedTransitionState) {
