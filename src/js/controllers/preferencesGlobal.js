@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('copayApp.controllers').controller('preferencesGlobalController', function ($scope, $rootScope, $log, configService, uxLanguage, pushNotificationsService, profileService) {
+angular.module('copayApp.controllers').controller('preferencesGlobalController', function ($scope, $rootScope, $log, configService, uxLanguage, profileService) {
 
 	var conf = require('trustnote-common/conf.js');
 
@@ -17,7 +17,6 @@ angular.module('copayApp.controllers').controller('preferencesGlobalController',
 		this.showHub = 0;
 		this.currentLanguageName = uxLanguage.getCurrentLanguageName();
 		this.torEnabled = conf.socksHost && conf.socksPort;
-		$scope.pushNotifications = config.pushNotifications.enabled;
 
 // 更改代码 iOS客户端 不显示全备份
 		if(typeof (window.cordova) == 'undefined'){
@@ -31,22 +30,6 @@ angular.module('copayApp.controllers').controller('preferencesGlobalController',
 	this.countShowHub = function() {
 		this.showHub++;
 	};
-
-	var unwatchPushNotifications = $scope.$watch('pushNotifications', function (newVal, oldVal) {
-		if (newVal == oldVal) return;
-		var opts = {
-			pushNotifications: {
-				enabled: newVal
-			}
-		};
-		configService.set(opts, function (err) {
-			if (opts.pushNotifications.enabled)
-				pushNotificationsService.pushNotificationsInit();
-			else
-				pushNotificationsService.pushNotificationsUnregister();
-			if (err) $log.debug(err);
-		});
-	});
 
 	//监听switch开关
 	var unwatchEncrypt = $scope.$watch('encrypt', function (val) {
@@ -106,7 +89,6 @@ angular.module('copayApp.controllers').controller('preferencesGlobalController',
 
 
 	$scope.$on('$destroy', function () {
-		unwatchPushNotifications();
 		unwatchEncrypt();
 	});
 });

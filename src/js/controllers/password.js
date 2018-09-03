@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('copayApp.controllers').controller('passwordController',
-	function ($rootScope, $scope, $timeout, profileService, notification, go, gettext) {
+	function ($rootScope, $scope, $timeout, profileService, go, gettext) {
 
 		var self = this;
 

@@ -2,7 +2,7 @@
 
 var breadcrumbs = require('trustnote-common/breadcrumbs.js');
 
-angular.module('copayApp.services').factory('profileService', function profileServiceFactory($rootScope, $location, $timeout, $filter, $log, lodash, storageService, bwcService, configService, pushNotificationsService, isCordova, gettext, gettextCatalog, nodeWebkit, uxLanguage) {
+angular.module('copayApp.services').factory('profileService', function profileServiceFactory($rootScope, $location, $timeout, $filter, $log, lodash, storageService, bwcService, configService, isCordova, gettext, gettextCatalog, nodeWebkit, uxLanguage) {
 
     var root = {};
 
