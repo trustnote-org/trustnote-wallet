@@ -149,11 +149,11 @@ if [ ! -d $PROJECT ]; then
     checkOK
     
     if [ $CURRENT_OS == "ANDROID" ]; then
-        cordova plugin add https://github.com/kakegu/PushPlugin.git
+        cordova plugin add https://github.com/trustnote/PushPlugin.git
         checkOK
     fi
     
-    cordova plugin add https://github.com/joyious/MFileChooser.git
+    cordova plugin add https://github.com/trustnote/MFileChooser.git
     checkOK
     
 fi

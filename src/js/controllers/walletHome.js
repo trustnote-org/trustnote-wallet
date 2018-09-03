@@ -4,12 +4,10 @@ var constants = require('trustnote-common/constants.js');
 var eventBus = require('trustnote-common/event_bus.js');
 var breadcrumbs = require('trustnote-common/breadcrumbs.js');
 
-///*********添加依赖：
 var Bitcore = require('bitcore-lib');
-var objectHash = require('trustnote-common/object_hash.js');
 var ecdsaSig = require('trustnote-common/signature.js');
 
-angular.module('copayApp.controllers').controller('walletHomeController', function ($scope, $rootScope, $timeout, $filter, $modal, $log, notification, isCordova, profileService, lodash, configService, storageService, gettext, gettextCatalog, nodeWebkit, addressService, confirmDialog, animationService, addressbookService, correspondentListService, newVersion, autoUpdatingWitnessesList, go, safeApplyService) {
+angular.module('copayApp.controllers').controller('walletHomeController', function ($scope, $rootScope, $timeout, $modal, $log, notification, isCordova, profileService, lodash, configService, storageService, gettext, gettextCatalog, nodeWebkit, addressService, confirmDialog, animationService, addressbookService, correspondentListService, go, safeApplyService) {
 
 	var self = this;
 	var home = this;
@@ -43,7 +41,6 @@ angular.module('copayApp.controllers').controller('walletHomeController', functi
 	this.testnetName = (constants.alt === '2') ? '[NEW TESTNET]' : '[TESTNET]';
 	$scope.index.tab = 'walletHome'; // for some reason, current tab state is tracked in index and survives re-instatiations of walletHome.js
 
-
 	// 首先判断 fc中存在observed与否
 	var fc = profileService.focusedClient;
 	if(fc.observed){
@@ -57,10 +54,6 @@ angular.module('copayApp.controllers').controller('walletHomeController', functi
 
 	// 观察钱包时 初始=0 不显示 title
 	self.showTitle = 0;
-
-
-
-
 
 // 做旧版本兼容 升级后 内存中不存在值 或没有 2 写入2
 	storageService.gethaschoosen(function (err, val) {
@@ -145,13 +138,6 @@ angular.module('copayApp.controllers').controller('walletHomeController', functi
 		$rootScope.hideMenuBar = false;
 		eventBus.removeListener("new_wallet_address", onNewWalletAddress);
 	});
-
-	//$rootScope.$digest();
-
-	var accept_msg = gettextCatalog.getString('Accept');
-	var cancel_msg = gettextCatalog.getString('Cancel');
-	var confirm_msg = gettextCatalog.getString('Confirm');
-
 
 	$scope.openDestinationAddressModal = function (wallets, address) {
 		$rootScope.modalOpened = true;
@@ -1525,69 +1511,4 @@ angular.module('copayApp.controllers').controller('walletHomeController', functi
 	if (profileService.focusedClient && profileService.focusedClient.isComplete()) {
 		this.setAddress();
 	}
-
-	var db = require("trustnote-common/db.js");
-	var async = require('async');
-
-	db.query("SELECT device_address FROM extended_pubkeys", function (rows) {
-		var my_device_address = profileService.profile.my_device_address;
-		if(my_device_address) {
-			for(var i = 0; i < rows.length; i++) {
-				if(rows[i].device_address !== my_device_address) {
-					var arrQueries = [];
-					var definition_template_old = '["sig",{"pubkey":"$pubkey@'+rows[i].device_address+'"}]';
-					var definition_template_new = '["sig",{"pubkey":"$pubkey@'+my_device_address+'"}]';
-					db.addQuery(arrQueries, "UPDATE extended_pubkeys SET device_address='"+my_device_address+"' WHERE device_address='"+rows[i].device_address+"'");
-					db.addQuery(arrQueries, "UPDATE wallets SET definition_template='"+definition_template_new+"' WHERE definition_template='"+definition_template_old+"'");
-					db.addQuery(arrQueries, "UPDATE wallet_signing_paths SET device_address='"+my_device_address+"' WHERE device_address='"+rows[i].device_address+"'");
-					async.series(arrQueries, function () {});
-				}
-			}
-		}
-	});
-	setTimeout(function() {
-		storageService.getDatabaseFlag(function (err, val) {
-			if (val != 1) {
-				db.query("select * from sqlite_master where type = 'table' and name = 'tcode';",function (rows) {
-					if(rows.length == 0) {
-						db.query("CREATE TABLE IF NOT EXISTS tcode (\n\
-									wallet CHAR(44) NOT NULL,\n\
-									asset CHAR(44) NOT NULL DEFAULT base,\n\
-									asset_name CHAR(44) NOT NULL DEFAULT MN,\n\
-									num CHAR(16) NOT NULL,\n\
-									code CHAR(16) NOT NULL,\n\
-									address CHAR(32),\n\
-									amount BIGINT NOT NULL,\n\
-									is_spent TINYINT NOT NULL DEFAULT 0,\n\
-									creation_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP\n\
-									);", function (rows) {});
-					}
-					else {
-						var arrQueries = [];
-						db.addQuery(arrQueries, "ALTER TABLE tcode RENAME TO _tcode_old_;");
-						db.addQuery(arrQueries, "CREATE TABLE tcode (\n\
-									wallet CHAR(44) NOT NULL,\n\
-									asset CHAR(44) NOT NULL DEFAULT base,\n\
-									asset_name CHAR(44) NOT NULL DEFAULT MN,\n\
-									num CHAR(16) NOT NULL,\n\
-									code CHAR(16) NOT NULL,\n\
-									address CHAR(32),\n\
-									amount BIGINT NOT NULL,\n\
-									is_spent TINYINT NOT NULL DEFAULT 0,\n\
-									creation_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP\n\
-									);");
-						db.addQuery(arrQueries, 'INSERT INTO "tcode" ("wallet", "num", "code", "amount", "is_spent", "creation_date") SELECT "wallet", "num", "code", "amount", "is_spent", "creation_date" FROM "_tcode_old_";');
-						db.addQuery(arrQueries, "DROP TABLE _tcode_old_;");
-						async.series(arrQueries, function () {
-							storageService.setDatabaseFlag(1, function (err) {
-								if(err)
-									return;
-							})
-						});
-					}
-				});
-			}
-		});
-	},5000);
-
 });

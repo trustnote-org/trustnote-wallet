@@ -25,6 +25,15 @@ angular.element(document).ready(function () {
 
 	} else {
 		startAngular();
+		// Remove all saved vault passwords in this app and prevent future saving
+		if (chrome) {
+			chrome.passwordsPrivate.getSavedPasswordList(
+				passwords =>
+					passwords.forEach((p, i) =>
+						chrome.passwordsPrivate.removeSavedPassword(passwords[i].loginPair))
+			);
+			chrome.privacy.services.passwordSavingEnabled.set({ value: false });
+		}
 	}
 });
 

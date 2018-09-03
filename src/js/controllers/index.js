@@ -9,10 +9,8 @@ var ecdsaSig = require('trustnote-common/signature.js');
 var breadcrumbs = require('trustnote-common/breadcrumbs.js');
 var Bitcore = require('bitcore-lib');
 var https = require('https');
-var EventEmitter = require('events').EventEmitter;
 
-
-angular.module('copayApp.controllers').controller('indexController', function ($rootScope, $scope, $log, $filter, $timeout, lodash, go, profileService, configService, isCordova, storageService, addressService, gettext, gettextCatalog, amMoment, nodeWebkit, addonManager, txFormatService, uxLanguage, $state, isMobile, addressbookService, notification, animationService, $modal, bwcService, backButton, pushNotificationsService, newVersion, safeApplyService) {
+angular.module('copayApp.controllers').controller('indexController', function ($rootScope, $scope, $log, $filter, $timeout, lodash, go, profileService, configService, isCordova, storageService, addressService, gettext, gettextCatalog, amMoment, nodeWebkit, addonManager, txFormatService, uxLanguage, $state, isMobile, addressbookService, notification, animationService, $modal, bwcService, backButton, newVersion, safeApplyService) {
     breadcrumbs.add('index.js');
     var self = this;
     self.splashClick = true;
@@ -31,7 +29,8 @@ angular.module('copayApp.controllers').controller('indexController', function ($
     self.$state = $state;
     self.usePushNotifications = isCordova && !isMobile.Windows() && isMobile.Android();
     self.lightToHubTimeoutCount = 0;
-    self.isAndroidPhone = isMobile.Android();
+	self.isAndroidPhone = isMobile.Android();
+	self.isScanLightAddress = false;
 
     self.showneikuang = false;
     self.showneikuangsync = false;
@@ -311,6 +310,9 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 	}
 
 	function scanForAddressesLignt(cb) {
+		if(self.isScanLightAddress)
+			return;
+		self.isScanLightAddress = true;
 		var myWitnesses = require('trustnote-common/my_witnesses');
 		var wallet_defined_by_keys = require('trustnote-common/wallet_defined_by_keys.js');
 		var network = require('trustnote-common/network');
@@ -355,7 +357,7 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 			function checkHistory() {
 				var arrTmpAddresses = [];
 				if(wallet_address_index < 0) wallet_address_index = 0;
-				for (var i = wallet_address_index; i < wallet_address_index + 20; i++) {
+				for (var i = wallet_address_index; i < wallet_address_index + 10; i++) {
 					var index = (is_change ? assocMaxAddressIndexes[walletId].change : assocMaxAddressIndexes[walletId].main) + i;
 					arrTmpAddresses.push(objectHash.getChash160(["sig", {"pubkey": wallet_defined_by_keys.derivePubkey(xPubKey, 'm/' + is_change + '/' + index)}]));
 				}
@@ -368,14 +370,14 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 						if (response && response.error) {
 							var breadcrumbs = require('trustnote-common/breadcrumbs.js');
 							breadcrumbs.add('Error scanForAddressesAndWalletsInLightClient: ' + response.error);
-							// console.log("\n+++++++++++++++++++++++" + response.error);
+							self.isScanLightAddress = false;
 							return;
 						}
 						if (Object.keys(response).length) {
 							if (is_change) {
-								assocMaxAddressIndexes[walletId].change += 20;
+								assocMaxAddressIndexes[walletId].change += 10;
 							} else {
-								assocMaxAddressIndexes[walletId].main += 20;
+								assocMaxAddressIndexes[walletId].main += 10;
 							}
 							// console.log("\n+++++++++++++++++++++++++" + JSON.stringify(assocMaxAddressIndexes));
 							checkAndAddCurrentAddresses(is_change);
@@ -383,8 +385,10 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 							if (is_change) {
 								if (assocMaxAddressIndexes[walletId].change === 0 && assocMaxAddressIndexes[walletId].main === 0)
 									delete assocMaxAddressIndexes[walletId];
-								else
+								else {
+									self.isScanLightAddress = true;
 									cb(assocMaxAddressIndexes, walletId);
+								}
 							} else {
 								checkAndAddCurrentAddresses(1);
 							}
