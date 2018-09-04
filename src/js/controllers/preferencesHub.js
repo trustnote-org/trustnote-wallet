@@ -1,14 +1,11 @@
 'use strict';
 
 angular.module('copayApp.controllers').controller('preferencesHubController',
-	function($scope, $timeout, configService, go, autoUpdatingWitnessesList){
+	function($scope, $timeout, configService, go){
 		var config = configService.getSync();
 		var initHubEdit = false;
 		this.hub = config.hub;
 		this.arrHub = configService.hub;
-
-		this.currentAutoUpdWitnessesList = autoUpdatingWitnessesList.autoUpdate;
-		$scope.autoUpdWitnessesList = autoUpdatingWitnessesList.autoUpdate;
 
 		this.save = function() {
 			var self = this;
@@ -33,16 +30,13 @@ angular.module('copayApp.controllers').controller('preferencesHubController',
 					go.path('preferencesGlobal');
 				}, 50);
 			});
-			// if (this.currentAutoUpdWitnessesList != $scope.autoUpdWitnessesList) {
-			// 	autoUpdatingWitnessesList.setAutoUpdate($scope.autoUpdWitnessesList);
-			// }
 		};
 
 		var unwatchEditHub = $scope.$watch(angular.bind(this, function(){
 			return this.hub;
 		}), function(){
 			if (initHubEdit) {
-				$scope.autoUpdWitnessesList = false;
+
 			}
 			else {
 				initHubEdit = true;

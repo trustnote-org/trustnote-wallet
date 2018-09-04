@@ -9,5 +9,3 @@ angular.module('copayApp.controllers').controller('versionController', function 
 	// wallet type
 	this.type = (conf.bLight ? 'light' : '');
 });
-
-

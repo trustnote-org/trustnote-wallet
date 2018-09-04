@@ -27,7 +27,6 @@ angular.module('copayApp.controllers').controller('indexController', function ($
     self.assetIndex = 0;
     self.assetIndexxx = 0;
     self.$state = $state;
-    self.usePushNotifications = isCordova && !isMobile.Windows() && isMobile.Android();
     self.lightToHubTimeoutCount = 0;
 	self.isAndroidPhone = isMobile.Android();
 	self.isScanLightAddress = false;
@@ -2006,14 +2005,6 @@ angular.module('copayApp.controllers').controller('indexController', function ($
 			$rootScope.$apply();
 		});
 	});
-
-	$rootScope.$on('Local/pushNotificationsReady', function () {
-		self.usePushNotifications = true;
-		$timeout(function () {
-			$rootScope.$apply();
-		});
-	});
-
 
 // 创建 观察钱包 冷钱包 //*****************************////
 	self.ifQr = 0; // 显示：冷钱包的 授权信息

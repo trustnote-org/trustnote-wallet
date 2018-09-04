@@ -1,75 +1,14 @@
 'use strict';
 
-var unsupported, isaosp;
 var breadcrumbs = require('trustnote-common/breadcrumbs.js');
-
-if (window && window.navigator) {
-	var rxaosp = window.navigator.userAgent.match(/Android.*AppleWebKit\/([\d.]+)/);
-	isaosp = (rxaosp && rxaosp[1] < 537);
-	if (!window.cordova && isaosp)
-		unsupported = true;
-	if (unsupported) {
-		window.location = '#/unsupported';
-	}
-}
-
 
 //Setting up route
 angular
 	.module('copayApp')
-	.config(function (historicLogProvider, $provide, $logProvider, $stateProvider, $urlRouterProvider, $compileProvider) {
+	.config(function ($logProvider, $stateProvider, $urlRouterProvider, $compileProvider) {
 		$urlRouterProvider.otherwise('/');
 
 		$logProvider.debugEnabled(true);
-		$provide.decorator('$log', ['$delegate',
-			function ($delegate) {
-				var historicLog = historicLogProvider.$get();
-
-				['debug', 'info', 'warn', 'error', 'log'].forEach(function (level) {
-
-					var orig = $delegate[level];
-					$delegate[level] = function () {
-						if (level == 'error')
-							console.log(arguments);
-
-						var args = [].slice.call(arguments);
-						if (!Array.isArray(args)) args = [args];
-						args = args.map(function (v) {
-							try {
-								if (typeof v == 'undefined') v = 'undefined';
-								if (!v) v = 'null';
-								if (typeof v == 'object') {
-									if (v.message)
-										v = v.message;
-									else
-										v = JSON.stringify(v);
-								}
-								// Trim output in mobile
-								if (window.cordova) {
-									v = v.toString();
-									if (v.length > 1000) {
-										v = v.substr(0, 997) + '...';
-									}
-								}
-							} catch (e) {
-								console.log('Error at log decorator:', e);
-								v = 'undefined';
-							}
-							return v;
-						});
-						try {
-							if (window.cordova)
-								console.log(args.join(' '));
-							historicLog.add(level, args.join(' '));
-							orig.apply(null, args);
-						} catch (e) {
-							console.log('ERROR (at log decorator):', e, args[0]);
-						}
-					};
-				});
-				return $delegate;
-			}
-		]);
 
 		// whitelist 'chrome-extension:' for chromeApp to work with image URLs processed by Angular
 		// link: http://stackoverflow.com/questions/15606751/angular-changes-urls-to-unsafe-in-extension-page?lq=1
@@ -109,16 +48,7 @@ angular
 					}
 				}
 			})
-			.state('unsupported', {
-				url: '/unsupported',
-				needProfile: false,
-				views: {
-					'main': {
-						templateUrl: 'views/unsupported.html'
-					}
-				}
-			})
-
+			
 			.state('create', {
 				url: '/create',
 				templateUrl: 'views/create.html',
@@ -384,17 +314,6 @@ angular
 					}
 				}
 			})
-			.state('preferences.preferencesAdvanced.paperWallet', {
-				url: '/paperWallet',
-				templateUrl: 'views/paperWallet.html',
-				walletShouldBeComplete: true,
-				needProfile: true,
-				views: {
-					'main@': {
-						templateUrl: 'views/paperWallet.html'
-					}
-				}
-			})
 			.state('preferences.preferencesAdvanced.preferencesDeleteWallet', {
 				url: '/delete',
 				templateUrl: 'views/preferencesDeleteWallet.html',
@@ -436,17 +355,6 @@ angular
 					}
 				}
 			})
-			.state('preferencesGlobal.preferencesTor', {
-				url: '/tor',
-				templateUrl: 'views/preferencesTor.html',
-				walletShouldBeComplete: true,
-				needProfile: true,
-				views: {
-					'main@': {
-						templateUrl: 'views/preferencesTor.html'
-					}
-				}
-			})
 			.state('preferencesGlobal.preferencesLanguage', {
 				url: '/language',
 				walletShouldBeComplete: true,
@@ -454,61 +362,6 @@ angular
 				views: {
 					'main@': {
 						templateUrl: 'views/preferencesLanguage.html'
-					}
-				}
-			})
-			.state('preferencesGlobal.preferencesUnit', {
-				url: '/unit',
-				templateUrl: 'views/preferencesUnit.html',
-				walletShouldBeComplete: true,
-				needProfile: true,
-				views: {
-					'main@': {
-						templateUrl: 'views/preferencesUnit.html'
-					}
-				}
-			})
-			.state('preferencesGlobal.preferencesBbUnit', {
-				url: '/bbUnit',
-				templateUrl: 'views/preferencesBbUnit.html',
-				walletShouldBeComplete: true,
-				needProfile: true,
-				views: {
-					'main@': {
-						templateUrl: 'views/preferencesBbUnit.html'
-					}
-				}
-			})
-			.state('preferencesGlobal.preferencesEmail', {
-				url: '/email',
-				templateUrl: 'views/preferencesEmail.html',
-				walletShouldBeComplete: true,
-				needProfile: true,
-				views: {
-					'main@': {
-						templateUrl: 'views/preferencesEmail.html'
-					}
-
-				}
-			})
-			.state('preferencesGlobal.preferencesWitnesses', {
-				url: '/witnesses',
-				templateUrl: 'views/preferencesWitnesses.html',
-				walletShouldBeComplete: true,
-				needProfile: true,
-				views: {
-					'main@': {
-						templateUrl: 'views/preferencesWitnesses.html'
-					}
-				}
-			})
-			.state('preferencesGlobal.preferencesWitnesses.preferencesEditWitness', {
-				url: '/edit',
-				walletShouldBeComplete: true,
-				needProfile: true,
-				views: {
-					'main@': {
-						templateUrl: 'views/preferencesEditWitness.html'
 					}
 				}
 			})
@@ -561,29 +414,8 @@ angular
 						templateUrl: 'views/synchronization.html'
 					}
 				}
-			})
-
-			.state('preferencesGlobal.export', {
-				url: '/export',
-				templateUrl: 'views/export.html',
-				walletShouldBeComplete: true,
-				needProfile: true,
-				views: {
-					'main@': {
-						templateUrl: 'views/export.html'
-					}
-				}
-			})
-			.state('preferencesGlobal.import', {
-				url: '/import',
-				needProfile: true,
-				views: {
-					'main@': {
-						templateUrl: 'views/import.html'
-					}
-				}
-			})
-
+            })
+            
 			.state('preferencesGlobal.preferencesAbout', {
 				url: '/about',
 				templateUrl: 'views/preferencesAbout.html',
@@ -611,17 +443,6 @@ angular
 				views: {
 					'main@': {
 						templateUrl: 'views/translators.html'
-					}
-				}
-			})
-			.state('preferencesGlobal.preferencesAbout.preferencesLogs', {
-				url: '/logs',
-				templateUrl: 'views/preferencesLogs.html',
-				walletShouldBeComplete: true,
-				needProfile: true,
-				views: {
-					'main@': {
-						templateUrl: 'views/preferencesLogs.html'
 					}
 				}
 			})
