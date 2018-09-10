@@ -11,17 +11,17 @@ angular.module('trustnoteApp.services').factory('profileService', function profi
     root.walletClients = {};
 	root.Utils = bwcService.getUtils();
 
-	root.formatAmount = function(amount, asset, opts) {
-      	var config = configService.getSync().wallet.settings;
+    root.formatAmount = function (amount, asset, opts) {
+        var config = configService.getSync().wallet.settings;
 
-      	//if (config.unitCode == 'byte') return amount;
-      	//TODO : now only works for english, specify opts to change thousand separator and decimal separator
-		if(asset == 'blackbytes') {
-			return this.Utils.formatAmount(amount, config.bbUnitCode, opts);
-		}else if(asset == 'base'){
-			return this.Utils.formatAmount(amount, config.unitCode, opts);
-		}else{
-		    return amount;
+        //if (config.unitCode == 'byte') return amount;
+        //TODO : now only works for english, specify opts to change thousand separator and decimal separator
+        if (asset == 'blackbytes') {
+            return this.Utils.formatAmount(amount, config.bbUnitCode, opts);
+        } else if (asset == 'base') {
+            return this.Utils.formatAmount(amount, config.unitCode, opts);
+        } else {
+            return amount;
         }
     };
 
@@ -77,13 +77,6 @@ angular.module('trustnoteApp.services').factory('profileService', function profi
 		if("observed" in credentials)
 			root.walletClients[credentials.walletId].observed = true;
         root.walletClients[credentials.walletId].started = true;
-
-        client.initialize({}, function(err) {
-            if (err) {
-                // impossible
-                return;
-            }
-        });
     };
 
     root.setWalletClients = function() {
@@ -218,70 +211,51 @@ angular.module('trustnoteApp.services').factory('profileService', function profi
 	};
 
     
-    root._seedWallet = function(opts, cb) {
-      	opts = opts || {};
+    root._seedWallet = function (opts, cb) {
+        opts = opts || {};
 
-      	var walletClient = bwcService.getClient();
-      	var network = opts.networkName || 'livenet';
+        var walletClient = bwcService.getClient();
+        var network = opts.networkName || 'livenet';
 
+        if (opts.mnemonic) {
+            try {
+                opts.mnemonic = root._normalizeMnemonic(opts.mnemonic);
+                walletClient.seedFromMnemonic(opts.mnemonic, {
+                    network: network,
+                    passphrase: opts.passphrase,
+                    account: opts.account || 0,
+                    derivationStrategy: opts.derivationStrategy || 'BIP44',
+                });
 
-      	if (opts.mnemonic) {
-        	try {
-          		opts.mnemonic = root._normalizeMnemonic(opts.mnemonic);
-          		walletClient.seedFromMnemonic(opts.mnemonic, {
-            		network: network,
-            		passphrase: opts.passphrase,
-            		account: opts.account || 0,
-            		derivationStrategy: opts.derivationStrategy || 'BIP44',
-          		});
-
-        	} catch (ex) {
-          		$log.info(ex);
-          		return cb(gettext('Could not create: Invalid wallet seed'));
-        	}
-      	} else if (opts.extendedPrivateKey) {
-        	try {
-          		walletClient.seedFromExtendedPrivateKey(opts.extendedPrivateKey, opts.account || 0);
-        	} catch (ex) {
-          		$log.warn(ex);
-          		return cb(gettext('Could not create using the specified extended private key'));
-        	}
-      	} else if (opts.extendedPublicKey) {
-        	try {
-          		walletClient.seedFromExtendedPublicKey(opts.extendedPublicKey, opts.externalSource, opts.entropySource, {
-            		account: opts.account || 0,
-            		derivationStrategy: opts.derivationStrategy || 'BIP44',
-          		});
-        	} catch (ex) {
-          		$log.warn("Creating wallet from Extended Public Key Arg:", ex, opts);
-          		return cb(gettext('Could not create using the specified extended public key'));
-        	}
-      	} else {
-        	var lang = uxLanguage.getCurrentLanguage();
-          	console.log("will seedFromRandomWithMnemonic for language "+lang);
-
-          	try {
-          		walletClient.seedFromRandomWithMnemonic({
-					network: network,
-					passphrase: opts.passphrase,
-					language: lang,
-					account: opts.account || 0,
-          		});
-        	} catch (e) {
-          		$log.info('Error creating seed: ' + e.message);
-          		if (e.message.indexOf('language') > 0) {
-            		$log.info('Using default language for mnemonic');
-            		walletClient.seedFromRandomWithMnemonic({
-              			network: network,
-              			passphrase: opts.passphrase,
-              			account: opts.account || 0,
-            		});
-          		} else {
-            		return cb(e);
-          		}
-        	}
-      	}
-      	return cb(null, walletClient);
+            } catch (ex) {
+                $log.info(ex);
+                return cb(gettext('Could not create: Invalid wallet seed'));
+            }
+        } else if (opts.extendedPrivateKey) {
+            try {
+                walletClient.seedFromExtendedPrivateKey(opts.extendedPrivateKey, opts.account || 0);
+            } catch (ex) {
+                $log.warn(ex);
+                return cb(gettext('Could not create using the specified extended private key'));
+            }
+        } else if (opts.extendedPublicKey) {
+            try {
+                walletClient.seedFromExtendedPublicKey(opts.extendedPublicKey, opts.externalSource, opts.entropySource, {
+                    account: opts.account || 0,
+                    derivationStrategy: opts.derivationStrategy || 'BIP44',
+                });
+            } catch (ex) {
+                $log.warn("Creating wallet from Extended Public Key Arg:", ex, opts);
+                return cb(gettext('Could not create using the specified extended public key'));
+            }
+        } else {
+            walletClient.seedFromRandomWithMnemonic({
+                network: network,
+                passphrase: opts.passphrase,
+                account: opts.account || 0,
+            });
+        }
+        return cb(null, walletClient);
     };
 
 
