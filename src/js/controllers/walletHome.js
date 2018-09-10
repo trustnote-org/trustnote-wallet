@@ -7,7 +7,7 @@ var breadcrumbs = require('trustnote-common/breadcrumbs.js');
 var Bitcore = require('bitcore-lib');
 var ecdsaSig = require('trustnote-common/signature.js');
 
-angular.module('copayApp.controllers').controller('walletHomeController', function ($scope, $rootScope, $timeout, $modal, $log, notification, isCordova, profileService, lodash, configService, storageService, gettext, gettextCatalog, nodeWebkit, addressService, confirmDialog, animationService, addressbookService, correspondentListService, go, safeApplyService) {
+angular.module('trustnoteApp.controllers').controller('walletHomeController', function ($scope, $rootScope, $timeout, $modal, $log, notification, isCordova, profileService, lodash, configService, storageService, gettext, gettextCatalog, nodeWebkit, addressService, confirmDialog, animationService, addressbookService, correspondentListService, go, safeApplyService) {
 
 	var self = this;
 	var home = this;

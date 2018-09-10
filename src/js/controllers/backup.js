@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('copayApp.controllers').controller('wordsController', function ($rootScope, $scope, $timeout, profileService, go, gettext, gettextCatalog, confirmDialog, notification, $log, isCordova, storageService) {
+angular.module('trustnoteApp.controllers').controller('wordsController', function ($rootScope, $scope, $timeout, profileService, go, gettext, gettextCatalog, confirmDialog, notification, $log, isCordova, storageService) {
 
 	var msg = gettextCatalog.getString('Are you sure you want to delete the backup words?');
 	var successMsg = gettext('Backup words deleted');

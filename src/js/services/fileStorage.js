@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('copayApp.services')
+angular.module('trustnoteApp.services')
   .factory('fileStorageService', function() {
     var fileStorage = require('./fileStorage.js');
     var root = {};

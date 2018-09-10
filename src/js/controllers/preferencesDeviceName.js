@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('copayApp.controllers').controller('preferencesDeviceNameController',
+angular.module('trustnoteApp.controllers').controller('preferencesDeviceNameController',
   function($scope, $timeout, configService, go) {
     var config = configService.getSync();
     this.deviceName = config.deviceName;

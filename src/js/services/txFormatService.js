@@ -2,7 +2,7 @@
 
 var constants = require('trustnote-common/constants.js');
 
-angular.module('copayApp.services').factory('txFormatService', function (profileService, configService, lodash) {
+angular.module('trustnoteApp.services').factory('txFormatService', function (profileService, configService, lodash) {
 	var root = {};
 
 	var formatAmountStr = function (amount, asset) {

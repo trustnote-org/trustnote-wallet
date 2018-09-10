@@ -2,7 +2,7 @@
 
 var eventBus = require('trustnote-common/event_bus.js');
 
-angular.module('copayApp.services').factory('go', function($http, $window, $rootScope,  $location, $state, profileService, fileSystemService, nodeWebkit, notification, gettextCatalog, authService, $deepStateRedirect, $stickyState, $timeout) {
+angular.module('trustnoteApp.services').factory('go', function($http, $window, $rootScope,  $location, $state, profileService, fileSystemService, nodeWebkit, notification, gettextCatalog, authService, $deepStateRedirect, $stickyState, $timeout) {
 	var root = {};
 	root.toPay = 0;
 	root.haschoosen = 0;

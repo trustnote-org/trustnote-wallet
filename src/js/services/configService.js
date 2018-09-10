@@ -2,7 +2,7 @@
 
 // 配置服务脚本
 
-angular.module('copayApp.services').factory('configService', function (storageService, lodash, $log, isCordova) {
+angular.module('trustnoteApp.services').factory('configService', function (storageService, lodash, $log, isCordova) {
 	var root = {};
 	root.colorOpts = [
 		"#0095ff",

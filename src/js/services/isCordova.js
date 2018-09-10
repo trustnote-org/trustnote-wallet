@@ -1,3 +1,3 @@
 'use strict';
 
-angular.module('copayApp.services').value('isCordova', window.cordova ? true : false);
+angular.module('trustnoteApp.services').value('isCordova', window.cordova ? true : false);

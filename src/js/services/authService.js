@@ -1,7 +1,7 @@
 'use strict';
 
 
-angular.module('copayApp.services').factory('authService', function() {
+angular.module('trustnoteApp.services').factory('authService', function() {
     var root = {};
 
     root.objRequest = null;

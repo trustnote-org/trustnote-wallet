@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('copayApp.services').factory('txStatus', function($modal, lodash, profileService, $timeout) {
+angular.module('trustnoteApp.services').factory('txStatus', function($modal, lodash, profileService, $timeout) {
   var root = {};
 
   root.notify = function(txp, cb) {

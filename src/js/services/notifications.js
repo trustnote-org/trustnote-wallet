@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('copayApp.services').
+angular.module('trustnoteApp.services').
 factory('notification', ['$timeout',
   function($timeout) {
 

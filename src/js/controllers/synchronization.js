@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('copayApp.controllers').controller('synchronization', function ($rootScope, $scope, $log, gettext, $timeout, lodash, gettextCatalog, profileService, storageService, configService) {
+angular.module('trustnoteApp.controllers').controller('synchronization', function ($rootScope, $scope, $log, gettext, $timeout, lodash, gettextCatalog, profileService, storageService, configService) {
 
 	var conf = require('trustnote-common/conf.js');
 	var wallet_defined_by_keys = require('trustnote-common/wallet_defined_by_keys.js');

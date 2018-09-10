@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('copayApp.controllers').controller('passwordController',
+angular.module('trustnoteApp.controllers').controller('passwordController',
 	function ($rootScope, $scope, $timeout, profileService, go, gettext) {
 
 		var self = this;

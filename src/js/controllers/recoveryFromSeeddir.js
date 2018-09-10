@@ -3,7 +3,7 @@
  */
 'use strict';
 
-angular.module('copayApp.controllers').controller('recoveryFromSeeddir', function ($rootScope, $scope, $log, gettext, $timeout, gettextCatalog, profileService, go, notification, storageService) {
+angular.module('trustnoteApp.controllers').controller('recoveryFromSeeddir', function ($rootScope, $scope, $log, gettext, $timeout, gettextCatalog, profileService, go, notification, storageService) {
 	var async = require('async');
 	var conf = require('trustnote-common/conf.js');
 	var wallet_defined_by_keys = require('trustnote-common/wallet_defined_by_keys.js');

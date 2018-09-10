@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('copayApp.controllers').controller('airDrop', function ($scope, $rootScope, go, profileService, $timeout, gettext, gettextCatalog, isCordova, configService, storageService, nodeWebkit, uxLanguage, safeApplyService) {
+angular.module('trustnoteApp.controllers').controller('airDrop', function ($scope, $rootScope, go, profileService, $timeout, gettext, gettextCatalog, isCordova, configService, storageService, nodeWebkit, uxLanguage, safeApplyService) {
 	var self = this;
 	var indexScope = $scope.index;
 	var config = configService.getSync();

@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('copayApp.controllers').controller('sendAssets', function ($scope, $rootScope, go, profileService, gettextCatalog, addressService, $timeout) {
+angular.module('trustnoteApp.controllers').controller('sendAssets', function ($scope, $rootScope, go, profileService, gettextCatalog, addressService, $timeout) {
 	var self = this;
 	var indexScope = $scope.index;
 	var https = require('https');

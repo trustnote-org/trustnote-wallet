@@ -5,7 +5,7 @@ var eventBus = require('trustnote-common/event_bus.js');
 var ValidationUtils = require('trustnote-common/validation_utils.js');
 var objectHash = require('trustnote-common/object_hash.js');
 
-angular.module('copayApp.services').factory('correspondentListService', function($state, $rootScope, $sce, $compile, configService, storageService, profileService, addressService, go, lodash, $stickyState, $deepStateRedirect, $timeout, gettextCatalog, gettext, safeApplyService) {
+angular.module('trustnoteApp.services').factory('correspondentListService', function($state, $rootScope, $sce, $compile, configService, storageService, profileService, addressService, go, lodash, $stickyState, $deepStateRedirect, $timeout, gettextCatalog, gettext, safeApplyService) {
 	var root = {};
 	var device = require('trustnote-common/device.js');
 	var wallet = require('trustnote-common/wallet.js');

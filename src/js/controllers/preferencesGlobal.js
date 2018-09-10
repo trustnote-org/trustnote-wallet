@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('copayApp.controllers').controller('preferencesGlobalController', function ($scope, $rootScope, $log, configService, uxLanguage, profileService) {
+angular.module('trustnoteApp.controllers').controller('preferencesGlobalController', function ($scope, $rootScope, $log, configService, uxLanguage, profileService) {
 
 	var conf = require('trustnote-common/conf.js');
 

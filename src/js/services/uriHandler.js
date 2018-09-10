@@ -11,4 +11,4 @@ UriHandler.prototype.register = function() {
   }
 };
 
-angular.module('copayApp.services').value('uriHandler', new UriHandler());
+angular.module('trustnoteApp.services').value('uriHandler', new UriHandler());

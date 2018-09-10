@@ -1,6 +1,6 @@
 'use strict';
 'use strict';
-angular.module('copayApp.services')
+angular.module('trustnoteApp.services')
   .factory('addressService', function(profileService, $log, $timeout, lodash, gettextCatalog) {
     var root = {};
 

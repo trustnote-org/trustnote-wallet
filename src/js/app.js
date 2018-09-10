@@ -11,19 +11,19 @@ var modules = [
 	'ngLodash',
 	'uiSwitch',
 	'bwcModule',
-	'copayApp.filters',
-	'copayApp.services',
-	'copayApp.controllers',
-	'copayApp.directives',
-	'copayApp.addons',
+	'trustnoteApp.filters',
+	'trustnoteApp.services',
+	'trustnoteApp.controllers',
+	'trustnoteApp.directives',
+	'trustnoteApp.addons',
 	'ct.ui.router.extras'
 ];
 
-var copayApp = window.copayApp = angular.module('copayApp', modules);
+var trustnoteApp = window.trustnoteApp = angular.module('trustnoteApp', modules);
 
-angular.module('copayApp.filters', []);
-angular.module('copayApp.services', []);
-angular.module('copayApp.controllers', []);
-angular.module('copayApp.directives', []);
-angular.module('copayApp.addons', []);
+angular.module('trustnoteApp.filters', []);
+angular.module('trustnoteApp.services', []);
+angular.module('trustnoteApp.controllers', []);
+angular.module('trustnoteApp.directives', []);
+angular.module('trustnoteApp.addons', []);
 

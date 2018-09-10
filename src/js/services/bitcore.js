@@ -1,5 +1,5 @@
 'use strict';
-angular.module('copayApp.services')
+angular.module('trustnoteApp.services')
   .factory('bitcore', function bitcoreFactory(bwcService) {
     var bitcore = bwcService.getBitcore();
     return bitcore;

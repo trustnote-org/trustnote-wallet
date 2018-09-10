@@ -2,7 +2,7 @@
 
 var constants = require('trustnote-common/constants.js');
 
-angular.module('copayApp.controllers').controller('qrcodeController', function($scope, $rootScope, $timeout, $filter, $modal, $log, notification, isCordova, profileService, lodash, configService, storageService, gettext, gettextCatalog, nodeWebkit, addressService, confirmDialog, animationService, backButton, safeApplyService) {
+angular.module('trustnoteApp.controllers').controller('qrcodeController', function($scope, $rootScope, $timeout, $filter, $modal, $log, notification, isCordova, profileService, lodash, configService, storageService, gettext, gettextCatalog, nodeWebkit, addressService, confirmDialog, animationService, backButton, safeApplyService) {
 
 	var self = this;
 	var conf = require('trustnote-common/conf.js');

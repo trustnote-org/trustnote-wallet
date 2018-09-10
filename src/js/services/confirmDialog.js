@@ -1,7 +1,7 @@
 
 'use strict';
 
-angular.module('copayApp.services').factory('confirmDialog', function($log, $timeout, gettextCatalog, isCordova) {
+angular.module('trustnoteApp.services').factory('confirmDialog', function($log, $timeout, gettextCatalog, isCordova) {
   var root = {};
 
 

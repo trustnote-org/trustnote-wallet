@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('copayApp.controllers').controller('botController',
+angular.module('trustnoteApp.controllers').controller('botController',
   function($stateParams, $scope, $rootScope, $timeout, configService, profileService, isCordova, go, correspondentListService, safeApplyService) {
 	
 	var self = this;

@@ -1,5 +1,5 @@
 'use strict';
-angular.module('copayApp.services')
+angular.module('trustnoteApp.services')
   .factory('backupService', function backupServiceFactory($log, $timeout, profileService, sjcl) {
 
     var root = {};

@@ -4,7 +4,7 @@
 var constants = require('trustnote-common/constants.js');
 
 
-angular.module('copayApp.controllers').controller('correspondentDeviceController',
+angular.module('trustnoteApp.controllers').controller('correspondentDeviceController',
 	function ($scope, $rootScope, $timeout, $sce, $modal, configService, profileService, animationService, isCordova, go, correspondentListService, addressService, lodash, $deepStateRedirect, $state, backButton, safeApplyService) {
 
 		var chatStorage = require('trustnote-common/chat_storage.js');

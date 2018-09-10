@@ -2,7 +2,7 @@
 
 var eventBus = require('trustnote-common/event_bus.js');
 
-angular.module('copayApp.services').factory('newVersion', function(storageService){
+angular.module('trustnoteApp.services').factory('newVersion', function(storageService){
 	var root = {};
 	root.showUpdate = 0;
 

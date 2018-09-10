@@ -5,7 +5,7 @@
  */
 
 
-angular.module('copayApp.services')
+angular.module('trustnoteApp.services')
   .factory('$swipemodified', [
   function() {
     // The total distance in any direction before we make the call on swipe vs. scroll.

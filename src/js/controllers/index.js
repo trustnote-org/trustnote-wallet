@@ -10,7 +10,7 @@ var breadcrumbs = require('trustnote-common/breadcrumbs.js');
 var Bitcore = require('bitcore-lib');
 var https = require('https');
 
-angular.module('copayApp.controllers').controller('indexController', function ($rootScope, $scope, $log, $filter, $timeout, lodash, go, profileService, configService, isCordova, storageService, addressService, gettext, gettextCatalog, amMoment, nodeWebkit, addonManager, txFormatService, uxLanguage, $state, isMobile, addressbookService, notification, animationService, $modal, bwcService, backButton, newVersion, safeApplyService) {
+angular.module('trustnoteApp.controllers').controller('indexController', function ($rootScope, $scope, $log, $filter, $timeout, lodash, go, profileService, configService, isCordova, storageService, addressService, gettext, gettextCatalog, amMoment, nodeWebkit, addonManager, txFormatService, uxLanguage, $state, isMobile, addressbookService, notification, animationService, $modal, bwcService, backButton, newVersion, safeApplyService) {
     breadcrumbs.add('index.js');
     var self = this;
     self.splashClick = true;

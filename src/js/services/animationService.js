@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('copayApp.services').factory('animationService', function (isCordova) {
+angular.module('trustnoteApp.services').factory('animationService', function (isCordova) {
     var root = {};
 
     var cachedTransitionState, cachedBackPanel;

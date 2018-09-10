@@ -25,4 +25,4 @@ var isMobile = {
     }
 };
 
-angular.module('copayApp.services').value('isMobile', isMobile);
+angular.module('trustnoteApp.services').value('isMobile', isMobile);

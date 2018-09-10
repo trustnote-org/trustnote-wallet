@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('copayApp.controllers').controller('sidebarController', function ($rootScope, $timeout, lodash, profileService, configService, go, isMobile, isCordova, backButton) {
+angular.module('trustnoteApp.controllers').controller('sidebarController', function ($rootScope, $timeout, lodash, profileService, configService, go, isMobile, isCordova, backButton) {
 	var self = this;
 	self.isWindowsPhoneApp = isMobile.Windows() && isCordova;
 	self.walletSelection = false;

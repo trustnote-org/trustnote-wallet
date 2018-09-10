@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('copayApp.services').factory('nodeWebkit', function nodeWebkitFactory() {
+angular.module('trustnoteApp.services').factory('nodeWebkit', function nodeWebkitFactory() {
 	var root = {};
 
 	var isNodeWebkit = function () {

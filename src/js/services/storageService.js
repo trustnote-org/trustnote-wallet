@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('copayApp.services')
+angular.module('trustnoteApp.services')
 	.factory('storageService', function (logHeader, fileStorageService, localStorageService, sjcl, $log, lodash, isCordova) {
 
 		var root = {};

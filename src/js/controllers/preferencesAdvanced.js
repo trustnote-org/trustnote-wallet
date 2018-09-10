@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('copayApp.controllers').controller('preferencesAdvancedController',
+angular.module('trustnoteApp.controllers').controller('preferencesAdvancedController',
   function($scope) {
 
   });

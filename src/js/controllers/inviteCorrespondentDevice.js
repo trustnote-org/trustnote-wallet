@@ -2,7 +2,7 @@
 
 var eventBus = require('trustnote-common/event_bus.js');
 
-angular.module('copayApp.controllers').controller('inviteCorrespondentDeviceController', function ($scope, $timeout, profileService, go, isCordova, correspondentListService, gettextCatalog, safeApplyService) {
+angular.module('trustnoteApp.controllers').controller('inviteCorrespondentDeviceController', function ($scope, $timeout, profileService, go, isCordova, correspondentListService, gettextCatalog, safeApplyService) {
 
 	var self = this;
 

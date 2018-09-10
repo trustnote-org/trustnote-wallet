@@ -1,7 +1,7 @@
 'use strict';
 var breadcrumbs = require('trustnote-common/breadcrumbs.js');
 
-angular.module('copayApp.directives').directive('qrScanner', ['$rootScope', '$timeout', '$modal', 'isCordova', 'gettextCatalog', function ($rootScope, $timeout, $modal, isCordova, gettextCatalog) {
+angular.module('trustnoteApp.directives').directive('qrScanner', ['$rootScope', '$timeout', '$modal', 'isCordova', 'gettextCatalog', function ($rootScope, $timeout, $modal, isCordova, gettextCatalog) {
 
 	var controller = function ($scope) {
 		$scope.cordovaOpenScanner = function () {

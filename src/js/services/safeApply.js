@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('copayApp.services').factory('safeApplyService', function safeApplyServiceFactory() {
+angular.module('trustnoteApp.services').factory('safeApplyService', function safeApplyServiceFactory() {
 	var root = {};
 
 	root.safeApply = function (scope, fn) {

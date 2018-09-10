@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('copayApp.controllers').controller('airDropReceive', function ($scope, $rootScope, go, profileService, gettextCatalog, addressService, $timeout) {
+angular.module('trustnoteApp.controllers').controller('airDropReceive', function ($scope, $rootScope, go, profileService, gettextCatalog, addressService, $timeout) {
 	var self = this;
 	var wallet_defined_by_keys = require('trustnote-common/wallet_defined_by_keys.js');
 	var myWitnesses = require('trustnote-common/my_witnesses');

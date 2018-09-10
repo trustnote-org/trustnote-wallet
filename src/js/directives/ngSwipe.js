@@ -6,7 +6,7 @@
 
 
 function makeSwipeDirective(directiveName, direction, eventName) {
-  angular.module('copayApp.directives')
+  angular.module('trustnoteApp.directives')
     .directive(directiveName, ['$parse', '$swipe', '$timeout',
       function($parse, $swipe, $timeout) {
         // The maximum vertical delta for a swipe should be less than 75px.

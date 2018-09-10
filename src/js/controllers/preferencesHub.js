@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('copayApp.controllers').controller('preferencesHubController',
+angular.module('trustnoteApp.controllers').controller('preferencesHubController',
 	function($scope, $timeout, configService, go){
 		var config = configService.getSync();
 		var initHubEdit = false;

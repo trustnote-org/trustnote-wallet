@@ -4,7 +4,7 @@ var breadcrumbs = require('trustnote-common/breadcrumbs.js');
 
 //Setting up route
 angular
-	.module('copayApp')
+	.module('trustnoteApp')
 	.config(function ($logProvider, $stateProvider, $urlRouterProvider, $compileProvider) {
 		$urlRouterProvider.otherwise('/');
 

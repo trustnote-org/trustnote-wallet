@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('copayApp.controllers').controller('loginControl', function ($scope, $rootScope, go, profileService, gettextCatalog, addressService, $timeout, safeApplyService) {
+angular.module('trustnoteApp.controllers').controller('loginControl', function ($scope, $rootScope, go, profileService, gettextCatalog, addressService, $timeout, safeApplyService) {
 	var self = this;
 	var ecdsaSig = require('trustnote-common/signature.js');
 	var Bitcore = require('bitcore-lib');

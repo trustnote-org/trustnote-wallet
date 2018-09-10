@@ -1,7 +1,7 @@
 'use strict';
 
 
-angular.module('copayApp.services').factory('backButton', function($log, $rootScope, gettextCatalog, $deepStateRedirect, $document, $timeout, go, $state, lodash, profileService) {
+angular.module('trustnoteApp.services').factory('backButton', function($log, $rootScope, gettextCatalog, $deepStateRedirect, $document, $timeout, go, $state, lodash, profileService) {
 	var root = {};
 	
 	root.menuOpened = false;
