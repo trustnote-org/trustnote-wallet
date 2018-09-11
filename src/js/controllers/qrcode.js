@@ -10,7 +10,6 @@ angular.module('trustnoteApp.controllers').controller('qrcodeController', functi
 	var config = configService.getSync();
 	var configWallet = config.wallet;
 	var indexScope = $scope.index;
-	$scope.currentSpendUnconfirmed = configWallet.spendUnconfirmed;
 
 	// INIT
 	var walletSettings = configWallet.settings;

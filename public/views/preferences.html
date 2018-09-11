@@ -16,7 +16,7 @@
 </nav>
 
 
-<div class="content preferences" ng-controller="preferencesController as preferences" ng-init="preferences.init()">
+<div class="content preferences" ng-controller="preferencesController as preferences">
     <h4></h4>
     <ul class="no-bullet m0" ng-show="!index.noFocusedWallet">
 
@@ -44,7 +44,7 @@
         </li>
 
         <!--冷钱包 认证-->
-        <li ng-click="preferences.toShowPubKey()" ng-if="index.isObserved() == 0">
+        <li ng-click="preferences.showPubKey()" ng-if="index.isObserved() == 0">
             <div class="right text-gray">
                 <i class="icon-arrow-right3 size-14"></i>
             </div>

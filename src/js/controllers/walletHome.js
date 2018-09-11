@@ -19,9 +19,6 @@ angular.module('trustnoteApp.controllers').controller('walletHomeController', fu
 	var config = configService.getSync();
 	var configWallet = config.wallet;
 	var indexScope = $scope.index;
-	$scope.currentSpendUnconfirmed = configWallet.spendUnconfirmed;
-
-
 
 	// INIT
 	var walletSettings = configWallet.settings;
@@ -500,18 +497,6 @@ angular.module('trustnoteApp.controllers').controller('walletHomeController', fu
 			m.addClass(animationService.modalAnimated.slideOutDown);
 		});
 	};
-
-	// Send
-
-	var unwatchSpendUnconfirmed = $scope.$watch('currentSpendUnconfirmed', function (newVal, oldVal) {
-		if (newVal == oldVal) return;
-		$scope.currentSpendUnconfirmed = newVal;
-	});
-
-	$scope.$on('$destroy', function () {
-		unwatchSpendUnconfirmed();
-	});
-
 
 	this.resetError = function () {
 		this.error = this.success = null;
@@ -1209,7 +1194,6 @@ angular.module('trustnoteApp.controllers').controller('walletHomeController', fu
 		this.lockAddress = false;
 		this.lockAmount = false;
 		this.hideAdvSend = true;
-		$scope.currentSpendUnconfirmed = configService.getSync().wallet.spendUnconfirmed;
 
 		this._amount = this._address = null;
 		this.bSendAll = false;

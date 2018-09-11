@@ -987,7 +987,6 @@ angular.module('trustnoteApp.controllers').controller('indexController', functio
 		self.historyShowShowAll = false;
 		self.balanceByAddress = null;
 		self.pendingTxProposalsCountForUs = null;
-		self.setSpendUnconfirmed();
 
 		var device = require('trustnote-common/device.js');
 		//console.log('-----fc.credentials.walletId:'+ fc.credentials.walletId);
@@ -1182,11 +1181,6 @@ angular.module('trustnoteApp.controllers').controller('indexController', functio
 			}
 		});
 	};
-
-	self.setSpendUnconfirmed = function () {
-		self.spendUnconfirmed = configService.getSync().wallet.spendUnconfirmed;
-	};
-
 
 	self.updateBalance = function () {
 		var fc = profileService.focusedClient;
@@ -1783,11 +1777,6 @@ angular.module('trustnoteApp.controllers').controller('indexController', functio
 		$timeout(function () {
 			$rootScope.$apply();
 		});
-	});
-
-	$rootScope.$on('Local/SpendUnconfirmedUpdated', function (event) {
-		self.setSpendUnconfirmed();
-		self.updateAll();
 	});
 
 	$rootScope.$on('Local/ProfileBound', function () {
