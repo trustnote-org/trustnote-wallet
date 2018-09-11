@@ -1,122 +1,106 @@
-
-<!--全局设置-->
-
-<!--顶部top栏-->
 <div class="topbar-container" ng-include="'views/includes/topbar.html'" ng-init="titleSection='Global preferences'; closeToHome = true; noColor = true"></div>
 
-
-<!--控制器类 与实例化-->
 <div class="content preferences" ng-controller="preferencesGlobalController as prefGlobal" ng-init="prefGlobal.init()">
+    <h4 translate>Basic Settings</h4>
+    <ul class="no-bullet m0 ">
 
-	<!--设备设置-->
-	<h4 translate>Basic Settings</h4>
-	<ul class="no-bullet m0 ">
-		<!-- Device name   -->
-		<li ng-click="$root.go('preferencesGlobal.preferencesDeviceName')">
-			<div class="right text-gray">
+        <!-- 设备名称 -->
+        <li ng-click="$root.go('preferencesGlobal.preferencesDeviceName')">
+            <div class="right text-gray">
 
-				<div style="float: right;">
-					<i class="icon-arrow-right3 size-14"></i>
-				</div>
+                <div style="float: right;">
+                    <i class="icon-arrow-right3 size-14"></i>
+                </div>
 
-				<div style="float: right; width:260px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; text-align: right; padding-right: 3px;">
-					{{prefGlobal.deviceName}}
-				</div>
-			</div>
-			<div class="size-14" translate>Device name</div>
-		</li>
+                <div style="float: right; width:260px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; text-align: right; padding-right: 3px;">
+                    {{prefGlobal.deviceName}}
+                </div>
+            </div>
+            <div class="size-14" translate>Device name</div>
+        </li>
 
-		<!-- Language 设置 -->
-		<li ng-click="$root.go('preferencesGlobal.preferencesLanguage')">
-			<div class="right text-gray">
-				{{prefGlobal.currentLanguageName|translate}}
-				<i class="icon-arrow-right3 size-14"></i>
-			</div>
-			<div class="size-14" translate>Language</div>
-		</li>
+        <!-- 语言设置 -->
+        <li ng-click="$root.go('preferencesGlobal.preferencesLanguage')">
+            <div class="right text-gray">
+                {{prefGlobal.currentLanguageName|translate}}
+                <i class="icon-arrow-right3 size-14"></i>
+            </div>
+            <div class="size-14" translate>Language</div>
+        </li>
 
-		<!-- TrustME URI -->
-		<li ng-if="prefGlobal.showHub >= 3" ng-click="$root.go('preferencesGlobal.preferencesHub')">
-			<div class="right text-gray"> {{prefGlobal.hub}} <i class="icon-arrow-right3 size-14"></i></div>
-			<div translate>TrustME URI</div>
-		</li>
-	</ul>
-	<!--设备设置 结束-->
+        <!-- TrustME URI -->
+        <li ng-if="prefGlobal.showHub" ng-click="$root.go('preferencesGlobal.preferencesHub')">
+            <div class="right text-gray"> {{prefGlobal.hub}} <i class="icon-arrow-right3 size-14"></i></div>
+            <div translate>TrustME URI</div>
+        </li>
+    </ul>
 
-	<!-- 设备地址 -->
-	<h4 translate>Device address</h4>
-	<ul class="no-bullet m0 enable_text_select">
-		<li>
-			<div class="size-14" ng-click="prefGlobal.countShowHub()">{{prefGlobal.myDeviceAddress}}</div>
-		</li>
-	</ul>
-	<!--设备地址 结束-->
+    <!-- 设备地址 -->
+    <h4 translate>Device address</h4>
+    <ul class="no-bullet m0 enable_text_select">
+        <li>
+            <div class="size-14" ng-click="prefGlobal.ClickToShowHub()">{{prefGlobal.myDeviceAddress}}</div>
+        </li>
+    </ul>
 
 
-	<!-- 密码保护  -->
-	<h4 translate>Spending Restrictions</h4>
-	<ul class="no-bullet m0">
-		<li>
-			<switch id="network-name" name="encrypt" ng-model="encrypt" class="green right"></switch>
-			<div class="size-14"  translate>Request Password</div>
-		</li>
-	</ul>
-	<!--密码保护  结束-->
+    <!-- 密码保护  -->
+    <h4 translate>Spending Restrictions</h4>
+    <ul class="no-bullet m0">
+        <li>
+            <switch id="network-name" name="encrypt" ng-model="encrypt" class="green right"></switch>
+            <div class="size-14" translate>Request Password</div>
+        </li>
+    </ul>
 
+    <!-- 备份口令 -->
+    <h4></h4>
+    <ul class="no-bullet m0">
+        <li ng-click="$root.go('preferencesGlobal.backup')">
+            <div class="right text-gray">
+                <span class="text-warning" ng-show="index.needsBackup">
+                    <i class="fi-alert"></i>
+                    <span translate>Still not done</span>
+                </span>
 
-	<!-- 备份口令 -->
-	<h4></h4>
-	<ul class="no-bullet m0">
-		<li ng-click="$root.go('preferencesGlobal.backup')" ng-hide="index.isPrivKeyExternal">
-			<div class="right text-gray">
-				<span class="text-warning" ng-show="index.needsBackup">
-					<i class="fi-alert"></i>
-					<span translate>Still not done</span>
-				</span>
+                <i class="icon-arrow-right3 size-14 text-gray"></i>
+            </div>
 
-				<i class="icon-arrow-right3 size-14 text-gray"></i>
-			</div>
+            <div class="size-14" translate>Backup wallet seed</div>
+        </li>
+    </ul>
 
-			<div class="size-14" translate>Backup wallet seed</div>
-		</li>
-	</ul>
-	<!-- 备份口令 口令 -->
+    <!-- 口令恢复钱包 -->
+    <ul class="no-bullet m0">
+        <li ng-click="$root.go('preferencesGlobal.recoveryFromSeed')">
+            <div class="right text-gray">
+                <i class="icon-arrow-right3 size-14 text-gray"></i>
+            </div>
+            <div class="size-14" translate>Recovery from seed</div>
+        </li>
+    </ul>
 
+    <h4></h4>
+    <!--同步钱包-->
+    <ul class="no-bullet m0">
+        <li ng-click="$root.go('preferencesGlobal.synchronization')">
+            <div class="right text-gray">
+                <i class="icon-arrow-right3 size-14 text-gray"></i>
+            </div>
+            <div class="size-14" translate>Sync Cloned Wallets</div>
+        </li>
+    </ul>
 
-	<!-- 使用口令恢复钱包 -->
-	<ul class="no-bullet m0">
-		<li ng-click="$root.go('preferencesGlobal.recoveryFromSeed')" ng-hide="index.isPrivKeyExternal">
-			<div class="right text-gray">
-				<i class="icon-arrow-right3 size-14 text-gray"></i>
-			</div>
-			<div class="size-14" translate>Recovery from seed</div>
-		</li>
-	</ul>
-	<!-- 使用口令恢复钱包 结束 -->
-
-	<h4></h4>
-	<!--同步钱包-->
-	<ul class="no-bullet m0">
-		<li ng-click="$root.go('preferencesGlobal.synchronization')" ng-hide="index.isPrivKeyExternal">
-			<div class="right text-gray">
-				<i class="icon-arrow-right3 size-14 text-gray"></i>
-			</div>
-			<div class="size-14" translate>Sync Cloned Wallets</div>
-		</li>
-	</ul>
-	<!--同步钱包 结束-->
-
-	<!-- 关于 TrustNote  -->
-	<h4></h4>
-	<ul class="no-bullet m0">
-		<li ng-click="$root.go('preferencesGlobal.preferencesAbout')">
-			<div class="right text-gray">
-				<i class="icon-arrow-right3 size-14"></i>
-			</div>
-			<div translate>About TrustNote</div>
-		</li>
-	</ul>
-	<h4></h4>
-	<!-- 关于 TrustNote 结束 -->
+    <!-- 关于 TrustNote  -->
+    <h4></h4>
+    <ul class="no-bullet m0">
+        <li ng-click="$root.go('preferencesGlobal.preferencesAbout')">
+            <div class="right text-gray">
+                <i class="icon-arrow-right3 size-14"></i>
+            </div>
+            <div translate>About TrustNote</div>
+        </li>
+    </ul>
+    <h4></h4>
 </div>
 <div class="extra-margin-bottom"></div>

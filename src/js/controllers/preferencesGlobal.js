@@ -1,94 +1,73 @@
 'use strict';
 
-angular.module('trustnoteApp.controllers').controller('preferencesGlobalController', function ($scope, $rootScope, $log, configService, uxLanguage, profileService) {
+angular.module('trustnoteApp.controllers').controller('preferencesGlobalController', function ($scope, $rootScope, $log, configService, uxLanguage, profileService, storageService) {
 
-	var conf = require('trustnote-common/conf.js');
+    $scope.encrypt = !!profileService.profile.xPrivKeyEncrypted;
 
-	//双向绑定的 ng-model
-	$scope.encrypt = !!profileService.profile.xPrivKeyEncrypted;
+    this.init = function () {
+        var config = configService.getSync();
+        this.deviceName = config.deviceName;
+        this.myDeviceAddress = require('trustnote-common/device.js').getMyDeviceAddress();
+        this.hub = config.hub;
+        this.showHub = false;
+        this.clickTimesToShowHub = 3;
+        this.currentLanguageName = uxLanguage.getCurrentLanguageName();
 
-	this.init = function () {
-		var config = configService.getSync();
-		this.unitName = config.wallet.settings.unitName;
-		this.bbUnitName = config.wallet.settings.bbUnitName;
-		this.deviceName = config.deviceName;
-		this.myDeviceAddress = require('trustnote-common/device.js').getMyDeviceAddress();
-		this.hub = config.hub;
-		this.showHub = 0;
-		this.currentLanguageName = uxLanguage.getCurrentLanguageName();
-		this.torEnabled = conf.socksHost && conf.socksPort;
+        // 是否已经备份状态
+        storageService.getBackupFlag("all", function (err, flag) {
+            if (flag) {
+                $scope.index.needsBackup = false;
+            }
+        })
+    };
 
-// 更改代码 iOS客户端 不显示全备份
-		if(typeof (window.cordova) == 'undefined'){
-			this.isIOS = false;
-		}else {
-			this.isIOS = window.cordova.platformId;
-		}
-	};
+    // 点击我的地址三次显示修改hub选项
+    this.ClickToShowHub = function () {
+        this.clickTimesToShowHub--;
+        if (this.clickTimesToShowHub <= 0) {
+            this.showHub = true;
+        }
+    };
 
+    var unwatchEncrypt = $scope.$watch('encrypt', function (val) {
+        profileService.checkPassClose = false;
+        var fc = profileService.focusedClient;
+        if (!fc) return;
 
-	this.countShowHub = function() {
-		this.showHub++;
-	};
+        if (val && !fc.hasPrivKeyEncrypted()) { // lock
+            $rootScope.$emit('Local/NeedsPassword', true, null, function (err, password) {
+                if (err || !password) {
+                    $scope.encrypt = false;
+                    return;
+                }
+                profileService.setPrivateKeyEncryptionFC(password, function () {
+                    $rootScope.$emit('Local/NewEncryptionSetting');
+                    $scope.encrypt = true;
+                });
+            });
+        } else { // unlock
+            if (!val && fc.hasPrivKeyEncrypted()) {
+                profileService.passWrongUnlockFC(null, function (err) {
+                    if (err) {
+                        $scope.encrypt = true;
+                        return;
+                    }
+                    profileService.disablePrivateKeyEncryptionFC(function (err) {
+                        if (err) {
+                            $scope.encrypt = true;
+                            $log.error(err);
+                            return;
+                        }
 
-	//监听switch开关
-	var unwatchEncrypt = $scope.$watch('encrypt', function (val) {
-		profileService.checkPassClose = false;
-		var fc = profileService.focusedClient;
-		if (!fc) return;
+                        $rootScope.$emit('Local/NewEncryptionSetting');
+                        $scope.encrypt = false;
+                    });
+                })
+            }
+        }
+    });
 
-		if (val && !fc.hasPrivKeyEncrypted()) {
-			$rootScope.$emit('Local/NeedsPassword', true, null, function (err, password) {
-				if (err || !password) {
-					$scope.encrypt = false;
-					return;
-				}
-				profileService.setPrivateKeyEncryptionFC(password, function () {
-					$rootScope.$emit('Local/NewEncryptionSetting');
-					$scope.encrypt = true;
-				});
-			});
-		} else {
-			if (!val && fc.hasPrivKeyEncrypted()) {
-				// profileService.unlockFC(null, function (err) {
-				// 	if (err) {
-				// 		$scope.encrypt = true;
-				// 		return;
-				// 	}
-				// 	profileService.disablePrivateKeyEncryptionFC(function (err) {
-				// 		$rootScope.$emit('Local/NewEncryptionSetting');
-				// 		if (err) {
-				// 			$scope.encrypt = true;
-				// 			$log.error(err);
-				// 			return;
-				// 		}
-				// 		$scope.encrypt = false;
-				// 	});
-				// });
-				profileService.passWrongUnlockFC(null,function (err) {
-					if(err == 'cancel'){
-						console.log('**********cancel Unclock**********');
-					}
-					if (err) {
-						$scope.encrypt = true;
-						return;
-					}
-					profileService.disablePrivateKeyEncryptionFC(function (err) {
-						$rootScope.$emit('Local/NewEncryptionSetting');
-						if (err) {
-							$scope.encrypt = true;
-							$log.error(err);
-							return;
-						}
-						$scope.encrypt = false;
-					});
-				})
-			}
-		}
-	});
-
-
-	$scope.$on('$destroy', function () {
-		unwatchEncrypt();
-	});
+    $scope.$on('$destroy', function () {
+        unwatchEncrypt();
+    });
 });
