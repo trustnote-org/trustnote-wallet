@@ -1943,20 +1943,6 @@ angular.module('trustnoteApp.controllers').controller('indexController', functio
 		self.setTab(tab, reset);
 	});
 
-	$rootScope.$on('Local/RequestTouchid', function (event, cb) {
-		window.plugins.touchid.verifyFingerprint(
-			gettextCatalog.getString('Scan your fingerprint please'),
-			function (msg) {
-				// OK
-				return cb();
-			},
-			function (msg) {
-				// ERROR
-				return cb(gettext('Invalid Touch ID'));
-			}
-		);
-	});
-
 	$rootScope.$on('Local/ShowAlert', function (event, msg, msg_icon, cb) {
 		self.showPopup(msg, msg_icon, cb);
 	});

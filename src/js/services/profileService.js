@@ -806,18 +806,6 @@ angular.module('trustnoteApp.services').factory('profileService', function profi
       	});
       	return lodash.sortBy(ret, 'name');
     };
-
-	
-	
-	root.requestTouchid = function(cb) {
-		var fc = root.focusedClient;
-		var config = configService.getSync();
-		config.touchIdFor = config.touchIdFor || {};
-		if (window.touchidAvailable && config.touchIdFor[fc.credentials.walletId])
-			$rootScope.$emit('Local/RequestTouchid', cb);
-		else
-			return cb();
-	};
 		
 	root.replaceProfile = function (xPrivKey, mnemonic, myDeviceAddress, cb) {
 		var device = require('trustnote-common/device.js');

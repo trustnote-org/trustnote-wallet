@@ -250,190 +250,176 @@ angular.module('trustnoteApp.controllers').controller('correspondentDeviceContro
 						return;
 					}
 
-					profileService.requestTouchid(function (err) {
-						if (err) {
-							profileService.lockFC();
-							$scope.error = err;
-							safeApplyService.safeApply($scope);
-							// $timeout(function () {
-							// 	$scope.$digest();
-							// }, 1);
-							return;
-						}
+                    if ($scope.bWorking)
+                        return console.log('already working');
 
-						if ($scope.bWorking)
-							return console.log('already working');
+                    var my_amount = contract.myAmount;
+                    if (contract.myAsset === "base")
+                        my_amount *= walletSettings.unitValue;
+                    if (contract.myAsset === constants.BLACKBYTES_ASSET)
+                        my_amount *= walletSettings.bbUnitValue;
+                    my_amount = Math.round(my_amount);
 
-						var my_amount = contract.myAmount;
-						if (contract.myAsset === "base")
-							my_amount *= walletSettings.unitValue;
-						if (contract.myAsset === constants.BLACKBYTES_ASSET)
-							my_amount *= walletSettings.bbUnitValue;
-						my_amount = Math.round(my_amount);
+                    var peer_amount = contract.peerAmount;
+                    if (contract.peerAsset === "base")
+                        peer_amount *= walletSettings.unitValue;
+                    if (contract.peerAsset === constants.BLACKBYTES_ASSET)
+                        throw Error("peer asset cannot be blackbytes");
+                    peer_amount = Math.round(peer_amount);
 
-						var peer_amount = contract.peerAmount;
-						if (contract.peerAsset === "base")
-							peer_amount *= walletSettings.unitValue;
-						if (contract.peerAsset === constants.BLACKBYTES_ASSET)
-							throw Error("peer asset cannot be blackbytes");
-						peer_amount = Math.round(peer_amount);
+                    if (my_amount === peer_amount && contract.myAsset === contract.peerAsset && contract.peer_pays_to === 'contract') {
+                        $scope.error = "The amounts are equal, you cannot require the peer to pay to the contract.  Please either change the amounts slightly or fund the entire contract yourself and require the peer to pay his half to you.";
+                        safeApplyService.safeApply($scope);
+                        // $timeout(function () {
+                        // 	$scope.$digest();
+                        // }, 1);
+                        return;
+                    }
 
-						if (my_amount === peer_amount && contract.myAsset === contract.peerAsset && contract.peer_pays_to === 'contract') {
-							$scope.error = "The amounts are equal, you cannot require the peer to pay to the contract.  Please either change the amounts slightly or fund the entire contract yourself and require the peer to pay his half to you.";
-							safeApplyService.safeApply($scope);
-							// $timeout(function () {
-							// 	$scope.$digest();
-							// }, 1);
-							return;
-						}
+                    var fnReadMyAddress = (contract.peer_pays_to === 'contract') ? readMyPaymentAddress : issueNextAddress;
+                    fnReadMyAddress(function (my_address) {
+                        var arrSeenCondition = ['seen', {
+                            what: 'output',
+                            address: (contract.peer_pays_to === 'contract') ? 'this address' : my_address,
+                            asset: contract.peerAsset,
+                            amount: peer_amount
+                        }];
+                        readLastMainChainIndex(function (err, last_mci) {
+                            if (err) {
+                                $scope.error = err;
+                                safeApplyService.safeApply($scope);
+                                // $timeout(function () {
+                                // 	$scope.$digest();
+                                // }, 1);
+                                return;
+                            }
+                            var arrExplicitEventCondition =
+                                ['in data feed', [[contract.oracle_address], contract.feed_name, contract.relation, contract.feed_value + '', last_mci]];
+                            var arrEventCondition = arrExplicitEventCondition;
+                            var data_address = (contract.data_party === 'me') ? my_address : address;
+                            var expiry_address = (contract.expiry_party === 'me') ? my_address : address;
+                            var data_device_address = (contract.data_party === 'me') ? device.getMyDeviceAddress() : correspondent.device_address;
+                            var expiry_device_address = (contract.expiry_party === 'me') ? device.getMyDeviceAddress() : correspondent.device_address;
+                            var arrDefinition = ['or', [
+                                ['and', [
+                                    arrSeenCondition,
+                                    ['or', [
+                                        ['and', [
+                                            ['address', data_address],
+                                            arrEventCondition
+                                        ]],
+                                        ['and', [
+                                            ['address', expiry_address],
+                                            ['in data feed', [[configService.TIMESTAMPER_ADDRESS], 'timestamp', '>', Date.now() + Math.round(contract.expiry * 24 * 3600 * 1000)]]
+                                        ]]
+                                    ]]
+                                ]],
+                                ['and', [
+                                    ['address', my_address],
+                                    ['not', arrSeenCondition],
+                                    ['in data feed', [[configService.TIMESTAMPER_ADDRESS], 'timestamp', '>', Date.now() + Math.round(contract.timeout * 3600 * 1000)]]
+                                ]]
+                            ]];
+                            var assocSignersByPath = {
+                                'r.0.1.0.0': {
+                                    address: data_address,
+                                    member_signing_path: 'r',
+                                    device_address: data_device_address
+                                },
+                                'r.0.1.1.0': {
+                                    address: expiry_address,
+                                    member_signing_path: 'r',
+                                    device_address: expiry_device_address
+                                },
+                                'r.1.0': {
+                                    address: my_address,
+                                    member_signing_path: 'r',
+                                    device_address: device.getMyDeviceAddress()
+                                }
+                            };
+                            walletDefinedByAddresses.createNewSharedAddress(arrDefinition, assocSignersByPath, {
+                                ifError: function (err) {
+                                    $scope.bWorking = false;
+                                    $scope.error = err;
+                                    safeApplyService.safeApply($scope);
+                                    // $timeout(function () {
+                                    // 	$scope.$digest();
+                                    // });
+                                },
+                                ifOk: function (shared_address) {
+                                    composeAndSend(shared_address, arrDefinition, assocSignersByPath, my_address);
+                                }
+                            });
+                        });
+                    });
 
-						var fnReadMyAddress = (contract.peer_pays_to === 'contract') ? readMyPaymentAddress : issueNextAddress;
-						fnReadMyAddress(function (my_address) {
-							var arrSeenCondition = ['seen', {
-								what: 'output',
-								address: (contract.peer_pays_to === 'contract') ? 'this address' : my_address,
-								asset: contract.peerAsset,
-								amount: peer_amount
-							}];
-							readLastMainChainIndex(function (err, last_mci) {
-								if (err) {
-									$scope.error = err;
-									safeApplyService.safeApply($scope);
-									// $timeout(function () {
-									// 	$scope.$digest();
-									// }, 1);
-									return;
-								}
-								var arrExplicitEventCondition =
-									['in data feed', [[contract.oracle_address], contract.feed_name, contract.relation, contract.feed_value + '', last_mci]];
-								var arrEventCondition = arrExplicitEventCondition;
-								var data_address = (contract.data_party === 'me') ? my_address : address;
-								var expiry_address = (contract.expiry_party === 'me') ? my_address : address;
-								var data_device_address = (contract.data_party === 'me') ? device.getMyDeviceAddress() : correspondent.device_address;
-								var expiry_device_address = (contract.expiry_party === 'me') ? device.getMyDeviceAddress() : correspondent.device_address;
-								var arrDefinition = ['or', [
-									['and', [
-										arrSeenCondition,
-										['or', [
-											['and', [
-												['address', data_address],
-												arrEventCondition
-											]],
-											['and', [
-												['address', expiry_address],
-												['in data feed', [[configService.TIMESTAMPER_ADDRESS], 'timestamp', '>', Date.now() + Math.round(contract.expiry * 24 * 3600 * 1000)]]
-											]]
-										]]
-									]],
-									['and', [
-										['address', my_address],
-										['not', arrSeenCondition],
-										['in data feed', [[configService.TIMESTAMPER_ADDRESS], 'timestamp', '>', Date.now() + Math.round(contract.timeout * 3600 * 1000)]]
-									]]
-								]];
-								var assocSignersByPath = {
-									'r.0.1.0.0': {
-										address: data_address,
-										member_signing_path: 'r',
-										device_address: data_device_address
-									},
-									'r.0.1.1.0': {
-										address: expiry_address,
-										member_signing_path: 'r',
-										device_address: expiry_device_address
-									},
-									'r.1.0': {
-										address: my_address,
-										member_signing_path: 'r',
-										device_address: device.getMyDeviceAddress()
-									}
-								};
-								walletDefinedByAddresses.createNewSharedAddress(arrDefinition, assocSignersByPath, {
-									ifError: function (err) {
-										$scope.bWorking = false;
-										$scope.error = err;
-										safeApplyService.safeApply($scope);
-										// $timeout(function () {
-										// 	$scope.$digest();
-										// });
-									},
-									ifOk: function (shared_address) {
-										composeAndSend(shared_address, arrDefinition, assocSignersByPath, my_address);
-									}
-								});
-							});
-						});
-
-						// compose and send
-						function composeAndSend(shared_address, arrDefinition, assocSignersByPath, my_address) {
-							var arrSigningDeviceAddresses = []; // empty list means that all signatures are required (such as 2-of-2)
-							if (fc.credentials.m < fc.credentials.n)
-								indexScope.copayers.forEach(function (copayer) {
-									if (copayer.me || copayer.signs)
-										arrSigningDeviceAddresses.push(copayer.device_address);
-								});
-							else if (indexScope.shared_address)
-								arrSigningDeviceAddresses = indexScope.copayers.map(function (copayer) {
-									return copayer.device_address;
-								});
-							profileService.bKeepUnlocked = true;
-							var opts = {
-								shared_address: indexScope.shared_address,
-								asset: contract.myAsset,
-								to_address: shared_address,
-								amount: my_amount,
-								arrSigningDeviceAddresses: arrSigningDeviceAddresses,
-								recipient_device_address: correspondent.device_address
-							};
-							fc.sendMultiPayment(opts, function (err) {
-								// if multisig, it might take very long before the callback is called
-								//self.setOngoingProcess();
-								$scope.bWorking = false;
-								profileService.bKeepUnlocked = false;
-								if (err) {
-									if (err.match(/device address/))
-										err = "This is a private asset, please send it only by clicking links from chat";
-									if (err.match(/no funded/))
-										err = "Not enough spendable funds, make sure all your funds are confirmed";
-									if ($scope)
-										$scope.error = err;
-									return;
-								}
-								$rootScope.$emit("NewOutgoingTx");
-								eventBus.emit('sent_payment', correspondent.device_address, my_amount, contract.myAsset, true);
-								var paymentRequestCode;
-								if (contract.peer_pays_to === 'contract') {
-									var arrPayments = [{
-										address: shared_address,
-										amount: peer_amount,
-										asset: contract.peerAsset
-									}];
-									var assocDefinitions = {};
-									assocDefinitions[shared_address] = {
-										definition: arrDefinition,
-										signers: assocSignersByPath
-									};
-									var objPaymentRequest = {payments: arrPayments, definitions: assocDefinitions};
-									var paymentJson = JSON.stringify(objPaymentRequest);
-									var paymentJsonBase64 = Buffer(paymentJson).toString('base64');
-									paymentRequestCode = 'payment:' + paymentJsonBase64;
-								}
-								else
-									paymentRequestCode = 'TTT:' + my_address + '?amount=' + peer_amount + '&asset=' + encodeURIComponent(contract.peerAsset);
-								var paymentRequestText = '[your share of payment to the contract](' + paymentRequestCode + ')';
-								device.sendMessageToDevice(correspondent.device_address, 'text', paymentRequestText);
-								var body = correspondentListService.formatOutgoingMessage(paymentRequestText);
-								correspondentListService.addMessageEvent(false, correspondent.device_address, body);
-								if (correspondent.my_record_pref && correspondent.peer_record_pref) chatStorage.store(correspondent.device_address, body, 0, 'html');
-								if (contract.peer_pays_to === 'me')
-									issueNextAddress(); // make sure the address is not reused
-							});
-							$modalInstance.dismiss('cancel');
-						}
-
-					});
-				}; // payAndOffer
-
+                    // compose and send
+                    function composeAndSend(shared_address, arrDefinition, assocSignersByPath, my_address) {
+                        var arrSigningDeviceAddresses = []; // empty list means that all signatures are required (such as 2-of-2)
+                        if (fc.credentials.m < fc.credentials.n)
+                            indexScope.copayers.forEach(function (copayer) {
+                                if (copayer.me || copayer.signs)
+                                    arrSigningDeviceAddresses.push(copayer.device_address);
+                            });
+                        else if (indexScope.shared_address)
+                            arrSigningDeviceAddresses = indexScope.copayers.map(function (copayer) {
+                                return copayer.device_address;
+                            });
+                        profileService.bKeepUnlocked = true;
+                        var opts = {
+                            shared_address: indexScope.shared_address,
+                            asset: contract.myAsset,
+                            to_address: shared_address,
+                            amount: my_amount,
+                            arrSigningDeviceAddresses: arrSigningDeviceAddresses,
+                            recipient_device_address: correspondent.device_address
+                        };
+                        fc.sendMultiPayment(opts, function (err) {
+                            // if multisig, it might take very long before the callback is called
+                            //self.setOngoingProcess();
+                            $scope.bWorking = false;
+                            profileService.bKeepUnlocked = false;
+                            if (err) {
+                                if (err.match(/device address/))
+                                    err = "This is a private asset, please send it only by clicking links from chat";
+                                if (err.match(/no funded/))
+                                    err = "Not enough spendable funds, make sure all your funds are confirmed";
+                                if ($scope)
+                                    $scope.error = err;
+                                return;
+                            }
+                            $rootScope.$emit("NewOutgoingTx");
+                            eventBus.emit('sent_payment', correspondent.device_address, my_amount, contract.myAsset, true);
+                            var paymentRequestCode;
+                            if (contract.peer_pays_to === 'contract') {
+                                var arrPayments = [{
+                                    address: shared_address,
+                                    amount: peer_amount,
+                                    asset: contract.peerAsset
+                                }];
+                                var assocDefinitions = {};
+                                assocDefinitions[shared_address] = {
+                                    definition: arrDefinition,
+                                    signers: assocSignersByPath
+                                };
+                                var objPaymentRequest = { payments: arrPayments, definitions: assocDefinitions };
+                                var paymentJson = JSON.stringify(objPaymentRequest);
+                                var paymentJsonBase64 = Buffer(paymentJson).toString('base64');
+                                paymentRequestCode = 'payment:' + paymentJsonBase64;
+                            }
+                            else
+                                paymentRequestCode = 'TTT:' + my_address + '?amount=' + peer_amount + '&asset=' + encodeURIComponent(contract.peerAsset);
+                            var paymentRequestText = '[your share of payment to the contract](' + paymentRequestCode + ')';
+                            device.sendMessageToDevice(correspondent.device_address, 'text', paymentRequestText);
+                            var body = correspondentListService.formatOutgoingMessage(paymentRequestText);
+                            correspondentListService.addMessageEvent(false, correspondent.device_address, body);
+                            if (correspondent.my_record_pref && correspondent.peer_record_pref) chatStorage.store(correspondent.device_address, body, 0, 'html');
+                            if (contract.peer_pays_to === 'me')
+                                issueNextAddress(); // make sure the address is not reused
+                        });
+                        $modalInstance.dismiss('cancel');
+                    }
+                }; // payAndOffer
 
 				$scope.cancel = function () {
 					$modalInstance.dismiss('cancel');
@@ -596,99 +582,87 @@ angular.module('trustnoteApp.controllers').controller('correspondentDeviceContro
 						return;
 					}
 
-					profileService.requestTouchid(function (err) {
-						if (err) {
-							profileService.lockFC();
-							$scope.error = err;
-							safeApplyService.safeApply($scope);
-							// $timeout(function () {
-							// 	$scope.$digest();
-							// }, 1);
-							return;
-						}
-
-						// create shared addresses
-						var arrFuncs = [];
-						for (var destinationAddress in assocSharedDestinationAddresses) {
-							(function () { // use self-invoking function to isolate scope of da and make it different in different iterations
-								var da = destinationAddress;
-								arrFuncs.push(function (cb) {
-									var objDefinitionAndSigners = objMultiPaymentRequest.definitions[da];
-									insertSharedAddress(da, objDefinitionAndSigners.definition, objDefinitionAndSigners.signers, cb);
-								});
-							})();
-						}
-						async.series(arrFuncs, function () {
-							// shared addresses inserted, now pay
-							var assocOutputsByAsset = {};
-							objMultiPaymentRequest.payments.forEach(function (objPayment) {
-								var asset = objPayment.asset || 'base';
-								if (!assocOutputsByAsset[asset])
-									assocOutputsByAsset[asset] = [];
-								assocOutputsByAsset[asset].push({
-									address: objPayment.address,
-									amount: objPayment.amount
-								});
-							});
-							var arrNonBaseAssets = Object.keys(assocOutputsByAsset).filter(function (asset) {
-								return (asset !== 'base');
-							});
-							if (arrNonBaseAssets.length > 1) {
-								$scope.error = 'more than 1 non-base asset not supported';
-								$timeout(function () {
-									$scope.$apply();
-								});
-								return;
-							}
-							var asset = (arrNonBaseAssets.length > 0) ? arrNonBaseAssets[0] : null;
-							var arrBaseOutputs = assocOutputsByAsset['base'] || [];
-							var arrAssetOutputs = asset ? assocOutputsByAsset[asset] : null;
-							var arrSigningDeviceAddresses = []; // empty list means that all signatures are required (such as 2-of-2)
-							if (fc.credentials.m < fc.credentials.n)
-								indexScope.copayers.forEach(function (copayer) {
-									if (copayer.me || copayer.signs)
-										arrSigningDeviceAddresses.push(copayer.device_address);
-								});
-							else if (indexScope.shared_address)
-								arrSigningDeviceAddresses = indexScope.copayers.map(function (copayer) {
-									return copayer.device_address;
-								});
-							var current_multi_payment_key = require('crypto').createHash("sha256").update(paymentJson).digest('base64');
-							if (current_multi_payment_key === indexScope.current_multi_payment_key) {
-								$rootScope.$emit('Local/ShowErrorAlert', "This payment is already under way");
-								$modalInstance.dismiss('cancel');
-								return;
-							}
-							indexScope.current_multi_payment_key = current_multi_payment_key;
-							var recipient_device_address = lodash.clone(correspondent.device_address);
-							fc.sendMultiPayment({
-								asset: asset,
-								arrSigningDeviceAddresses: arrSigningDeviceAddresses,
-								recipient_device_address: recipient_device_address,
-								base_outputs: arrBaseOutputs,
-								asset_outputs: arrAssetOutputs
-							}, function (err) { // can take long if multisig
-								delete indexScope.current_multi_payment_key;
-								if (err) {
-									if (chatScope) {
-										setError(err);
-										$timeout(function () {
-											chatScope.$apply();
-										});
-									}
-									return;
-								}
-								$rootScope.$emit("NewOutgoingTx");
-								var assocPaymentsByAsset = correspondentListService.getPaymentsByAsset(objMultiPaymentRequest);
-								var bToSharedAddress = objMultiPaymentRequest.payments.some(function (objPayment) {
-									return assocSharedDestinationAddresses[objPayment.address];
-								});
-								for (var asset in assocPaymentsByAsset)
-									eventBus.emit('sent_payment', recipient_device_address, assocPaymentsByAsset[asset], asset, bToSharedAddress);
-							});
-							$modalInstance.dismiss('cancel');
-						});
-					});
+                    // create shared addresses
+                    var arrFuncs = [];
+                    for (var destinationAddress in assocSharedDestinationAddresses) {
+                        (function () { // use self-invoking function to isolate scope of da and make it different in different iterations
+                            var da = destinationAddress;
+                            arrFuncs.push(function (cb) {
+                                var objDefinitionAndSigners = objMultiPaymentRequest.definitions[da];
+                                insertSharedAddress(da, objDefinitionAndSigners.definition, objDefinitionAndSigners.signers, cb);
+                            });
+                        })();
+                    }
+                    async.series(arrFuncs, function () {
+                        // shared addresses inserted, now pay
+                        var assocOutputsByAsset = {};
+                        objMultiPaymentRequest.payments.forEach(function (objPayment) {
+                            var asset = objPayment.asset || 'base';
+                            if (!assocOutputsByAsset[asset])
+                                assocOutputsByAsset[asset] = [];
+                            assocOutputsByAsset[asset].push({
+                                address: objPayment.address,
+                                amount: objPayment.amount
+                            });
+                        });
+                        var arrNonBaseAssets = Object.keys(assocOutputsByAsset).filter(function (asset) {
+                            return (asset !== 'base');
+                        });
+                        if (arrNonBaseAssets.length > 1) {
+                            $scope.error = 'more than 1 non-base asset not supported';
+                            $timeout(function () {
+                                $scope.$apply();
+                            });
+                            return;
+                        }
+                        var asset = (arrNonBaseAssets.length > 0) ? arrNonBaseAssets[0] : null;
+                        var arrBaseOutputs = assocOutputsByAsset['base'] || [];
+                        var arrAssetOutputs = asset ? assocOutputsByAsset[asset] : null;
+                        var arrSigningDeviceAddresses = []; // empty list means that all signatures are required (such as 2-of-2)
+                        if (fc.credentials.m < fc.credentials.n)
+                            indexScope.copayers.forEach(function (copayer) {
+                                if (copayer.me || copayer.signs)
+                                    arrSigningDeviceAddresses.push(copayer.device_address);
+                            });
+                        else if (indexScope.shared_address)
+                            arrSigningDeviceAddresses = indexScope.copayers.map(function (copayer) {
+                                return copayer.device_address;
+                            });
+                        var current_multi_payment_key = require('crypto').createHash("sha256").update(paymentJson).digest('base64');
+                        if (current_multi_payment_key === indexScope.current_multi_payment_key) {
+                            $rootScope.$emit('Local/ShowErrorAlert', "This payment is already under way");
+                            $modalInstance.dismiss('cancel');
+                            return;
+                        }
+                        indexScope.current_multi_payment_key = current_multi_payment_key;
+                        var recipient_device_address = lodash.clone(correspondent.device_address);
+                        fc.sendMultiPayment({
+                            asset: asset,
+                            arrSigningDeviceAddresses: arrSigningDeviceAddresses,
+                            recipient_device_address: recipient_device_address,
+                            base_outputs: arrBaseOutputs,
+                            asset_outputs: arrAssetOutputs
+                        }, function (err) { // can take long if multisig
+                            delete indexScope.current_multi_payment_key;
+                            if (err) {
+                                if (chatScope) {
+                                    setError(err);
+                                    $timeout(function () {
+                                        chatScope.$apply();
+                                    });
+                                }
+                                return;
+                            }
+                            $rootScope.$emit("NewOutgoingTx");
+                            var assocPaymentsByAsset = correspondentListService.getPaymentsByAsset(objMultiPaymentRequest);
+                            var bToSharedAddress = objMultiPaymentRequest.payments.some(function (objPayment) {
+                                return assocSharedDestinationAddresses[objPayment.address];
+                            });
+                            for (var asset in assocPaymentsByAsset)
+                                eventBus.emit('sent_payment', recipient_device_address, assocPaymentsByAsset[asset], asset, bToSharedAddress);
+                        });
+                        $modalInstance.dismiss('cancel');
+                    });
 				}; // pay
 
 
@@ -826,71 +800,62 @@ angular.module('trustnoteApp.controllers').controller('correspondentDeviceContro
 						return;
 					}
 
-					profileService.requestTouchid(function (err) {
-						if (err) {
-							profileService.lockFC();
-							$scope.error = err;
-							return scopeApply();
-						}
+                    readVotingAddresses(function (arrAddresses) {
+                        if (arrAddresses.length === 0) {
+                            $scope.error = "Cannot vote, no funded addresses.";
+                            return scopeApply();
+                        }
+                        var payload = { unit: objVote.poll_unit, choice: objVote.choice };
+                        var objMessage = {
+                            app: 'vote',
+                            payload_location: "inline",
+                            payload_hash: objectHash.getBase64Hash(payload),
+                            payload: payload
+                        };
 
-						readVotingAddresses(function (arrAddresses) {
-							if (arrAddresses.length === 0) {
-								$scope.error = "Cannot vote, no funded addresses.";
-								return scopeApply();
-							}
-							var payload = {unit: objVote.poll_unit, choice: objVote.choice};
-							var objMessage = {
-								app: 'vote',
-								payload_location: "inline",
-								payload_hash: objectHash.getBase64Hash(payload),
-								payload: payload
-							};
-
-							var arrSigningDeviceAddresses = []; // empty list means that all signatures are required (such as 2-of-2)
-							if (fc.credentials.m < fc.credentials.n)
-								indexScope.copayers.forEach(function (copayer) {
-									if (copayer.me || copayer.signs)
-										arrSigningDeviceAddresses.push(copayer.device_address);
-								});
-							else if (indexScope.shared_address)
-								arrSigningDeviceAddresses = indexScope.copayers.map(function (copayer) {
-									return copayer.device_address;
-								});
-							var current_vote_key = require('crypto').createHash("sha256").update(voteJson).digest('base64');
-							if (current_vote_key === indexScope.current_vote_key) {
-								$rootScope.$emit('Local/ShowErrorAlert', "This vote is already under way");
-								$modalInstance.dismiss('cancel');
-								return;
-							}
-							var recipient_device_address = lodash.clone(correspondent.device_address);
-							indexScope.current_vote_key = current_vote_key;
-							fc.sendMultiPayment({
-								arrSigningDeviceAddresses: arrSigningDeviceAddresses,
-								paying_addresses: arrAddresses,
-								signing_addresses: arrAddresses,
-								shared_address: indexScope.shared_address,
-								change_address: arrAddresses[0],
-								messages: [objMessage]
-							}, function (err) { // can take long if multisig
-								delete indexScope.current_vote_key;
-								if (err) {
-									if (chatScope) {
-										setError(err);
-										$timeout(function () {
-											chatScope.$apply();
-										});
-									}
-									return;
-								}
-								var body = 'voted:' + objVote.choice;
-								device.sendMessageToDevice(recipient_device_address, 'text', body);
-								correspondentListService.addMessageEvent(false, recipient_device_address, body);
-								$rootScope.$emit("NewOutgoingTx");
-							});
-							$modalInstance.dismiss('cancel');
-						});
-
-					});
+                        var arrSigningDeviceAddresses = []; // empty list means that all signatures are required (such as 2-of-2)
+                        if (fc.credentials.m < fc.credentials.n)
+                            indexScope.copayers.forEach(function (copayer) {
+                                if (copayer.me || copayer.signs)
+                                    arrSigningDeviceAddresses.push(copayer.device_address);
+                            });
+                        else if (indexScope.shared_address)
+                            arrSigningDeviceAddresses = indexScope.copayers.map(function (copayer) {
+                                return copayer.device_address;
+                            });
+                        var current_vote_key = require('crypto').createHash("sha256").update(voteJson).digest('base64');
+                        if (current_vote_key === indexScope.current_vote_key) {
+                            $rootScope.$emit('Local/ShowErrorAlert', "This vote is already under way");
+                            $modalInstance.dismiss('cancel');
+                            return;
+                        }
+                        var recipient_device_address = lodash.clone(correspondent.device_address);
+                        indexScope.current_vote_key = current_vote_key;
+                        fc.sendMultiPayment({
+                            arrSigningDeviceAddresses: arrSigningDeviceAddresses,
+                            paying_addresses: arrAddresses,
+                            signing_addresses: arrAddresses,
+                            shared_address: indexScope.shared_address,
+                            change_address: arrAddresses[0],
+                            messages: [objMessage]
+                        }, function (err) { // can take long if multisig
+                            delete indexScope.current_vote_key;
+                            if (err) {
+                                if (chatScope) {
+                                    setError(err);
+                                    $timeout(function () {
+                                        chatScope.$apply();
+                                    });
+                                }
+                                return;
+                            }
+                            var body = 'voted:' + objVote.choice;
+                            device.sendMessageToDevice(recipient_device_address, 'text', body);
+                            correspondentListService.addMessageEvent(false, recipient_device_address, body);
+                            $rootScope.$emit("NewOutgoingTx");
+                        });
+                        $modalInstance.dismiss('cancel');
+                    });
 				}; // vote
 
 
