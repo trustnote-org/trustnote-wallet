@@ -25,41 +25,32 @@ angular.module('trustnoteApp.services').factory('profileService', function profi
         }
     };
 
+    root._setFocus = function (walletId, isFocusedChange, cb) {
+        $log.debug('Set focus:', walletId);
 
-	// 更改代码  添加选项：option（第一次改）
-    root._setFocus = function(walletId, option, cb) {
-    	// alert("----"+option)
-      	$log.debug('Set focus:', walletId);
+        if (walletId)
+            root.focusedClient = root.walletClients[walletId];
+        else
+            root.focusedClient = [];
 
-      	// Set local object
-      	if (walletId)
-        	root.focusedClient = root.walletClients[walletId];
-      	else
-        	root.focusedClient = [];
+        if (lodash.isEmpty(root.focusedClient)) {
+            root.focusedClient = root.walletClients[lodash.keys(root.walletClients)[0]];
+        }
 
-      	if (lodash.isEmpty(root.focusedClient)) {
-        	root.focusedClient = root.walletClients[lodash.keys(root.walletClients)[0]];
-      	}
-
-      	// 仍然没有钱包 emit一个事件 Still nothing?
-		if (lodash.isEmpty(root.focusedClient)) {
-        	$rootScope.$emit('Local/NoWallets');
-        	return;
-
-      	} else {
-        	$rootScope.$emit('Local/NewFocusedWallet', option);
-      	}
-
-      	return cb();
+        if (lodash.isEmpty(root.focusedClient)) {
+            $rootScope.$emit('Local/NoWallets'); // 没有检测到钱包
+            return;
+        } else {
+            $rootScope.$emit('Local/FocusedWallet', isFocusedChange);
+        }
+        return cb();
     };
 
-    root.setAndStoreFocus = function(walletId, option, cb) {
-      	root._setFocus(walletId, option, function() {
-        	storageService.storeFocusedWalletId(walletId, cb);
-      	});
+    root.setAndStoreFocus = function (walletId, isFocusedChange, cb) {
+        root._setFocus(walletId, isFocusedChange, function () {
+            storageService.storeFocusedWalletId(walletId, cb);
+        });
     };
-	// 更改代码  添加选项：option 结束
-
 
     root.setWalletClient = function(credentials) {
         if (root.walletClients[credentials.walletId] && root.walletClients[credentials.walletId].started)
@@ -149,8 +140,6 @@ angular.module('trustnoteApp.services').factory('profileService', function profi
                     return cb(err);
 
                 root._setFocus(focusedWalletId, true, function() {
-                	console.log("focusedWalletId", focusedWalletId);
-
                 	require('trustnote-common/wallet.js');
 					var device = require('trustnote-common/device.js');
                     var config = configService.getSync();

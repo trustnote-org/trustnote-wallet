@@ -29,7 +29,8 @@ angular.module('trustnoteApp.controllers').controller('indexController', functio
     self.$state = $state;
     self.lightToHubTimeoutCount = 0;
 	self.isAndroidPhone = isMobile.Android();
-	self.isScanLightAddress = false;
+    self.isScanLightAddress = false;
+    self.needsBackup = true;
 
     self.showneikuang = false;
     self.showneikuangsync = false;
@@ -959,101 +960,80 @@ angular.module('trustnoteApp.controllers').controller('indexController', functio
 		});
 	};
 
-// 设置 当前选中钱包：
-	self.setFocusedWallet = function () {
-		var fc = profileService.focusedClient;
-		if (!fc) return;
-		breadcrumbs.add('setFocusedWallet ' + fc.credentials.walletId);
+    // 选中钱包
+    self.setFocusedWallet = function () {
+        var fc = profileService.focusedClient;
+        if (!fc) return;
 
-		// Clean status
-		self.totalBalanceBytes = null;
-		self.lockedBalanceBytes = null;
-		self.availableBalanceBytes = null;
-		self.pendingAmount = null;
-		self.spendUnconfirmed = null;
+        // Clean status
+        self.totalBalanceBytes = null;
+        self.lockedBalanceBytes = null;
+        self.availableBalanceBytes = null;
+        self.pendingAmount = null;
+        self.spendUnconfirmed = null;
 
-		self.totalBalanceStr = null;
-		self.availableBalanceStr = null;
-		self.lockedBalanceStr = null;
+        self.totalBalanceStr = null;
+        self.availableBalanceStr = null;
+        self.lockedBalanceStr = null;
 
-		self.arrBalances = [];
-		self.assetIndex = 0;
-		self.shared_address = null;
-		self.bHasMerkle = false;
+        self.arrBalances = [];
+        self.assetIndex = 0;
+        self.shared_address = null;
+        self.bHasMerkle = false;
 
-		self.txHistory = [];
-		self.completeHistory = [];
-		self.txProgress = 0;
-		self.historyShowShowAll = false;
-		self.balanceByAddress = null;
-		self.pendingTxProposalsCountForUs = null;
+        self.txHistory = [];
+        self.completeHistory = [];
+        self.txProgress = 0;
+        self.historyShowShowAll = false;
+        self.balanceByAddress = null;
+        self.pendingTxProposalsCountForUs = null;
 
-		var device = require('trustnote-common/device.js');
-		//console.log('-----fc.credentials.walletId:'+ fc.credentials.walletId);
-		//console.log(JSON.stringify(fc.credentials));
-		//device.uPMyColdDeviceAddress(fc.credentials.walletId);
+        $timeout(function () {
+            self.hasProfile = true;
 
-		$timeout(function () {
-			//$rootScope.$apply();
-			self.hasProfile = true;
+            storageService.gethaschoosen(function (err, val) {
+                self.haschoosen = val;
+                go.haschoosen = val;
+            });
 
-// 更改代码
-			storageService.gethaschoosen(function (err, val) {
-				self.haschoosen = val;
-				go.haschoosen = val;
-			});
-			if(fc.observed)
-				device.uPMyColdDeviceAddress(fc.credentials.walletId);
+            if (fc.observed) { // 当前为观察钱包
+                var device = require('trustnote-common/device.js');
+                device.uPMyColdDeviceAddress(fc.credentials.walletId);
+            }
 
-			self.noFocusedWallet = false;
-			self.onGoingProcess = {};
+            self.noFocusedWallet = false;
+            self.onGoingProcess = {};
 
-			// Credentials Shortcuts
-			self.m = fc.credentials.m;
-			self.n = fc.credentials.n;
-			self.network = fc.credentials.network;
-			self.requiresMultipleSignatures = fc.credentials.m > 1;
-			//self.isShared = fc.credentials.n > 1;
-			self.walletName = fc.credentials.walletName;
-			self.walletId = fc.credentials.walletId;
-			self.isComplete = fc.isComplete();
-			self.canSign = fc.canSign();
-			self.isPrivKeyExternal = fc.isPrivKeyExternal();
-			self.isPrivKeyEncrypted = fc.isPrivKeyEncrypted();
-			self.externalSource = fc.getPrivKeyExternalSourceName();
-			self.account = fc.credentials.account;
+            // Credentials Shortcuts
+            self.m = fc.credentials.m;
+            self.n = fc.credentials.n;
+            self.network = fc.credentials.network;
+            self.requiresMultipleSignatures = fc.credentials.m > 1;
+            self.walletName = fc.credentials.walletName;
+            self.walletId = fc.credentials.walletId;
+            self.isComplete = fc.isComplete();
+            self.canSign = fc.canSign();
+            self.isPrivKeyExternal = fc.isPrivKeyExternal();
+            self.isPrivKeyEncrypted = fc.isPrivKeyEncrypted();
+            self.externalSource = fc.getPrivKeyExternalSourceName();
+            self.account = fc.credentials.account;
 
-			self.txps = [];
-			self.copayers = [];
-			self.updateColor();
-			self.updateAlias();
-			self.setAddressbook();
+            self.txps = [];
+            self.copayers = [];
+            self.updateColor();
+            self.updateAlias();
+            self.setAddressbook();
 
-			//console.log('fc.credentials-------------'+JSON.stringify(fc.credentials));
+            console.log("reading cosigners");
+            var walletDefinedByKeys = require('trustnote-common/wallet_defined_by_keys.js');
+            walletDefinedByKeys.readCosigners(self.walletId, function (arrCosignerInfos) {
+                self.copayers = arrCosignerInfos;
+                safeApplyService.safeApply($rootScope);
+            });
 
-			console.log("reading cosigners");
-			var walletDefinedByKeys = require('trustnote-common/wallet_defined_by_keys.js');
-			walletDefinedByKeys.readCosigners(self.walletId, function (arrCosignerInfos) {
-				self.copayers = arrCosignerInfos;
-				safeApplyService.safeApply($rootScope);
-				// $timeout(function () {
-				// 	$rootScope.$digest();
-				// });
-			});
-
-			self.needsBackup = false;
-			self.openWallet();
-			/*if (fc.isPrivKeyExternal()) {
-			 self.needsBackup = false;
-			 self.openWallet();
-			 } else {
-			 storageService.getBackupFlag('all', function(err, val) {
-			 self.needsBackup = self.network == 'testnet' ? false : !val;
-			 self.openWallet();
-			 });
-			 }*/
-		});
-	};
+            self.openWallet();
+        });
+    };
 
 
 	self.setTab = function (tab, reset, tries, switchState) {
@@ -1782,7 +1762,7 @@ angular.module('trustnoteApp.controllers').controller('indexController', functio
 	$rootScope.$on('Local/ProfileBound', function () {
 	});
 
-	$rootScope.$on('Local/NewFocusedWallet', function () {
+	$rootScope.$on('Local/FocusedWallet', function () {
 		self.setUxLanguage();
 	});
 
@@ -1829,15 +1809,16 @@ angular.module('trustnoteApp.controllers').controller('indexController', functio
 		//self.debouncedUpdate();
 	});
 
-	$rootScope.$on('Local/BackupDone', function (event) {
-		self.needsBackup = false;
-		$log.debug('Backup done');
-		storageService.setBackupFlag('all', function (err) {
-			if (err)
-				return $log.warn("setBackupFlag failed: " + JSON.stringify(err));
-			$log.debug('Backup done stored');
-		});
-	});
+    // 备份助记词完成
+    $rootScope.$on('Local/BackupDone', function () {
+        self.needsBackup = false;
+        $log.debug('Backup done');
+        storageService.setBackupFlag('all', function (err) {
+            if (err)
+                return $log.warn("setBackupFlag failed: " + JSON.stringify(err));
+            $log.debug('Backup done stored');
+        });
+    });
 
 	$rootScope.$on('Local/DeviceError', function (event, err) {
 		self.showErrorPopup(err, function () {
@@ -1899,30 +1880,26 @@ angular.module('trustnoteApp.controllers').controller('indexController', functio
 		});
 	});
 
-
-// 更改代码 监听到状态 没有钱包 go.path 进入种子恢复钱包页
-	$rootScope.$on('Local/NoWallets', function (event) {
+    // 没有检测到钱包
+	$rootScope.$on('Local/NoWallets', function () {
 		$timeout(function () {
 			self.hasProfile = true;
 			self.noFocusedWallet = true;
 			self.isComplete = null;
 			self.walletName = null;
 
-			// 监听 没有钱包状态 删除profile 重置app 然后进入选择钱包类型页
-			// self.profile = {};
-			storageService.deleteProfile(function () {});
-			// alert('meiyouqianbao')
-			go.path('splash');
+			storageService.deleteProfile(function () {
+                go.path('splash');
+            });
 		});
-	});
-	// 进入首页前 满足1：option是真 2： 存储中已经写入2  3： 恢复页面的模态框不显示
-	$rootScope.$on('Local/NewFocusedWallet', function (e, option) {
-		// alert(option)
-		console.log('on Local/NewFocusedWallet');
-		self.setFocusedWallet();
-		//self.updateTxHistory();
-		if (option && (self.haschoosen == 2) && !self.showneikuang) {
-
+    });
+    
+    // 选中钱包
+	$rootScope.$on('Local/FocusedWallet', function (e, isFocusedChange) {
+        self.setFocusedWallet();
+        
+        // 切换钱包后进入主页
+		if (isFocusedChange && (self.haschoosen == 2) && !self.showneikuang) {
 			go.walletHome();
 		}
 	});
@@ -1941,23 +1918,29 @@ angular.module('trustnoteApp.controllers').controller('indexController', functio
 	});
 
 
-// 监听事件  是否需要密码
-	$rootScope.$on('Local/NeedsPassword', function (event, isSetup, error_message, cb) {
-		console.log('NeedsPassword');
+    // 密码弹框
+    $rootScope.$on('Local/NeedsPassword', function (event, isSetup, error_message, cb) {
+        self.askPassword = {
+            isSetup: isSetup,
+            error: error_message,
+            callback: function (err, pass) {
+                self.askPassword = null;
+                return cb(err, pass);
+            },
+        };
+        $timeout(function () {
+            $rootScope.$apply();
+        });
+    });
 
-		self.askPassword = {
-			isSetup: isSetup,
-			error: error_message,
-			callback: function (err, pass) {
-				self.askPassword = null;
-				return cb(err, pass);
-			},
-		};
+    // 密码状态更新
+	$rootScope.$on('Local/NewEncryptionSetting', function () {
+		var fc = profileService.focusedClient;
+		self.isPrivKeyEncrypted = fc.isPrivKeyEncrypted();
 		$timeout(function () {
 			$rootScope.$apply();
 		});
 	});
-
 
 // 添加代码： 弹出二维码页面
 	self.showQrcode = function () {
@@ -1970,14 +1953,6 @@ angular.module('trustnoteApp.controllers').controller('indexController', functio
 		$rootScope.$on(eventName, function () {
 			// Re try to open wallet (will triggers)
 			self.setFocusedWallet();
-		});
-	});
-
-	$rootScope.$on('Local/NewEncryptionSetting', function () {
-		var fc = profileService.focusedClient;
-		self.isPrivKeyEncrypted = fc.isPrivKeyEncrypted();
-		$timeout(function () {
-			$rootScope.$apply();
 		});
 	});
 

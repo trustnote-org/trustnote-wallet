@@ -1,10 +1,12 @@
 'use strict';
 
-angular.module('trustnoteApp.controllers').controller('wordsController', function ($rootScope, $scope, $timeout, profileService, go, gettext, gettextCatalog, confirmDialog, notification, $log, isCordova, storageService) {
+angular.module('trustnoteApp.controllers').controller('wordsController', function ($rootScope, $scope, $timeout, profileService, go, gettextCatalog, confirmDialog, notification, $log, isCordova, storageService) {
+
+    var self = this;
 
 	var msg = gettextCatalog.getString('Are you sure you want to delete the backup words?');
-	var successMsg = gettext('Backup words deleted');
-	var self = this;
+	var successMsg = gettextCatalog.getString('Backup words deleted');
+
 	self.show = false;
 	var fc = profileService.focusedClient;
 	var reg = new RegExp(/^[a-z]+$/);
@@ -435,10 +437,11 @@ angular.module('trustnoteApp.controllers').controller('wordsController', functio
 	self.isCordova = isCordova;
 
 
-	if (fc.isPrivKeyEncrypted()) self.credentialsEncrypted = true;
-	else {
-		setWords(fc.getMnemonic());
-	}
+    if (fc.isPrivKeyEncrypted())
+        self.credentialsEncrypted = true;
+    else {
+        setWords(fc.getMnemonic());
+    }
 
 	if (fc.credentials && !fc.credentials.mnemonicEncrypted && !fc.credentials.mnemonic) {
 		self.deleted = true;
@@ -494,43 +497,36 @@ angular.module('trustnoteApp.controllers').controller('wordsController', functio
 	function setWords(words) {
 		if (words) {
 			self.mnemonicWords = words.split(/[\u3000\s]+/);
-			self.mnemonicHasPassphrase = fc.mnemonicHasPassphrase();
-			self.useIdeograms = words.indexOf("\u3000") >= 0;
-			// alert(self.mnemonicWords );
-			// alert(typeof (self.mnemonicWords));
-			// alert(JSON.stringify(self.mnemonicWords));
 		}
 	};
-	// strvalue = self.mnemonicWords.join(" ");
-	// alert(fc.getMnemonic());
 
+    self.passwordRequest = function () {
+        try {
+            setWords(fc.getMnemonic());
+        } catch (e) {
+            if (e.message && e.message.match(/encrypted/) && fc.isPrivKeyEncrypted()) {
+                self.credentialsEncrypted = true;
 
-	self.passwordRequest = function () {
-		try {
-			setWords(fc.getMnemonic());
-		} catch (e) {
-			if (e.message && e.message.match(/encrypted/) && fc.isPrivKeyEncrypted()) {
-				self.credentialsEncrypted = true;
+                $timeout(function () {
+                    $scope.$apply();
+                }, 1);
 
-				$timeout(function () {
-					$scope.$apply();
-				}, 1);
+                profileService.unlockFC(null, function (err) {
+                    if (err) {
+                        self.error = gettextCatalog.getString('Could not decrypt') + ': ' + err.message;
+                        $log.warn('Error decrypting credentials:', self.error); //TODO
+                        return;
+                    }
+                    if (!self.show && self.credentialsEncrypted)
+                        self.show = !self.show;
 
-				profileService.unlockFC(null, function (err) {
-					if (err) {
-						self.error = gettextCatalog.getString('Could not decrypt') + ': ' + err.message;
-						$log.warn('Error decrypting credentials:', self.error); //TODO
-						return;
-					}
-					if (!self.show && self.credentialsEncrypted)
-						self.show = !self.show;
-					self.credentialsEncrypted = false;
-					setWords(fc.getMnemonic());
-					$rootScope.$emit('Local/BackupDone');
-				});
-			}
-		}
-	}
+                    self.credentialsEncrypted = false;
+                    setWords(fc.getMnemonic());
+                    $rootScope.$emit('Local/BackupDone');
+                });
+            }
+        }
+    }
 
 
 // 更改代码

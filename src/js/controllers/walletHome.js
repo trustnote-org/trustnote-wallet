@@ -83,7 +83,7 @@ angular.module('trustnoteApp.controllers').controller('walletHomeController', fu
 		self.setAddress(true);
 	});
 
-	var disableFocusListener = $rootScope.$on('Local/NewFocusedWallet', function () {
+	var disableFocusListener = $rootScope.$on('Local/FocusedWallet', function () {
 		self.addr = {};
 		self.resetForm();
 	});

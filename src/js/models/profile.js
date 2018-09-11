@@ -63,7 +63,7 @@ Profile.fromString = function(str) {
 	return Profile.fromObj(JSON.parse(str));
 };
 
-Profile.prototype.toObj = function() {
+Profile.prototype.toStr = function() {
 	return JSON.stringify(this);
 };
 

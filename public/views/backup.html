@@ -7,7 +7,7 @@
 
     <!--备份错误-->
     <div class="box-notification" ng-show="wordsC.error">
-        <span class="text-warning">{{wordsC.error|translate}}</span>
+        <span class="text-warning">{{wordsC.error}}</span>
     </div>
 
     <div class="row m20t" ng-show="wordsC.deleted">
@@ -40,22 +40,10 @@
         <div class="row" ng-show="wordsC.show">
             <div class="columns">
                 <div class="p10" style="background:white;-webkit-user-select: text;" ng-class="{'enable_text_select': index.network == 'testnet'}">
-
                     <span ng-repeat="word in wordsC.mnemonicWords track by $index" style="-webkit-user-select: text">
                         <span style="white-space:nowrap; -webkit-user-select: text;"> {{word}} </span>
-                        <span ng-show="wordsC.useIdeograms">&#x3000;</span>
                     </span>
                 </div>
-            </div>
-        </div>
-
-        <div class="row m10t m20b" ng-show="wordsC.show">
-            <div class="columns" ng-show="wordsC.mnemonicHasPassphrase">
-                <span class="size-12">
-                    <i class="fi-alert"></i>
-                    <span translate>WARNING: This seed was created with a passphrase. To recover this wallet both the mnemonic
-                        and passphrase are needed.</span>
-                </span>
             </div>
         </div>
 
