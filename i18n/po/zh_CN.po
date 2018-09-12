@@ -111,7 +111,7 @@ msgstr "还有"
 
 #: public/views/includes/password.html:42
 msgid "Also, don't forget to delete your seed"
-msgstr "此外，千万不要忘记删除您的口令"
+msgstr "此外，千万不要忘记删除您的助记词"
 
 #: public/views/includes/output.html:6
 #: public/views/modals/customized-amount.html:38
@@ -174,7 +174,7 @@ msgstr "立即备份"
 
 #: public/views/preferencesGlobal.html:100
 msgid "Backup wallet seed"
-msgstr "备份钱包口令"
+msgstr "备份助记词"
 
 #: src/js/controllers/backup.js:7
 msgid "Backup words deleted"
@@ -186,7 +186,7 @@ msgstr "余额"
 
 #: public/views/walletHome.html:204
 msgid "Before receiving funds, it is highly recommended you backup your wallet keys."
-msgstr "接收资金之前，强烈建议您备份钱包口令密匙。"
+msgstr "接收资金之前，强烈建议您备份助记词。"
 
 #: public/views/backup.html:26
 msgid "Better yet, use multisig wallets with redundancy,"
@@ -352,7 +352,7 @@ msgstr "无法使用指定的扩展公钥创建"
 
 #: src/js/services/profileService.js:215
 msgid "Could not create: Invalid wallet seed"
-msgstr "无法创建：无效的钱包口令"
+msgstr "无法创建：无效的助记词"
 
 #: src/js/controllers/backup.js:81
 msgid "Could not decrypt"
@@ -415,7 +415,7 @@ msgstr "创建钱包…"
 
 #: public/views/backup.html:93
 msgid "DELETE WORDS"
-msgstr "删除口令"
+msgstr "删除助记词"
 
 #: public/views/modals/tx-details.html:78
 msgid "Date"
@@ -474,7 +474,7 @@ msgstr "与您通信的其他设备可以看到设备名称。"
 
 #: public/views/recoveryFromSeed.html:43
 msgid "Do not clone wallets, stop using the original wallet with this seed."
-msgstr "不要复制钱包，不要在原始钱包上使用这个口令"
+msgstr "不要复制钱包，不要在原始钱包上使用这个助记词"
 
 #: public/views/backup.html:59
 msgid "Do not use it to clone the wallet."
@@ -606,7 +606,7 @@ msgstr "硬件钱包"
 
 #: public/views/backup.html:45
 msgid "Hide the Wallet Seed"
-msgstr "隐藏钱包口令"
+msgstr "隐藏助记词"
 
 #: src/js/controllers/index.js:602
 msgid "History"
@@ -769,7 +769,7 @@ msgstr "网络"
 
 #: src/js/controllers/create.js:29
 msgid "New Random Seed"
-msgstr "新的随机口令"
+msgstr "新的随机助记词"
 
 #: public/views/modals/approveNewWitnesses.html:9
 msgid "New witnesses"
@@ -810,7 +810,7 @@ msgstr "签署合约"
 
 #: public/views/backup.html:87
 msgid "Once you have written your wallet seed down, it is recommended to delete it from this device."
-msgstr "一旦您写下您的钱包口令，建议把口令从设备中删除。"
+msgstr "如果已经抄写下助记词，建议把助记词从设备中删除。"
 
 #: public/views/recoveryFromSeed.html:41
 msgid "Only single-sig wallets can be recovered."
@@ -954,11 +954,11 @@ msgstr "正在重新连接到钱包服务..."
 
 #: public/views/recoveryFromSeed.html:34
 msgid "Recover"
-msgstr "口令恢复钱包"
+msgstr "恢复钱包"
 
 #: public/views/preferencesGlobal.html:109
 msgid "Recovery from seed"
-msgstr "口令恢复钱包"
+msgstr "恢复钱包"
 
 #: public/views/walletHome.html:58
 msgid "Recreating Wallet..."
@@ -1158,7 +1158,7 @@ msgstr "显示所有"
 
 #: public/views/backup.html:44
 msgid "Show the Wallet Seed Anyway"
-msgstr "无论如何显示钱包口令"
+msgstr "显示助记词"
 
 #: src/js/controllers/index.js:418
 msgid "Sign transaction spending  from wallet ?"
@@ -1431,7 +1431,7 @@ msgstr "钱包名称"
 
 #: public/views/backup.html:34
 msgid "Wallet seed deleted."
-msgstr "钱包口令已删除。"
+msgstr "助记词已删除。"
 
 #: public/views/modals/destination-address.html:15
 #: public/views/modals/destination-address.html:29
@@ -1459,7 +1459,7 @@ msgstr "公证人"
 
 #: public/views/backup.html:56
 msgid "Write it down and keep it somewhere safe."
-msgstr "强烈建议您将口令写在纸上并存放在安全的地方，不要截图或拍照，也不要在多个设备上使用相同的口令！"
+msgstr "强烈建议将助记词写在纸上并存放在安全的地方，不要截图或拍照，也不要在多个设备上使用相同的助记词！"
 
 #: src/js/services/profileService.js:620
 msgid "Wrong password"
@@ -1478,10 +1478,10 @@ msgstr "您没有钱包"
 #: public/views/backup.html:55
 #: public/views/recoveryFromSeed.html:31
 msgid "Your Wallet Seed:"
-msgstr "钱包口令："
+msgstr "钱包助记词："
 
 msgid "Your Wallet Seed Phrase:"
-msgstr "钱包口令："
+msgstr "钱包助记词："
 
 #: public/views/export.html:33
 msgid "Your export password"
@@ -1688,7 +1688,7 @@ msgid "You acknowledge that your use of this software is at your own discretion 
 msgstr "请您确定使用本软件是您自己的决定并遵守所有适用的法律。"
 
 msgid "You are responsible for safekeeping your passwords, private key pairs, PINs and any other codes you use to access the software."
-msgstr "您有责任妥善保管您的登录口令、私钥、交易密码和您用以访问本软件的其它代码。"
+msgstr "您有责任妥善保管您的登录助记词、私钥、交易密码和您用以访问本软件的其它代码。"
 
 msgid "<b>IF YOU LOSE ACCESS TO YOUR TRUSTNOTE WALLET, YOU ACKNOWLEDGE AND AGREE THAT ANY NOTES OR OTHER VALUABLES YOU HAVE ASSOCIATED WITH THAT TRUSTNOTE WALLET WILL BECOME INACCESSIBLE.</b>"
 msgstr "<b>若您失去对本钱包的控制权，您知悉并接受任何与本钱包关联的TTT和其它有价资产将无法找回。</b>"
@@ -1737,18 +1737,18 @@ msgid "Invite new device"
 msgstr "设备配对码"
 
 msgid "Backup"
-msgstr "备份钱包口令"
+msgstr "备份助记词"
 
 msgid "Recovery"
 msgstr "恢复钱包"
 
 #: public/views/backup.html:22
 msgid "Just the wallet seed is not enough, contact lists and meesages could be recovered."
-msgstr "仅有钱包口令是不够的，好友列表和消息内容无法恢复。"
+msgstr "仅有助记词是不够的，好友列表和消息内容无法恢复。"
 
 
 msgid "Seed is not valid"
-msgstr "错误：输入的口令无效，请确认输入是否正确。"
+msgstr "错误：输入助记词无效，请确认输入是否正确。"
 
 msgid "Unit"
 msgstr "单元"
@@ -1761,22 +1761,22 @@ msgid "chat recording"
 msgstr "聊天记录"
 
 msgid "Please backup the mnemonic word"
-msgstr "请立即备份您的钱包口令"
+msgstr "请立即备份你的助记词"
 
 msgid "We highly recommend you write the Mnemonic words(Backup Phrase) on Paper and keep it in a safe place, anyone get it can access or spend your assets. Also get start with a small amout of assets."
-msgstr "备份钱包，导出“口令”并抄写到安全的地方，千万不要保存到网络上。然后尝试转入，转出小额资产开始使用。"
+msgstr "备份钱包，导出助记词并抄写到安全的地方，千万不要保存到网络上。然后尝试转入，转出小额资产开始使用。"
 
 msgid "Don't Screenshot"
 msgstr "请勿截图"
 
 msgid "Please write the Mnemonic words on Paper and keep it in a safe place."
-msgstr "请抄写下口令并保存在安全的地方"
+msgstr "请抄写下助记词并保存在安全的地方"
 
 msgid "Understood"
 msgstr "知道了"
 
 msgid "DELETE"
-msgstr "删除口令"
+msgstr "删除助记词"
 
 msgid "Next"
 msgstr "下一步"
@@ -1791,37 +1791,34 @@ msgid "Last step"
 msgstr "上一步"
 
 msgid "Are you sure you want to delete the Seed Phrase?"
-msgstr "您确定要删除钱包口令吗？"
+msgstr "确定要删除助记词吗？"
 
 msgid "Hello"
 msgstr "您好"
 
 msgid "Please backup the mnemonic words"
-msgstr "抄写下您的钱包口令"
+msgstr "请抄写助记词"
 
 msgid "Those 12 mnemonic words are for recovering you wallet, write down correctly on paper and keep in a safe place."
-msgstr "口令用于恢复钱包，将它准确地写到纸上，并存放在只有你知道的地方"
+msgstr "助记词用于恢复钱包，将它准确地写到纸上，并存放在只有你知道的地方"
 
 msgid "Confirm your mnemonic words"
-msgstr "确认您的钱包口令"
-
-msgid "Confirm Your Mnemonic Words"
-msgstr "确认您的钱包口令"
+msgstr "确认你的助记词"
 
 msgid "Please write the mnemonic words in order and make sure your mnemonic was correct written."
-msgstr "请按顺序输入口令以确认您的备份口令正确"
+msgstr "请按顺序输入助记词以确认您的助记词的正确性"
 
 msgid "Your mnemonic words are correct. To make your wallet safe, we highly recommend you delete mnemonic words from app."
-msgstr "您的口令正确，为了保证您的钱包安全，建议您删掉口令"
+msgstr "助记词正确，为了保证您的钱包安全，建议您备份后删除助记词"
 
 msgid "Can't delete the last remaining wallet"
 msgstr "无法删除剩下的最后一个钱包"
 
 msgid "Invalid mnemonic"
-msgstr "无效的口令"
+msgstr "无效的助记词"
 
 msgid "Backup Your Seed Phrase"
-msgstr "备份钱包口令"
+msgstr "备份助记词"
 
 
 msgid "wallets recovered, please restart the application to finish."
@@ -1834,7 +1831,7 @@ msgid "Restore Wallet"
 msgstr "恢复钱包"
 
 msgid "Restore Wallet and Delete Seed Phrase"
-msgstr "恢复钱包并删除口令"
+msgstr "恢复钱包并删除助记词"
 
 
 msgid "Synchronization completed"
@@ -1868,13 +1865,13 @@ msgid "Restore Wallet"
 msgstr "恢复钱包"
 
 msgid "Create Wallet and Backup Your Seed Phrase"
-msgstr "创建钱包并备份您的口令"
+msgstr "创建钱包并备份您的助记词"
 
 msgid "Confirm delete"
 msgstr "确定删除"
 
 msgid "Delete Seed Phrase"
-msgstr "删除口令"
+msgstr "删除助记词"
 
 msgid "Note:"
 msgstr "注意："
@@ -1889,16 +1886,16 @@ msgid "Only one space is allowed between words."
 msgstr "输入单词之间只有一个英文空格！"
 
 msgid "Restore Wallet from Seed Phrase"
-msgstr "使用口令恢复钱包"
+msgstr "使用助记词钱包"
 
 msgid "DELETE SEED PHRASE"
-msgstr "删除口令"
+msgstr "删除助记词"
 
 msgid "We don’t recommend cloning your Wallet because your Wallet is safe as long as your Seed Phrase is well protected. However, if you experience data inconsistency issue between the original Wallet and its clone, you can fix it by using the “Sync Cloned Wallets” feature on both Wallets."
-msgstr "不建议您克隆钱包，保护好您的口令就是安全的。如果您遇到克隆钱包导致的数据不同步，请在两个钱包上使用克隆钱包同步功能。"
+msgstr "不建议您克隆钱包，保护好助记词就是安全的。如果您遇到克隆钱包导致的数据不同步，请在两个钱包上使用克隆钱包同步功能。"
 
 msgid "It will delete the seed phrase in the app and can not be restored, please be sure that you have the seed phrase back to a safe place"
-msgstr "此操作将彻底删除应用中口令并且不可恢复，请再次确认您已经将口令备份到安全的地方"
+msgstr "此操作将彻底删除助记词并且不可恢复，请再次确认您已经将助记词备份到安全的地方"
 
 msgid "During synchronization, please be patient."
 msgstr "同步过程中，请耐心等待。"
