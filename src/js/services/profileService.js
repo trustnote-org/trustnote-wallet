@@ -169,35 +169,35 @@ angular.module('trustnoteApp.services').factory('profileService', function profi
         });
     };
 
-	root.loadAndBindProfile = function (cb) {
-		breadcrumbs.add('loadAndBindProfile');
+    root.loadAndBindProfile = function (cb) {
+        breadcrumbs.add('loadAndBindProfile');
 
-		storageService.gethaschoosen(function (err, val) {
-			root.haschoosen = val;
-		});
+        storageService.gethaschoosen(function (err, val) {
+            root.haschoosen = val;
+        });
 
-		storageService.getDisclaimerFlag(function (err, val) {
-			if (!val) {
-				breadcrumbs.add('Non agreed disclaimer');
-				return cb( new Error('NONAGREEDDISCLAIMER: Non agreed disclaimer') );
-			} else {
-				storageService.getProfile(function (err, profile) {
-					if (err) {
-						$rootScope.$emit('Local/DeviceError', err);
-						return cb(err);
-					}
-					if (!profile) {
-						breadcrumbs.add('no profile');
-						return cb(new Error('NOPROFILE: No profile'));
-					}
-					else {
-						$log.debug('Profile read');
-						return root.bindProfile(profile, cb);
-					}
-				});
-			}
-		});
-	};
+        storageService.getDisclaimerFlag(function (err, val) {
+            if (!val) {
+                breadcrumbs.add('Non agreed disclaimer');
+                return cb(new Error('NONAGREEDDISCLAIMER: Non agreed disclaimer'));
+            } else {
+                storageService.getProfile(function (err, profile) {
+                    if (err) {
+                        $rootScope.$emit('Local/DeviceError', err);
+                        return cb(err);
+                    }
+                    if (!profile) {
+                        breadcrumbs.add('no profile');
+                        return cb(new Error('NOPROFILE: No profile'));
+                    }
+                    else {
+                        $log.debug('Profile read');
+                        return root.bindProfile(profile, cb);
+                    }
+                });
+            }
+        });
+    };
 
     
     root._seedWallet = function (opts, cb) {
