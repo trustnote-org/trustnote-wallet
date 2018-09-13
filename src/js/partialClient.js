@@ -161,7 +161,6 @@ function initWallet() {
 		
 		// setTimeout(function(){ getFromId('splash').style.display = 'none'; },3000);
 		
-		swipeListener.close();
 		var pages = document.getElementsByClassName('page');
 		if (pages.length === 2) {
 			document.getElementsByClassName('page')[1].remove();
@@ -233,7 +232,6 @@ function initWallet() {
 		root.focusedClient = root.walletClients[walletId];
 		fileSystem.set('focusedWalletId', walletId, function() {});
 		initFocusedWallet(function() {});
-		openOrCloseMenu();
 	}
 	
 	function formatAmount(bytes, asset) {
@@ -306,104 +304,7 @@ function setSlider(assocBalances) {
 	window.slider = new _slider(assocBalances);
 }
 
-//menu
-var menuAnimated = false;
-window.openOrCloseMenu = function() {
-	if(completeClientLoaded) return;
-	if (menuAnimated) return;
-	var menuDiv = document.getElementsByClassName('off-canvas-wrap')[1];
-	if (menuDiv) {
-		menuAnimated = true;
-		if (menuDiv.className.indexOf('move-right') === -1) {
-			menuDiv.className = menuDiv.className.trim() + ' move-right';
-			setTimeout(function() {
-				menuAnimated = false;
-			}, 200);
-		} else {
-			menuDiv.className = menuDiv.className.replace('move-right', '').trim();
-			setTimeout(function() {
-				menuAnimated = false;
-			}, 200);
-		}
-	}
-};
 
-window.menuIsOpen = function() {
-	return document.getElementsByClassName('off-canvas-wrap')[1] && document.getElementsByClassName('off-canvas-wrap')[1].className.indexOf('move-right') !== -1;
-};
-
-
-//swipe
-function _swipeListener() {
-	document.addEventListener('touchstart', handleTouchStart, false);
-	document.addEventListener('touchmove', handleTouchMove, false);
-	
-	var root = {};
-	var xDown = null;
-	var yDown = null;
-	var focusOnAmountBg = false;
-
-	function handleTouchStart(evt) {
-		focusOnAmountBg = false;
-		if(evt.path) {
-			for (var i = 0, l = evt.path.length; i < l; i++) {
-				if (evt.path[i].id === 'amountBg') {
-					focusOnAmountBg = true;
-					break;
-				}
-			}
-		}
-		xDown = evt.touches[0].clientX;
-		yDown = evt.touches[0].clientY;
-	}
-
-	function handleTouchMove(evt) {
-		if (!xDown || !yDown) return;
-
-		var xUp = evt.touches[0].clientX;
-		var yUp = evt.touches[0].clientY;
-
-		var xDiff = xDown - xUp;
-		var yDiff = yDown - yUp;
-
-		if (Math.abs(xDiff) > Math.abs(yDiff)) {
-			if (xDiff > 0) {
-				listen('left');
-			} else {
-				listen('right');
-			}
-		}
-
-		xDown = null;
-		yDown = null;
-		
-	}
-	function listen(direction) {
-		if(direction === 'left'){
-			if(focusOnAmountBg){
-				slider.next();
-			}else if(menuIsOpen()){
-				openOrCloseMenu();
-			}
-		}else if(direction === 'right'){
-			if(focusOnAmountBg){
-				slider.prev();
-			}else if(!menuIsOpen()){
-				openOrCloseMenu();
-			}
-		}
-	}
-	root.close = function() {
-		document.removeEventListener('touchstart', handleTouchStart, false);
-		document.removeEventListener('touchmove', handleTouchMove, false);
-	};
-	
-	return root;
-}
-
-var swipeListener = new _swipeListener();
-
-//other
 function getFromId(id) {
 	return document.getElementById(id);
 }

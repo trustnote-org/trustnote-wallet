@@ -1,55 +1,56 @@
-
 <nav ng-controller="topbarController as topbar" class="tab-bar oh">
-	<!-- 左边 -->
-  	<section class="left-small"><!--更改代码如下：-->
-    	<!--<a id="hamburger" class="p10" ng-show="!goBackToState && !closeToHome  && !index.noFocusedWallet" ng-click="index.openMenu()">-->
+    <!-- 左边 -->
+    <section class="left-small">
 
-		<!--二维码图标-->
-		<a id="hamburger" class="p10" ng-show="!goBackToState && !closeToHome  && !index.noFocusedWallet" ng-click="index.showQrcode()">
-			<i class="icon-qr size-24"></i>
-    	</a>
+        <!--二维码图标-->
+        <a id="hamburger" class="p10" ng-show="!goBackToState && !closeToHome  && !index.noFocusedWallet" ng-click="index.showQrcode()">
+            <i class="icon-qr size-24"></i>
+        </a>
 
-		<!--点击返回  或者  点击关闭-->
-		<a ng-show="goBackToState" onclick="$('.ngcalculator_area').removeClass('keyboardShow');$('.ngcalculator_area').addClass('keyboardHidden');	$('.inptMnemonic').removeClass('active');" ng-click="$root.go('^', true); goBackToState = null">
-			<i class="icon-arrow-left3  icon-back"></i>
-			<span class="text-back">{{'Back'|translate}}</span>
-		</a>
-		<!--更改代码	如下  --><!--点击关闭 回到mywallet-->
-		<a ng-show="closeToHome" class="p10 " ng-click="topbar.goWallet();closeToHome = null">
-		<!--<a ng-show="closeToHome" class="p10 " ng-click="topbar.goHome();closeToHome = null">	-->
-      		<span class="text-close">{{'Close'|translate}}</span>
-    	</a>
-  	</section>
-	<!--左边结束-->
-
-
-	<!-- 右边 打开相机 -->
-	<section class="right-small" ng-show="showCamera">
-		<!--angular 自定义指令-->
-		<qr-scanner ng-show="index.isComplete" on-scan="topbar.onQrCodeScanned(data)" before-scan="topbar.onBeforeScan()">
-			<!--此处是有内容的，qrScanner中定义 -->
-			<!--<a id="camera-icon" class="p10" ng-click="openScanner()">-->
-				<!--<i class="icon-scan size-24"></i>-->
-			<!--</a> -->
-		</qr-scanner>
-	</section>
-	<!-- 右边 打开相机 结束 -->
+        <!--点击返回  或者  点击关闭-->
+        <a ng-show="goBackToState" onclick="$('.ngcalculator_area').removeClass('keyboardShow');$('.ngcalculator_area').addClass('keyboardHidden');	$('.inptMnemonic').removeClass('active');"
+            ng-click="$root.go('^', true); goBackToState = null">
+            <i class="icon-arrow-left3  icon-back"></i>
+            <span class="text-back">{{'Back'|translate}}</span>
+        </a>
+        <!--更改代码	如下  -->
+        <!--点击关闭 回到mywallet-->
+        <a ng-show="closeToHome" class="p10 " ng-click="topbar.goWallet();closeToHome = null">
+            <!--<a ng-show="closeToHome" class="p10 " ng-click="topbar.goHome();closeToHome = null">	-->
+            <span class="text-close">{{'Close'|translate}}</span>
+        </a>
+    </section>
+    <!--左边结束-->
 
 
-	<!-- 中间部分 -->
-  	<section class="middle tab-bar-section">
-		<h1 class="ellipsis" ng-style="{ 'max-width': '100%'}">
-			<span class="size-17 colorfff" ng-if="index.arrBalances[index.assetIndex].shared === undefined && !index.shared_address || titleSection">
-				{{(titleSection|translate) || (index.shared_address || index.alias || index.walletName)}}
-			</span>
+    <!-- 右边 打开相机 -->
+    <section class="right-small" ng-show="showCamera">
+        <!--angular 自定义指令-->
+        <qr-scanner ng-show="index.isComplete" on-scan="topbar.onQrCodeScanned(data)" before-scan="topbar.onBeforeScan()">
+            <!--此处是有内容的，qrScanner中定义 -->
+            <!--<a id="camera-icon" class="p10" ng-click="openScanner()">-->
+            <!--<i class="icon-scan size-24"></i>-->
+            <!--</a> -->
+        </qr-scanner>
+    </section>
+    <!-- 右边 打开相机 结束 -->
 
-			<!--存在智能合约地址-->
-			<span ng-if="(index.arrBalances[index.assetIndex].shared !== undefined || index.shared_address) && !titleSection" class="ellipsis size-17 colorfff">
-				{{(index.shared_address || index.alias || index.walletName)}}
-			</span>
-		</h1>
-  	</section>
-	<!-- 中间部分结束 -->
+
+    <!-- 中间部分 -->
+    <section class="middle tab-bar-section">
+        <h1 class="ellipsis" ng-style="{ 'max-width': '100%'}">
+            <span class="size-17 colorfff" ng-if="index.arrBalances[index.assetIndex].shared === undefined && !index.shared_address || titleSection">
+                {{(titleSection|translate) || (index.shared_address || index.alias || index.walletName)}}
+            </span>
+
+            <!--存在智能合约地址-->
+            <span ng-if="(index.arrBalances[index.assetIndex].shared !== undefined || index.shared_address) && !titleSection"
+                class="ellipsis size-17 colorfff">
+                {{(index.shared_address || index.alias || index.walletName)}}
+            </span>
+        </h1>
+    </section>
+    <!-- 中间部分结束 -->
 </nav>
 
 <!--<a ng-click="index.openSubwalletModal()">-->

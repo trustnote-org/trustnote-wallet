@@ -2,7 +2,7 @@
 
 var eventBus = require('trustnote-common/event_bus.js');
 
-angular.module('trustnoteApp.services').factory('go', function($http, $window, $rootScope,  $location, $state, profileService, fileSystemService, nodeWebkit, notification, gettextCatalog, authService, $deepStateRedirect, $stickyState, $timeout) {
+angular.module('trustnoteApp.services').factory('go', function($rootScope, $state, $log, profileService, fileSystemService, nodeWebkit, notification, authService, $deepStateRedirect, $stickyState) {
 	var root = {};
 	root.toPay = 0;
 	root.haschoosen = 0;
@@ -16,58 +16,35 @@ angular.module('trustnoteApp.services').factory('go', function($http, $window, $
 		root.isToRecordsDir = 1;
 	};
 
-	var hideSidebars = function() {
-		if (typeof document === 'undefined')
-			return;
-
-		var elem = document.getElementById('off-canvas-wrap');
-		elem.className = 'off-canvas-wrap';
-	};
-
-	var toggleSidebar = function(invert) {
-		if (typeof document === 'undefined')
-			return;
-
-		var elem = document.getElementById('off-canvas-wrap');
-		var leftbarActive = elem.className.indexOf('move-right') >= 0;
-
-		if (invert) {
-			if (profileService.profile && !$rootScope.hideNavigation) {
-				elem.className = 'off-canvas-wrap move-right';
-			}
-		} else {
-			if (leftbarActive) {
-				hideSidebars();
-			}
-		}
-	};
-
 	root.openExternalLink = function(url, target) {
 		if (nodeWebkit.isDefined()) {
 			nodeWebkit.openExternalLink(url);
 		}
 		else {
 			target = target || '_blank';
-			var ref = window.open(url, target, 'location=no');
+			window.open(url, target, 'location=no');
 		}
 	};
 
-	// 定义 路由跳转
-	root.path = function(path, cb) {
-		$state.go(path)
-		.then(function() {
-			console.log("transition done "+path);
-			if (cb) return cb();
-		}, function() {
-			console.log("transition failed "+path);
-			if (cb) return cb('animation in progress');
-		});
-		// hideSidebars();
-	};
+    root.path = function (path, cb) {
+        $state.go(path).then(function () {
+            $log.info("transition done", path);
+            if (cb) return cb();
+        }, function () {
+            $log.error("transition failed", path);
+            if (cb) return cb('animation in progress');
+        });
+    };
 
-	root.swipe = function(invert) {
-		toggleSidebar(invert);
-	};
+    $rootScope.go = function (path, resetState) {
+        var targetState = $state.get(path);
+        if (resetState) $deepStateRedirect.reset(targetState.name);
+        root.path(path);
+    };
+
+    $rootScope.openExternalLink = function (url, target) {
+        root.openExternalLink(url, target);
+    };
 
 	root.walletHome = function() {
 		var fc = profileService.focusedClient;
@@ -126,23 +103,6 @@ angular.module('trustnoteApp.services').factory('go', function($http, $window, $
 	root.reload = function() {
 		$state.reload();
 	};
-
-
-	// Global go. This should be in a better place TODO
-	// We dont do a 'go' directive, to use the benefits of ng-touch with ng-click
-
-
-
-	$rootScope.go = function(path, resetState) {
-		var targetState = $state.get(path);
-		if (resetState) $deepStateRedirect.reset(targetState.name);
-		root.path(path);
-	};
-
-	$rootScope.openExternalLink = function(url, target) {
-		root.openExternalLink(url, target);
-	};
-
 
 // 添加变量：控制观察钱包 (交易页面） 默认是0 普通钱包
 	root.observed = 0;

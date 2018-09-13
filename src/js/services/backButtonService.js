@@ -1,10 +1,9 @@
 'use strict';
 
 
-angular.module('trustnoteApp.services').factory('backButton', function($log, $rootScope, gettextCatalog, $deepStateRedirect, $document, $timeout, go, $state, lodash, profileService) {
+angular.module('trustnoteApp.services').factory('backButton', function($rootScope, $log, $deepStateRedirect, $document, $timeout, $state, go, gettextCatalog, lodash, profileService) {
 	var root = {};
 	
-	root.menuOpened = false;
 	root.dontDeletePath = false;
 	
 	var arrHistory = [];
@@ -43,21 +42,14 @@ angular.module('trustnoteApp.services').factory('backButton', function($log, $ro
 		if (to.name == "walletHome") {
 			$rootScope.$emit('Local/SetTab', 'walletHome', true);
 		}
-		root.menuOpened = false;
 	});
 
-
-// 更改代码
 	function back() {
 		if (body.hasClass('modal-open')) {
 			$rootScope.$emit('closeModal');
 		}
 		else if (root.showQrcode) {
 			$rootScope.$emit('closeQrcode');
-		}
-		else if (root.menuOpened) {
-			go.swipe();
-			root.menuOpened = false;
 		}
 		else if(typeof(profileService.haschoosen) == "undefined" || profileService.haschoosen != 2){
 			askAndExit();
@@ -86,35 +78,28 @@ angular.module('trustnoteApp.services').factory('backButton', function($log, $ro
 			}
 		}
 	}
-	
-	function askAndExit(){
-		if (shownExitMessage) {
-			navigator.app.exitApp();
-		}
-		else {
-			shownExitMessage = true;
-			window.plugins.toast.showShortBottom(gettextCatalog.getString('Press again to exit'));
-			$timeout(function() {
-				shownExitMessage = false;
-			}, 2000);
-		}
-	}
 
-	function clearHistory() {
-		arrHistory.splice(1);
-	}
-	
-	//document.addEventListener('backbutton', function() {
-	//	back();
-	//}, false);
-	document.addEventListener('backbutton', back, false);
+    function askAndExit() {
+        if (shownExitMessage) {
+            navigator.app.exitApp();
+        }
+        else {
+            shownExitMessage = true;
+            window.plugins.toast.showShortBottom(gettextCatalog.getString('Press again to exit'));
+            $timeout(function () {
+                shownExitMessage = false;
+            }, 2000);
+        }
+    }
 
-	/*document.addEventListener('keydown', function(e) {
-		if (e.which == 37) back();
-	}, false);*/
-	
-	root.back = back;
-	root.arrHistory = arrHistory;
-	root.clearHistory = clearHistory;
-	return root;
+    function clearHistory() {
+        arrHistory.splice(1);
+    }
+
+    document.addEventListener('backbutton', back, false);
+
+    root.back = back;
+    root.arrHistory = arrHistory;
+    root.clearHistory = clearHistory;
+    return root;
 });

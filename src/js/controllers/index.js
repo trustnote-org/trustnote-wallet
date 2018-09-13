@@ -21,7 +21,6 @@ angular.module('trustnoteApp.controllers').controller('indexController', functio
     self.onGoingProcess = {};
     self.historyShowLimit = 10;
     self.updatingTxHistory = {};
-    self.bSwipeSuspended = false;
     self.arrBalances = [];
     self.arrAssetStore = [];
     self.assetIndex = 0;
@@ -1635,36 +1634,6 @@ angular.module('trustnoteApp.controllers').controller('indexController', functio
 			}, 100);
 		});
 	};
-
-	self.openMenu = function () {
-		backButton.menuOpened = true;
-		go.swipe(true);
-	};
-
-	self.closeMenu = function () {
-		backButton.menuOpened = false;
-		go.swipe();
-	};
-
-// 手势向右滑动
-	self.swipeRight = function () {
-		if (!self.bSwipeSuspended)
-			self.openMenu();
-		else
-			console.log('ignoring swipe');
-	};
-
-	self.suspendSwipe = function () {
-		if (self.arrBalances.length <= 1)
-			return;
-		self.bSwipeSuspended = true;
-		console.log('suspending swipe');
-		$timeout(function () {
-			self.bSwipeSuspended = false;
-			console.log('resuming swipe');
-		}, 100);
-	};
-
 
 	self.retryScan = function () {
 		var self = this;
