@@ -1,22 +1,21 @@
 'use strict';
 
 angular.element(document).ready(function () {
+    
 	// Run trustnoteApp after device is ready.
 	var startAngular = function () {
 		angular.bootstrap(document, ['trustnoteApp']);
-	};
+    };
+    
 	// Cordova specific Init
 	if (window.cordova !== undefined) {
 		document.addEventListener('deviceready', function () {
-			document.addEventListener('menubutton', function () {
-				window.location = '#/preferences';
-			}, false);
-
 			startAngular();
 		}, false);
 
 	} else {
-		startAngular();
+        startAngular();
+        
 		// Remove all saved vault passwords in this app and prevent future saving
 		if (chrome) {
 			chrome.passwordsPrivate.getSavedPasswordList(
