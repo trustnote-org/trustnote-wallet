@@ -6,7 +6,6 @@ angular.module('trustnoteApp.controllers').controller('passwordController',
         var self = this;
 
         var refPassword;
-        self.checkPassClose = profileService.checkPassClose;
         self.isVerification = false;
 
         self.close = function (cb) {
