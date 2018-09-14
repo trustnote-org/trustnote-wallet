@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('trustnoteApp.controllers').controller('preferencesGlobalController', function ($scope, $rootScope, $log, configService, uxLanguage, profileService, storageService) {
+angular.module('trustnoteApp.controllers').controller('preferencesGlobalController', function ($scope, $rootScope, $log, configService, uxLanguage, profileService) {
 
     $scope.encrypt = !!profileService.profile.xPrivKeyEncrypted;
 
