@@ -12,13 +12,6 @@ angular.module('trustnoteApp.controllers').controller('preferencesGlobalControll
         this.showHub = false;
         this.clickTimesToShowHub = 3;
         this.currentLanguageName = uxLanguage.getCurrentLanguageName();
-
-        // 是否已经备份状态
-        storageService.getBackupFlag("all", function (err, flag) {
-            if (flag) {
-                $scope.index.needsBackup = false;
-            }
-        })
     };
 
     // 点击我的地址三次显示修改hub选项
@@ -30,7 +23,6 @@ angular.module('trustnoteApp.controllers').controller('preferencesGlobalControll
     };
 
     var unwatchEncrypt = $scope.$watch('encrypt', function (val) {
-        profileService.checkPassClose = false;
         var fc = profileService.focusedClient;
         if (!fc) return;
 
@@ -47,7 +39,7 @@ angular.module('trustnoteApp.controllers').controller('preferencesGlobalControll
             });
         } else { // unlock
             if (!val && fc.hasPrivKeyEncrypted()) {
-                profileService.passWrongUnlockFC(null, function (err) {
+                profileService.insistUnlockFC(null, true, function (err) {
                     if (err) {
                         $scope.encrypt = true;
                         return;

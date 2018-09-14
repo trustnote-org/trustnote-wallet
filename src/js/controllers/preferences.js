@@ -4,23 +4,17 @@ angular.module('trustnoteApp.controllers').controller('preferencesController', f
     var self = this;
 
     self.showPubKey = function () {
-        profileService.checkPassClose = false;
         var fc = profileService.focusedClient;
 
         if (fc.isPrivKeyEncrypted()) {
-            profileService.passWrongUnlockFC(null, function (err) {
-                if (err == 'cancel') {
-                    profileService.checkPassClose = true;
-                } else if (err) {
+            profileService.insistUnlockFC(null, true, function (err) {
+                if (err)
                     return;
-                }
-                else {
+                else
                     $rootScope.go('preferences.preferencesCold')
-                }
             });
-            return;
         }
-
-        $rootScope.go('preferences.preferencesCold')
+        else
+            $rootScope.go('preferences.preferencesCold')
     };
 });

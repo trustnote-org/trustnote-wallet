@@ -10,12 +10,13 @@ angular.module('trustnoteApp.controllers').controller('passwordController',
         self.isVerification = false;
 
         self.close = function (cb) {
-            profileService.checkPassClose = true;
+            profileService.clickCancel = true;
             return cb(gettext('No password given'));
         };
 
         self.set = function (isSetup, cb) {
             self.error = false;
+            profileService.clickCancel = false;
             // set password: first input
             if (isSetup && !self.isVerification) {
                 document.getElementById("passwordInput").focus();
