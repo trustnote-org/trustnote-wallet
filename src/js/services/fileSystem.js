@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('copayApp.services')
+angular.module('trustnoteApp.services')
 .factory('fileSystemService', function($log, isCordova) {
 	var root = {},
 		bFsInitialized = false;

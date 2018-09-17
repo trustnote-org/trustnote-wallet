@@ -1,8 +1,7 @@
 'use strict';
 
-angular.module('copayApp.controllers').controller('sidebarController', function ($rootScope, $timeout, lodash, profileService, configService, go, isMobile, isCordova, backButton) {
+angular.module('trustnoteApp.controllers').controller('sidebarController', function ($rootScope, lodash, profileService, configService, go) {
 	var self = this;
-	self.isWindowsPhoneApp = isMobile.Windows() && isCordova;
 	self.walletSelection = false;
 
 	// wallet list change
@@ -19,30 +18,19 @@ angular.module('copayApp.controllers').controller('sidebarController', function 
 		self.setWallets();
 	});
 
+    self.switchWallet = function (selectedWalletId, currentWalletId) {
+        if (selectedWalletId == currentWalletId) return;
+        self.walletSelection = false;
+        profileService.setAndStoreFocus(selectedWalletId, true, function () {
+        });
 
-	self.signout = function () {
-		profileService.signout();
-	};
-
-
-// 切换钱包
-	self.switchWallet = function (selectedWalletId, currentWalletId) {
-		backButton.menuOpened = false;
-		if (selectedWalletId == currentWalletId) return;
-		self.walletSelection = false;
-		profileService.setAndStoreFocus(selectedWalletId, true, function () {
-		});
-
-		self.fc = profileService.focusedClient;
-		if(self.fc.observed){
-			go.observed = 1; // go.js中 表示为： 1 观察钱包
-		}else{
-			go.observed = 0; // go.js中： 表示为: 0 普通钱包
-		}
-		// $timeout(function () {
-		// 	$rootScope.$apply();
-		// });
-	};
+        self.fc = profileService.focusedClient;
+        if (self.fc.observed) {
+            go.observed = 1; // go.js中 表示为： 1 观察钱包
+        } else {
+            go.observed = 0; // go.js中： 表示为: 0 普通钱包
+        }
+    };
 
 
 	self.toggleWalletSelection = function () {

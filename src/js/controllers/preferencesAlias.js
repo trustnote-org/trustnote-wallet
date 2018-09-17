@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('copayApp.controllers').controller('preferencesAliasController',
+angular.module('trustnoteApp.controllers').controller('preferencesAliasController',
   function($scope, $timeout, configService, profileService, go) {
     var config = configService.getSync();
     var fc = profileService.focusedClient;

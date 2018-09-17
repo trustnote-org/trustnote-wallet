@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('copayApp.services')
+angular.module('trustnoteApp.services')
 	.factory('localStorageService', function ($timeout) {
 		var root = {};
 		var ls = ((typeof window.localStorage !== "undefined") ? window.localStorage : null);

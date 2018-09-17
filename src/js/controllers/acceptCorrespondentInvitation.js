@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('copayApp.controllers').controller('acceptCorrespondentInvitationController',
+angular.module('trustnoteApp.controllers').controller('acceptCorrespondentInvitationController',
   function($scope, $rootScope, $timeout, configService, profileService, isCordova, go, correspondentListService) {
 	
 	var self = this;

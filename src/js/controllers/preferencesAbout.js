@@ -1,3 +1,3 @@
 'use strict';
 
-angular.module('copayApp.controllers').controller('preferencesAbout', function() {});
+angular.module('trustnoteApp.controllers').controller('preferencesAbout', function() {});

@@ -1,5 +1,5 @@
 'use strict';
-angular.module('copayApp.services')
+angular.module('trustnoteApp.services')
   .factory('applicationService', function($rootScope, $timeout, isCordova, nodeWebkit, go, safeApplyService) {
     var root = {};
 

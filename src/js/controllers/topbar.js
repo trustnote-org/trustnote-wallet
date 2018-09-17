@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('copayApp.controllers').controller('topbarController', function($scope, $rootScope, go, profileService) {
+angular.module('trustnoteApp.controllers').controller('topbarController', function($scope, $rootScope, go, profileService) {
     this.onQrCodeScanned = function(data) {
         go.handleUri(data);//$rootScope.$emit('dataScanned', data);
     };

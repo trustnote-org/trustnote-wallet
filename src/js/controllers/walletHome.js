@@ -7,7 +7,7 @@ var breadcrumbs = require('trustnote-common/breadcrumbs.js');
 var Bitcore = require('bitcore-lib');
 var ecdsaSig = require('trustnote-common/signature.js');
 
-angular.module('copayApp.controllers').controller('walletHomeController', function ($scope, $rootScope, $timeout, $modal, $log, notification, isCordova, profileService, lodash, configService, storageService, gettext, gettextCatalog, nodeWebkit, addressService, confirmDialog, animationService, addressbookService, correspondentListService, go, safeApplyService) {
+angular.module('trustnoteApp.controllers').controller('walletHomeController', function ($scope, $rootScope, $timeout, $modal, $log, notification, isCordova, profileService, lodash, configService, storageService, gettext, gettextCatalog, nodeWebkit, addressService, confirmDialog, animationService, addressbookService, correspondentListService, go, safeApplyService) {
 
 	var self = this;
 	var home = this;
@@ -19,9 +19,6 @@ angular.module('copayApp.controllers').controller('walletHomeController', functi
 	var config = configService.getSync();
 	var configWallet = config.wallet;
 	var indexScope = $scope.index;
-	$scope.currentSpendUnconfirmed = configWallet.spendUnconfirmed;
-
-
 
 	// INIT
 	var walletSettings = configWallet.settings;
@@ -86,7 +83,7 @@ angular.module('copayApp.controllers').controller('walletHomeController', functi
 		self.setAddress(true);
 	});
 
-	var disableFocusListener = $rootScope.$on('Local/NewFocusedWallet', function () {
+	var disableFocusListener = $rootScope.$on('Local/FocusedWallet', function () {
 		self.addr = {};
 		self.resetForm();
 	});
@@ -501,18 +498,6 @@ angular.module('copayApp.controllers').controller('walletHomeController', functi
 		});
 	};
 
-	// Send
-
-	var unwatchSpendUnconfirmed = $scope.$watch('currentSpendUnconfirmed', function (newVal, oldVal) {
-		if (newVal == oldVal) return;
-		$scope.currentSpendUnconfirmed = newVal;
-	});
-
-	$scope.$on('$destroy', function () {
-		unwatchSpendUnconfirmed();
-	});
-
-
 	this.resetError = function () {
 		this.error = this.success = null;
 	};
@@ -729,286 +714,271 @@ angular.module('copayApp.controllers').controller('walletHomeController', functi
 
 		indexScope.setOngoingProcess(gettext('sending'), true);
 
-		$timeout(function () {
-			profileService.requestTouchid(function (err) {
-				if (err) {
-					profileService.lockFC();
-					indexScope.setOngoingProcess(gettext('sending'), false);
-					self.error = err;
-					$timeout(function () {
-						delete self.current_payment_key;
-						safeApplyService.safeApply($scope);
-						// $scope.$digest();
-					}, 1);
-					return;
-				}
+        $timeout(function () {
+            var device = require('trustnote-common/device.js');
 
-				var device = require('trustnote-common/device.js');
+            if (self.binding) {
+                if (!recipient_device_address)
+                    throw Error('recipient device address not known');
 
-				if (self.binding) {
-					if (!recipient_device_address)
-						throw Error('recipient device address not known');
+                var walletDefinedByAddresses = require('trustnote-common/wallet_defined_by_addresses.js');
+                var walletDefinedByKeys = require('trustnote-common/wallet_defined_by_keys.js');
+                var my_address;
 
-					var walletDefinedByAddresses = require('trustnote-common/wallet_defined_by_addresses.js');
-					var walletDefinedByKeys = require('trustnote-common/wallet_defined_by_keys.js');
-					var my_address;
+                // walletDefinedByKeys.issueNextAddress(fc.credentials.walletId, 0, function (addressInfo) {  // never reuse addresses as the required output could be already present
+                walletDefinedByKeys.issueOrSelectNextAddress(fc.credentials.walletId, 0, function (addressInfo) {
+                    my_address = addressInfo.address;
+                    if (self.binding.type === 'reverse_payment') {
+                        var arrSeenCondition = ['seen', {
+                            what: 'output',
+                            address: my_address,
+                            asset: self.binding.reverseAsset,
+                            amount: self.binding.reverseAmount
+                        }];
+                        var arrDefinition = ['or', [
+                            ['and', [
+                                ['address', address],
+                                arrSeenCondition
+                            ]],
+                            ['and', [
+                                ['address', my_address],
+                                ['not', arrSeenCondition],
+                                ['in data feed', [[configService.TIMESTAMPER_ADDRESS], 'timestamp', '>', Date.now() + Math.round(self.binding.timeout * 3600 * 1000)]]
+                            ]]
+                        ]];
+                        var assocSignersByPath = {
+                            'r.0.0': {
+                                address: address,
+                                member_signing_path: 'r',
+                                device_address: recipient_device_address
+                            },
+                            'r.1.0': {
+                                address: my_address,
+                                member_signing_path: 'r',
+                                device_address: device.getMyDeviceAddress()
+                            }
+                        };
+                    }
+                    else {
+                        var arrExplicitEventCondition = ['in data feed', [[self.binding.oracle_address], self.binding.feed_name, '=', self.binding.feed_value]];
+                        var arrMerkleEventCondition = ['in merkle', [[self.binding.oracle_address], self.binding.feed_name, self.binding.feed_value]];
+                        var arrEventCondition;
 
-					// walletDefinedByKeys.issueNextAddress(fc.credentials.walletId, 0, function (addressInfo) {  // never reuse addresses as the required output could be already present
-					walletDefinedByKeys.issueOrSelectNextAddress(fc.credentials.walletId, 0, function (addressInfo) {	
-						my_address = addressInfo.address;
-						if (self.binding.type === 'reverse_payment') {
-							var arrSeenCondition = ['seen', {
-								what: 'output',
-								address: my_address,
-								asset: self.binding.reverseAsset,
-								amount: self.binding.reverseAmount
-							}];
-							var arrDefinition = ['or', [
-								['and', [
-									['address', address],
-									arrSeenCondition
-								]],
-								['and', [
-									['address', my_address],
-									['not', arrSeenCondition],
-									['in data feed', [[configService.TIMESTAMPER_ADDRESS], 'timestamp', '>', Date.now() + Math.round(self.binding.timeout * 3600 * 1000)]]
-								]]
-							]];
-							var assocSignersByPath = {
-								'r.0.0': {
-									address: address,
-									member_signing_path: 'r',
-									device_address: recipient_device_address
-								},
-								'r.1.0': {
-									address: my_address,
-									member_signing_path: 'r',
-									device_address: device.getMyDeviceAddress()
-								}
-							};
-						}
-						else {
-							var arrExplicitEventCondition = ['in data feed', [[self.binding.oracle_address], self.binding.feed_name, '=', self.binding.feed_value]];
-							var arrMerkleEventCondition = ['in merkle', [[self.binding.oracle_address], self.binding.feed_name, self.binding.feed_value]];
-							var arrEventCondition;
+                        if (self.binding.feed_type === 'explicit')
+                            arrEventCondition = arrExplicitEventCondition;
 
-							if (self.binding.feed_type === 'explicit')
-								arrEventCondition = arrExplicitEventCondition;
+                        else if (self.binding.feed_type === 'merkle')
+                            arrEventCondition = arrMerkleEventCondition;
 
-							else if (self.binding.feed_type === 'merkle')
-								arrEventCondition = arrMerkleEventCondition;
+                        else if (self.binding.feed_type === 'either')
+                            arrEventCondition = ['or', [arrMerkleEventCondition, arrExplicitEventCondition]];
 
-							else if (self.binding.feed_type === 'either')
-								arrEventCondition = ['or', [arrMerkleEventCondition, arrExplicitEventCondition]];
+                        else
+                            throw Error("unknown feed type: " + self.binding.feed_type);
+                        var arrDefinition = ['or', [
+                            ['and', [
+                                ['address', address],
+                                arrEventCondition
+                            ]],
+                            ['and', [
+                                ['address', my_address],
+                                ['in data feed', [[configService.TIMESTAMPER_ADDRESS], 'timestamp', '>', Date.now() + Math.round(self.binding.timeout * 3600 * 1000)]]
+                            ]]
+                        ]];
+                        var assocSignersByPath = {
+                            'r.0.0': {
+                                address: address,
+                                member_signing_path: 'r',
+                                device_address: recipient_device_address
+                            },
+                            'r.1.0': {
+                                address: my_address,
+                                member_signing_path: 'r',
+                                device_address: device.getMyDeviceAddress()
+                            }
+                        };
+                        if (self.binding.feed_type === 'merkle' || self.binding.feed_type === 'either')
+                            assocSignersByPath[(self.binding.feed_type === 'merkle') ? 'r.0.1' : 'r.0.1.0'] = {
+                                address: '',
+                                member_signing_path: 'r',
+                                device_address: recipient_device_address
+                            };
+                    }
+                    walletDefinedByAddresses.createNewSharedAddress(arrDefinition, assocSignersByPath, {
+                        ifError: function (err) {
+                            delete self.current_payment_key;
+                            indexScope.setOngoingProcess(gettext('sending'), false);
+                            self.setSendError(err);
+                        },
+                        ifOk: function (shared_address) {
+                            composeAndSend(shared_address, arrDefinition, assocSignersByPath);
+                        }
+                    });
+                });
+            }
+            else
+                composeAndSend(address);
 
-							else
-								throw Error("unknown feed type: " + self.binding.feed_type);
-							var arrDefinition = ['or', [
-								['and', [
-									['address', address],
-									arrEventCondition
-								]],
-								['and', [
-									['address', my_address],
-									['in data feed', [[configService.TIMESTAMPER_ADDRESS], 'timestamp', '>', Date.now() + Math.round(self.binding.timeout * 3600 * 1000)]]
-								]]
-							]];
-							var assocSignersByPath = {
-								'r.0.0': {
-									address: address,
-									member_signing_path: 'r',
-									device_address: recipient_device_address
-								},
-								'r.1.0': {
-									address: my_address,
-									member_signing_path: 'r',
-									device_address: device.getMyDeviceAddress()
-								}
-							};
-							if (self.binding.feed_type === 'merkle' || self.binding.feed_type === 'either')
-								assocSignersByPath[(self.binding.feed_type === 'merkle') ? 'r.0.1' : 'r.0.1.0'] = {
-									address: '',
-									member_signing_path: 'r',
-									device_address: recipient_device_address
-								};
-						}
-						walletDefinedByAddresses.createNewSharedAddress(arrDefinition, assocSignersByPath, {
-							ifError: function (err) {
-								delete self.current_payment_key;
-								indexScope.setOngoingProcess(gettext('sending'), false);
-								self.setSendError(err);
-							},
-							ifOk: function (shared_address) {
-								composeAndSend(shared_address, arrDefinition, assocSignersByPath);
-							}
-						});
-					});
-				}
-				else
-					composeAndSend(address);
+            // compose and send
+            // function composeAndSend(to_address) {
+            function composeAndSend(to_address, arrDefinition, assocSignersByPath) {
+                var arrSigningDeviceAddresses = []; // empty list means that all signatures are required (such as 2-of-2)
 
-				// compose and send
-				// function composeAndSend(to_address) {
-				function composeAndSend(to_address, arrDefinition, assocSignersByPath) {
-					var arrSigningDeviceAddresses = []; // empty list means that all signatures are required (such as 2-of-2)
+                if (fc.credentials.m < fc.credentials.n)
+                    $scope.index.copayers.forEach(function (copayer) {
+                        if (copayer.me || copayer.signs)
+                            arrSigningDeviceAddresses.push(copayer.device_address);
+                    });
+                else if (indexScope.shared_address)
+                    arrSigningDeviceAddresses = indexScope.copayers.map(function (copayer) {
+                        return copayer.device_address;
+                    });
 
-					if (fc.credentials.m < fc.credentials.n)
-						$scope.index.copayers.forEach(function (copayer) {
-							if (copayer.me || copayer.signs)
-								arrSigningDeviceAddresses.push(copayer.device_address);
-						});
-					else if (indexScope.shared_address)
-						arrSigningDeviceAddresses = indexScope.copayers.map(function (copayer) {
-							return copayer.device_address;
-						});
+                breadcrumbs.add('sending payment in ' + asset);
+                profileService.bKeepUnlocked = true;
 
-					breadcrumbs.add('sending payment in ' + asset);
-					profileService.bKeepUnlocked = true;
+                var opts = {
+                    shared_address: indexScope.shared_address,
+                    merkle_proof: merkle_proof,
+                    asset: asset,
+                    to_address: to_address,
+                    amount: amount,
+                    send_all: self.bSendAll,
+                    arrSigningDeviceAddresses: arrSigningDeviceAddresses,
+                    recipient_device_address: recipient_device_address
+                };
 
-					var opts = {
-						shared_address: indexScope.shared_address,
-						merkle_proof: merkle_proof,
-						asset: asset,
-						to_address: to_address,
-						amount: amount,
-						send_all: self.bSendAll,
-						arrSigningDeviceAddresses: arrSigningDeviceAddresses,
-						recipient_device_address: recipient_device_address
-					};
+                if (arrDefinition && assocSignersByPath) {
+                    opts.arrDefinition = arrDefinition;
+                    opts.assocSignersByPath = assocSignersByPath;
+                }
 
-					if (arrDefinition && assocSignersByPath) {
-						opts.arrDefinition = arrDefinition;
-						opts.assocSignersByPath = assocSignersByPath;
-					}
+                self.sendtoaddress = opts.to_address;
+                self.sendamount = opts.amount / 1000000 + "MN";
 
-					self.sendtoaddress = opts.to_address;
-					self.sendamount = opts.amount/1000000 + "MN";
+                var eventListeners = eventBus.listenerCount('apiTowalletHome');
 
-					var eventListeners = eventBus.listenerCount('apiTowalletHome');
+                self.reCallApiToWalletHome = function (account, is_change, address_index, text_to_sign, cb) {
+                    var coin = (profileService.focusedClient.credentials.network == 'livenet' ? "0" : "1");
+                    var path = "m/44'/" + coin + "'/" + account + "'/" + is_change + "/" + address_index;
 
-					self.reCallApiToWalletHome = function (account, is_change, address_index, text_to_sign, cb) {
-						var coin = (profileService.focusedClient.credentials.network == 'livenet' ? "0" : "1");
-						var path = "m/44'/" + coin + "'/" + account + "'/" + is_change + "/" + address_index;
+                    var xPrivKey = new Bitcore.HDPrivateKey.fromString(profileService.focusedClient.credentials.xPrivKey);
+                    var privateKey = xPrivKey.derive(path).privateKey;
+                    var privKeyBuf = privateKey.bn.toBuffer({ size: 32 });
+                    var signature = ecdsaSig.sign(text_to_sign, privKeyBuf);
+                    cb(signature);
+                    eventBus.once('apiTowalletHome', self.reCallApiToWalletHome);
+                }
 
-						var xPrivKey = new Bitcore.HDPrivateKey.fromString(profileService.focusedClient.credentials.xPrivKey);
-						var privateKey = xPrivKey.derive(path).privateKey;
-						var privKeyBuf = privateKey.bn.toBuffer({size: 32});
-						var signature = ecdsaSig.sign(text_to_sign, privKeyBuf);
-						cb(signature);
-						eventBus.once('apiTowalletHome', self.reCallApiToWalletHome);
-					}
+                self.callApiToWalletHome = function (account, is_change, address_index, text_to_sign, cb) {
+                    var coin = (profileService.focusedClient.credentials.network == 'livenet' ? "0" : "1");
+                    var path = "m/44'/" + coin + "'/" + account + "'/" + is_change + "/" + address_index;
 
-					self.callApiToWalletHome = function (account, is_change, address_index, text_to_sign, cb) {
-						var coin = (profileService.focusedClient.credentials.network == 'livenet' ? "0" : "1");
-						var path = "m/44'/" + coin + "'/" + account + "'/" + is_change + "/" + address_index;
+                    var obj = {
+                        "type": "h2",
+                        "sign": text_to_sign.toString("base64"),
+                        "path": path,
+                        "addr": opts.to_address,
+                        "amount": opts.amount,
+                        "v": Math.floor(Math.random() * 9000 + 1000)
+                    };
+                    self.text_to_sign_qr = 'TTT:' + JSON.stringify(obj);
+                    $timeout(function () {
+                        profileService.tempNum2 = obj.v;
+                        $scope.$apply();
+                    }, 10);
+                    eventBus.once('apiTowalletHome', self.callApiToWalletHome);
 
-						var obj = {
-							"type": "h2",
-							"sign": text_to_sign.toString("base64"),
-							"path": path,
-							"addr": opts.to_address,
-							"amount": opts.amount,
-							"v": Math.floor(Math.random()*9000+1000)
-						};
-						self.text_to_sign_qr = 'TTT:' + JSON.stringify(obj);
-						$timeout(function() {
-							profileService.tempNum2 = obj.v;
-							$scope.$apply();
-						}, 10);
-						eventBus.once('apiTowalletHome', self.callApiToWalletHome);
+                    var finishListener = eventBus.listenerCount('finishScaned');
+                    if (finishListener > 0) {
+                        eventBus.removeAllListeners('finishScaned');
+                    }
+                    eventBus.once('finishScaned', function (signature) {
+                        cb(signature);
+                    });
+                };
 
-						var finishListener = eventBus.listenerCount('finishScaned');
-						if(finishListener > 0) {
-							eventBus.removeAllListeners('finishScaned');
-						}
-						eventBus.once('finishScaned', function (signature) {
-							cb(signature);
-						});
-					};
-
-					if(eventListeners > 0) {
-						eventBus.removeAllListeners('apiTowalletHome');
-						if(fc.observed)
-							eventBus.once('apiTowalletHome', self.callApiToWalletHome);
-						else
-							eventBus.once('apiTowalletHome', self.reCallApiToWalletHome);
-					}
-					else {
-						if(fc.observed)
-							eventBus.once('apiTowalletHome', self.callApiToWalletHome);
-						else
-							eventBus.once('apiTowalletHome', self.reCallApiToWalletHome);
-					}
+                if (eventListeners > 0) {
+                    eventBus.removeAllListeners('apiTowalletHome');
+                    if (fc.observed)
+                        eventBus.once('apiTowalletHome', self.callApiToWalletHome);
+                    else
+                        eventBus.once('apiTowalletHome', self.reCallApiToWalletHome);
+                }
+                else {
+                    if (fc.observed)
+                        eventBus.once('apiTowalletHome', self.callApiToWalletHome);
+                    else
+                        eventBus.once('apiTowalletHome', self.reCallApiToWalletHome);
+                }
 
 
-					fc.sendMultiPayment(opts, function (err) {
-						indexScope.setOngoingProcess(gettext('sending'), false);  // if multisig, it might take very long before the callback is called
-						breadcrumbs.add('done payment in ' + asset + ', err=' + err);
-						delete self.current_payment_key;
-						profileService.bKeepUnlocked = false;
+                fc.sendMultiPayment(opts, function (err) {
+                    indexScope.setOngoingProcess(gettext('sending'), false);  // if multisig, it might take very long before the callback is called
+                    breadcrumbs.add('done payment in ' + asset + ', err=' + err);
+                    delete self.current_payment_key;
+                    profileService.bKeepUnlocked = false;
 
-						if (err) {
-							if (typeof err === 'object') {
-								err = JSON.stringify(err);
-								eventBus.emit('nonfatal_error', "error object from sendMultiPayment: " + err, new Error());
-							}
-							else if (err.match(/device address/))
-								err = "This is a private asset, please send it only by clicking links from chat";
+                    if (err) {
+                        if (typeof err === 'object') {
+                            err = JSON.stringify(err);
+                            eventBus.emit('nonfatal_error', "error object from sendMultiPayment: " + err, new Error());
+                        }
+                        else if (err.match(/device address/))
+                            err = "This is a private asset, please send it only by clicking links from chat";
 
-							else if (err.match(/no funded/))
-								err = gettextCatalog.getString('Not enough spendable funds') ;
+                        else if (err.match(/no funded/))
+                            err = gettextCatalog.getString('Not enough spendable funds');
 
-							else if (err.match(/connection closed/))
-								err = gettextCatalog.getString('[internal] connection closed') ;
-							else if (err.match(/one of the cosigners refused to sign/))
-								err = gettextCatalog.getString('one of the cosigners refused to sign') ;
-							else if (err.match(/funds from/))
-								err = err.substring(err.indexOf("from")+4, err.indexOf("for")) + gettextCatalog.getString(err.substr(0,err.indexOf("from"))) + gettextCatalog.getString(". It needs atleast ")  + parseInt(err.substring(err.indexOf("for")+3, err.length))/1000000 + "MN";
-							else if(err == "close") {
-								err = "suspend transaction.";
-							}
-							else if(err.match(/notes to pay fees/))
-								err = gettextCatalog.getString('No notes to pay fees') ;
-							else if(err.match(/authentifier verification failed/))
-								err = gettextCatalog.getString('authentifier verification failed');
-							// 如果是 观察钱包
-							if(self.observed == 1){
-								$scope.index.showTitle = 1;
-								self.showTitle = 0;
-							}
-							return self.setSendError(err);
-						}
+                        else if (err.match(/connection closed/))
+                            err = gettextCatalog.getString('[internal] connection closed');
+                        else if (err.match(/one of the cosigners refused to sign/))
+                            err = gettextCatalog.getString('one of the cosigners refused to sign');
+                        else if (err.match(/funds from/))
+                            err = err.substring(err.indexOf("from") + 4, err.indexOf("for")) + gettextCatalog.getString(err.substr(0, err.indexOf("from"))) + gettextCatalog.getString(". It needs atleast ") + parseInt(err.substring(err.indexOf("for") + 3, err.length)) / 1000000 + "MN";
+                        else if (err == "close") {
+                            err = "suspend transaction.";
+                        }
+                        else if (err.match(/notes to pay fees/))
+                            err = gettextCatalog.getString('No notes to pay fees');
+                        else if (err.match(/authentifier verification failed/))
+                            err = gettextCatalog.getString('authentifier verification failed');
+                        // 如果是 观察钱包
+                        if (self.observed == 1) {
+                            $scope.index.showTitle = 1;
+                            self.showTitle = 0;
+                        }
+                        return self.setSendError(err);
+                    }
 
-						var binding = self.binding;
-						self.resetForm();
-						$rootScope.$emit("NewOutgoingTx");
+                    var binding = self.binding;
+                    self.resetForm();
+                    $rootScope.$emit("NewOutgoingTx");
 
-						if (recipient_device_address) {  // show payment in chat window
-							eventBus.emit('sent_payment', recipient_device_address, amount || 'all', asset, !!binding);
-							if (binding && binding.reverseAmount) { // create a request for reverse payment
-								if (!my_address)
-									throw Error('my address not known');
-								var paymentRequestCode = 'TTT:' + my_address + '?amount=' + binding.reverseAmount + '&asset=' + encodeURIComponent(binding.reverseAsset);
-								var paymentRequestText = '[reverse payment](' + paymentRequestCode + ')';
-								device.sendMessageToDevice(recipient_device_address, 'text', paymentRequestText);
-								var body = correspondentListService.formatOutgoingMessage(paymentRequestText);
-								correspondentListService.addMessageEvent(false, recipient_device_address, body);
-								device.readCorrespondent(recipient_device_address, function (correspondent) {
-									if (correspondent.my_record_pref && correspondent.peer_record_pref) chatStorage.store(correspondent.device_address, body, 0, 'html');
-								});
+                    if (recipient_device_address) {  // show payment in chat window
+                        eventBus.emit('sent_payment', recipient_device_address, amount || 'all', asset, !!binding);
+                        if (binding && binding.reverseAmount) { // create a request for reverse payment
+                            if (!my_address)
+                                throw Error('my address not known');
+                            var paymentRequestCode = 'TTT:' + my_address + '?amount=' + binding.reverseAmount + '&asset=' + encodeURIComponent(binding.reverseAsset);
+                            var paymentRequestText = '[reverse payment](' + paymentRequestCode + ')';
+                            device.sendMessageToDevice(recipient_device_address, 'text', paymentRequestText);
+                            var body = correspondentListService.formatOutgoingMessage(paymentRequestText);
+                            correspondentListService.addMessageEvent(false, recipient_device_address, body);
+                            device.readCorrespondent(recipient_device_address, function (correspondent) {
+                                if (correspondent.my_record_pref && correspondent.peer_record_pref) chatStorage.store(correspondent.device_address, body, 0, 'html');
+                            });
 
-								// issue next address to avoid reusing the reverse payment address
-								walletDefinedByKeys.issueNextAddress(fc.credentials.walletId, 0, function () {});
-							}
-						}else{ // redirect to history
-							$rootScope.$emit('Local/SetTab', 'walletHome');
-						}
-
-					});
-				}
-			});
-		}, 100);
-	};
+                            // issue next address to avoid reusing the reverse payment address
+                            walletDefinedByKeys.issueNextAddress(fc.credentials.walletId, 0, function () { });
+                        }
+                    } else { // redirect to history
+                        $rootScope.$emit('Local/SetTab', 'walletHome');
+                    }
+                });
+            }
+        }, 100);
+    };
 // 发起交易 *** 结束  *************************************************************************************///////////////////////////////////////////***********************************//
 
 	this.closeColdPay = function () {
@@ -1224,7 +1194,6 @@ angular.module('copayApp.controllers').controller('walletHomeController', functi
 		this.lockAddress = false;
 		this.lockAmount = false;
 		this.hideAdvSend = true;
-		$scope.currentSpendUnconfirmed = configService.getSync().wallet.spendUnconfirmed;
 
 		this._amount = this._address = null;
 		this.bSendAll = false;

@@ -2,7 +2,7 @@
 
 var breadcrumbs = require('trustnote-common/breadcrumbs.js');
 
-angular.module('copayApp.directives').directive('qrScannerCold', ['$rootScope', '$timeout', '$modal', 'isCordova', 'gettextCatalog', function ($rootScope, $timeout, $modal, isCordova, gettextCatalog) {
+angular.module('trustnoteApp.directives').directive('qrScannerCold', ['$rootScope', '$timeout', '$modal', 'isCordova', 'gettextCatalog', function ($rootScope, $timeout, $modal, isCordova, gettextCatalog) {
 
 	var controller = function ($scope) {
 

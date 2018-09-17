@@ -16,7 +16,7 @@ function selectText(element) {
 	}
 }
 
-angular.module('copayApp.directives')
+angular.module('trustnoteApp.directives')
 	.directive('validAddress', ['$rootScope', 'profileService',
 		function ($rootScope, profileService) {
 			return {

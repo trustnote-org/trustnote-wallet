@@ -17,7 +17,7 @@
 
 var ecdsaSig = require('trustnote-common/signature.js');
 
-angular.module('copayApp.controllers').controller('authConfirmationController', function ($scope, $timeout, configService, profileService, go, authService) {
+angular.module('trustnoteApp.controllers').controller('authConfirmationController', function ($scope, $timeout, configService, profileService, go, authService) {
 
 	function extractDomainFromUrl(url) {
 		var domain_with_path = url.replace(/^https?:\/\//i, '');

@@ -1,7 +1,7 @@
 'use strict';
 
 // 冷钱包公钥 以及 相关信息
-angular.module('copayApp.controllers').controller('preferencesColdController', function ($scope,  profileService, nodeWebkit, isCordova) {
+angular.module('trustnoteApp.controllers').controller('preferencesColdController', function ($scope,  profileService, nodeWebkit, isCordova) {
 	var fc = profileService.focusedClient;
 	var self = this;
 	self.myDeviceAddress = require('trustnote-common/device.js').getMyDeviceAddress();  // 获取我的 设备地址 getMyDeviceAddress

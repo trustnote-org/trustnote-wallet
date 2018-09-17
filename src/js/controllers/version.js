@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('copayApp.controllers').controller('versionController', function () {
+angular.module('trustnoteApp.controllers').controller('versionController', function () {
 	var conf = require('trustnote-common/conf.js');
 
 	this.version = window.version;

@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('copayApp.controllers').controller('createController', function ($scope, $rootScope, $location, $timeout, $log, lodash, go, profileService, configService, isCordova, gettext, isMobile, derivationPathHelper, correspondentListService, safeApplyService) {
+angular.module('trustnoteApp.controllers').controller('createController', function ($scope, $rootScope, $location, $timeout, $log, lodash, go, profileService, configService, isCordova, gettext, isMobile, derivationPathHelper, correspondentListService, safeApplyService) {
 
 	var self = this;
 

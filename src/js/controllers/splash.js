@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('copayApp.controllers').controller('splashController', function ($scope, $timeout, $log, configService, profileService, storageService, go, isCordova) {
+angular.module('trustnoteApp.controllers').controller('splashController', function ($scope, $timeout, $log, configService, profileService, storageService, go, isCordova) {
 		var self = this;
 		this.saveDeviceName = function () {
 			console.log('saveDeviceName: ' + self.deviceName);
