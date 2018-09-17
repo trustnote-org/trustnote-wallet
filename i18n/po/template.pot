@@ -4,8 +4,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Project-Id-Version: \n"
 
-#: includes/sidebar.html:104
-#: includes/sidebar.html:72
+#: includes\sidebar.html:104
+#: includes\sidebar.html:72
 msgid "( {{item.m}}-of-{{item.n}} )"
 msgstr ""
 
@@ -18,8 +18,8 @@ msgid "(possible double spend)"
 msgstr ""
 
 #: airDrop.js:452
-#: sendAssets.js:281
-#: walletHome.js:980
+#: sendAssets.js:278
+#: walletHome.js:938
 msgid ". It needs atleast"
 msgstr ""
 
@@ -27,22 +27,13 @@ msgstr ""
 msgid "<b>IF YOU LOSE ACCESS TO YOUR TRUSTNOTE WALLET, YOU ACKNOWLEDGE AND AGREE THAT ANY NOTES OR OTHER VALUABLES YOU HAVE ASSOCIATED WITH THAT TRUSTNOTE WALLET WILL BECOME INACCESSIBLE.</b>"
 msgstr ""
 
-#: preferencesDeleteWallet.html:20
-msgid "<i class=\" icon-waring size-100\"></i>"
-msgstr ""
-
-#: modals/scanner.html:11
-msgid "<span class=\"size-17 colorfff\" translate=\"\">QR-Scanner</span>"
-msgstr ""
-
-#: preferencesGlobal.html:116
+#: preferencesGlobal.html:96
 msgid "About TrustNote"
 msgstr ""
 
 #: confirmDialog.js:8
 #: copayers.js:8
 #: preferencesDelete.js:10
-#: walletHome.js:151
 msgid "Accept"
 msgstr ""
 
@@ -58,8 +49,8 @@ msgstr ""
 msgid "Add Services"
 msgstr ""
 
-#: modals/destination-address.html:129
-#: modals/destination-address.html:140
+#: modals\destination-address.html:129
+#: modals\destination-address.html:140
 msgid "Add a new entry"
 msgstr ""
 
@@ -67,18 +58,18 @@ msgstr ""
 msgid "Added"
 msgstr ""
 
-#: modals/customized-amount.html:38
-#: modals/destination-address.html:161
-#: modals/destination-address.html:24
+#: modals\customized-amount.html:38
+#: modals\destination-address.html:161
+#: modals\destination-address.html:24
 #: paymentUri.html:12
 msgid "Address"
 msgstr ""
 
-#: modals/destination-address.html:60
+#: modals\destination-address.html:60
 msgid "Addressbook"
 msgstr ""
 
-#: preferences.html:91
+#: preferences.html:68
 msgid "Advanced"
 msgstr ""
 
@@ -90,15 +81,11 @@ msgstr ""
 msgid "Alias for <span>{{index.walletName}}</span>"
 msgstr ""
 
-#: translators.html:56
-msgid "All contributions to TrustNote's translation are welcome. Sign up at crowdin.com and join the TrustNote project at"
-msgstr ""
-
-#: modals/multi-payment.html:65
+#: modals\multi-payment.html:65
 msgid "Already Paid"
 msgstr ""
 
-#: includes/airDrop.html:200
+#: includes\airDrop.html:200
 msgid "Already generated"
 msgstr ""
 
@@ -107,23 +94,23 @@ msgstr ""
 msgid "Also"
 msgstr ""
 
-#: includes/output.html:9
-#: includes/toPay.html:74
-#: modals/customized-amount.html:45
-#: modals/customized-amount.html:71
-#: modals/customized-amount.html:82
-#: modals/select-subwallet.html:110
+#: includes\output.html:9
+#: includes\toPay.html:74
+#: modals\customized-amount.html:45
+#: modals\customized-amount.html:71
+#: modals\customized-amount.html:82
+#: modals\select-subwallet.html:110
 #: paymentUri.html:13
 #: walletHome.html:119
 #: walletHome.html:575
 msgid "Amount"
 msgstr ""
 
-#: includes/airDrop.html:152
+#: includes\airDrop.html:152
 msgid "Amount each"
 msgstr ""
 
-#: modals/vote.html:22
+#: modals\vote.html:22
 msgid "Answer:"
 msgstr ""
 
@@ -131,11 +118,11 @@ msgstr ""
 msgid "Approve wallet creation on other devices"
 msgstr ""
 
-#: includes/backupWaring.html:708
+#: includes\backupWaring.html:755
 msgid "Are you sure you want to delete the Seed Phrase?"
 msgstr ""
 
-#: backup.js:5
+#: backup.js:7
 msgid "Are you sure you want to delete the backup words?"
 msgstr ""
 
@@ -148,13 +135,13 @@ msgstr ""
 msgid "Asset does not exist"
 msgstr ""
 
-#: includes/askColdwalletQrcode.html:66
-#: includes/toPay.html:84
+#: includes\askColdwalletQrcode.html:66
+#: includes\toPay.html:84
 msgid "Authorized"
 msgstr ""
 
-#: includes/airDrop.html:119
-#: includes/available-balance.html:8
+#: includes\airDrop.html:119
+#: includes\available-balance.html:8
 #: walletHome.html:472
 #: walletHome.html:486
 msgid "Available Balance"
@@ -162,31 +149,31 @@ msgstr ""
 
 #: acceptCorrespondentInvitation.html:9
 #: bot.html:10
-#: correspondentDevice.html:14
+#: correspondentDevice.html:295
 #: correspondentDevices.html:66
 #: editCorrespondentDevice.html:12
-#: includes/backupWaring.html:136
-#: includes/backupWaring.html:141
-#: includes/backupWaring.html:432
-#: includes/topbar.html:15
-#: modals/correspondentListToReSendPrivPayloads.html:6
-#: modals/destination-address.html:15
-#: modals/tx-details.html:8
+#: includes\backupWaring.html:202
+#: includes\backupWaring.html:207
+#: includes\backupWaring.html:478
+#: includes\topbar.html:14
+#: modals\correspondentListToReSendPrivPayloads.html:6
+#: modals\destination-address.html:15
+#: modals\tx-details.html:8
 #: preferencesCold.html:51
 msgid "Back"
 msgstr ""
 
-#: includes/backupWaring.html:443
-#: includes/backupWaring.html:472
-#: includes/backupWaring.html:706
+#: includes\backupWaring.html:489
+#: includes\backupWaring.html:518
+#: includes\backupWaring.html:753
 msgid "Backup Your Seed Phrase"
 msgstr ""
 
-#: preferencesGlobal.html:80
+#: preferencesGlobal.html:64
 msgid "Backup wallet seed"
 msgstr ""
 
-#: backup.js:6
+#: backup.js:8
 #: recoveryFromSeed.js:25
 #: recoveryFromSeeddir.js:26
 msgid "Backup words deleted"
@@ -196,12 +183,12 @@ msgstr ""
 msgid "Balance By Address"
 msgstr ""
 
-#: preferencesGlobal.html:12
+#: preferencesGlobal.html:4
 msgid "Basic Settings"
 msgstr ""
 
-#: modals/bind.html:8
-#: modals/bind.html:99
+#: modals\bind.html:8
+#: modals\bind.html:99
 msgid "Bind payment"
 msgstr ""
 
@@ -209,11 +196,7 @@ msgstr ""
 msgid "Bitcoin URI is NOT valid!"
 msgstr ""
 
-#: unsupported.html:7
-msgid "Browser unsupported"
-msgstr ""
-
-#: includes/password.html:35
+#: includes\password.html:30
 msgid "CANCEL"
 msgstr ""
 
@@ -227,13 +210,12 @@ msgstr ""
 
 #: confirmDialog.js:9
 #: copayers.js:9
-#: includes/login.html:89
-#: includes/sendassets.html:284
-#: modals/confirmation.html:21
-#: modals/destination-address.html:197
+#: includes\login.html:89
+#: includes\sendassets.html:284
+#: modals\confirmation.html:21
+#: modals\destination-address.html:197
 #: preferencesDelete.js:11
 #: walletHome.html:659
-#: walletHome.js:152
 msgid "Cancel"
 msgstr ""
 
@@ -245,19 +227,15 @@ msgstr ""
 msgid "Changing wallet alias only affects the local wallet name."
 msgstr ""
 
-#: import.html:31
-msgid "Choose File"
-msgstr ""
-
-#: modals/howToSign.html:314
+#: modals\howToSign.html:314
 msgid "Choose one watch wallet that is the same with cold wallet - go to TTT transaction page,input all the transfer information - click “Confirm” button - generate QR code"
 msgstr ""
 
-#: modals/correspondentListToReSendPrivPayloads.html:10
+#: modals\correspondentListToReSendPrivPayloads.html:10
 msgid "Choose the device to send to"
 msgstr ""
 
-#: modals/howToSign.html:186
+#: modals\howToSign.html:186
 msgid "Choose the wallet you want to be watched, click \"wallet Settings\" - input password - shows the Offline wallet QR code"
 msgstr ""
 
@@ -265,97 +243,92 @@ msgstr ""
 msgid "Click to Sync the Wallets:"
 msgstr ""
 
-#: modals/howToSign.html:160
+#: modals\howToSign.html:160
 msgid "Click “create wallet” - choose watch wallet - click “scan button” next to the title of the Offline wallet QR code ,scan Offline wallet QR code from step2"
 msgstr ""
 
-#: modals/howToSign.html:272
+#: modals\howToSign.html:272
 msgid "Click “next”button - click “scan ”button - scan signature detail QR code from cold wallet generated in step4"
 msgstr ""
 
-#: modals/howToSign.html:374
+#: modals\howToSign.html:374
 msgid "Click”next”button - click”scan”button,then scan “Authorized” QR code from cold wallet generate in step2 - sending transaction"
 msgstr ""
 
 #: correspondentDevices.html:69
-#: includes/airDropReceive.html:124
-#: includes/coldQrcode.html:57
-#: includes/login.html:80
-#: includes/toPay.html:61
-#: includes/topbar.html:20
-#: modals/address-definition.html:40
-#: modals/address-definition.html:5
-#: modals/approveNewWitnesses.html:4
-#: modals/bind.html:4
-#: modals/customized-amount.html:8
-#: modals/destination-address.html:10
-#: modals/howToSign.html:132
-#: modals/multi-payment.html:4
-#: modals/offer-contract.html:23
-#: modals/scanner.html:7
-#: modals/select-subwallet.html:79
-#: modals/vote.html:4
-#: preferences.html:12
+#: includes\airDropReceive.html:124
+#: includes\coldQrcode.html:57
+#: includes\login.html:80
+#: includes\toPay.html:61
+#: includes\topbar.html:20
+#: modals\address-definition.html:40
+#: modals\address-definition.html:5
+#: modals\approveNewWitnesses.html:4
+#: modals\bind.html:4
+#: modals\customized-amount.html:8
+#: modals\destination-address.html:10
+#: modals\howToSign.html:132
+#: modals\multi-payment.html:4
+#: modals\offer-contract.html:23
+#: modals\scanner.html:7
+#: modals\select-subwallet.html:79
+#: modals\vote.html:4
+#: preferences.html:5
 #: preferencesRecords.html:121
 #: walletHome.html:106
 msgid "Close"
 msgstr ""
 
-#: modals/howToSign.html:305
+#: modals\howToSign.html:305
 msgid "Cold wallet transaction signature"
 msgstr ""
 
-#: modals/howToSign.html:183
-#: modals/howToSign.html:243
-#: modals/howToSign.html:337
+#: modals\howToSign.html:183
+#: modals\howToSign.html:243
+#: modals\howToSign.html:337
 msgid "Cold wallet:"
 msgstr ""
 
-#: preferences.html:57
+#: preferences.html:43
 msgid "Color"
 msgstr ""
 
-#: preferencesAbout.html:19
+#: preferencesAbout.html:15
 msgid "Commit hash"
-msgstr ""
-
-#: export.html:58
-msgid "Compress the file? (Slower)"
 msgstr ""
 
 #: confirmDialog.js:10
 #: copayers.js:10
-#: index.js:770
+#: index.js:751
 #: preferencesDelete.js:12
-#: walletHome.js:153
 msgid "Confirm"
 msgstr ""
 
-#: modals/vote.html:56
+#: modals\vote.html:56
 msgid "Confirm Vote"
 msgstr ""
 
-#: includes/backupWaring.html:473
+#: includes\backupWaring.html:519
 msgid "Confirm Your Mnemonic Words"
 msgstr ""
 
-#: includes/backupWaring.html:714
+#: includes\backupWaring.html:761
 msgid "Confirm delete"
 msgstr ""
 
-#: includes/login.html:85
+#: includes\login.html:85
 msgid "Confirm login to iToken"
 msgstr ""
 
-#: modals/multi-payment.html:8
+#: modals\multi-payment.html:8
 msgid "Confirm payment"
 msgstr ""
 
-#: modals/vote.html:8
+#: modals\vote.html:8
 msgid "Confirm vote"
 msgstr ""
 
-#: modals/tx-details.html:171
+#: modals\tx-details.html:171
 msgid "Confirmed"
 msgstr ""
 
@@ -371,15 +344,15 @@ msgstr ""
 msgid "Contract wallet cannot be paid"
 msgstr ""
 
-#: includes/qrcode.html:57
+#: includes\qrcode.html:57
 #: preferencesRecords.html:154
 msgid "Copied"
 msgstr ""
 
 #: inviteCorrespondentDevice.js:32
 #: preferencesCold.html:76
-#: qrcode.js:75
-#: walletHome.js:422
+#: qrcode.js:74
+#: walletHome.js:405
 msgid "Copied to clipboard"
 msgstr ""
 
@@ -392,23 +365,23 @@ msgid "Copy offline wallet QR code"
 msgstr ""
 
 #: airDrop.js:542
-#: walletHome.js:637
+#: walletHome.js:608
 msgid "Could not create payment proposal"
 msgstr ""
 
-#: profileService.js:247
+#: profileService.js:229
 msgid "Could not create using the specified extended private key"
 msgstr ""
 
-#: profileService.js:257
+#: profileService.js:239
 msgid "Could not create using the specified extended public key"
 msgstr ""
 
-#: profileService.js:240
+#: profileService.js:222
 msgid "Could not create: Invalid wallet seed"
 msgstr ""
 
-#: backup.js:521
+#: backup.js:516
 msgid "Could not decrypt"
 msgstr ""
 
@@ -416,31 +389,31 @@ msgstr ""
 msgid "Could not fetch transaction history"
 msgstr ""
 
-#: profileService.js:580
-#: profileService.js:608
-#: profileService.js:630
+#: profileService.js:544
+#: profileService.js:572
+#: profileService.js:594
 msgid "Could not import"
 msgstr ""
 
-#: profileService.js:557
+#: profileService.js:521
 msgid "Could not import. Check input file and password"
 msgstr ""
 
-#: walletHome.js:81
+#: walletHome.js:71
 msgid "Could not recognize a valid Trustnote QR Code"
 msgstr ""
 
 #: airDrop.js:542
-#: walletHome.js:637
+#: walletHome.js:608
 msgid "Could not send payment"
 msgstr ""
 
-#: includes/backupWaring.html:116
-#: includes/backupWaring.html:428
+#: includes\backupWaring.html:183
+#: includes\backupWaring.html:474
 msgid "Create Wallet"
 msgstr ""
 
-#: includes/backupWaring.html:436
+#: includes\backupWaring.html:482
 msgid "Create Wallet and Backup Your Seed Phrase"
 msgstr ""
 
@@ -449,12 +422,12 @@ msgstr ""
 msgid "Create new wallet"
 msgstr ""
 
-#: index.js:594
+#: index.js:575
 msgid "Create new wallet  together with  ?"
 msgstr ""
 
-#: modals/address-definition.html:32
-#: modals/select-subwallet.html:115
+#: modals\address-definition.html:32
+#: modals\select-subwallet.html:115
 msgid "Created:"
 msgstr ""
 
@@ -466,35 +439,31 @@ msgstr ""
 msgid "Creating Wallet..."
 msgstr ""
 
-#: includes/backupWaring.html:686
+#: includes\backupWaring.html:733
 msgid "DELETE SEED PHRASE"
 msgstr ""
 
-#: backup.html:75
+#: backup.html:60
 msgid "DELETE WORDS"
 msgstr ""
 
-#: modals/tx-details.html:125
+#: modals\tx-details.html:125
 msgid "Date"
 msgstr ""
 
-#: index.js:562
+#: index.js:543
 msgid "Declined"
 msgstr ""
 
-#: paperWallet.html:40
-msgid "Decrypting a paper wallet could take around 5 minutes on this device. please be patient and keep the app open."
-msgstr ""
-
-#: modals/address-definition.html:10
+#: modals\address-definition.html:10
 msgid "Definition of smart address"
 msgstr ""
 
-#: modals/multi-payment.html:25
+#: modals\multi-payment.html:25
 msgid "Definitions of addresses"
 msgstr ""
 
-#: preferencesAdvanced.html:30
+#: preferencesAdvanced.html:13
 msgid "Delete Wallet"
 msgstr ""
 
@@ -506,18 +475,18 @@ msgstr ""
 msgid "Delete wallet"
 msgstr ""
 
-#: modals/customized-amount.html:35
-#: modals/multi-payment.html:17
-#: modals/tx-details.html:14
+#: modals\customized-amount.html:35
+#: modals\multi-payment.html:17
+#: modals\tx-details.html:14
 msgid "Details"
 msgstr ""
 
-#: preferencesGlobal.html:47
+#: preferencesGlobal.html:39
 msgid "Device address"
 msgstr ""
 
 #: preferencesDeviceName.html:12
-#: preferencesGlobal.html:26
+#: preferencesGlobal.html:19
 msgid "Device name"
 msgstr ""
 
@@ -525,20 +494,16 @@ msgstr ""
 msgid "Device name is visible to other devices you communicate with."
 msgstr ""
 
-#: backup.html:39
+#: backup.html:35
 msgid "Do not use it to clone the wallet."
 msgstr ""
 
-#: includes/backupWaring.html:451
+#: includes\backupWaring.html:497
 msgid "Don't Screenshot"
 msgstr ""
 
-#: translators.html:60
-msgid "Don't see your language on Crowdin? Contact the Owner on Crowdin! We'd love to support your language."
-msgstr ""
-
 #: inviteCorrespondentDevice.html:77
-#: modals/destination-address.html:38
+#: modals\destination-address.html:38
 msgid "Done"
 msgstr ""
 
@@ -550,18 +515,14 @@ msgstr ""
 msgid "Download the entire TrustNote database"
 msgstr ""
 
-#: includes/backupWaring.html:413
+#: includes\backupWaring.html:462
 #: recoveryFromSeed.html:324
 msgid "During the recovery, please be patient and do not shut down the software."
 msgstr ""
 
-#: correspondentDevice.html:35
-#: modals/destination-address.html:34
+#: correspondentDevice.html:307
+#: modals\destination-address.html:34
 msgid "Edit"
-msgstr ""
-
-#: preferencesEmail.html:32
-msgid "Email for wallet notifications"
 msgstr ""
 
 #: airDrop.js:618
@@ -578,14 +539,14 @@ msgstr ""
 msgid "Enter the pairing code received from the other device, or use your camera (icon at the upper right corner) to scan the QR code displayed on the other device."
 msgstr ""
 
-#: includes/password.html:14
+#: includes\password.html:12
 msgid "Enter your password"
 msgstr ""
 
-#: profileService.js:310
-#: profileService.js:369
-#: profileService.js:392
-#: profileService.js:451
+#: profileService.js:274
+#: profileService.js:333
+#: profileService.js:356
+#: profileService.js:415
 msgid "Error creating wallet"
 msgstr ""
 
@@ -593,34 +554,17 @@ msgstr ""
 msgid "Error: my wallet address is not found"
 msgstr ""
 
-#: export.html:65
-msgid "Export"
-msgstr ""
-
-#: export.js:135
-#: export.js:160
-msgid "Export completed successfully"
-msgstr ""
-
-#: export.html:17
-msgid "Exporting..."
-msgstr ""
-
-#: export.html:24
-msgid "Failed to export"
-msgstr ""
-
-#: modals/tx-details.html:134
+#: modals\tx-details.html:134
 msgid "Fee"
 msgstr ""
 
-#: modals/select-subwallet.html:119
-#: modals/tx-details.html:166
+#: modals\select-subwallet.html:119
+#: modals\tx-details.html:166
 msgid "Finality"
 msgstr ""
 
-#: includes/coldQrcode.html:67
-#: includes/toPay.html:89
+#: includes\coldQrcode.html:67
+#: includes\toPay.html:89
 msgid "Finish"
 msgstr ""
 
@@ -628,11 +572,11 @@ msgstr ""
 msgid "Finish editing"
 msgstr ""
 
-#: includes/airDrop.html:139
+#: includes\airDrop.html:139
 msgid "Fixed Amount Each"
 msgstr ""
 
-#: modals/tx-details.html:82
+#: modals\tx-details.html:82
 msgid "From"
 msgstr ""
 
@@ -640,20 +584,12 @@ msgstr ""
 msgid "Full address:"
 msgstr ""
 
-#: paperWallet.html:58
-msgid "Funds found"
-msgstr ""
-
-#: paperWallet.html:74
-msgid "Funds will be transferred to"
-msgstr ""
-
 #: airDrop.js:44
 msgid "Generate"
 msgstr ""
 
-#: qrcode.js:110
-#: walletHome.js:450
+#: qrcode.js:109
+#: walletHome.js:433
 msgid "Generate QR Code"
 msgstr ""
 
@@ -665,39 +601,31 @@ msgstr ""
 msgid "Generating QR code..."
 msgstr ""
 
-#: includes/airDrop.html:197
+#: includes\airDrop.html:197
 msgid "Generating..."
 msgstr ""
 
-#: modals/destination-address.html:79
+#: modals\destination-address.html:79
 msgid "Getting address for wallet {{selectedWalletName}} ..."
 msgstr ""
 
-#: preferences.html:74
-msgid "Hardware wallet"
-msgstr ""
-
-#: backup.html:27
+#: backup.html:24
 msgid "Hide the Wallet Seed"
 msgstr ""
 
-#: index.js:932
+#: index.js:913
 msgid "Home"
 msgstr ""
 
-#: preferencesTor.html:14
-msgid "Host"
-msgstr ""
-
-#: modals/howToSign.html:157
-#: modals/howToSign.html:217
-#: modals/howToSign.html:269
-#: modals/howToSign.html:311
-#: modals/howToSign.html:371
+#: modals\howToSign.html:157
+#: modals\howToSign.html:217
+#: modals\howToSign.html:269
+#: modals\howToSign.html:311
+#: modals\howToSign.html:371
 msgid "Hot wallet:"
 msgstr ""
 
-#: modals/howToSign.html:133
+#: modals\howToSign.html:133
 msgid "How does offline signing work?"
 msgstr ""
 
@@ -709,49 +637,33 @@ msgstr ""
 msgid "I affirm that I have read, understood, and agree with these terms."
 msgstr ""
 
-#: modals/offer-contract.html:35
+#: modals\offer-contract.html:35
 msgid "I pay"
 msgstr ""
 
-#: modals/bind.html:27
+#: modals\bind.html:27
 msgid "I receive another payment of"
 msgstr ""
 
-#: modals/bind.html:84
+#: modals\bind.html:84
 msgid "If the condition is not met, I can take this money back after"
 msgstr ""
 
-#: modals/offer-contract.html:59
+#: modals\offer-contract.html:59
 msgid "If the peer doesn't pay, I can take my money back after"
 msgstr ""
 
-#: import.html:59
-msgid "If you have moved this backup from another device, stop using it on the original one immediately after creating the backup.  Never clone wallets."
-msgstr ""
-
-#: export.html:74
-msgid "If you plan to restore the wallet on another device, stop using it on the current one immediately after creating the backup.  Never clone wallets."
-msgstr ""
-
-#: modals/howToSign.html:151
+#: modals\howToSign.html:151
 msgid "If you want to use cold wallet in Trustnote version 1.1.5,you should watch the wallet at first."
 msgstr ""
 
-#: import.html:38
-msgid "Import"
-msgstr ""
-
-#: includes/askColdwalletQrcode.html:74
+#: includes\askColdwalletQrcode.html:74
 #: walletHome.html:164
 msgid "Import the signature"
 msgstr ""
 
 #: add.html:22
 msgid "Import wallet"
-msgstr ""
-
-#: import.html:18
-msgid "Importing wallet..."
 msgstr ""
 
 #: disclaimer.html:68
@@ -771,20 +683,16 @@ msgstr ""
 msgid "Initial transaction history synchronization can take some minutes for wallets with many transactions.<br>Please stand by."
 msgstr ""
 
-#: correspondentDevice.html:357
+#: correspondentDevice.html:371
 msgid "Insert my address"
 msgstr ""
 
-#: modals/howToSign.html:143
+#: modals\howToSign.html:143
 msgid "Installed the newest version 1.1.5 and download from trustnote.org"
 msgstr ""
 
 #: walletHome.html:376
 msgid "Invalid"
-msgstr ""
-
-#: index.js:1976
-msgid "Invalid Touch ID"
 msgstr ""
 
 #: airDrop.js:100
@@ -801,7 +709,7 @@ msgstr ""
 msgid "Invalid count"
 msgstr ""
 
-#: includes/backupWaring.html:675
+#: includes\backupWaring.html:717
 msgid "Invalid mnemonic"
 msgstr ""
 
@@ -817,11 +725,11 @@ msgstr ""
 msgid "Invite the other device"
 msgstr ""
 
-#: includes/backupWaring.html:711
+#: includes\backupWaring.html:758
 msgid "It will delete the seed phrase in the app and can not be restored, please be sure that you have the seed phrase back to a safe place"
 msgstr ""
 
-#: modals/howToSign.html:409
+#: modals\howToSign.html:409
 msgid "Keep cold wallet offline"
 msgstr ""
 
@@ -829,52 +737,52 @@ msgstr ""
 msgid "Keep only data relevant to you"
 msgstr ""
 
-#: includes/backupWaring.html:110
+#: includes\backupWaring.html:182
 msgid "LIGHT ∙ FAST ∙ SWEET"
 msgstr ""
 
-#: modals/destination-address.html:176
+#: modals\destination-address.html:176
 msgid "Label"
 msgstr ""
 
-#: preferencesGlobal.html:35
+#: preferencesGlobal.html:28
 msgid "Language"
 msgstr ""
 
-#: includes/backupWaring.html:677
+#: includes\backupWaring.html:719
 msgid "Last step"
 msgstr ""
 
-#: modals/newVersionIsAvailable.html:68
+#: modals\newVersionIsAvailable.html:68
 msgid "Later"
 msgstr ""
 
-#: modals/howToSign.html:306
+#: modals\howToSign.html:306
 msgid "Let’s use offline signature function to transfer TTT:"
 msgstr ""
 
 #: disclaimer.js:16
-#: includes/sendassets.html:274
+#: includes\sendassets.html:274
 msgid "Loading..."
 msgstr ""
 
-#: modals/select-subwallet.html:120
+#: modals\select-subwallet.html:120
 msgid "Locked"
 msgstr ""
 
-#: includes/login.html:87
+#: includes\login.html:87
 msgid "Login"
 msgstr ""
 
-#: loginControl.js:110
+#: loginControl.js:107
 msgid "Login error, try later"
 msgstr ""
 
-#: includes/login.html:99
+#: includes\login.html:99
 msgid "Login successful"
 msgstr ""
 
-#: includes/login.html:88
+#: includes\login.html:88
 msgid "Logining"
 msgstr ""
 
@@ -890,32 +798,32 @@ msgstr ""
 msgid "Maximum T Code number 20"
 msgstr ""
 
-#: modals/approveNewWitnesses.html:29
+#: modals\approveNewWitnesses.html:29
 msgid "Maybe later"
 msgstr ""
 
-#: includes/copayers.html:5
-#: modals/multi-payment.html:40
-#: modals/offer-contract.html:108
-#: modals/vote.html:33
+#: includes\copayers.html:5
+#: modals\multi-payment.html:40
+#: modals\offer-contract.html:108
+#: modals\vote.html:33
 #: preferencesInformation.html:128
 msgid "Me"
 msgstr ""
 
-#: includes/sendassets.html:251
+#: includes\sendassets.html:251
 msgid "Memo:"
 msgstr ""
 
-#: modals/tx-details.html:158
+#: modals\tx-details.html:158
 msgid "Merchant message"
 msgstr ""
 
-#: includes/airDrop.html:207
+#: includes\airDrop.html:207
 #: walletHome.html:627
 msgid "Merkle proof"
 msgstr ""
 
-#: index.js:940
+#: index.js:921
 #: paymentUri.html:14
 msgid "Message"
 msgstr ""
@@ -924,11 +832,11 @@ msgstr ""
 msgid "Moved"
 msgstr ""
 
-#: includes/qrcode.html:17
+#: includes\qrcode.html:17
 msgid "My TrustNote address"
 msgstr ""
 
-#: modals/destination-address.html:185
+#: modals\destination-address.html:185
 msgid "Name of the contact"
 msgstr ""
 
@@ -940,29 +848,29 @@ msgstr ""
 msgid "New Random Seed"
 msgstr ""
 
-#: modals/approveNewWitnesses.html:9
+#: modals\approveNewWitnesses.html:9
 msgid "New witnesses"
 msgstr ""
 
-#: includes/askColdwalletQrcode.html:61
-#: includes/backupWaring.html:438
-#: includes/backupWaring.html:466
+#: includes\askColdwalletQrcode.html:61
+#: includes\backupWaring.html:484
+#: includes\backupWaring.html:512
 #: splash.html:116
 #: walletHome.html:143
 msgid "Next"
 msgstr ""
 
 #: authConfirmation.html:25
-#: index.js:769
+#: index.js:750
 msgid "No"
 msgstr ""
 
-#: sendAssets.js:286
-#: walletHome.js:985
+#: sendAssets.js:283
+#: walletHome.js:943
 msgid "No notes to pay fees"
 msgstr ""
 
-#: password.js:19
+#: password.js:13
 msgid "No password given"
 msgstr ""
 
@@ -971,27 +879,27 @@ msgid "No transactions yet"
 msgstr ""
 
 #: airDrop.js:445
-#: sendAssets.js:274
-#: walletHome.js:973
+#: sendAssets.js:271
+#: walletHome.js:931
 msgid "Not enough spendable funds"
 msgstr ""
 
-#: modals/customized-amount.html:61
-#: modals/destination-address.html:149
+#: modals\customized-amount.html:61
+#: modals\destination-address.html:149
 #: walletHome.html:521
 #: walletHome.html:566
 msgid "Not valid"
 msgstr ""
 
-#: includes/output.html:15
-#: modals/tx-details.html:113
-#: modals/tx-details.html:153
+#: includes\output.html:15
+#: modals\tx-details.html:113
+#: modals\tx-details.html:153
 #: walletHome.html:408
 #: walletHome.html:642
 msgid "Note"
 msgstr ""
 
-#: includes/backupWaring.html:410
+#: includes\backupWaring.html:460
 #: recoveryFromSeed.html:321
 msgid "Note:"
 msgstr ""
@@ -1004,14 +912,14 @@ msgstr ""
 msgid "Note: Watching Only Wallet needs a offline wallet to help siging. You can use a retired smartphone and enable its aeroplane mode as a offline wallet for the offline signing purpose."
 msgstr ""
 
-#: includes/airDrop.html:173
+#: includes\airDrop.html:173
 msgid "Number"
 msgstr ""
 
-#: includes/alert.html:15
-#: includes/password.html:43
-#: includes/recoveryAlert.html:15
-#: includes/sendassets.html:279
+#: includes\alert.html:15
+#: includes\password.html:39
+#: includes\recoveryAlert.html:15
+#: includes\sendassets.html:279
 #: recoveryFromSeedAlert.html:15
 msgid "OK"
 msgstr ""
@@ -1020,22 +928,24 @@ msgstr ""
 msgid "Observe Wallet"
 msgstr ""
 
-#: modals/offer-contract.html:27
+#: modals\offer-contract.html:27
 msgid "Offer a contract"
 msgstr ""
 
 #: create.html:124
-#: preferences.html:65
+#: preferences.html:51
 #: preferencesCold.html:58
 #: preferencesCold.html:65
 msgid "Offline wallet verification QR Code"
 msgstr ""
 
-#: backup.html:70
-msgid "Once you have written your wallet seed down, it is recommended to delete it from this device."
+#: backup.html:53
+msgid ""
+"Once you have written your wallet seed down, it is recommended to delete it from this\n"
+"                        device."
 msgstr ""
 
-#: modals/howToSign.html:144
+#: modals\howToSign.html:144
 msgid "One of phone open airplane mode as cold wallet,keep it offline always because it's saved your privacy key."
 msgstr ""
 
@@ -1051,36 +961,23 @@ msgstr ""
 msgid "Pairing code"
 msgstr ""
 
-#: paperWallet.html:30
-msgid "Paper Wallet Private Key"
-msgstr ""
-
-#: paperWallet.html:37
-#: paperWallet.html:39
-msgid "Passphrase"
-msgstr ""
-
-#: profileService.js:750
+#: profileService.js:714
 msgid "Password needed"
 msgstr ""
 
-#: password.js:37
+#: password.js:33
 msgid "Passwords do not match"
 msgstr ""
 
-#: paperWallet.html:31
-msgid "Paste your paper wallet private key here"
-msgstr ""
-
-#: modals/offer-contract.html:129
+#: modals\offer-contract.html:129
 msgid "Pay and offer"
 msgstr ""
 
-#: modals/tx-status.html:28
+#: modals\tx-status.html:28
 msgid "Payment Accepted"
 msgstr ""
 
-#: modals/tx-status.html:16
+#: modals\tx-status.html:16
 msgid "Payment Proposal Created"
 msgstr ""
 
@@ -1088,11 +985,11 @@ msgstr ""
 msgid "Payment Proposals"
 msgstr ""
 
-#: modals/tx-status.html:38
+#: modals\tx-status.html:38
 msgid "Payment Rejected"
 msgstr ""
 
-#: modals/tx-status.html:5
+#: modals\tx-status.html:5
 msgid "Payment Sent"
 msgstr ""
 
@@ -1100,7 +997,7 @@ msgstr ""
 msgid "Payment to"
 msgstr ""
 
-#: modals/address-definition.html:27
+#: modals\address-definition.html:27
 msgid "Peer:"
 msgstr ""
 
@@ -1112,7 +1009,7 @@ msgstr ""
 msgid "Plain Wallet"
 msgstr ""
 
-#: includes/backupWaring.html:453
+#: includes\backupWaring.html:499
 msgid "Please backup the mnemonic words"
 msgstr ""
 
@@ -1128,11 +1025,11 @@ msgstr ""
 msgid "Please enter the required fields"
 msgstr ""
 
-#: includes/askColdwalletQrcode.html:76
+#: includes\askColdwalletQrcode.html:76
 msgid "Please scan QR code on the offline wallet to import the signature"
 msgstr ""
 
-#: includes/toPay.html:88
+#: includes\toPay.html:88
 msgid "Please scan signature QR code with your hot wallet"
 msgstr ""
 
@@ -1140,23 +1037,19 @@ msgstr ""
 msgid "Please scan signature QR code with your offline wallet"
 msgstr ""
 
-#: includes/askColdwalletQrcode.html:60
+#: includes\askColdwalletQrcode.html:60
 msgid "Please use the address's offline wallet (the latest version), scan the QR code, waiting until being authorized and then go to the next."
 msgstr ""
 
-#: includes/backupWaring.html:474
+#: includes\backupWaring.html:520
 msgid "Please write the mnemonic words in order and make sure your mnemonic was correct written."
 msgstr ""
 
-#: preferencesTor.html:17
-msgid "Port"
-msgstr ""
-
-#: preferences.html:19
+#: preferences.html:12
 msgid "Preferences"
 msgstr ""
 
-#: backButtonService.js:96
+#: backButtonService.js:88
 msgid "Press again to exit"
 msgstr ""
 
@@ -1165,43 +1058,43 @@ msgstr ""
 msgid "Preview the transaction"
 msgstr ""
 
-#: walletHome.js:1395
-#: walletHome.js:1469
+#: walletHome.js:1350
+#: walletHome.js:1424
 msgid "Private payloads sent"
 msgstr ""
 
-#: modals/customized-amount.html:25
+#: modals\customized-amount.html:25
 msgid "QR Code"
 msgstr ""
 
-#: modals/scanner.html:12
+#: modals\scanner.html:12
 msgid "QR-Scanner"
 msgstr ""
 
-#: includes/airDrop.html:172
+#: includes\airDrop.html:172
 msgid "Quantity"
 msgstr ""
 
-#: modals/vote.html:17
+#: modals\vote.html:17
 msgid "Question:"
 msgstr ""
 
-#: modals/howToSign.html:140
+#: modals\howToSign.html:140
 msgid "Ready for work:"
 msgstr ""
 
-#: modals/tx-details.html:33
+#: modals\tx-details.html:33
 #: walletHome.html:348
 msgid "Received"
 msgstr ""
 
-#: includes/toPay.html:71
+#: includes\toPay.html:71
 #: walletHome.html:117
 msgid "Receiver"
 msgstr ""
 
-#: includes/transaction.html:22
-#: modals/tx-details.html:67
+#: includes\transaction.html:22
+#: modals\tx-details.html:67
 msgid "Recipients"
 msgstr ""
 
@@ -1221,7 +1114,7 @@ msgstr ""
 msgid "Recover"
 msgstr ""
 
-#: preferencesGlobal.html:92
+#: preferencesGlobal.html:74
 msgid "Recovery from seed"
 msgstr ""
 
@@ -1229,40 +1122,40 @@ msgstr ""
 msgid "Recreating Wallet..."
 msgstr ""
 
-#: includes/airDropReceive.html:158
+#: includes\airDropReceive.html:158
 msgid "Redeem Success"
 msgstr ""
 
-#: includes/airDropReceive.html:129
+#: includes\airDropReceive.html:129
 #: preferencesTcode.html:53
 msgid "Redeem T Code"
 msgstr ""
 
-#: includes/airDropReceive.html:141
+#: includes\airDropReceive.html:141
 msgid "Redeem now"
 msgstr ""
 
-#: includes/airDropReceive.html:156
+#: includes\airDropReceive.html:156
 msgid "Redeeming..."
 msgstr ""
 
-#: includes/airDropReceive.html:138
+#: includes\airDropReceive.html:138
 msgid "Reedem T code is a transcation which will incure a small fee"
 msgstr ""
 
-#: index.js:514
+#: index.js:495
 msgid "Refused"
 msgstr ""
 
-#: preferencesAbout.html:7
+#: preferencesAbout.html:4
 msgid "Release Information"
 msgstr ""
 
-#: includes/airDropReceive.html:143
+#: includes\airDropReceive.html:143
 msgid "Reminder: View your T code claims from the first page of your default wallet"
 msgstr ""
 
-#: modals/destination-address.html:109
+#: modals\destination-address.html:109
 msgid "Remove"
 msgstr ""
 
@@ -1274,43 +1167,38 @@ msgstr ""
 msgid "Rename:"
 msgstr ""
 
-#: export.html:50
-#: includes/password.html:10
+#: includes\password.html:8
 msgid "Repeat password"
 msgstr ""
 
-#: export.html:44
-msgid "Repeat the password"
-msgstr ""
-
-#: modals/approveNewWitnesses.html:23
+#: modals\approveNewWitnesses.html:23
 msgid "Replace"
 msgstr ""
 
-#: preferencesGlobal.html:61
+#: preferencesGlobal.html:52
 msgid "Request Password"
 msgstr ""
 
-#: includes/qrcode.html:95
-#: modals/customized-amount.html:15
+#: includes\qrcode.html:95
+#: modals\customized-amount.html:15
 msgid "Request a specific amount"
 msgstr ""
 
-#: correspondentDevice.html:368
-#: modals/customized-amount.html:96
+#: correspondentDevice.html:382
+#: modals\customized-amount.html:96
 msgid "Request payment"
 msgstr ""
 
-#: includes/backupWaring.html:118
-#: includes/backupWaring.html:132
+#: includes\backupWaring.html:184
+#: includes\backupWaring.html:195
 msgid "Restore Wallet"
 msgstr ""
 
-#: includes/backupWaring.html:397
+#: includes\backupWaring.html:455
 msgid "Restore Wallet and Delete Seed Phrase"
 msgstr ""
 
-#: includes/backupWaring.html:373
+#: includes\backupWaring.html:432
 msgid "Restore Wallet from Seed Phrase"
 msgstr ""
 
@@ -1318,30 +1206,19 @@ msgstr ""
 msgid "Retrying..."
 msgstr ""
 
-#: includes/password.html:42
+#: includes\password.html:38
 msgid "SET"
 msgstr ""
 
 #: editCorrespondentDevice.html:55
-#: modals/destination-address.html:206
+#: modals\destination-address.html:206
 #: preferencesAlias.html:29
 #: preferencesDeviceName.html:28
-#: preferencesEditWitness.html:17
-#: preferencesEmail.html:34
 #: preferencesHub.html:20
-#: preferencesTor.html:21
 msgid "Save"
 msgstr ""
 
-#: preferencesEmail.html:20
-msgid "Saving preferences..."
-msgstr ""
-
-#: paperWallet.html:44
-msgid "Scan Wallet Funds"
-msgstr ""
-
-#: includes/coldQrcode.html:66
+#: includes\coldQrcode.html:66
 msgid "Scan signature QR code by hot wallet"
 msgstr ""
 
@@ -1349,15 +1226,15 @@ msgstr ""
 msgid "Scan status finished with error"
 msgstr ""
 
-#: modals/howToSign.html:340
+#: modals\howToSign.html:340
 msgid "Scan step1’s QR code from hot wallet - click”sign” - input password - generate “Authorized” QR code"
 msgstr ""
 
-#: modals/howToSign.html:220
+#: modals\howToSign.html:220
 msgid "Scan step2’s cold wallet - click“import wallet” - generate QR code for “Authorized signature”"
 msgstr ""
 
-#: modals/howToSign.html:246
+#: modals\howToSign.html:246
 msgid "Scan step3’s QR wallet - generate “Signature detail” QR code"
 msgstr ""
 
@@ -1369,22 +1246,14 @@ msgstr ""
 msgid "Scan the above QR code using the other device, or send this pairing code to the other device:"
 msgstr ""
 
-#: index.js:1969
-msgid "Scan your fingerprint please"
-msgstr ""
-
 #: walletHome.html:194
 msgid "Scanning Wallet funds..."
 msgstr ""
 
-#: includes/backupWaring.html:154
+#: includes\backupWaring.html:220
 #: recoveryFromSeed.html:97
 #: synchronization.html:20
 msgid "Scanning for addresses..."
-msgstr ""
-
-#: paperWallet.html:18
-msgid "Scanning wallet funds..."
 msgstr ""
 
 #: walletHome.html:687
@@ -1399,7 +1268,7 @@ msgstr ""
 msgid "Select a wallet"
 msgstr ""
 
-#: modals/select-subwallet.html:85
+#: modals\select-subwallet.html:85
 msgid "Select subwallet"
 msgstr ""
 
@@ -1407,17 +1276,17 @@ msgstr ""
 msgid "Select your identity"
 msgstr ""
 
-#: includes/transaction.html:12
+#: includes\transaction.html:12
 #: walletHome.html:663
 #: walletHome.html:673
 msgid "Send"
 msgstr ""
 
-#: modals/multi-payment.html:62
+#: modals\multi-payment.html:62
 msgid "Send Payment"
 msgstr ""
 
-#: includes/sendassets.html:290
+#: includes\sendassets.html:290
 msgid "Send Success"
 msgstr ""
 
@@ -1429,24 +1298,16 @@ msgstr ""
 msgid "Send all"
 msgstr ""
 
-#: preferencesLogs.html:14
-msgid "Send by email"
-msgstr ""
-
 #: preferencesTcode.html:48
 msgid "Send or reedem T code is a transcation which will incure a small fee"
 msgstr ""
 
-#: paperWallet.html:19
-msgid "Sending funds..."
-msgstr ""
-
-#: includes/sendassets.html:282
+#: includes\sendassets.html:282
 #: walletHome.html:199
 msgid "Sending..."
 msgstr ""
 
-#: modals/tx-details.html:37
+#: modals\tx-details.html:37
 #: walletHome.html:355
 msgid "Sent"
 msgstr ""
@@ -1456,19 +1317,11 @@ msgstr ""
 msgid "Services"
 msgstr ""
 
-#: export.html:32
-msgid "Set up a Password"
-msgstr ""
-
-#: includes/password.html:9
+#: includes\password.html:7
 msgid "Set up a password"
 msgstr ""
 
-#: preferencesEmail.html:39
-msgid "Setting up email notifications could weaken your privacy, if the wallet service provider is compromised. Information available to an attacker would include your wallet addresses and its balance, but no more."
-msgstr ""
-
-#: modals/select-subwallet.html:107
+#: modals\select-subwallet.html:107
 msgid "Shared_address:"
 msgstr ""
 
@@ -1476,21 +1329,21 @@ msgstr ""
 msgid "Show all"
 msgstr ""
 
-#: backup.html:26
+#: backup.html:23
 msgid "Show the Wallet Seed Anyway"
 msgstr ""
 
-#: includes/askColdwalletQrcode.html:54
-#: includes/toPay.html:77
+#: includes\askColdwalletQrcode.html:54
+#: includes\toPay.html:77
 msgid "Sign"
 msgstr ""
 
-#: index.js:746
+#: index.js:727
 msgid "Sign transaction spending  from wallet ?"
 msgstr ""
 
-#: includes/coldQrcode.html:59
-#: includes/toPay.html:66
+#: includes\coldQrcode.html:59
+#: includes\toPay.html:66
 msgid "Signature detail"
 msgstr ""
 
@@ -1499,8 +1352,8 @@ msgstr ""
 msgid "Single T Code should less than 200"
 msgstr ""
 
-#: includes/backupWaring.html:695
-#: includes/backupWaring.html:716
+#: includes\backupWaring.html:742
+#: includes\backupWaring.html:763
 msgid "Skip"
 msgstr ""
 
@@ -1508,7 +1361,7 @@ msgstr ""
 msgid "Specify Seed..."
 msgstr ""
 
-#: preferencesGlobal.html:57
+#: preferencesGlobal.html:48
 msgid "Spending Restrictions"
 msgstr ""
 
@@ -1516,49 +1369,39 @@ msgstr ""
 msgid "Start importing"
 msgstr ""
 
-#: modals/howToSign.html:156
-#: modals/howToSign.html:310
+#: modals\howToSign.html:156
+#: modals\howToSign.html:310
 msgid "Step1"
 msgstr ""
 
-#: modals/howToSign.html:182
-#: modals/howToSign.html:336
+#: modals\howToSign.html:182
+#: modals\howToSign.html:336
 msgid "Step2"
 msgstr ""
 
-#: modals/howToSign.html:216
-#: modals/howToSign.html:370
+#: modals\howToSign.html:216
+#: modals\howToSign.html:370
 msgid "Step3"
 msgstr ""
 
-#: modals/howToSign.html:242
+#: modals\howToSign.html:242
 msgid "Step4"
 msgstr ""
 
-#: modals/howToSign.html:268
+#: modals\howToSign.html:268
 msgid "Step5"
 msgstr ""
 
-#: preferencesGlobal.html:74
-msgid "Still not done"
-msgstr ""
-
 #: copayers.js:78
-#: export.js:135
-#: export.js:160
-#: index.js:551
-#: index.js:579
+#: index.js:532
+#: index.js:560
 #: preferencesDelete.js:60
-#: walletHome.js:1395
-#: walletHome.js:1469
+#: walletHome.js:1350
+#: walletHome.js:1424
 msgid "Success"
 msgstr ""
 
-#: paperWallet.html:64
-msgid "Sweep Wallet"
-msgstr ""
-
-#: preferencesGlobal.html:104
+#: preferencesGlobal.html:85
 msgid "Sync Cloned Wallets"
 msgstr ""
 
@@ -1578,7 +1421,7 @@ msgstr ""
 msgid "Syncing... {{index.syncProgress}}"
 msgstr ""
 
-#: preferences.html:83
+#: preferences.html:60
 #: preferencesRecords.html:123
 msgid "T Code"
 msgstr ""
@@ -1591,7 +1434,7 @@ msgstr ""
 msgid "T Code is not stable, please try again later"
 msgstr ""
 
-#: profileService.js:304
+#: profileService.js:268
 msgid "TTT Wallet"
 msgstr ""
 
@@ -1602,15 +1445,19 @@ msgid "Tap to retry"
 msgstr ""
 
 #: disclaimer.html:52
-#: preferencesAbout.html:25
+#: preferencesAbout.html:21
 msgid "Terms of Use"
 msgstr ""
 
-#: correspondentDevice.html:380
+#: correspondentDevice.html:394
 msgid "Text message to"
 msgstr ""
 
-#: modals/approveNewWitnesses.html:11
+#: translators.html:15
+msgid "Thanks"
+msgstr ""
+
+#: modals\approveNewWitnesses.html:11
 msgid "The TrustMe URI suggests replacing the following witnesses:"
 msgstr ""
 
@@ -1618,7 +1465,7 @@ msgstr ""
 msgid "The authors of the software cannot retrieve your private keys or passwords if you lose or forget them and cannot guarantee transaction confirmation as they do not have control over the TrustNote network."
 msgstr ""
 
-#: modals/bind.html:23
+#: modals\bind.html:23
 msgid "The peer receives this payment if"
 msgstr ""
 
@@ -1630,7 +1477,7 @@ msgstr ""
 msgid "The software you are about to use functions as a free, open source, and multi-signature digital wallet."
 msgstr ""
 
-#: modals/vote.html:64
+#: modals\vote.html:64
 msgid "The vote will be signed by all your funded addresses"
 msgstr ""
 
@@ -1651,7 +1498,7 @@ msgstr ""
 msgid "There are no wallets to make this payment"
 msgstr ""
 
-#: modals/howToSign.html:408
+#: modals\howToSign.html:408
 msgid "There is saved privacy key in cold wallet phone, so keep it safe and complete backup carefully"
 msgstr ""
 
@@ -1671,25 +1518,24 @@ msgstr ""
 msgid "This option is better for privacy but will take  several gigabytes of storage and the initial sync will take several days.  CPU load will be high during sync."
 msgstr ""
 
-#: modals/tx-details.html:118
+#: modals\tx-details.html:118
 msgid "This transaction has become invalid; possibly due to a double spend attempt."
 msgstr ""
 
-#: import.html:57
 #: recoveryFromSeed.html:323
 #: recoveryFromSeed.js:432
 #: recoveryFromSeeddir.js:85
 msgid "This will permanently delete all your existing wallets!"
 msgstr ""
 
-#: includes/backupWaring.html:454
+#: includes\backupWaring.html:500
 msgid "Those 12 mnemonic words are for recovering you wallet, write down correctly on paper and keep in a safe place."
 msgstr ""
 
-#: includes/output.html:5
-#: includes/transaction.html:27
-#: modals/tx-details.html:52
-#: modals/tx-details.html:95
+#: includes\output.html:5
+#: includes\transaction.html:27
+#: modals\tx-details.html:52
+#: modals\tx-details.html:95
 #: walletHome.html:411
 #: walletHome.html:515
 msgid "To"
@@ -1703,11 +1549,11 @@ msgstr ""
 msgid "Total Locked Balance"
 msgstr ""
 
-#: includes/airDrop.html:177
+#: includes\airDrop.html:177
 msgid "Total amount"
 msgstr ""
 
-#: index.js:936
+#: index.js:917
 msgid "Transaction"
 msgstr ""
 
@@ -1715,43 +1561,43 @@ msgstr ""
 msgid "Transactions <br> Downloaded"
 msgstr ""
 
-#: translators.html:11
-msgid "Translation Credits"
+#: preferencesAbout.html:25
+msgid "Translators"
 msgstr ""
 
-#: preferencesGlobal.html:41
+#: preferencesGlobal.html:34
 #: preferencesHub.html:9
 msgid "TrustME URI"
 msgstr ""
 
-#: modals/destination-address.html:169
+#: modals\destination-address.html:169
 msgid "TrustNote address"
 msgstr ""
 
-#: modals/howToSign.html:142
+#: modals\howToSign.html:142
 msgid "Two phones without root or you think it’s safe."
 msgstr ""
 
-#: includes/sendassets.html:243
+#: includes\sendassets.html:243
 msgid "Type of Assets:"
 msgstr ""
 
 #: airDrop.js:244
-#: walletHome.js:692
+#: walletHome.js:663
 msgid "Unable to send transaction proposal"
 msgstr ""
 
-#: modals/tx-details.html:168
+#: modals\tx-details.html:168
 #: walletHome.html:362
 #: walletHome.html:396
 msgid "Unconfirmed"
 msgstr ""
 
-#: modals/tx-details.html:141
+#: modals\tx-details.html:141
 msgid "Unit"
 msgstr ""
 
-#: modals/select-subwallet.html:121
+#: modals\select-subwallet.html:121
 msgid "Unlocked"
 msgstr ""
 
@@ -1759,7 +1605,7 @@ msgstr ""
 msgid "Unsent transactions"
 msgstr ""
 
-#: modals/newVersionIsAvailable.html:69
+#: modals\newVersionIsAvailable.html:69
 msgid "Update"
 msgstr ""
 
@@ -1767,32 +1613,20 @@ msgstr ""
 msgid "Updating Wallet..."
 msgstr ""
 
-#: modals/newVersionIsAvailable.html:63
+#: modals\newVersionIsAvailable.html:63
 msgid "Upgrade Prompt"
 msgstr ""
 
-#: includes/upgrading_db.html:8
+#: includes\upgrading_db.html:8
 msgid "Upgrading the database, please be patient.  Sometimes it takes several minutes."
 msgstr ""
 
-#: preferencesAbout.html:14
+#: preferencesAbout.html:10
 msgid "Version"
 msgstr ""
 
 #: preferencesTcode.html:49
 msgid "View your T code claims from the first page of your default wallet"
-msgstr ""
-
-#: export.html:72
-msgid "WARNING:"
-msgstr ""
-
-#: backup.html:62
-msgid "WARNING: This seed was created with a passphrase. To recover this wallet both the mnemonic and passphrase are needed."
-msgstr ""
-
-#: import.html:55
-msgid "WARNINGS:"
 msgstr ""
 
 #: copayers.html:44
@@ -1803,14 +1637,14 @@ msgstr ""
 msgid "Waiting..."
 msgstr ""
 
-#: includes/sidebar.html:26
-#: index.js:945
-#: modals/destination-address.html:55
+#: includes\sidebar.html:26
+#: index.js:926
+#: modals\destination-address.html:55
 #: preferencesDeleteWallet.html:15
 msgid "Wallet"
 msgstr ""
 
-#: preferences.html:48
+#: preferences.html:34
 msgid "Wallet Alias"
 msgstr ""
 
@@ -1818,7 +1652,7 @@ msgstr ""
 msgid "Wallet Id"
 msgstr ""
 
-#: preferencesAdvanced.html:13
+#: preferencesAdvanced.html:8
 #: preferencesInformation.html:16
 msgid "Wallet Information"
 msgstr ""
@@ -1827,7 +1661,7 @@ msgstr ""
 msgid "Wallet Name (at creation)"
 msgstr ""
 
-#: profileService.js:524
+#: profileService.js:488
 msgid "Wallet already in trustnote:"
 msgstr ""
 
@@ -1835,21 +1669,21 @@ msgstr ""
 msgid "Wallet name"
 msgstr ""
 
-#: backup.html:17
+#: backup.html:14
 msgid "Wallet seed deleted."
 msgstr ""
 
-#: modals/howToSign.html:150
+#: modals\howToSign.html:150
 msgid "Watch wallet"
 msgstr ""
 
-#: modals/howToSign.html:410
+#: modals\howToSign.html:410
 msgid "Watch wallet can’t finish transaction without “offline signature” from cold wallet"
 msgstr ""
 
-#: includes/sidebar.html:102
-#: includes/sidebar.html:107
-#: includes/sidebar.html:71
+#: includes\sidebar.html:102
+#: includes\sidebar.html:107
+#: includes\sidebar.html:71
 msgid "Watching"
 msgstr ""
 
@@ -1865,7 +1699,7 @@ msgstr ""
 msgid "We don’t recommend cloning your Wallet because your Wallet is safe as long as your Seed Phrase is well protected. However, if you experience data inconsistency issue between the original Wallet and its clone, you can fix it by using the “Sync Cloned Wallets” feature on both Wallets."
 msgstr ""
 
-#: includes/backupWaring.html:437
+#: includes\backupWaring.html:483
 msgid "We highly recommend you write the Mnemonic words(Backup Phrase) on Paper and keep it in a safe place, anyone get it can access or spend your assets. Also get start with a small amout of assets."
 msgstr ""
 
@@ -1885,27 +1719,23 @@ msgstr ""
 msgid "While the software has undergone beta testing and continues to be improved by feedback from the open-source user and developer community, we cannot guarantee that there will be no bugs in the software."
 msgstr ""
 
-#: modals/multi-payment.html:35
-#: modals/offer-contract.html:103
-#: modals/vote.html:28
+#: modals\multi-payment.html:35
+#: modals\offer-contract.html:103
+#: modals\vote.html:28
 msgid "Who signs:"
 msgstr ""
 
-#: preferencesEditWitness.html:13
-msgid "Witness address"
-msgstr ""
-
-#: backup.html:38
+#: backup.html:34
 msgid "Write it down and keep it somewhere safe."
 msgstr ""
 
-#: profileService.js:761
+#: profileService.js:725
 msgid "Wrong password"
 msgstr ""
 
 #: authConfirmation.html:18
-#: index.js:768
-#: modals/confirmation.html:12
+#: index.js:749
+#: modals\confirmation.html:12
 msgid "Yes"
 msgstr ""
 
@@ -1934,37 +1764,31 @@ msgstr ""
 msgid "You assume any and all risks associated with the use of the software."
 msgstr ""
 
-#: includes/airDrop.html:181
+#: includes\airDrop.html:181
 msgid "Youe balance is not enough"
 msgstr ""
 
-#: includes/backupWaring.html:166
+#: includes\backupWaring.html:232
 msgid "Your Wallet Seed Phrase:"
 msgstr ""
 
-#: backup.html:37
+#: backup.html:33
 #: recoveryFromSeed.html:108
 msgid "Your Wallet Seed:"
 msgstr ""
 
-#: export.html:38
-msgid "Your export password"
-msgstr ""
-
-#: includes/backupWaring.html:682
+#: includes\backupWaring.html:729
 msgid "Your mnemonic words are correct. To make your wallet safe, we highly recommend you delete mnemonic words from app."
 msgstr ""
 
-#: includes/password.html:26
+#: includes\password.html:23
 msgid "Your password"
 msgstr ""
 
-#: import.html:28
-msgid "Your wallet file:"
-msgstr ""
-
-#: includes/password.html:50
-msgid "Your wallet key will be encrypted. Password cannot be recovered. Be sure to write it down"
+#: includes\password.html:46
+msgid ""
+"Your wallet key will be encrypted. Password cannot be recovered. Be\n"
+"                sure to write it down"
 msgstr ""
 
 #: splash.html:110
@@ -1972,14 +1796,14 @@ msgid "Your wallet will be created on this device, keep it safe.  See your backu
 msgstr ""
 
 #: airDrop.js:448
-#: sendAssets.js:277
-#: walletHome.js:976
+#: sendAssets.js:274
+#: walletHome.js:934
 msgid "[internal] connection closed"
 msgstr ""
 
-#: modals/bind.html:39
-#: modals/offer-contract.html:36
-#: modals/offer-contract.html:44
+#: modals\bind.html:39
+#: modals\offer-contract.html:36
+#: modals\offer-contract.html:44
 msgid "amount"
 msgstr ""
 
@@ -1987,16 +1811,16 @@ msgstr ""
 msgid "arrWitnesses error: try it later."
 msgstr ""
 
-#: sendAssets.js:288
-#: walletHome.js:987
+#: sendAssets.js:285
+#: walletHome.js:945
 msgid "authentifier verification failed"
 msgstr ""
 
-#: modals/offer-contract.html:69
+#: modals\offer-contract.html:69
 msgid "can unlock the contract"
 msgstr ""
 
-#: modals/offer-contract.html:98
+#: modals\offer-contract.html:98
 msgid "can unlock the contract after it expires in"
 msgstr ""
 
@@ -2008,34 +1832,34 @@ msgstr ""
 msgid "clear chat history"
 msgstr ""
 
-#: modals/offer-contract.html:100
+#: modals\offer-contract.html:100
 msgid "days"
 msgstr ""
 
-#: modals/bind.html:79
+#: modals\bind.html:79
 msgid "either way"
 msgstr ""
 
-#: modals/bind.html:71
+#: modals\bind.html:71
 msgid "explicitly"
 msgstr ""
 
-#: modals/bind.html:89
-#: modals/offer-contract.html:61
+#: modals\bind.html:89
+#: modals\offer-contract.html:61
 msgid "hours"
 msgstr ""
 
-#: loginControl.js:118
-#: sendAssets.js:331
+#: loginControl.js:115
+#: sendAssets.js:328
 #: sendAssets.js:50
 msgid "httpErr"
 msgstr ""
 
-#: modals/offer-contract.html:70
+#: modals\offer-contract.html:70
 msgid "if an event is posted by an oracle"
 msgstr ""
 
-#: modals/bind.html:75
+#: modals\bind.html:75
 msgid "in merkle tree"
 msgstr ""
 
@@ -2047,36 +1871,36 @@ msgstr ""
 msgid "in smart wallets"
 msgstr ""
 
-#: includes/available-balance.html:14
+#: includes\available-balance.html:14
 msgid "locked by pending payments"
 msgstr ""
 
-#: modals/howToSign.html:152
+#: modals\howToSign.html:152
 msgid "note:one of phone connected network as <b>hot wallet</b> to watch <b>cold wallet</b>,the other one keep offline for Authorized signature."
 msgstr ""
 
-#: modals/bind.html:62
-#: modals/offer-contract.html:80
+#: modals\bind.html:62
+#: modals\offer-contract.html:80
 msgid "on feed name"
 msgstr ""
 
 #: airDrop.js:450
-#: sendAssets.js:279
-#: walletHome.js:978
+#: sendAssets.js:276
+#: walletHome.js:936
 msgid "one of the cosigners refused to sign"
 msgstr ""
 
-#: includes/airDrop.html:208
+#: includes\airDrop.html:208
 #: walletHome.html:628
 #: walletHome.html:643
 msgid "optional"
 msgstr ""
 
-#: modals/offer-contract.html:91
+#: modals\offer-contract.html:91
 msgid "or"
 msgstr ""
 
-#: modals/offer-contract.html:43
+#: modals\offer-contract.html:43
 msgid "peer pays"
 msgstr ""
 
@@ -2084,24 +1908,23 @@ msgstr ""
 msgid "please try again later."
 msgstr ""
 
-#: modals/bind.html:67
+#: modals\bind.html:67
 msgid "posted"
 msgstr ""
 
-#: modals/tx-details.html:179
+#: modals\tx-details.html:179
 msgid "re-send private payloads"
 msgstr ""
 
-#: modals/tx-details.html:186
+#: modals\tx-details.html:186
 msgid "re-send private payloads to cosigners"
 msgstr ""
 
 #: airDrop.js:248
 #: airDrop.js:427
-#: walletHome.js:744
-#: walletHome.js:750
-#: walletHome.js:852
-#: walletHome.js:959
+#: walletHome.js:715
+#: walletHome.js:810
+#: walletHome.js:917
 msgid "sending"
 msgstr ""
 
@@ -2113,16 +1936,16 @@ msgstr ""
 msgid "the T code has been claimed by other people"
 msgstr ""
 
-#: modals/howToSign.html:406
+#: modals\howToSign.html:406
 msgid "tips:"
 msgstr ""
 
-#: modals/approveNewWitnesses.html:17
-#: modals/offer-contract.html:51
+#: modals\approveNewWitnesses.html:17
+#: modals\offer-contract.html:51
 msgid "to"
 msgstr ""
 
-#: includes/airDrop.html:209
+#: includes\airDrop.html:209
 #: walletHome.html:629
 #: walletHome.html:644
 msgid "too long!"
@@ -2137,40 +1960,40 @@ msgstr ""
 msgid "wallets recovered, please restart the application to finish."
 msgstr ""
 
-#: modals/offer-contract.html:83
+#: modals\offer-contract.html:83
 msgid "with expected value"
 msgstr ""
 
-#: modals/bind.html:65
+#: modals\bind.html:65
 msgid "with expected value of"
 msgstr ""
 
-#: modals/address-definition.html:18
+#: modals\address-definition.html:18
 msgid "{{address}} can be spent if:"
 msgstr ""
 
-#: walletHome.js:1511
+#: walletHome.js:1466
 msgid "{{fee}} will be deducted for bitcoin networking fees"
 msgstr ""
 
-#: modals/multi-payment.html:28
+#: modals\multi-payment.html:28
 msgid "{{hrd.destinationAddress}} can be spent if:"
 msgstr ""
 
 #: copayers.html:47
-#: includes/walletInfo.html:2
+#: includes\walletInfo.html:2
 msgid "{{index.m}}-of-{{index.n}}"
 msgstr ""
 
-#: includes/alert.html:11
+#: includes\alert.html:11
 msgid "{{index.showAlert.msg}}"
 msgstr ""
 
-#: includes/toPay.html:72
+#: includes\toPay.html:72
 msgid "{{index.to_address()}}"
 msgstr ""
 
-#: includes/login.html:93
+#: includes\login.html:93
 msgid "{{loginC.error}}"
 msgstr ""
 
@@ -2183,15 +2006,15 @@ msgstr ""
 msgid "{{recFromSeed.showAlert.msg}}"
 msgstr ""
 
-#: includes/backupWaring.html:159
+#: includes\backupWaring.html:225
 msgid "{{recFromSeeddir.error}}"
 msgstr ""
 
-#: includes/recoveryAlert.html:11
+#: includes\recoveryAlert.html:11
 msgid "{{recFromSeeddir.showAlert.msg}}"
 msgstr ""
 
-#: includes/sendassets.html:263
+#: includes\sendassets.html:263
 msgid "{{sendA.error}}"
 msgstr ""
 
