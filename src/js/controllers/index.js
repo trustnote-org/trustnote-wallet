@@ -474,13 +474,13 @@ angular.module('trustnoteApp.controllers').controller('indexController', functio
         self.lightToHubTimeoutCount++;
         console.log('refresh_light_timeout');
         self.setOngoingProcess('Syncing', false);
-        var lightWallet = require('trustnote-common/light_wallet.js');
+        // var lightWallet = require('trustnote-common/light_wallet.js');
         if (self.lightToHubTimeoutCount > 3) {
             self.lightToHubTimeoutCount = 0;
             console.log('refresh_light_timeout ' + configService.stableHub);
             lightWallet.setLightVendorHost(configService.stableHub);
         }
-        lightWallet.refreshLightClientHistory();
+        // lightWallet.refreshLightClientHistory();
     });
 
     eventBus.on("confirm_on_other_devices", function () {
