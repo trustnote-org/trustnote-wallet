@@ -89,6 +89,24 @@ angular.module('trustnoteApp.controllers').controller('indexController', functio
         self.signatureObj = "TTT:" + JSON.stringify(self.signatureObj);
     };
 
+    eventBus.on('nonfatal_error', function (error_message, error_object) {
+        $log.error('nonfatal error stack', error_object.stack);
+        error_object.bIgnore = true;
+    });
+
+    eventBus.on('uncaught_error', function (error_message, error_object) {
+        $log.error('stack', error_object.stack);
+        if (error_object && error_object.bIgnore)
+            return;
+        self.showErrorPopup(error_message, function () {
+            var db = require('trustnote-common/db.js');
+            db.close();
+            if (self.isCordova && navigator && navigator.app) // android & iOS
+                navigator.app.exitApp();
+            else if (process.exit) // nwjs
+                process.exit();
+        });
+    });
 
     function updatePublicKeyRing(walletClient, onDone) {
         var walletDefinedByKeys = require('trustnote-common/wallet_defined_by_keys.js');
@@ -114,75 +132,8 @@ angular.module('trustnoteApp.controllers').controller('indexController', functio
         });
     }
 
-    function sendBugReport(error_message, error_object) {
-        var conf = require('trustnote-common/conf.js');
-        var network = require('trustnote-common/network.js');
-        var bug_sink_url = conf.WS_PROTOCOL + (conf.bug_sink_url || configService.getSync().hub);
-        network.findOutboundPeerOrConnect(bug_sink_url, function (err, ws) {
-            if (err)
-                return;
-            breadcrumbs.add('bugreport');
-            var description = error_object.stack || JSON.stringify(error_object, null, '\t');
-            if (error_object.bIgnore)
-                description += "\n(ignored)";
-            description += "\n\nBreadcrumbs:\n" + breadcrumbs.get().join("\n") + "\n\n";
-            description += "UA: " + navigator.userAgent + "\n";
-            description += "Language: " + (navigator.userLanguage || navigator.language) + "\n";
-            description += "Program: " + conf.program + ' ' + conf.program_version + "\n";
-            network.sendJustsaying(ws, 'bugreport', { message: error_message, exception: description });
-        });
-    }
-
-    self.sendBugReport = sendBugReport;
-
-    if (isCordova && constants.version === '1.0') {
-        var db = require('trustnote-common/db.js');
-        db.query("SELECT 1 FROM units WHERE version!=? LIMIT 1", [constants.version], function (rows) {
-            if (rows.length > 0) {
-                self.showErrorPopup("Looks like you have testnet data.  Please remove the app and reinstall.", function () {
-                    if (navigator && navigator.app) // android
-                        navigator.app.exitApp();
-                    // ios doesn't exit
-                });
-            }
-        });
-    }
-
-    eventBus.on('nonfatal_error', function (error_message, error_object) {
-        console.log('nonfatal error stack', error_object.stack);
-        error_object.bIgnore = true;
-        sendBugReport(error_message, error_object);
-    });
-
-    eventBus.on('uncaught_error', function (error_message, error_object) {
-        if (error_message.indexOf('ECONNREFUSED') >= 0 || error_message.indexOf('host is unreachable') >= 0) {
-            $rootScope.$emit('Local/ShowAlert', "Error connecting to TOR", 'fi-alert', function () {
-                go.path('preferencesGlobal.preferencesTor');
-            });
-            return;
-        }
-        if (error_message.indexOf('ttl expired') >= 0 || error_message.indexOf('general SOCKS server failure') >= 0) // TOR error after wakeup from sleep
-            return;
-        console.log('stack', error_object.stack);
-        sendBugReport(error_message, error_object);
-        if (error_object && error_object.bIgnore)
-            return;
-        self.showErrorPopup(error_message, function () {
-            var db = require('trustnote-common/db.js');
-            db.close();
-            if (self.isCordova && navigator && navigator.app) // android
-                navigator.app.exitApp();
-            else if (process.exit) // nwjs
-                process.exit();
-            // ios doesn't exit
-        });
-        if (isCordova) wallet.showCompleteClient();
-    });
-
+    // read the latest time when synchronizing full data
     function readLastDateString(cb) {
-        var conf = require('trustnote-common/conf.js');
-        if (conf.storage !== 'sqlite')
-            return cb();
         var db = require('trustnote-common/db.js');
         db.query(
             "SELECT int_value FROM unit_authors JOIN data_feeds USING(unit) \n\
@@ -198,6 +149,7 @@ angular.module('trustnoteApp.controllers').controller('indexController', functio
         );
     }
 
+    // Show sync progress information
     function setSyncProgress(percent) {
         readLastDateString(function (strProgress) {
             self.syncProgress = strProgress || (percent + "% of new units");
@@ -213,7 +165,6 @@ angular.module('trustnoteApp.controllers').controller('indexController', functio
                 cb(true);
             else {
                 db.query("SELECT 1 FROM unit_authors WHERE address = ? LIMIT 1", [address], function (unitAuthorsRows) {
-                    //cb(unitAuthorsRows.length === 1);  // Victor ShareAddress add third sql
                     if (unitAuthorsRows.length === 1)
                         cb(true);
                     else {
@@ -429,11 +380,15 @@ angular.module('trustnoteApp.controllers').controller('indexController', functio
         self.updateHistory();
     }
 
+
+    // catching up start, full wallet
     var catchup_balls_at_start = -1;
+
     eventBus.on('catching_up_started', function () {
         self.setOngoingProcess('Syncing', true);
         setSyncProgress(0);
     });
+
     eventBus.on('catchup_balls_left', function (count_left) {
         if (!self.anyOnGoingProcess) {
             self.anyOnGoingProcess = true;
@@ -445,43 +400,50 @@ angular.module('trustnoteApp.controllers').controller('indexController', functio
         var percent = Math.round((catchup_balls_at_start - count_left) / catchup_balls_at_start * 100);
         setSyncProgress(percent);
     });
+
     eventBus.on('catching_up_done', function () {
         catchup_balls_at_start = -1;
         self.setOngoingProcess('Syncing', false);
         self.syncProgress = "";
         scanForAddresses(addAddresses);
     });
+    // catching up end
+
     eventBus.on('unhandled_private_payments_left', function (count_left) { // light only
         var bChanged = (self.count_unhandled_private_payments !== count_left);
         self.count_unhandled_private_payments = count_left;
         if (bChanged)
             self.setOngoingProcess('handling_private', count_left > 0);
     });
+
+    // sync date start, light wallet
     eventBus.on('refresh_light_started', function () {
-        console.log('refresh_light_started');
+        $log.debug('refresh_light_started');
         self.setOngoingProcess('Syncing', true);
         $timeout(function () {
             self.setOngoingProcess('Syncing', false);
         }, 60000)
     });
+
+    eventBus.on('refresh_light_timeout', function (cb) {
+        $log.debug('refresh_light_timeout', configService.getSync().hub);
+        self.lightToHubTimeoutCount++;
+        self.setOngoingProcess('Syncing', false);
+        if (self.lightToHubTimeoutCount > 3) {
+            self.lightToHubTimeoutCount = 0;
+            cb(configService.stableHub);
+        }
+        else {
+            cb();
+        }
+    });
+
     eventBus.on('refresh_light_done', function () {
-        console.log('refresh_light_done');
+        $log.debug('refresh_light_done');
         self.setOngoingProcess('Syncing', false);
         scanForAddressesLignt(addAddresses);
     });
-
-    eventBus.on('refresh_light_timeout', function () {
-        self.lightToHubTimeoutCount++;
-        console.log('refresh_light_timeout');
-        self.setOngoingProcess('Syncing', false);
-        // var lightWallet = require('trustnote-common/light_wallet.js');
-        if (self.lightToHubTimeoutCount > 3) {
-            self.lightToHubTimeoutCount = 0;
-            console.log('refresh_light_timeout ' + configService.stableHub);
-            lightWallet.setLightVendorHost(configService.stableHub);
-        }
-        // lightWallet.refreshLightClientHistory();
-    });
+    // sync date end, light wallet
 
     eventBus.on("confirm_on_other_devices", function () {
         $rootScope.$emit('Local/ShowAlert', "Transaction created.\nPlease approve it on the other devices.", 'fi-key', function () {
