@@ -1,25 +1,17 @@
-
-<!--trustme URI-->
-
 <div class="topbar-container" ng-include="'views/includes/topbar.html'" ng-init="titleSection='TrustMe URI'; goBackToState = true"></div>
 
 <div class="content preferences" ng-controller="preferencesHubController as prefHub">
-	<h4></h4>
-  	<form name="settingsHubForm" ng-submit="prefHub.save()" class="columns">
-    	<label><span translate>TrustME URI</span></label>
-    	<!--<input type="text" id="hub" type="text" name="hub" ng-model="prefHub.hub" style="margin-bottom: 5px;">-->
-		<select
-			style="height: 45px; font-size: 14px;"
-			id="hub"
-			name="hub"
-			class="m10t"
-			ng-options="hub for hub in prefHub.arrHub"
-			ng-model="prefHub.hub">
-		</select>
-    	<div style="margin-top: 10px;">
-			<input type="submit" class="button expand black round" value="{{'Save'|translate}}" style="background: #0095ff;">
-		</div>
-	</form>
+    <h4></h4>
+    <form name="settingsHubForm" ng-submit="prefHub.save()" class="columns">
+        <label><span translate>TrustME URI</span></label>
+        <!--<input type="text" id="hub" type="text" name="hub" ng-model="prefHub.hub" style="margin-bottom: 5px;">-->
+        <select style="height: 45px; font-size: 14px;" id="hub" name="hub" class="m10t" ng-options="hub for hub in prefHub.arrHub"
+            ng-model="prefHub.hub">
+        </select>
+        <div style="margin-top: 10px;">
+            <input type="submit" class="button expand black round" value="{{'Save'|translate}}" style="background: #0095ff;">
+        </div>
+    </form>
 </div>
 
 <div class="extra-margin-bottom"></div>
