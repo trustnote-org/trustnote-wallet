@@ -5,20 +5,20 @@
 
 angular.module('trustnoteApp.controllers').controller('recoveryFromSeeddir', function ($rootScope, $scope, $log, gettext, $timeout, gettextCatalog, profileService, go, notification, storageService) {
 	var async = require('async');
-	var conf = require('trustnote-common/conf.js');
-	var wallet_defined_by_keys = require('trustnote-common/wallet_defined_by_keys.js');
-	var objectHash = require('trustnote-common/object_hash.js');
+	var conf = require('trustnote-pow-common/conf.js');
+	var wallet_defined_by_keys = require('trustnote-pow-common/wallet_defined_by_keys.js');
+	var objectHash = require('trustnote-pow-common/object_hash.js');
 	try {
 		var ecdsa = require('secp256k1');
 	}
 	catch (e) {
-		var ecdsa = require('trustnote-common/node_modules/secp256k1' + '');
+		var ecdsa = require('trustnote-pow-common/node_modules/secp256k1' + '');
 	}
 	var Mnemonic = require('bitcore-mnemonic');
 	var Bitcore = require('bitcore-lib');
-	var db = require('trustnote-common/db.js');
-	var network = require('trustnote-common/network');
-	var myWitnesses = require('trustnote-common/my_witnesses');
+	var db = require('trustnote-pow-common/db.js');
+	var network = require('trustnote-pow-common/network');
+	var myWitnesses = require('trustnote-pow-common/my_witnesses');
 	var fc = profileService.focusedClient;
 
 
@@ -259,7 +259,7 @@ angular.module('trustnoteApp.controllers').controller('recoveryFromSeeddir', fun
 					witnesses: arrWitnesses
 				}, function (ws, request, response) {
 					if (response && response.error) {
-						var breadcrumbs = require('trustnote-common/breadcrumbs.js');
+						var breadcrumbs = require('trustnote-pow-common/breadcrumbs.js');
 						breadcrumbs.add('Error scanForAddressesAndWalletsInLightClient: ' + response.error);
 						self.error = 'When scanning an error occurred, please try again later.';
 						self.scanning = false;
@@ -306,7 +306,7 @@ angular.module('trustnoteApp.controllers').controller('recoveryFromSeeddir', fun
 	}
 
 	function cleanAndAddWalletsAndAddresses(assocMaxAddressIndexes) {
-		var device = require('trustnote-common/device');
+		var device = require('trustnote-pow-common/device');
 		var arrWalletIndexes = Object.keys(assocMaxAddressIndexes);
 		if (arrWalletIndexes.length) {
 			removeAddressesAndWallets(function () {
@@ -460,7 +460,7 @@ angular.module('trustnoteApp.controllers').controller('recoveryFromSeeddir', fun
 
 
 	function cleanAndAddWalletsAndAddressesdel(assocMaxAddressIndexes) {
-		var device = require('trustnote-common/device');
+		var device = require('trustnote-pow-common/device');
 		var arrWalletIndexes = Object.keys(assocMaxAddressIndexes);
 		if (arrWalletIndexes.length) {
 			removeAddressesAndWallets(function () {

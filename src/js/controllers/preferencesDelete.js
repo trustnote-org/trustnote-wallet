@@ -5,7 +5,7 @@ angular.module('trustnoteApp.controllers').controller('preferencesDeleteWalletCo
 		this.isCordova = isCordova;
 		this.error = null;
 		var async = require('async');
-		var db = require('trustnote-common/db.js');
+		var db = require('trustnote-pow-common/db.js');
 		var delete_msg = gettextCatalog.getString('Are you sure you want to delete this wallet?');
 		var accept_msg = gettextCatalog.getString('Accept');
 		var cancel_msg = gettextCatalog.getString('Cancel');

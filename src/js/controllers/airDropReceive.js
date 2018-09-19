@@ -2,14 +2,14 @@
 
 angular.module('trustnoteApp.controllers').controller('airDropReceive', function ($scope, $rootScope, go, profileService, gettextCatalog, addressService, $timeout) {
 	var self = this;
-	var wallet_defined_by_keys = require('trustnote-common/wallet_defined_by_keys.js');
-	var myWitnesses = require('trustnote-common/my_witnesses');
-	var network = require('trustnote-common/network');
+	var wallet_defined_by_keys = require('trustnote-pow-common/wallet_defined_by_keys.js');
+	var myWitnesses = require('trustnote-pow-common/my_witnesses');
+	var network = require('trustnote-pow-common/network');
 	var Bitcore = require('bitcore-lib');
 	var Mnemonic = require("bitcore-mnemonic");
 	var crypto = require("crypto");
-	var objectHash = require('trustnote-common/object_hash.js');
-	var ecdsaSig = require('trustnote-common/signature.js');
+	var objectHash = require('trustnote-pow-common/object_hash.js');
+	var ecdsaSig = require('trustnote-pow-common/signature.js');
 
 	self.successful = 0;
 	self.Redeeming = 0;
@@ -299,7 +299,7 @@ angular.module('trustnoteApp.controllers').controller('airDropReceive', function
 									];
 
 									objUnit.messages = msg1;
-									var objectLength = require('trustnote-common/object_length');
+									var objectLength = require('trustnote-pow-common/object_length');
 									var numHeadersCommission = objectLength.getHeadersSize(objUnit); // header佣金
 									objUnit.headers_commission = numHeadersCommission;
 									var numPayloadCommission = objectLength.getTotalPayloadSize(objUnit); // payload佣金
@@ -315,7 +315,7 @@ angular.module('trustnoteApp.controllers').controller('airDropReceive', function
 									objUnit.messages[1].payload_hash = payload_hash1;
 								}
 								else{
-									var objectLength = require('trustnote-common/object_length');
+									var objectLength = require('trustnote-pow-common/object_length');
 									var numHeadersCommission = objectLength.getHeadersSize(objUnit); // header佣金
 									objUnit.headers_commission = numHeadersCommission;
 									var numPayloadCommission = objectLength.getTotalPayloadSize(objUnit); // payload佣金
@@ -364,7 +364,7 @@ angular.module('trustnoteApp.controllers').controller('airDropReceive', function
 								// if (conf.bLight){ // light clients cannot save before receiving OK from light vendor
 
 								//alert(JSON.stringify(obj))
-								var network = require('trustnote-common/network.js');
+								var network = require('trustnote-pow-common/network.js');
 								network.postJointToLightVendor(obj, function (response) {
 									if (response === 'accepted') {
 										self.Redeeming = 0;

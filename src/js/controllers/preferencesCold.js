@@ -4,7 +4,7 @@
 angular.module('trustnoteApp.controllers').controller('preferencesColdController', function ($scope,  profileService, nodeWebkit, isCordova) {
 	var fc = profileService.focusedClient;
 	var self = this;
-	self.myDeviceAddress = require('trustnote-common/device.js').getMyDeviceAddress();  // 获取我的 设备地址 getMyDeviceAddress
+	self.myDeviceAddress = require('trustnote-pow-common/device.js').getMyDeviceAddress();  // 获取我的 设备地址 getMyDeviceAddress
 	self.credentials = fc.credentials;
 	self.objQr_to_show = {
 		"type": "c1",

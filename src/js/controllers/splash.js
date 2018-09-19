@@ -5,7 +5,7 @@ angular.module('trustnoteApp.controllers').controller('splashController', functi
 		this.saveDeviceName = function () {
 			console.log('saveDeviceName: ' + self.deviceName);
 			// require js
-			var device = require('trustnote-common/device.js');
+			var device = require('trustnote-pow-common/device.js');
 			device.setDeviceName(self.deviceName);
 			var opts = {deviceName: self.deviceName};
 
@@ -41,13 +41,13 @@ angular.module('trustnoteApp.controllers').controller('splashController', functi
 				return;
 			}
 			var fs = require('fs' + '');
-			var desktopApp = require('trustnote-common/desktop_app.js');
+			var desktopApp = require('trustnote-pow-common/desktop_app.js');
 			var appDataDir = desktopApp.getAppDataDir();
 			var userConfFile = appDataDir + '/conf.json';
 			fs.writeFile(userConfFile, JSON.stringify({bLight: bLight}, null, '\t'), 'utf8', function (err) {
 				if (err)
 					throw Error('failed to write conf.json: ' + err);
-				var conf = require('trustnote-common/conf.js');
+				var conf = require('trustnote-pow-common/conf.js');
 				if (!conf.bLight)
 					throw Error("Failed to switch to light, please restart the app");
 				self.step = 'device_name';

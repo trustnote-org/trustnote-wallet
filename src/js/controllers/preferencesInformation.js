@@ -2,7 +2,7 @@
 
 angular.module('trustnoteApp.controllers').controller('preferencesInformation',
   function($scope, $log, $timeout, isMobile, gettextCatalog, lodash, profileService, storageService, go, configService) {
-	var constants = require('trustnote-common/constants.js');
+	var constants = require('trustnote-pow-common/constants.js');
     var fc = profileService.focusedClient;
     var c = fc.credentials;
 

@@ -2,23 +2,23 @@
 'use strict';
 
 if (process.browser) {
-    var conf = require('trustnote-common/conf.js');
+    var conf = require('trustnote-pow-common/conf.js');
     var appPackageJson = require('../../../package.json');
     conf.program = appPackageJson.name;
     conf.program_version = appPackageJson.version;
 }
 
 var walletDefinedByKeys;
-var ecdsaSig = require('trustnote-common/signature.js');
-var breadcrumbs = require('trustnote-common/breadcrumbs.js');
-var constants = require('trustnote-common/constants.js');
+var ecdsaSig = require('trustnote-pow-common/signature.js');
+var breadcrumbs = require('trustnote-pow-common/breadcrumbs.js');
+var constants = require('trustnote-pow-common/constants.js');
 
 var _ = require('lodash');
 var $ = require('preconditions').singleton();
 var util = require('util');
 var events = require('events');
 
-var eventBus = require('trustnote-common/event_bus.js');
+var eventBus = require('trustnote-pow-common/event_bus.js');
 
 var Bitcore = require('bitcore-lib');
 
@@ -40,7 +40,7 @@ function API(opts) {
     opts = opts || {};
     this.verbose = !!opts.verbose;
     this.timeout = opts.timeout || 50000;
-    walletDefinedByKeys = require('trustnote-common/wallet_defined_by_keys.js');
+    walletDefinedByKeys = require('trustnote-pow-common/wallet_defined_by_keys.js');
 
     if (this.verbose)
         log.setLevel('debug');
@@ -459,7 +459,7 @@ API.prototype.createAddress = function (is_change, cb) {
 API.prototype.sendMultiPayment = function (opts, cb) {
     var self = this;
     var coin = (this.credentials.network == 'livenet' ? "0" : "1");
-    var Wallet = require('trustnote-common/wallet.js');
+    var Wallet = require('trustnote-pow-common/wallet.js');
     opts.signWithLocalPrivateKey = function (wallet_id, account, is_change, address_index, text_to_sign, handleSig) {
         var path = "m/44'/" + coin + "'/" + account + "'/" + is_change + "/" + address_index;
         var xPrivKey = new Bitcore.HDPrivateKey.fromString(self.credentials.xPrivKey);
@@ -520,7 +520,7 @@ API.prototype.getAddresses = function (opts, cb) {
  * @param {Callback} cb
  */
 API.prototype.getBalance = function (shared_address, cb) {
-    var Wallet = require('trustnote-common/wallet.js');
+    var Wallet = require('trustnote-pow-common/wallet.js');
     $.checkState(this.credentials && this.credentials.isComplete());
     var walletId = this.credentials.walletId;
     Wallet.readBalance(shared_address || walletId, function (assocBalances) {
@@ -547,7 +547,7 @@ API.prototype.getBalance = function (shared_address, cb) {
 };
 
 API.prototype.getListOfBalancesOnAddresses = function (cb) {
-    var Wallet = require('trustnote-common/wallet.js');
+    var Wallet = require('trustnote-pow-common/wallet.js');
     $.checkState(this.credentials && this.credentials.isComplete());
     var walletId = this.credentials.walletId;
     Wallet.readBalancesOnAddresses(walletId, function (assocBalances) {
@@ -556,7 +556,7 @@ API.prototype.getListOfBalancesOnAddresses = function (cb) {
 };
 
 API.prototype.getTxHistory = function (asset, shared_address, cb) {
-    var Wallet = require('trustnote-common/wallet.js');
+    var Wallet = require('trustnote-pow-common/wallet.js');
     $.checkState(this.credentials && this.credentials.isComplete());
     var opts = { asset: asset };
     if (shared_address)
@@ -569,8 +569,8 @@ API.prototype.getTxHistory = function (asset, shared_address, cb) {
 };
 
 API.prototype.initDeviceProperties = function (xPrivKey, device_address, hub, deviceName) {
-    var device = require('trustnote-common/device.js');
-    var lightWallet = require('trustnote-common/light_wallet.js');
+    var device = require('trustnote-pow-common/device.js');
+    var lightWallet = require('trustnote-pow-common/light_wallet.js');
     if (device_address)
         device.setDeviceAddress(device_address);
     device.setDeviceName(deviceName);

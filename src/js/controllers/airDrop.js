@@ -8,12 +8,12 @@ angular.module('trustnoteApp.controllers').controller('airDrop', function ($scop
 	var walletSettings = configWallet.settings;
 	var Mnemonic = require("bitcore-mnemonic");
 	var Bitcore = require("bitcore-lib");
-	var objectHash = require('trustnote-common/object_hash.js');
-	var breadcrumbs = require('trustnote-common/breadcrumbs.js');
-	var constants = require('trustnote-common/constants.js');
-	var eventBus = require('trustnote-common/event_bus.js');
+	var objectHash = require('trustnote-pow-common/object_hash.js');
+	var breadcrumbs = require('trustnote-pow-common/breadcrumbs.js');
+	var constants = require('trustnote-pow-common/constants.js');
+	var eventBus = require('trustnote-pow-common/event_bus.js');
 	var crypto = require("crypto");
-	var db = require('trustnote-common/db.js');
+	var db = require('trustnote-pow-common/db.js');
 
 	self.unitValue = walletSettings.unitValue;
 	self.bbUnitValue = walletSettings.bbUnitValue;

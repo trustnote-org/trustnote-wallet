@@ -431,7 +431,7 @@ angular.module('trustnoteApp.controllers').controller('wordsController', functio
 
 
 	if (!isCordova) {
-		var desktopApp = require('trustnote-common/desktop_app.js' + '');
+		var desktopApp = require('trustnote-pow-common/desktop_app.js' + '');
 		self.appDataDir = desktopApp.getAppDataDir();
 	}
 	self.isCordova = isCordova;

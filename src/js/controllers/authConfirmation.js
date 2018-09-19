@@ -15,7 +15,7 @@
 
  */
 
-var ecdsaSig = require('trustnote-common/signature.js');
+var ecdsaSig = require('trustnote-pow-common/signature.js');
 
 angular.module('trustnoteApp.controllers').controller('authConfirmationController', function ($scope, $timeout, configService, profileService, go, authService) {
 
@@ -27,7 +27,7 @@ angular.module('trustnoteApp.controllers').controller('authConfirmationControlle
 	}
 
 	var self = this;
-	var bbWallet = require('trustnote-common/wallet.js');
+	var bbWallet = require('trustnote-pow-common/wallet.js');
 
 	// the wallet to sign with
 	$scope.walletId = profileService.focusedClient.credentials.walletId;

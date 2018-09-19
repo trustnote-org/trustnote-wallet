@@ -2,14 +2,14 @@
 
 angular.module('trustnoteApp.controllers').controller('synchronization', function ($rootScope, $scope, $log, gettext, $timeout, lodash, gettextCatalog, profileService, storageService, configService) {
 
-	var conf = require('trustnote-common/conf.js');
-	var wallet_defined_by_keys = require('trustnote-common/wallet_defined_by_keys.js');
-	var objectHash = require('trustnote-common/object_hash.js');
+	var conf = require('trustnote-pow-common/conf.js');
+	var wallet_defined_by_keys = require('trustnote-pow-common/wallet_defined_by_keys.js');
+	var objectHash = require('trustnote-pow-common/object_hash.js');
 
 	var Bitcore = require('bitcore-lib');
-	var db = require('trustnote-common/db.js');
-	var network = require('trustnote-common/network');
-	var myWitnesses = require('trustnote-common/my_witnesses');
+	var db = require('trustnote-pow-common/db.js');
+	var network = require('trustnote-pow-common/network');
+	var myWitnesses = require('trustnote-pow-common/my_witnesses');
 
 	var self = this;
 
@@ -161,7 +161,7 @@ angular.module('trustnoteApp.controllers').controller('synchronization', functio
 					witnesses: arrWitnesses
 				}, function (ws, request, response) {
 					if (response && response.error) {
-						var breadcrumbs = require('trustnote-common/breadcrumbs.js');
+						var breadcrumbs = require('trustnote-pow-common/breadcrumbs.js');
 						breadcrumbs.add('Error scanForAddressesAndWalletsInLightClient: ' + response.error);
 						self.error = gettextCatalog.getString('please try again later.');
 						self.scanning = false;

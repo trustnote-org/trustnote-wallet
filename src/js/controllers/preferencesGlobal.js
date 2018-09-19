@@ -7,7 +7,7 @@ angular.module('trustnoteApp.controllers').controller('preferencesGlobalControll
     this.init = function () {
         var config = configService.getSync();
         this.deviceName = config.deviceName;
-        this.myDeviceAddress = require('trustnote-common/device.js').getMyDeviceAddress();
+        this.myDeviceAddress = require('trustnote-pow-common/device.js').getMyDeviceAddress();
         this.hub = config.hub;
         this.showHub = false;
         this.clickTimesToShowHub = 3;

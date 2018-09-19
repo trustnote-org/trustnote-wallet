@@ -5,9 +5,9 @@ angular.module('trustnoteApp.controllers').controller('correspondentDevicesContr
 	
 	var self = this;
 	
-	var wallet = require('trustnote-common/wallet.js');
-	var bots = require('trustnote-common/bots.js');
-	var mutex = require('trustnote-common/mutex.js');
+	var wallet = require('trustnote-pow-common/wallet.js');
+	var bots = require('trustnote-pow-common/bots.js');
+	var mutex = require('trustnote-pow-common/mutex.js');
 	$scope.editCorrespondentList = false;
 	$scope.selectedCorrespondentList = {};
 	var fc = profileService.focusedClient;
@@ -106,7 +106,7 @@ angular.module('trustnoteApp.controllers').controller('correspondentDevicesContr
 					unlock();
 					return console.log('device '+device_address+' is not removable');
 				}
-				var device = require('trustnote-common/device.js');
+				var device = require('trustnote-pow-common/device.js');
 
 				// send message to paired device
 				// this must be done before removing the device

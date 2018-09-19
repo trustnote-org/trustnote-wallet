@@ -1,11 +1,11 @@
 'use strict';
 
-var constants = require('trustnote-common/constants.js');
+var constants = require('trustnote-pow-common/constants.js');
 
 angular.module('trustnoteApp.controllers').controller('qrcodeController', function ($scope, $rootScope, $timeout, $filter, $modal, $log, notification, isCordova, profileService, lodash, configService, storageService, gettext, gettextCatalog, nodeWebkit, addressService, confirmDialog, animationService, backButton, safeApplyService) {
 
     var self = this;
-    var conf = require('trustnote-common/conf.js');
+    var conf = require('trustnote-pow-common/conf.js');
     this.protocol = conf.program;
     var config = configService.getSync();
     var configWallet = config.wallet;

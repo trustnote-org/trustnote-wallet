@@ -1,14 +1,14 @@
 'use strict';
 
-var constants = require('trustnote-common/constants.js');
-var eventBus = require('trustnote-common/event_bus.js');
-var ValidationUtils = require('trustnote-common/validation_utils.js');
-var objectHash = require('trustnote-common/object_hash.js');
+var constants = require('trustnote-pow-common/constants.js');
+var eventBus = require('trustnote-pow-common/event_bus.js');
+var ValidationUtils = require('trustnote-pow-common/validation_utils.js');
+var objectHash = require('trustnote-pow-common/object_hash.js');
 
 angular.module('trustnoteApp.services').factory('correspondentListService', function($state, $rootScope, $sce, $compile, configService, storageService, profileService, addressService, go, lodash, $stickyState, $deepStateRedirect, $timeout, gettextCatalog, gettext, safeApplyService) {
 	var root = {};
-	var device = require('trustnote-common/device.js');
-	var wallet = require('trustnote-common/wallet.js');
+	var device = require('trustnote-pow-common/device.js');
+	var wallet = require('trustnote-pow-common/wallet.js');
 	var walletId = profileService.profile.credentials[0].walletId;
 	var lockupAddress;
 	addressService.getAddress(walletId, null, function(err, addr) {
@@ -16,7 +16,7 @@ angular.module('trustnoteApp.services').factory('correspondentListService', func
 			lockupAddress = addr;
 	});
 
-	var chatStorage = require('trustnote-common/chat_storage.js');
+	var chatStorage = require('trustnote-pow-common/chat_storage.js');
 	$rootScope.newMessagesCount = {};
 	$rootScope.newMsgCounterEnabled = false;
 
@@ -42,7 +42,7 @@ angular.module('trustnoteApp.services').factory('correspondentListService', func
 	}, true);
 	
 	function addIncomingMessageEvent(from_address, body, message_counter){
-		var walletGeneral = require('trustnote-common/wallet_general.js');
+		var walletGeneral = require('trustnote-pow-common/wallet_general.js');
 		walletGeneral.readMyAddresses(function(arrMyAddresses){
 			body = highlightActions(escapeHtml(body), arrMyAddresses);
 			body = text2html(body);
@@ -248,7 +248,7 @@ angular.module('trustnoteApp.services').factory('correspondentListService', func
 	}
 	
 	function parsePaymentRequestQueryString(query_string, address){
-		var URI = require('trustnote-common/uri.js');
+		var URI = require('trustnote-pow-common/uri.js');
 		var assocParams = URI.parseQueryString(query_string, '&amp;');
 		var strAmount = assocParams['amount'];
 		if (!strAmount)
@@ -420,7 +420,7 @@ angular.module('trustnoteApp.services').factory('correspondentListService', func
 			for (var i in messages) {
 				messages[i] = parseMessage(messages[i]);
 			}
-			var walletGeneral = require('trustnote-common/wallet_general.js');
+			var walletGeneral = require('trustnote-pow-common/wallet_general.js');
 			walletGeneral.readMyAddresses(function(arrMyAddresses){
 
 				if (messages.length < limit)
