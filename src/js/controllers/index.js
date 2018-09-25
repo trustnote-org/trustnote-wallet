@@ -441,7 +441,7 @@ angular.module('trustnoteApp.controllers').controller('indexController', functio
     eventBus.on('refresh_light_done', function () {
         $log.debug('refresh_light_done');
         self.setOngoingProcess('Syncing', false);
-        scanForAddressesLignt(addAddresses);
+        // scanForAddressesLignt(addAddresses);
     });
     // sync date end, light wallet
 

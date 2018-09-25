@@ -58,14 +58,9 @@ angular.module('trustnoteApp.services').factory('configService', function (stora
     };
 
     root.hub = [
-        'victor.trustnote.org/tn',
-        'eason.trustnote.org/tn',
-        'lymn.trustnote.org/tn',
-        'bob.trustnote.org/tn',
-        'curry.trustnote.org/tn',
-        'kake.trustnote.org/tn'
+        'dev.mainchain.pow.trustnote.org:9191',
     ]
-    root.stableHub = 'stable.trustnote.org/tn';
+    root.stableHub = 'dev.mainchain.pow.trustnote.org:9191';
     // 钱包默认配置
     var defaultConfig = {
         // wallet limits

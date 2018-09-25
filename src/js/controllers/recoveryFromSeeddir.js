@@ -256,7 +256,7 @@ angular.module('trustnoteApp.controllers').controller('recoveryFromSeeddir', fun
 			myWitnesses.readMyWitnesses(function (arrWitnesses) {
 				network.requestFromLightVendor('light/get_history', {
 					addresses: arrTmpAddresses,
-					witnesses: arrWitnesses
+					// witnesses: arrWitnesses
 				}, function (ws, request, response) {
 					if (response && response.error) {
 						var breadcrumbs = require('trustnote-pow-common/breadcrumbs.js');

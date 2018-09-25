@@ -333,7 +333,7 @@ if (window.cordova) {
 // };
 
 process.on('uncaughtException', function (e) {
-    $log.info("uncaughtException");
+    console.error("uncaughtException");
     eventBus.emit('uncaught_error', "Uncaught exception: " + e, e);
 });
 

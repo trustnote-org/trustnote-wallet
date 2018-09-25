@@ -44,7 +44,7 @@ angular.module('trustnoteApp.controllers').controller('splashController', functi
 			var desktopApp = require('trustnote-pow-common/desktop_app.js');
 			var appDataDir = desktopApp.getAppDataDir();
 			var userConfFile = appDataDir + '/conf.json';
-			fs.writeFile(userConfFile, JSON.stringify({bLight: bLight}, null, '\t'), 'utf8', function (err) {
+			fs.writeFile(userConfFile, JSON.stringify({bLight: bLight, bWallet: true}, null, '\t'), 'utf8', function (err) {
 				if (err)
 					throw Error('failed to write conf.json: ' + err);
 				var conf = require('trustnote-pow-common/conf.js');
