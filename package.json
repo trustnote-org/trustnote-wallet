@@ -60,7 +60,7 @@
         "moment": "^2.18.1",
         "preconditions": "^1.0.8",
         "sjcl": "^1.0.2",
-        "trustnote-pow-common": "git+https://github.com/trustnote/trustnote-pow-common.git#testnet"
+        "trustnote-pow-common": "git+https://github.com/trustnote/trustnote-pow-common.git"
     },
     "devDependencies": {
         "angular": "^1.3.14",
