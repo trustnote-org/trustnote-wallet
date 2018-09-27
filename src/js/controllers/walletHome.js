@@ -1321,9 +1321,8 @@ angular.module('trustnoteApp.controllers').controller('walletHomeController', fu
 
 			$scope.openInExplorer = function () {
 				var testnet = home.isTestnet ? 'testnet' : '';
-				// var url = 'https://'+testnet+'explorer.trustnote.org/#'+btx.unit;
-				// var url = 'http://'+testnet+'211.159.160.220:88/#'+btx.unit;
-				var url = 'https://' + testnet + 'explorer.trustnote.org/#' + btx.unit;
+                // var url = 'https://' + testnet + 'explorer.trustnote.org/#' + btx.unit;
+                var url = 'http://' + testnet + 'explorer2-alpha.trustnote.org:8000/detail#' + btx.unit;
 				if (typeof nw !== 'undefined')
 					nw.Shell.openExternal(url);
 				else if (isCordova)
