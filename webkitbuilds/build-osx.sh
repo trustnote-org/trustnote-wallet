@@ -22,7 +22,7 @@ APP_EXE="${PATH_NAME}${APP_NAME}.app/Contents/MacOS/nwjs"
 
 VOL_NAME="${APP_NAME}-${ARCH}"
 DMG_TMP="${VOL_NAME}-temp.dmg"
-DMG_FINAL="${VOL_NAME}.dmg"
+DMG_FINAL="${VOL_NAME}-alpha.dmg"
 STAGING_DIR="tmp"
 
 # Check the background image DPI and convert it if it isn't 72x72
@@ -51,7 +51,7 @@ rm -rf "${STAGING_DIR}" "${DMG_TMP}" "${DMG_FINAL}"
 # copy over the stuff we want in the final disk image to our staging dir
 echo "Copying ..."
 mkdir -p "${STAGING_DIR}"
-cp -af "${PATH_NAME}${APP_NAME}.app" "${STAGING_DIR}"
+cp -af "${PATH_NAME}${APP_NAME}.app" "${STAGING_DIR}/${APP_NAME}-alpha.app"
 # ... cp anything else you want in the DMG - documentation, etc.
 
 pushd "${STAGING_DIR}"
@@ -59,7 +59,7 @@ pushd "${STAGING_DIR}"
 popd
 
 # Fix size to 150MB
-SIZE=350
+SIZE=450
 
 if [ $? -ne 0 ]; then
     echo "Error: Cannot compute size of staging dir"
@@ -102,7 +102,7 @@ echo '
            set arrangement of viewOptions to not arranged
            set icon size of viewOptions to 72
            set background picture of viewOptions to file ".background:'${DMG_BACKGROUND_IMG}'"
-           set position of item "'${APP_NAME}'.app" of container window to {160, 195}
+           set position of item "'${APP_NAME}'-alpha.app" of container window to {160, 195}
            set position of item "Applications" of container window to {360, 195}
            close
            open
