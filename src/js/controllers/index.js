@@ -1,12 +1,12 @@
 'use strict';
 
 var async = require('async');
-var constants = require('trustnote-pow-common/constants.js');
-var mutex = require('trustnote-pow-common/mutex.js');
-var eventBus = require('trustnote-pow-common/event_bus.js');
-var objectHash = require('trustnote-pow-common/object_hash.js');
-var ecdsaSig = require('trustnote-pow-common/signature.js');
-var breadcrumbs = require('trustnote-pow-common/breadcrumbs.js');
+var constants = require('trustnote-pow-common/config/constants.js');
+var mutex = require('trustnote-pow-common/base/mutex.js');
+var eventBus = require('trustnote-pow-common/base/event_bus.js');
+var objectHash = require('trustnote-pow-common/base/object_hash.js');
+var ecdsaSig = require('trustnote-pow-common/encrypt/signature.js');
+var breadcrumbs = require('trustnote-pow-common/base/breadcrumbs.js');
 var Bitcore = require('bitcore-lib');
 var https = require('https');
 
@@ -99,7 +99,7 @@ angular.module('trustnoteApp.controllers').controller('indexController', functio
         if (error_object && error_object.bIgnore)
             return;
         self.showErrorPopup(error_message, function () {
-            var db = require('trustnote-pow-common/db.js');
+            var db = require('trustnote-pow-common/db/db.js');
             db.close();
             if (self.isCordova && navigator && navigator.app) // android & iOS
                 navigator.app.exitApp();
@@ -109,7 +109,7 @@ angular.module('trustnoteApp.controllers').controller('indexController', functio
     });
 
     function updatePublicKeyRing(walletClient, onDone) {
-        var walletDefinedByKeys = require('trustnote-pow-common/wallet_defined_by_keys.js');
+        var walletDefinedByKeys = require('trustnote-pow-common/wallet/wallet_defined_by_keys.js');
         walletDefinedByKeys.readCosigners(walletClient.credentials.walletId, function (arrCosigners) {
             var arrApprovedDevices = arrCosigners.filter(function (cosigner) {
                 return cosigner.approval_date;
@@ -134,7 +134,7 @@ angular.module('trustnoteApp.controllers').controller('indexController', functio
 
     // read the latest time when synchronizing full data
     function readLastDateString(cb) {
-        var db = require('trustnote-pow-common/db.js');
+        var db = require('trustnote-pow-common/db/db.js');
         db.query(
             "SELECT int_value FROM unit_authors JOIN data_feeds USING(unit) \n\
 			WHERE address=? AND feed_name='timestamp' \n\
@@ -178,8 +178,8 @@ angular.module('trustnoteApp.controllers').controller('indexController', functio
     }
 
     function scanForAddresses(cb) {
-        var wallet_defined_by_keys = require('trustnote-pow-common/wallet_defined_by_keys.js');
-        var db = require('trustnote-pow-common/db.js');
+        var wallet_defined_by_keys = require('trustnote-pow-common/wallet/wallet_defined_by_keys.js');
+        var db = require('trustnote-pow-common/db/db.js');
         var fc = profileService.focusedClient;
         var xPubKey = fc.credentials.xPubKey;
         var walletId = fc.credentials.walletId;
@@ -259,9 +259,9 @@ angular.module('trustnoteApp.controllers').controller('indexController', functio
         if (self.isScanLightAddress)
             return;
         self.isScanLightAddress = true;
-        var myWitnesses = require('trustnote-pow-common/my_witnesses');
-        var wallet_defined_by_keys = require('trustnote-pow-common/wallet_defined_by_keys.js');
-        var network = require('trustnote-pow-common/network');
+        var myWitnesses = require('trustnote-pow-common/witness/my_witnesses');
+        var wallet_defined_by_keys = require('trustnote-pow-common/wallet/wallet_defined_by_keys.js');
+        var network = require('trustnote-pow-common/p2p/network');
         var fc = profileService.focusedClient;
         var xPubKey = fc.credentials.xPubKey;
         var walletId = fc.credentials.walletId;
@@ -314,7 +314,7 @@ angular.module('trustnoteApp.controllers').controller('indexController', functio
                         witnesses: arrWitnesses
                     }, function (ws, request, response) {
                         if (response && response.error) {
-                            var breadcrumbs = require('trustnote-pow-common/breadcrumbs.js');
+                            var breadcrumbs = require('trustnote-pow-common/base/breadcrumbs.js');
                             breadcrumbs.add('Error scanForAddressesAndWalletsInLightClient: ' + response.error);
                             self.isScanLightAddress = false;
                             return;
@@ -347,7 +347,7 @@ angular.module('trustnoteApp.controllers').controller('indexController', functio
     }
 
     function addAddresses(assocMaxAddressIndexes, walletId) {
-        var wallet_defined_by_keys = require('trustnote-pow-common/wallet_defined_by_keys.js');
+        var wallet_defined_by_keys = require('trustnote-pow-common/wallet/wallet_defined_by_keys.js');
 
         function addAddress(wallet, is_change, index, maxIndex) {
             console.log("\n+++++++++++++++++++++++" + is_change + "change" + index + "------" + maxIndex);
@@ -452,7 +452,7 @@ angular.module('trustnoteApp.controllers').controller('indexController', functio
     });
 
     eventBus.on("refused_to_sign", function (device_address) {
-        var device = require('trustnote-pow-common/device.js');
+        var device = require('trustnote-pow-common/wallet/device.js');
         device.readCorrespondent(device_address, function (correspondent) {
             notification.success(gettextCatalog.getString('Refused'), correspondent.name + " refused to sign the transaction");
         });
@@ -489,7 +489,7 @@ angular.module('trustnoteApp.controllers').controller('indexController', functio
             return;
         var walletName = client.credentials.walletName;
         updatePublicKeyRing(client);
-        var device = require('trustnote-pow-common/device.js');
+        var device = require('trustnote-pow-common/wallet/device.js');
         device.readCorrespondent(device_address, function (correspondent) {
             notification.success(gettextCatalog.getString('Success'), "Wallet " + walletName + " approved by " + correspondent.name);
         });
@@ -500,7 +500,7 @@ angular.module('trustnoteApp.controllers').controller('indexController', functio
         if (!client) // already deleted (maybe declined by another device)
             return;
         var walletName = client.credentials.walletName;
-        var device = require('trustnote-pow-common/device.js');
+        var device = require('trustnote-pow-common/wallet/device.js');
         device.readCorrespondent(device_address, function (correspondent) {
             notification.info(gettextCatalog.getString('Declined'), "Wallet " + walletName + " declined by " + correspondent.name);
         });
@@ -526,8 +526,8 @@ angular.module('trustnoteApp.controllers').controller('indexController', functio
 
     // in arrOtherCosigners, 'other' is relative to the initiator
     eventBus.on("create_new_wallet", function (walletId, arrWalletDefinitionTemplate, arrDeviceAddresses, walletName, arrOtherCosigners) {
-        var device = require('trustnote-pow-common/device.js');
-        var walletDefinedByKeys = require('trustnote-pow-common/wallet_defined_by_keys.js');
+        var device = require('trustnote-pow-common/wallet/device.js');
+        var walletDefinedByKeys = require('trustnote-pow-common/wallet/wallet_defined_by_keys.js');
         device.readCorrespondentsByDeviceAddresses(arrDeviceAddresses, function (arrCorrespondentInfos) {
             // my own address is not included in arrCorrespondentInfos because I'm not my correspondent
             var arrNames = arrCorrespondentInfos.map(function (correspondent) {
@@ -611,8 +611,8 @@ angular.module('trustnoteApp.controllers').controller('indexController', functio
             console.log("refused signature");
         }
 
-        var bbWallet = require('trustnote-pow-common/wallet.js');
-        var walletDefinedByKeys = require('trustnote-pow-common/wallet_defined_by_keys.js');
+        var bbWallet = require('trustnote-pow-common/wallet/wallet.js');
+        var walletDefinedByKeys = require('trustnote-pow-common/wallet/wallet_defined_by_keys.js');
         var unit = objUnit.unit;
         var credentials = lodash.find(profileService.profile.credentials, { walletId: objAddress.wallet });
         mutex.lock(["signing_request-" + unit], function (unlock) {
@@ -787,7 +787,7 @@ angular.module('trustnoteApp.controllers').controller('indexController', functio
             }
             $scope.arrSharedWallets = arrSharedWallets;
 
-            var walletDefinedByAddresses = require('trustnote-pow-common/wallet_defined_by_addresses.js');
+            var walletDefinedByAddresses = require('trustnote-pow-common/wallet/wallet_defined_by_addresses.js');
             async.eachSeries(
                 arrSharedWallets,
                 function (objSharedWallet, cb) {
@@ -954,7 +954,7 @@ angular.module('trustnoteApp.controllers').controller('indexController', functio
             });
 
             if (fc.observed) { // 当前为观察钱包
-                var device = require('trustnote-pow-common/device.js');
+                var device = require('trustnote-pow-common/wallet/device.js');
                 device.uPMyColdDeviceAddress(fc.credentials.walletId);
             }
 
@@ -982,7 +982,7 @@ angular.module('trustnoteApp.controllers').controller('indexController', functio
             self.setAddressbook();
 
             console.log("reading cosigners");
-            var walletDefinedByKeys = require('trustnote-pow-common/wallet_defined_by_keys.js');
+            var walletDefinedByKeys = require('trustnote-pow-common/wallet/wallet_defined_by_keys.js');
             walletDefinedByKeys.readCosigners(self.walletId, function (arrCosignerInfos) {
                 self.copayers = arrCosignerInfos;
                 safeApplyService.safeApply($rootScope);
@@ -1074,7 +1074,7 @@ angular.module('trustnoteApp.controllers').controller('indexController', functio
             return breadcrumbs.add('updateAll not complete yet');
 
         // reconnect if lost connection
-        var device = require('trustnote-pow-common/device.js');
+        var device = require('trustnote-pow-common/wallet/device.js');
         device.loginToHub();
 
         $timeout(function () {
@@ -1112,7 +1112,7 @@ angular.module('trustnoteApp.controllers').controller('indexController', functio
                     self.updateTxHistory();
                 }, 1);
             }
-            var conf = require('trustnote-pow-common/conf.js');
+            var conf = require('trustnote-pow-common/config/conf.js');
             if (!conf.bLight) {
                 scanForAddresses(addAddresses);
             }
@@ -1533,7 +1533,7 @@ angular.module('trustnoteApp.controllers').controller('indexController', functio
         if (n != o) {
             self.updateHistory();
             // self.updateAll();
-            // var lightWallet = require('trustnote-pow-common/light_wallet.js');
+            // var lightWallet = require('trustnote-pow-common/wallet/light_wallet.js');
             // lightWallet.refreshLightClientHistory();
         }
     });
@@ -1549,7 +1549,7 @@ angular.module('trustnoteApp.controllers').controller('indexController', functio
             if (self.assetIndex !== self.oldAssetIndex) // it was a swipe
                 return console.log("== swipe");
             console.log('== updateHistoryFromNetwork'); // == updateHistoryFromNetwork
-            var lightWallet = require('trustnote-pow-common/light_wallet.js');
+            var lightWallet = require('trustnote-pow-common/wallet/light_wallet.js');
             lightWallet.refreshLightClientHistory();
         }, 500);
     }, 5000);
@@ -1731,7 +1731,7 @@ angular.module('trustnoteApp.controllers').controller('indexController', functio
 
     $rootScope.$on('Local/Resume', function (event) {
         $log.debug('### Resume event');
-        var lightWallet = require('trustnote-pow-common/light_wallet.js');
+        var lightWallet = require('trustnote-pow-common/wallet/light_wallet.js');
         lightWallet.refreshLightClientHistory();
         //self.debouncedUpdate();
     });
@@ -1911,7 +1911,7 @@ angular.module('trustnoteApp.controllers').controller('indexController', functio
                     self.wallet_Id = crypto.createHash("sha256").update(xpub.toString(), "utf8").digest("base64"); // 通过公钥 生成钱包地址
 
                     if (obj_from_hotWallet.v == profileService.tmpeNum && obj_from_hotWallet.id == self.wallet_Id) {
-                        self.myDeviceAddress = require('trustnote-pow-common/device.js').getMyDeviceAddress(); // 得到：设备地址
+                        self.myDeviceAddress = require('trustnote-pow-common/wallet/device.js').getMyDeviceAddress(); // 得到：设备地址
                         self.ifQr = 1;
                         self.objForHot = {
                             "type": "c2",

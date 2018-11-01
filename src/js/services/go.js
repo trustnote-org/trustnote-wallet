@@ -1,6 +1,6 @@
 'use strict';
 
-var eventBus = require('trustnote-pow-common/event_bus.js');
+var eventBus = require('trustnote-pow-common/base/event_bus.js');
 
 angular.module('trustnoteApp.services').factory('go', function ($rootScope, $state, $deepStateRedirect, $stickyState, $log, profileService, fileSystemService, nodeWebkit, notification, authService) {
     var root = {};
@@ -110,7 +110,7 @@ angular.module('trustnoteApp.services').factory('go', function ($rootScope, $sta
     function handleUri(uri) {
         console.log("handleUri " + uri);
 
-        require('trustnote-pow-common/uri.js').parseUri(uri, {
+        require('trustnote-pow-common/base/uri.js').parseUri(uri, {
             ifError: function (err) {
                 console.log(err);
                 notification.error(err);
@@ -174,7 +174,7 @@ angular.module('trustnoteApp.services').factory('go', function ($rootScope, $sta
     }
 
     function extractTrustnoteArgFromCommandLine(commandLine) {
-        var conf = require('trustnote-pow-common/conf.js');
+        var conf = require('trustnote-pow-common/config/conf.js');
         var re = new RegExp('^' + conf.program + ':', 'i');
         var arrParts = commandLine.split(' '); // on windows includes exe and all args, on mac just our arg
         for (var i = 0; i < arrParts.length; i++) {
@@ -265,7 +265,7 @@ X-Ubuntu-StageHint=SideStage\n", { mode: 0755 }, function (err) {
 		/*var win = gui.Window.get();
 		win.on('close', function(){
 			console.log('close event');
-			var db = require('trustnote-pow-common/db.js');
+			var db = require('trustnote-pow-common/db/db.js');
 			db.close(function(err){
 				console.log('close err: '+err);
 			});

@@ -7,7 +7,7 @@ angular.module('trustnoteApp.controllers').controller('preferencesDeviceNameCont
 
     this.save = function() {
       var self = this;
-	  var device = require('trustnote-pow-common/device.js');
+	  var device = require('trustnote-pow-common/wallet/device.js');
       device.setDeviceName(self.deviceName);
       var opts = {deviceName: self.deviceName};
 

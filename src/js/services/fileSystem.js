@@ -7,7 +7,7 @@ angular.module('trustnoteApp.services')
 	
 	var fs = require('fs' + '');
 	try {
-		var desktopApp = require('trustnote-pow-common/desktop_app.js' + '');
+		var desktopApp = require('trustnote-pow-common/base/desktop_app.js' + '');
 	} catch (e) {
 		
 	}

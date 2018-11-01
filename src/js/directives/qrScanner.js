@@ -1,5 +1,5 @@
 'use strict';
-var breadcrumbs = require('trustnote-pow-common/breadcrumbs.js');
+var breadcrumbs = require('trustnote-pow-common/base/breadcrumbs.js');
 
 angular.module('trustnoteApp.directives').directive('qrScanner', ['$rootScope', '$timeout', '$modal', 'isCordova', 'gettextCatalog', function ($rootScope, $timeout, $modal, isCordova, gettextCatalog) {
 

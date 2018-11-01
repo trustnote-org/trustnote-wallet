@@ -2,9 +2,9 @@
 
 angular.module('trustnoteApp.controllers').controller('loginControl', function ($scope, $rootScope, go, profileService, gettextCatalog, addressService, $timeout, safeApplyService) {
     var self = this;
-    var ecdsaSig = require('trustnote-pow-common/signature.js');
+    var ecdsaSig = require('trustnote-pow-common/encrypt/signature.js');
     var Bitcore = require('bitcore-lib');
-    var db = require('trustnote-pow-common/db.js');
+    var db = require('trustnote-pow-common/db/db.js');
     var https = require('https');
 
     self.showLogining = false;

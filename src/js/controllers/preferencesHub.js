@@ -8,8 +8,8 @@ angular.module('trustnoteApp.controllers').controller('preferencesHubController'
 
         this.save = function () {
             var self = this;
-            var device = require('trustnote-pow-common/device.js');
-            var lightWallet = require('trustnote-pow-common/light_wallet.js');
+            var device = require('trustnote-pow-common/wallet/device.js');
+            var lightWallet = require('trustnote-pow-common/wallet/light_wallet.js');
             self.hub = self.hub.replace(/^wss?:\/\//i, '').replace(/^https?:\/\//i, '');
 
             $log.debug("hub:", self.hub);

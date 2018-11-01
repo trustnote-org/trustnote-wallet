@@ -22,7 +22,7 @@ angular.module('trustnoteApp.services').factory('configService', function (stora
         '#7A8C9E'
     ];
 
-    var constants = require('trustnote-pow-common/constants.js');
+    var constants = require('trustnote-pow-common/config/constants.js');
     var isTestnet = constants.version.match(/t$/);
 
     // 配置时间戳地址

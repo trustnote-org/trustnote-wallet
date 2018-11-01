@@ -1,6 +1,6 @@
 'use strict';
 
-var breadcrumbs = require('trustnote-pow-common/breadcrumbs.js');
+var breadcrumbs = require('trustnote-pow-common/base/breadcrumbs.js');
 
 angular.module('trustnoteApp.services').factory('profileService', function profileServiceFactory($rootScope, $location, $timeout, $filter, $log, lodash, storageService, bwcService, configService, isCordova, gettext, gettextCatalog, nodeWebkit, uxLanguage) {
 
@@ -141,8 +141,8 @@ angular.module('trustnoteApp.services').factory('profileService', function profi
                     return cb(err);
 
                 root._setFocus(focusedWalletId, true, function () {
-                    require('trustnote-pow-common/wallet.js');
-                    var device = require('trustnote-pow-common/device.js');
+                    require('trustnote-pow-common/wallet/wallet.js');
+                    var device = require('trustnote-pow-common/wallet/device.js');
                     var config = configService.getSync();
                     var firstWc = root.walletClients[lodash.keys(root.walletClients)[0]];
 
@@ -259,9 +259,9 @@ angular.module('trustnoteApp.services').factory('profileService', function profi
             if (err)
                 return cb(err);
             var config = configService.getSync();
-            require('trustnote-pow-common/wallet.js'); // load hub / message handlers
+            require('trustnote-pow-common/wallet/wallet.js'); // load hub / message handlers
 
-            var device = require('trustnote-pow-common/device.js');
+            var device = require('trustnote-pow-common/wallet/device.js');
             var tempDeviceKey = device.genPrivKey();
 
             walletClient.initDeviceProperties(walletClient.credentials.xPrivKey, null, config.hub, config.deviceName);	// initDeviceProperties sets my_device_address needed by walletClient.createWallet
@@ -307,7 +307,7 @@ angular.module('trustnoteApp.services').factory('profileService', function profi
             return console.log('need password to create new wallet');
         }
 
-        var walletDefinedByKeys = require('trustnote-pow-common/wallet_defined_by_keys.js');
+        var walletDefinedByKeys = require('trustnote-pow-common/wallet/wallet_defined_by_keys.js');
 
         walletDefinedByKeys.readNextAccount(function (account) {
             console.log("next account = " + account);
@@ -341,7 +341,7 @@ angular.module('trustnoteApp.services').factory('profileService', function profi
     // 创建观察钱包 开始
     root.createColdWallet = function (opts, addr, cb) {
         $log.debug('Creating ColdWallet:', opts);  // Creating Wallet: {"m":1,"n":1,"name":"wwwddd","networkName":"livenet","cosigners":[]}
-        var device = require('trustnote-pow-common/device.js');
+        var device = require('trustnote-pow-common/wallet/device.js');
         device.setMyColdDeviceAddress(addr);
         var walletClient = bwcService.getClient();
 
@@ -395,7 +395,7 @@ angular.module('trustnoteApp.services').factory('profileService', function profi
             return console.log('need password to create new wallet');
         }
 
-        var walletDefinedByKeys = require('trustnote-pow-common/wallet_defined_by_keys.js');
+        var walletDefinedByKeys = require('trustnote-pow-common/wallet/wallet_defined_by_keys.js');
         walletDefinedByKeys.readNextAccount(function (account) {
             opts.extendedPrivateKey = root.focusedClient.credentials.xPrivKey;
 
@@ -796,7 +796,7 @@ angular.module('trustnoteApp.services').factory('profileService', function profi
     };
 
     root.replaceProfile = function (xPrivKey, mnemonic, myDeviceAddress, cb) {
-        var device = require('trustnote-pow-common/device.js');
+        var device = require('trustnote-pow-common/wallet/device.js');
 
         root.profile.credentials = [];
         root.profile.xPrivKey = xPrivKey;

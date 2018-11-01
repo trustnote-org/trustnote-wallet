@@ -22,7 +22,7 @@ angular.module('trustnoteApp.directives')
 			return {
 				require: 'ngModel',
 				link: function (scope, elem, attrs, ctrl) {
-					var ValidationUtils = require('trustnote-pow-common/validation_utils.js');
+					var ValidationUtils = require('trustnote-pow-common/validation/validation_utils.js');
 					var validator = function (value) {
 						if (!profileService.focusedClient)
 							return;
@@ -44,7 +44,7 @@ angular.module('trustnoteApp.directives')
 						}
 
 						// trustnote uri
-						var conf = require('trustnote-pow-common/conf.js');
+						var conf = require('trustnote-pow-common/config/conf.js');
 						var re = new RegExp('^' + conf.program + ':([A-Z2-7]{32})\b', 'i');
 						var arrMatches = value.match(re);
 						if (arrMatches) {
@@ -100,7 +100,7 @@ angular.module('trustnoteApp.directives')
                             return value;
                         }*/
 						//console.log('-- amount');
-						var constants = require('trustnote-pow-common/constants.js');
+						var constants = require('trustnote-pow-common/config/constants.js');
 						var asset = attrs.validAmount;
 						var settings = configService.getSync().wallet.settings;
 						var unitValue = 1;

@@ -1,6 +1,6 @@
 'use strict';
 
-var breadcrumbs = require('trustnote-pow-common/breadcrumbs.js');
+var breadcrumbs = require('trustnote-pow-common/base/breadcrumbs.js');
 
 //Setting up route
 angular

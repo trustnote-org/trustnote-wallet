@@ -4,7 +4,7 @@ angular.module('trustnoteApp.controllers').controller('botController',
     function ($stateParams, $scope, $log, go, correspondentListService, safeApplyService) {
         var self = this;
         
-        var bots = require('trustnote-pow-common/bots.js');
+        var bots = require('trustnote-pow-common/bot/bots.js');
 
         // get params id from route url
         var id = $stateParams.id;

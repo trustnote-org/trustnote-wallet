@@ -16,7 +16,7 @@ angular.module('trustnoteApp.controllers').controller('editCorrespondentDeviceCo
 			$scope.error = null;
 			correspondent.name = $scope.name;
 			correspondent.hub = $scope.hub;
-			var device = require('trustnote-pow-common/device.js');
+			var device = require('trustnote-pow-common/wallet/device.js');
 			device.updateCorrespondentProps(correspondent, function () {
 				go.path('correspondentDevices.correspondentDevice');
 			});
@@ -52,7 +52,7 @@ angular.module('trustnoteApp.controllers').controller('editCorrespondentDeviceCo
 
 			modalInstance.result.then(function (ok) {
 				if (ok) {
-					var chatStorage = require('trustnote-pow-common/chat_storage.js');
+					var chatStorage = require('trustnote-pow-common/db/chat_storage.js');
 					chatStorage.purge(correspondent.device_address);
 					correspondentListService.messageEventsByCorrespondent[correspondent.device_address] = [];
 				}

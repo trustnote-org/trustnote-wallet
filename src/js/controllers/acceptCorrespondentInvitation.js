@@ -26,7 +26,7 @@ angular.module('trustnoteApp.controllers').controller('acceptCorrespondentInvita
 	};
 
 	function handleCode(code){
-		var conf = require('trustnote-pow-common/conf.js');
+		var conf = require('trustnote-pow-common/config/conf.js');
 		var re = new RegExp('^'+conf.program+':', 'i');
 		code = code.replace(re, '');
 		var matches = code.match(/^([\w\/+]+)@([\w.:\/-]+)#([\w\/+-]+)$/);

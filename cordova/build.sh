@@ -170,8 +170,8 @@ cp -af public/** $PROJECT/www
 checkOK
 
 echo "${OpenColor}${Green}* Copying initial database...${CloseColor}"
-cp node_modules/trustnote-pow-common/initial.trustnote.sqlite $PROJECT/www
-cp node_modules/trustnote-pow-common/initial.trustnote-light.sqlite $PROJECT/www
+cp node_modules/trustnote-pow-common/db/initial.trustnote.sqlite $PROJECT/www
+cp node_modules/trustnote-pow-common/db/initial.trustnote-light.sqlite $PROJECT/www
 checkOK
 
 node $BUILDDIR/replaceForPartialClient.js $PROJECT

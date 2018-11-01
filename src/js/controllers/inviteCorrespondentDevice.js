@@ -1,6 +1,6 @@
 'use strict';
 
-var eventBus = require('trustnote-pow-common/event_bus.js');
+var eventBus = require('trustnote-pow-common/base/event_bus.js');
 
 angular.module('trustnoteApp.controllers').controller('inviteCorrespondentDeviceController', function ($scope, $timeout, profileService, go, isCordova, correspondentListService, gettextCatalog, safeApplyService) {
 
@@ -12,7 +12,7 @@ angular.module('trustnoteApp.controllers').controller('inviteCorrespondentDevice
 		});
 	}
 
-	var conf = require('trustnote-pow-common/conf.js');
+	var conf = require('trustnote-pow-common/config/conf.js');
 	$scope.protocol = conf.program;
 	$scope.isCordova = isCordova;
 	var fc = profileService.focusedClient;

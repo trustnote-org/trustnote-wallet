@@ -1,21 +1,21 @@
 'use strict';
 
 
-var constants = require('trustnote-pow-common/constants.js');
+var constants = require('trustnote-pow-common/config/constants.js');
 
 
 angular.module('trustnoteApp.controllers').controller('correspondentDeviceController',
 	function ($scope, $rootScope, $timeout, $sce, $modal, configService, profileService, animationService, isCordova, go, correspondentListService, addressService, lodash, $deepStateRedirect, $state, backButton, safeApplyService) {
 
-		var chatStorage = require('trustnote-pow-common/chat_storage.js');
+		var chatStorage = require('trustnote-pow-common/db/chat_storage.js');
 		var self = this;
 		console.log("correspondentDeviceController");
 
-		var device = require('trustnote-pow-common/device.js');
-		var eventBus = require('trustnote-pow-common/event_bus.js');
-		var conf = require('trustnote-pow-common/conf.js');
-		var storage = require('trustnote-pow-common/storage.js');
-		var breadcrumbs = require('trustnote-pow-common/breadcrumbs.js');
+		var device = require('trustnote-pow-common/wallet/device.js');
+		var eventBus = require('trustnote-pow-common/base/event_bus.js');
+		var conf = require('trustnote-pow-common/config/conf.js');
+		var storage = require('trustnote-pow-common/db/storage.js');
+		var breadcrumbs = require('trustnote-pow-common/base/breadcrumbs.js');
 
 		var fc = profileService.focusedClient;
 		var chatScope = $scope;
@@ -36,7 +36,7 @@ angular.module('trustnoteApp.controllers').controller('correspondentDeviceContro
 
 		$scope.$watch("correspondent.my_record_pref", function (pref, old_pref) {
 			if (pref == old_pref) return;
-			var device = require('trustnote-pow-common/device.js');
+			var device = require('trustnote-pow-common/wallet/device.js');
 			device.sendMessageToDevice(correspondent.device_address, "chat_recording_pref", pref, {
 				ifOk: function () {
 					device.updateCorrespondentProps(correspondent);
@@ -176,7 +176,7 @@ angular.module('trustnoteApp.controllers').controller('correspondentDeviceContro
 
 
 		$scope.offerContract = function (address) {
-			var walletDefinedByAddresses = require('trustnote-pow-common/wallet_defined_by_addresses.js');
+			var walletDefinedByAddresses = require('trustnote-pow-common/wallet/wallet_defined_by_addresses.js');
 			$rootScope.modalOpened = true;
 			var fc = profileService.focusedClient;
 			$scope.oracles = configService.oracles;
@@ -449,8 +449,8 @@ angular.module('trustnoteApp.controllers').controller('correspondentDeviceContro
 
 		$scope.sendMultiPayment = function (paymentJsonBase64) {
 			var async = require('async');
-			var db = require('trustnote-pow-common/db.js');
-			var walletDefinedByAddresses = require('trustnote-pow-common/wallet_defined_by_addresses.js');
+			var db = require('trustnote-pow-common/db/db.js');
+			var walletDefinedByAddresses = require('trustnote-pow-common/wallet/wallet_defined_by_addresses.js');
 			var paymentJson = Buffer(paymentJsonBase64, 'base64').toString('utf8');
 			console.log("multi " + paymentJson);
 			var objMultiPaymentRequest = JSON.parse(paymentJson);
@@ -722,9 +722,9 @@ angular.module('trustnoteApp.controllers').controller('correspondentDeviceContro
 
 		$scope.sendVote = function (voteJsonBase64) {
 			var async = require('async');
-			var db = require('trustnote-pow-common/db.js');
-			var objectHash = require('trustnote-pow-common/object_hash.js');
-			var network = require('trustnote-pow-common/network.js');
+			var db = require('trustnote-pow-common/db/db.js');
+			var objectHash = require('trustnote-pow-common/base/object_hash.js');
+			var network = require('trustnote-pow-common/p2p/network.js');
 			var voteJson = Buffer(voteJsonBase64, 'base64').toString('utf8');
 			console.log("vote " + voteJson);
 			var objVote = JSON.parse(voteJson);
@@ -935,7 +935,7 @@ angular.module('trustnoteApp.controllers').controller('correspondentDeviceContro
 
 		function readLastMainChainIndex(cb) {
 			if (conf.bLight) {
-				var network = require('trustnote-pow-common/network.js');
+				var network = require('trustnote-pow-common/p2p/network.js');
 				network.requestFromLightVendor('get_last_mci', null, function (ws, request, response) {
 					response.error ? cb(response.error) : cb(null, response);
 				});
@@ -955,7 +955,7 @@ angular.module('trustnoteApp.controllers').controller('correspondentDeviceContro
 		}
 
 		function issueNextAddress(cb) {
-			var walletDefinedByKeys = require('trustnote-pow-common/wallet_defined_by_keys.js');
+			var walletDefinedByKeys = require('trustnote-pow-common/wallet/wallet_defined_by_keys.js');
 			walletDefinedByKeys.issueNextAddress(profileService.focusedClient.credentials.walletId, 0, function (addressInfo) {
 				if (cb)
 					cb(addressInfo.address);
@@ -966,7 +966,7 @@ angular.module('trustnoteApp.controllers').controller('correspondentDeviceContro
 		 function issueNextAddressIfNecessary(onDone){
 		 if (myPaymentAddress) // do not issue new address
 		 return onDone();
-		 var walletDefinedByKeys = require('trustnote-pow-common/wallet_defined_by_keys.js');
+		 var walletDefinedByKeys = require('trustnote-pow-common/wallet/wallet_defined_by_keys.js');
 		 walletDefinedByKeys.issueOrSelectNextAddress(fc.credentials.walletId, 0, function(addressInfo){
 		 myPaymentAddress = addressInfo.address; // cache it in case we need to insert again
 		 onDone();

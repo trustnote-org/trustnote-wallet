@@ -5,9 +5,9 @@
 
 angular.module('trustnoteApp.controllers').controller('recoveryFromSeeddir', function ($rootScope, $scope, $log, gettext, $timeout, gettextCatalog, profileService, go, notification, storageService) {
 	var async = require('async');
-	var conf = require('trustnote-pow-common/conf.js');
-	var wallet_defined_by_keys = require('trustnote-pow-common/wallet_defined_by_keys.js');
-	var objectHash = require('trustnote-pow-common/object_hash.js');
+	var conf = require('trustnote-pow-common/config/conf.js');
+	var wallet_defined_by_keys = require('trustnote-pow-common/wallet/wallet_defined_by_keys.js');
+	var objectHash = require('trustnote-pow-common/base/object_hash.js');
 	try {
 		var ecdsa = require('secp256k1');
 	}
@@ -16,9 +16,9 @@ angular.module('trustnoteApp.controllers').controller('recoveryFromSeeddir', fun
 	}
 	var Mnemonic = require('bitcore-mnemonic');
 	var Bitcore = require('bitcore-lib');
-	var db = require('trustnote-pow-common/db.js');
-	var network = require('trustnote-pow-common/network');
-	var myWitnesses = require('trustnote-pow-common/my_witnesses');
+	var db = require('trustnote-pow-common/db/db.js');
+	var network = require('trustnote-pow-common/p2p/network');
+	var myWitnesses = require('trustnote-pow-common/witness/my_witnesses');
 	var fc = profileService.focusedClient;
 
 
@@ -259,7 +259,7 @@ angular.module('trustnoteApp.controllers').controller('recoveryFromSeeddir', fun
 					// witnesses: arrWitnesses
 				}, function (ws, request, response) {
 					if (response && response.error) {
-						var breadcrumbs = require('trustnote-pow-common/breadcrumbs.js');
+						var breadcrumbs = require('trustnote-pow-common/base/breadcrumbs.js');
 						breadcrumbs.add('Error scanForAddressesAndWalletsInLightClient: ' + response.error);
 						self.error = 'When scanning an error occurred, please try again later.';
 						self.scanning = false;
