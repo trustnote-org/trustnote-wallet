@@ -346,9 +346,13 @@ angular.module('trustnoteApp.controllers').controller('recoveryFromSeed', functi
 									$scope.encrypt = true;
 									delete self.password;
 								});
-							}
+                            }
+                            
+                            var walletContext = arrWalletIndexes.length === 1 ? 
+                            gettextCatalog.getString(" wallet recovered, please restart the application to finish."):
+                            gettextCatalog.getString(" wallets recovered, please restart the application to finish.")
 // 更改代码  正常恢复
-							$rootScope.$emit('Local/ShowAlertnei', arrWalletIndexes.length + gettextCatalog.getString(" wallets recovered, please restart the application to finish."), 'fi-check', function () {
+							$rootScope.$emit('Local/ShowAlertnei', arrWalletIndexes.length + walletContext, 'fi-check', function () {
 								if (navigator && navigator.app) // android
 									navigator.app.exitApp();
 								else if (process.exit) // nwjs
@@ -377,7 +381,7 @@ angular.module('trustnoteApp.controllers').controller('recoveryFromSeed', functi
 						}
 
 // 更改代码   修改后恢复（没有交易）
-						$rootScope.$emit('Local/ShowAlertnei', arrWalletIndexes.length + gettextCatalog.getString(" wallets recovered, please restart the application to finish."), 'fi-check', function () {
+						$rootScope.$emit('Local/ShowAlertnei', arrWalletIndexes.length + gettextCatalog.getString(" wallet recovered, please restart the application to finish."), 'fi-check', function () {
 							if (navigator && navigator.app) // android
 								navigator.app.exitApp();
 							else if (process.exit) // nwjs
