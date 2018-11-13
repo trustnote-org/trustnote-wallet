@@ -320,8 +320,12 @@ angular.module('trustnoteApp.controllers').controller('recoveryFromSeeddir', fun
 							// 向内存中写入2
 							self.haschoosen();
 
+                            var walletContext = arrWalletIndexes.length === 1 ? 
+                            gettextCatalog.getString(" wallet recovered, please restart the application to finish."):
+                            gettextCatalog.getString(" wallets recovered, please restart the application to finish.")
+
 							// 更改代码   正常恢复
-							$rootScope.$emit('Local/ShowAlertdir', arrWalletIndexes.length + gettextCatalog.getString(" wallets recovered, please restart the application to finish."), 'fi-check', function () {
+							$rootScope.$emit('Local/ShowAlertdir', arrWalletIndexes.length + walletContext, 'fi-check', function () {
 								if (navigator && navigator.app) // android
 									navigator.app.exitApp();
 
@@ -345,7 +349,7 @@ angular.module('trustnoteApp.controllers').controller('recoveryFromSeeddir', fun
 						self.haschoosen();
 
 						// 更改代码   没有交易恢复
-						$rootScope.$emit('Local/ShowAlertdir', arrWalletIndexes.length + gettextCatalog.getString(" wallets recovered, please restart the application to finish."), 'fi-check', function () {
+						$rootScope.$emit('Local/ShowAlertdir', arrWalletIndexes.length + gettextCatalog.getString(" wallet recovered, please restart the application to finish."), 'fi-check', function () {
 							if (navigator && navigator.app) // android
 								navigator.app.exitApp();
 
@@ -472,10 +476,14 @@ angular.module('trustnoteApp.controllers').controller('recoveryFromSeeddir', fun
 							self.scanning = false;
 							self.show = false;
 							// 向内存中写入2
-							self.haschoosen();
+                            self.haschoosen();
+                            
+                            var walletContext = arrWalletIndexes.length === 1 ? 
+                            gettextCatalog.getString(" wallet recovered, please restart the application to finish."):
+                            gettextCatalog.getString(" wallets recovered, please restart the application to finish.")
 
 							// 更改代码   正常恢复
-							$rootScope.$emit('Local/ShowAlertdir', arrWalletIndexes.length + gettextCatalog.getString(" wallets recovered, please restart the application to finish."), 'fi-check', function () {
+							$rootScope.$emit('Local/ShowAlertdir', arrWalletIndexes.length + walletContext, 'fi-check', function () {
 
 								self.delteConfirm();
 								if (navigator && navigator.app) // android
@@ -500,7 +508,7 @@ angular.module('trustnoteApp.controllers').controller('recoveryFromSeeddir', fun
 						self.haschoosen();
 
 						// 更改代码   没有交易恢复
-						$rootScope.$emit('Local/ShowAlertdir', arrWalletIndexes.length + gettextCatalog.getString(" wallets recovered, please restart the application to finish."), 'fi-check', function () {
+						$rootScope.$emit('Local/ShowAlertdir', arrWalletIndexes.length + gettextCatalog.getString(" wallet recovered, please restart the application to finish."), 'fi-check', function () {
 
 							self.delteConfirm();
 							if (navigator && navigator.app) // android
