@@ -58,8 +58,8 @@ angular.module('trustnoteApp.services').factory('configService', function (stora
     };
 
     root.hub = [
-        'shawtest.trustnote.org',
-        'raytest.trustnote.org',
+        'shawtest.trustnote.org:6617',
+        'raytest.trustnote.org:6616'
     ]
     root.stableHub = 'kaketest.trustnote.org';
     // 钱包默认配置
