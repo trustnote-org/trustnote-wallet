@@ -58,7 +58,7 @@ angular.module('trustnoteApp.services').factory('configService', function (stora
     };
 
     root.hub = [
-        'shawtest.trustnote.org:6617',
+        'shawtest.trustnote.org:6616',
         'raytest.trustnote.org:6616'
     ]
     root.stableHub = 'kaketest.trustnote.org';
