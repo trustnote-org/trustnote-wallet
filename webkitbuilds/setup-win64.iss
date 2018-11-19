@@ -3,7 +3,7 @@
 
 #define MyAppName "TrustNote-test"
 #define MyAppPackageName "trustnote"
-#define MyAppVersion "1.2.3.1"
+#define MyAppVersion "1.2.3.2"
 #define MyAppPublisher "TrustNote"
 #define MyAppURL "https://trustnote.org"
 #define MyAppExeName "TrustNote.exe"
