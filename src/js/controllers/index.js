@@ -793,7 +793,8 @@ angular.module('trustnoteApp.controllers').controller('indexController', functio
                 function (objSharedWallet, cb) {
                     walletDefinedByAddresses.readSharedAddressCosigners(objSharedWallet.shared_address, function (cosigners) {
                         walletDefinedByAddresses.readSharedAddressDefinition(objSharedWallet.shared_address, function (arrDefinition) {
-                            var endTime = JSON.stringify(arrDefinition).match(/timestamp.+\>.+[0-9]{10,}/)[0].match(/[0-9]{10,}/);
+                            // var endTime = JSON.stringify(arrDefinition).match(/timestamp.+\>.+[0-9]{10,}/)[0].match(/[0-9]{10,}/);
+                            var endTime;
                             var nowTime = new Date().getTime();
                             objSharedWallet.is_unlock = (nowTime - endTime) > 0;
                             $timeout(function () {

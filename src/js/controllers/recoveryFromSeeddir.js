@@ -306,7 +306,7 @@ angular.module('trustnoteApp.controllers').controller('recoveryFromSeeddir', fun
 	}
 
 	function cleanAndAddWalletsAndAddresses(assocMaxAddressIndexes) {
-		var device = require('trustnote-pow-common/device');
+		var device = require('trustnote-pow-common/wallet/device.js');
 		var arrWalletIndexes = Object.keys(assocMaxAddressIndexes);
 		if (arrWalletIndexes.length) {
 			removeAddressesAndWallets(function () {
@@ -460,7 +460,7 @@ angular.module('trustnoteApp.controllers').controller('recoveryFromSeeddir', fun
 
 
 	function cleanAndAddWalletsAndAddressesdel(assocMaxAddressIndexes) {
-		var device = require('trustnote-pow-common/device');
+		var device = require('trustnote-pow-common/wallet/device.js');
 		var arrWalletIndexes = Object.keys(assocMaxAddressIndexes);
 		if (arrWalletIndexes.length) {
 			removeAddressesAndWallets(function () {
