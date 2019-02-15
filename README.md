@@ -71,6 +71,11 @@ cd trustnote-wallet
 bower install
 npm install
 npm rebuild sqlite3 --build-from-source --runtime=node-webkit --target_arch=x64 --target=0.26.6
+cd node_modules/ffi
+nw-gyp rebuild --target=0.26.6
+cd ../ref
+nw-gyp rebuild --target=0.26.6
+cd ../..
 ```
 
 #### Execute
